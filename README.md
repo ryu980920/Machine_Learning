@@ -44,4 +44,4 @@
 
 ## 현재 상태
 
-저장소 기본 구조를 만든 단계입니다. 담당자, 실험 결과, 데이터 파일 및 보고서는 실제 진행 후 추가합니다.
+공식 분할 기반 [데이터 구성 Notebook](02_data/notebooks/02_official_split_dataset.ipynb)과 [NPZ 데이터셋](02_data/datasets/MNIST_EMNIST_official_split_112000.npz)을 등록했습니다. [EXP-001 실험일지](03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md)는 PDF 원문을 Markdown으로 변환했으며, 이전 데이터 버전의 기록임을 표시했습니다.

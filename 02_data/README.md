@@ -20,7 +20,7 @@ eMNIST와 직접 만든 Hand-made 데이터셋의 수집, 이미지 변환, 레�
 | 날짜 | 담당자 | 작업 내용 | 상태 | 결과물 |
 | --- | --- | --- | --- | --- |
 | 11/1(일) | 각 팀원 | 개인별 Hand-made 640개 제작 및 검수 | 예정 | - |
-| 미정 | 담당자 미정 | eMNIST 클래스 분포 확인 및 데이터 구성 | 예정 | - |
+| 2026-11-05 (자료 등록) | 확인 필요 | 공식 분할 기반 MNIST·EMNIST 데이터 구성 자료 등록 | 완료 | 아래 Notebook·NPZ |
 
 ## 4. 결과 및 자료
 
@@ -28,7 +28,9 @@ eMNIST와 직접 만든 Hand-made 데이터셋의 수집, 이미지 변환, 레�
 
 | 자료명 | 파일 또는 링크 | 설명 |
 | --- | --- | --- |
-| - | - | 아직 등록된 자료 없음 |
+| 공식 분할 기반 데이터 구성 Notebook | [02_official_split_dataset.ipynb](notebooks/02_official_split_dataset.ipynb) | 제공된 코드·실행 출력·그림 보존 |
+| 공식 분할 기반 데이터셋 | [MNIST_EMNIST_official_split_112000.npz](datasets/MNIST_EMNIST_official_split_112000.npz) | Training 96,000개 / Test 16,000개 |
+| 초기 데이터 구성 실험일지 | [EXP-001 Markdown](../03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md) | 2026-11-03의 별도 Training/Validation 버전 |
 
 ## 5. 특이사항 및 시행착오
 
@@ -63,3 +65,12 @@ eMNIST와 직접 만든 Hand-made 데이터셋의 수집, 이미지 변환, 레�
 - 손글씨 원본을 확보하고 이미지별 레이블·품질을 검수합니다.
 - 데이터 개수, 사용 목적, 변환 조건과 수정 이력을 기록합니다.
 - 실제 파일을 추가할 때 결과 및 자료 표에 파일 경로와 버전을 연결합니다.
+
+## 등록 데이터 사용 안내
+
+- `datasets/MNIST_EMNIST_official_split_112000.npz`는 28×28 uint8 이미지와 0~15 레이블을 담습니다. MNIST 숫자 공식 Training 60,000개·Test 10,000개에 EMNIST A~F 각각 Training 6,000개·Test 1,000개를 추가했습니다.
+- EMNIST B·D·E의 Test 부족분은 학습에 쓰지 않은 공식 Training 원본 722개로 보충했습니다. Training 증강은 총 5,348개이며, 저장된 출처 식별자 기준 Training/Test 원본 중복은 0개입니다.
+- `train_is_augmented`, `train_source_split`, `test_source_split`, `train_source_index`, `test_source_index`, `emnist_class_log`, `seed`가 함께 저장되어 있습니다. Seed는 42입니다.
+- Notebook은 원본 그대로 보존했습니다. 파일 경로가 현재 작업 폴더 기준이므로, 실행 시 NPZ 저장·읽기 위치를 확인하십시오. 저장소에 등록된 데이터는 `02_data/datasets/`에 있습니다.
+- EXP-001의 원본 105,341개·증강 6,659개·Training 101,465개·Validation 10,535개는 이전 버전의 기록입니다. 현재 공식 분할 기반 데이터와 혼용하지 않습니다.
+- Hand-made 데이터는 이 NPZ에 포함되지 않았습니다.
