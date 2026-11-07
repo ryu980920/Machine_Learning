@@ -45,3 +45,5 @@
 ## 현재 상태
 
 공식 분할 기반 [데이터 구성 Notebook](02_data/notebooks/02_official_split_dataset.ipynb)과 [NPZ 데이터셋](02_data/datasets/MNIST_EMNIST_official_split_112000.npz)을 등록했습니다. [EXP-001 실험일지](03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md)는 PDF 원문을 Markdown으로 변환했으며, 이전 데이터 버전의 기록임을 표시했습니다.
+
+**Hand-made 독립 테스트셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번의 **640장씩 4개 NPZ(총 2,560장)**를 43번 양식으로 통일하여 등록했습니다. 이 데이터는 학습·튜닝에 사용하지 않습니다.
