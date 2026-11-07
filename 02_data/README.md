@@ -29,7 +29,7 @@ eMNIST와 직접 만든 Hand-made 데이터셋의 수집, 이미지 변환, 레�
 | 자료명 | 파일 또는 링크 | 설명 |
 | --- | --- | --- |
 | 공식 분할 기반 데이터 구성 Notebook | [02_official_split_dataset.ipynb](notebooks/02_official_split_dataset.ipynb) | 제공된 코드·실행 출력·그림 보존 |
-| 공식 분할 기반 데이터셋 | [MNIST_EMNIST_official_split_112000.npz](datasets/MNIST_EMNIST_official_split_112000.npz) | Training 96,000개 / Test 16,000개 |
+| **현행 최종 데이터셋 v3** | [MNIST_EMNIST_official_split_112000.npz](datasets/MNIST_EMNIST_official_split_112000.npz) | Training **96,000** / Test **16,000** = **112,000장**. Train 내부·Train/Test 완전 동일 픽셀 중복 **각각 0쌍**. 증강 5,349장 |
 | 초기 데이터 구성 실험일지 | [EXP-001 Markdown](../03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md) | 2026-11-03의 별도 Training/Validation 버전 |
 
 ## 5. 특이사항 및 시행착오
@@ -69,8 +69,9 @@ eMNIST와 직접 만든 Hand-made 데이터셋의 수집, 이미지 변환, 레�
 ## 등록 데이터 사용 안내
 
 - `datasets/MNIST_EMNIST_official_split_112000.npz`는 28×28 uint8 이미지와 0~15 레이블을 담습니다. MNIST 숫자 공식 Training 60,000개·Test 10,000개에 EMNIST A~F 각각 Training 6,000개·Test 1,000개를 추가했습니다.
-- EMNIST B·D·E의 Test 부족분은 학습에 쓰지 않은 공식 Training 원본 722개로 보충했습니다. Training 증강은 총 5,348개이며, 저장된 출처 식별자 기준 Training/Test 원본 중복은 0개입니다.
-- `train_is_augmented`, `train_source_split`, `test_source_split`, `train_source_index`, `test_source_index`, `emnist_class_log`, `seed`가 함께 저장되어 있습니다. Seed는 42입니다.
-- Notebook은 원본 그대로 보존했습니다. 파일 경로가 현재 작업 폴더 기준이므로, 실행 시 NPZ 저장·읽기 위치를 확인하십시오. 저장소에 등록된 데이터는 `02_data/datasets/`에 있습니다.
+- EMNIST B·D·E의 Test 부족분은 학습에 쓰지 않은 공식 Training 원본 722개로 보충했습니다. 현재 GitHub의 최종 **v3**는 기존 5,348개 Shift 증강을 회전·두께 변화로 교체했고, 후속으로 D 원본 1장을 회전 증강으로 전환하여 **총 증강 5,349개**입니다. Training 내부·Train/Test 간 **완전 동일 픽셀 중복은 모두 0쌍**입니다. `source_split+source_index`만 비교하면 MNIST/EMNIST에서 인덱스가 재사용되어 61개가 중복처럼 보일 수 있으므로 출처 검증에는 **원본 데이터셋 종류**도 포함해야 합니다.
+- `train_is_augmented`, `train_source_split`, `test_source_split`, `train_source_index`, `test_source_index`, `emnist_class_log`, `seed`와 v3용 `train_augmentation_type`, `train_augmentation_strength`, `augmentation_seed`, `dataset_revision`이 함께 저장되어 있습니다. 원본 분할 Seed는 42, v2 증강 Seed는 20261107, v3 추가 D 회전은 고정 +5°입니다.
+- [v3 통합 실험 로그](../03_experiments/W01_2026-11-02_11-08/logs/EXP-이-001_중복검증_증강개선.md) 및 [v3 자동 검증 보고서](verification/ML_04_v3_verification_report.md)를 참고하세요. 검증된 최종 NPZ의 SHA-256은 `0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879`입니다. Git 이력에 교체 이전 원본이 남아 있습니다.
+- Notebook은 원본 그대로 보존했습니다. **해당 Notebook을 재실행하면 v3 수정 사항이 자동 적용되는 것이 아니며**, [v3 재구성 스크립트](scripts/rebuild_ml04_v3.py)와 구분해야 합니다. 파일 경로가 현재 작업 폴더 기준이므로, 실행 시 NPZ 저장·읽기 위치를 확인하십시오. 저장소에 등록된 데이터는 `02_data/datasets/`에 있습니다.
 - EXP-001의 원본 105,341개·증강 6,659개·Training 101,465개·Validation 10,535개는 이전 버전의 기록입니다. 현재 공식 분할 기반 데이터와 혼용하지 않습니다.
 - Hand-made 데이터는 이 NPZ에 포함되지 않았습니다.

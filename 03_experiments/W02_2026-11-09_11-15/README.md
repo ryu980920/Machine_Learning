@@ -18,7 +18,7 @@ W01에서 선정한 세 모델을 **독립적으로 학습**하여, 동일한 �
 
 ## 3. 공통 비교 기준
 
-- **동일한** Training/Validation 데이터셋, 버전, 레이블 맵과 분할을 사용한다.
+- **동일한** Training/Validation 데이터셋, 버전, 레이블 맵과 분할을 사용한다. 우선 적용 데이터는 [최종 v3 112,000장 NPZ](../../02_data/datasets/MNIST_EMNIST_official_split_112000.npz)이며 W01 [통합 로그](../W01_2026-11-02_11-08/logs/EXP-이-001_중복검증_증강개선.md)의 조건을 따른다.
 - 입력은 28×28 Grayscale 이미지를 784개 특성으로 변환한다.
 - Accuracy, Macro F1, Confusion Matrix, 학습 시간, 예측 시간을 보고한다.
 - 모델별 Hyperparameter·Seed·수렴 상태·라이브러리 버전과 적용 전처리를 모두 기록한다. 필요하면 LinearSVC/MLP에 적절한 스케일링을 적용하되, 그 차이를 명시한다.
