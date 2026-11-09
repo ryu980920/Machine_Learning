@@ -1,3 +1,21 @@
+## 최신 공통 실험 운영 (2026-11-10 업데이트)
+
+**현재 실제 완료:** 실험 1(13개 후보 평가·5개 선정), 실험 2(Normal Baseline 5개), 실험 3(Hand-made 평가·데이터 오류 분석) 및 별도 42번 구/신 Grayscale 비교. [EXP-유-003 8절](W02_2026-11-09_11-15/logs/EXP-유-003_5개모델_Normal_Baseline.md)에서 **새 42번 예측과 기존 41·43·44번 예측을 결합한** 최신 Rotation 비교 확인. 5개 모델의 Combined 학습과 본격 최적화는 미실시.
+
+| 후속 단계 | 수행·평가 기준 | 상태 |
+|---|---|---|
+| ① Normal vs Combined | 모델 기본 설정 고정. 공식 Train 76,800 vs 동일 Train+Hand-made 2,560 후보를 **같은 신규 Hand-made Validation** 및 공식 Validation에서 평가 | 계획 |
+| ② 모델별 최적화 | 데이터 오류 분석·전처리·증강·하이퍼파라미터 등 각 모델의 변경 전후 비교 | 계획 |
+| ③ 최적화 5개 비교 | 동일한 신규 Hand-made Validation 우선, 공식 Validation과 시간 보조 | 계획 |
+| ④ 최종 모델 확정 | 1개 선정·추가 개선 후 모델 및 전처리 고정 | 계획 |
+| ⑤ 독립 Test | 신규 Hand-made Test + 공식 MNIST·EMNIST Test 16,000장, 각각 평가 | 계획 |
+| ⑥ 교수님 1차 데이터셋 | 배포 지침에 따라 모델 확정 후 평가 | 계획 |
+
+신규 손글씨 Validation 640장(8명×80) 및 Test 640장(다른 8명×80)은 **권장안으로 아직 미확정**. 작성자 누출 금지. 손글씨 Training 편입도 효과 검증 후 확정. LOWO-CV는 논의했으나 운영 방식으로 확정하지 않았다. [최신 연구계획](../01_project/RESEARCH_PLAN.md) 및 [데이터 수집·분할안](../02_data/HANDMADE_SPLIT_PLAN.md) 참조.
+
+**재현 코드 제공:** [학습 전 모델 5개](../02_data/notebooks/model_optimization/README.md). 개별 `build_baseline()`을 보존하고 `build_candidate()`를 수정하여 팀원이 직접 학습. **저장된 .joblib 5개 파일을 공유하지 않는다.** 새 코드의 전체 실제 재학습 결과 일치 여부는 검증 전까지 미검증이다.
+
+
 # 03_experiments — 주차별 실험 진행 기록
 
 이 폴더는 **주차별 작업 지시 → 팀원별 수행 과정 → 주간 종합 → 다음 주 작업**을 연결한다. 팀장의 작업 배정과 팀원의 실제 수행 결과는 구분해서 기록하며, 완료·미완료·미검증 상태를 명시한다.
@@ -11,26 +29,9 @@
 
 W03 이후는 실제 진행 내용과 역할이 결정될 때 추가한다. W01의 3모델 이론 검토는 과거 기록으로 보존하며, W02에서는 W01의 13개 후보를 모두 예비 평가하고, **Accuracy 90% 이상 6개 중 Random Forest를 계열 중복으로 제외한 5개**를 후속 최적화 대상으로 확정했다.
 
-## 확정된 후속 연구 흐름 — Normal → Hand-made → Combined → 최적화
+## 당시 후속 연구 흐름 (2026-11-09 계획에서 변경됨)
 
-> **상태:** 연구 계획 확정. **W02 실험 1(13개 후보 평가·5개 선정)까지만 완료**되었으며, 아래 5개 모델의 본 학습, Hand-made 비교, Combined 실험, Fine-tuning 및 최종 모델 선정은 **아직 수행·완료되지 않았다**.
-
-**후속 대상 5개:** `SVC(RBF)`, `HistGradientBoostingClassifier`, `MLPClassifier`, `ExtraTreesClassifier`, `KNeighborsClassifier`. 선정 근거: [W02 실험 1](W02_2026-11-09_11-15/logs/EXP-유-002_13개후보_초기평가_5개선정.md) · [13개 실측 비교표](W02_2026-11-09_11-15/results/EXP-유-002_13models_ranked.csv).
-
-| 단계 | 학습 데이터 / 평가 데이터 | 확인할 사항 | 상태 |
-|---|---|---|---|
-| **실험 1 — 완료** | MNIST·EMNIST 일부(Train 12,000 / Validation 3,200), 13개 후보 | 기본 설정 Accuracy·Macro F1·학습/추론 시간 → Accuracy 90% 이상 및 계열 중복 고려 → **5개 선정** | **완료** |
-| **실험 2 — Normal Baseline** | 공식 Training 96,000장 안에서 원본·증강본 그룹 기준 **Train:Validation≈8:2**로 분리; 5개 모두 같은 분할 | Hand-made 미사용 상태의 공식 Validation 성능, 클래스별 오분류, 학습·추론 시간 | **계획** |
-| **실험 3 — Hand-made 적용 전 평가** | 실험 2의 모델을 **추가 학습 없이** Hand-made 데이터에 적용 | 공식 Validation 대비 손글씨 정확도 하락(%p), 작성자별 편차, 혼동 문자 | **계획** |
-| **실험 4 — 원인 분석·개선** | 실험 2·3에서 동일하게 고정한 검증 데이터 | 이미지 방향·중심·획 두께·픽셀 스케일 등 데이터 문제는 공통 Preprocessing으로, 수렴·과적합·모델 특성 문제는 각 모델 Hyperparameter로 검증 | **계획** |
-| **실험 5 — Combined 학습** | 공식 Training + **학습용 Hand-made 일부** / 학습에서 제외한 **같은 작성자별 Hand-made Validation** | 5개 모델 각각 Normal vs Combined 성능 변화, 공식 Validation 성능 유지, 개선 전후 효과 | **계획** |
-| **실험 6 — 최종 선정·Fine-tuning** | 5개 개선 모델을 동일한 검증 지표로 비교 | Accuracy·Macro F1·오분류·추론 시간을 고려해 1개 선정. 1·2위가 근접하면 **두 모델을 추가 Fine-tuning** 후 결정 | **계획** |
-
-**데이터 역할:** 공식 v3 `Training=96,000`에서 분리한 고정 Validation은 Hyperparameter를 반복 비교하는 **개발용 평가셋**이고, 공식 `Test=16,000`은 최종 설정 확정 전 모델 선택에 사용하지 않는다. Hand-made는 **4명×640장=2,560장**이며, Combined 학습에 사용할 수 있다. 예컨대 **3명(1,920장) 학습 / 1명(640장) Validation**처럼 작성자별로 분리해, 학습에 포함한 이미지를 같은 평가에 재사용하지 않는다. 실제 보류 작성자와 교차검증 여부는 후속 세부 계획에 기록한다.
-
-**공정 비교 원칙:** Normal 모델과 Combined 모델의 정확도 변화를 비교할 때는 **동일한 미학습 Hand-made 평가 이미지**를 사용한다. Hand-made 전체에 대한 *학습 전 탐색적 평가*와 Combined 추가 학습 후의 *독립 보류 작성자 평가*는 구별한다. 원본·증강본 간 Train–Validation 누출을 막고 모든 모델에 같은 평가셋을 적용한다. 초기 선정(13개 후보) 결과와 5개 모델의 본 학습/최적화 결과는 서로 다른 실험으로 기록한다.
-
-**세부 실험 기준:** [W02 README](W02_2026-11-09_11-15/README.md)에 Normal·Hand-made·Combined 단계의 조건, 평가 지표, 완료 기준을 정리한다.
+2026-11-09 당시의 상세 계획은 [W02 연구계획](W02_2026-11-09_11-15/README.md)에 보존되어 있다. 최신 진행 상태 및 향후 실행 순서는 아래 **2026-11-10 업데이트**가 우선한다.
 
 ## W01 실험 로그
 
@@ -48,7 +49,7 @@ W03 이후는 실제 진행 내용과 역할이 결정될 때 추가한다. W01�
 | 실험 ID | 담당 | 작업 | 기록 |
 |---|---|---|---|
 | **EXP-유-002 (W02 실험 1)** | 유용성 | **13개 후보 기본 학습·성능 비교 → Accuracy 90% Threshold 및 모델 계열 기준 적용 → 5개 모델 선정** | [실험 로그](W02_2026-11-09_11-15/logs/EXP-유-002_13개후보_초기평가_5개선정.md) · [실측 결과 CSV](W02_2026-11-09_11-15/results/EXP-유-002_13models_ranked.csv) |
-| **EXP-유-003 (W02 실험 2)** | 유용성 | **Normal Dataset 8:2 분할, 5개 모델 기본 성능 평가 (Training 76,800 / Validation 19,200)**; Accuracy·Macro F1·학습/추론 시간 비교 | [실험 로그](03_experiments/W02_2026-11-09_11-15/logs/EXP-유-003_5개모델_Normal_Baseline.md) · [수치 CSV](03_experiments/W02_2026-11-09_11-15/results/EXP-유-003_5models_comparison.csv) | · [Confusion Matrix PNG 5종](W02_2026-11-09_11-15/results/confusion_matrices/README.md)
+| **EXP-유-003 (W02 실험 2)** | 유용성 | **Normal Dataset 8:2 분할, 5개 모델 기본 성능 평가 (Training 76,800 / Validation 19,200)**; Accuracy·Macro F1·학습/추론 시간 비교 | [실험 로그](W02_2026-11-09_11-15/logs/EXP-유-003_5개모델_Normal_Baseline.md) · [수치 CSV](W02_2026-11-09_11-15/results/EXP-유-003_5models_comparison.csv) | · [Confusion Matrix PNG 5종](W02_2026-11-09_11-15/results/confusion_matrices/README.md)
 
 김다연의 발표 작업은 주차별 지시서에 포함하고, 발표 자료는 `04_reports/`에서 관리한다.
 
