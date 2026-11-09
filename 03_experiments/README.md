@@ -11,6 +11,27 @@
 
 W03 이후는 실제 진행 내용과 역할이 결정될 때 추가한다. W01의 3모델 이론 검토는 과거 기록으로 보존하며, W02에서는 W01의 13개 후보를 모두 예비 평가하고, **Accuracy 90% 이상 6개 중 Random Forest를 계열 중복으로 제외한 5개**를 후속 최적화 대상으로 확정했다.
 
+## 확정된 후속 연구 흐름 — Normal → Hand-made → Combined → 최적화
+
+> **상태:** 연구 계획 확정. **W02 실험 1(13개 후보 평가·5개 선정)까지만 완료**되었으며, 아래 5개 모델의 본 학습, Hand-made 비교, Combined 실험, Fine-tuning 및 최종 모델 선정은 **아직 수행·완료되지 않았다**.
+
+**후속 대상 5개:** `SVC(RBF)`, `HistGradientBoostingClassifier`, `MLPClassifier`, `ExtraTreesClassifier`, `KNeighborsClassifier`. 선정 근거: [W02 실험 1](W02_2026-11-09_11-15/logs/EXP-유-002_13개후보_초기평가_5개선정.md) · [13개 실측 비교표](W02_2026-11-09_11-15/results/EXP-유-002_13models_ranked.csv).
+
+| 단계 | 학습 데이터 / 평가 데이터 | 확인할 사항 | 상태 |
+|---|---|---|---|
+| **실험 1 — 완료** | MNIST·EMNIST 일부(Train 12,000 / Validation 3,200), 13개 후보 | 기본 설정 Accuracy·Macro F1·학습/추론 시간 → Accuracy 90% 이상 및 계열 중복 고려 → **5개 선정** | **완료** |
+| **실험 2 — Normal Baseline** | 공식 Training 96,000장 안에서 원본·증강본 그룹 기준 **Train:Validation≈8:2**로 분리; 5개 모두 같은 분할 | Hand-made 미사용 상태의 공식 Validation 성능, 클래스별 오분류, 학습·추론 시간 | **계획** |
+| **실험 3 — Hand-made 적용 전 평가** | 실험 2의 모델을 **추가 학습 없이** Hand-made 데이터에 적용 | 공식 Validation 대비 손글씨 정확도 하락(%p), 작성자별 편차, 혼동 문자 | **계획** |
+| **실험 4 — 원인 분석·개선** | 실험 2·3에서 동일하게 고정한 검증 데이터 | 이미지 방향·중심·획 두께·픽셀 스케일 등 데이터 문제는 공통 Preprocessing으로, 수렴·과적합·모델 특성 문제는 각 모델 Hyperparameter로 검증 | **계획** |
+| **실험 5 — Combined 학습** | 공식 Training + **학습용 Hand-made 일부** / 학습에서 제외한 **같은 작성자별 Hand-made Validation** | 5개 모델 각각 Normal vs Combined 성능 변화, 공식 Validation 성능 유지, 개선 전후 효과 | **계획** |
+| **실험 6 — 최종 선정·Fine-tuning** | 5개 개선 모델을 동일한 검증 지표로 비교 | Accuracy·Macro F1·오분류·추론 시간을 고려해 1개 선정. 1·2위가 근접하면 **두 모델을 추가 Fine-tuning** 후 결정 | **계획** |
+
+**데이터 역할:** 공식 v3 `Training=96,000`에서 분리한 고정 Validation은 Hyperparameter를 반복 비교하는 **개발용 평가셋**이고, 공식 `Test=16,000`은 최종 설정 확정 전 모델 선택에 사용하지 않는다. Hand-made는 **4명×640장=2,560장**이며, Combined 학습에 사용할 수 있다. 예컨대 **3명(1,920장) 학습 / 1명(640장) Validation**처럼 작성자별로 분리해, 학습에 포함한 이미지를 같은 평가에 재사용하지 않는다. 실제 보류 작성자와 교차검증 여부는 후속 세부 계획에 기록한다.
+
+**공정 비교 원칙:** Normal 모델과 Combined 모델의 정확도 변화를 비교할 때는 **동일한 미학습 Hand-made 평가 이미지**를 사용한다. Hand-made 전체에 대한 *학습 전 탐색적 평가*와 Combined 추가 학습 후의 *독립 보류 작성자 평가*는 구별한다. 원본·증강본 간 Train–Validation 누출을 막고 모든 모델에 같은 평가셋을 적용한다. 초기 선정(13개 후보) 결과와 5개 모델의 본 학습/최적화 결과는 서로 다른 실험으로 기록한다.
+
+**세부 실험 기준:** [W02 README](W02_2026-11-09_11-15/README.md)에 Normal·Hand-made·Combined 단계의 조건, 평가 지표, 완료 기준을 정리한다.
+
 ## W01 실험 로그
 
 | 실험 ID | 담당 | 작업 | 기록 |
