@@ -5,9 +5,9 @@ MNIST·EMNIST 숫자 0–9 / 영문 A–F 총 16개 클래스에서 기본 모�
 
 ## 실제 완료한 실험
 
-1. **실험 1:** 13개 후보 모델을 간단히 평가하여 SVC(RBF), HGB, MLP, Extra Trees, KNN 5개 선정. [EXP-유-002](../03_experiments/W02_2026-11-09_11-15/logs/EXP-유-002_13개후보_초기평가_5개선정.md)
-2. **실험 2:** 공식 Training 96,000장 안에서 동일한 Train 76,800 / Validation 19,200 분할. 기본 하이퍼파라미터, 필요한 모델에만 스케일링, 5개 Baseline 성능 확인. [EXP-유-003](../03_experiments/W02_2026-11-09_11-15/logs/EXP-유-003_5개모델_Normal_Baseline.md)
-3. **실험 3 및 추가 분석:** 팀원 4명 × 640장 = Hand-made 2,560장에 기존 5개 Normal 모델 평가. 성능 저하, 회전·극성·42번 Grayscale 원본 문제 분석. 원본 버전별 수치와 평가 시점은 EXP-유-004·005 및 EXP-유-003 8절에 보존한다. **아직 5개 모델 본격 최적화 및 Combined 학습은 실행하지 않음.**
+1. **실험 1:** 13개 후보 모델을 간단히 평가하여 SVC(RBF), HGB, MLP, Extra Trees, KNN 5개 선정. [EXP유001](../03_experiments/W02_2026-11-09_11-15/logs/EXP유001_13개후보_초기평가_5개선정.md)
+2. **실험 2:** 공식 Training 96,000장 안에서 동일한 Train 76,800 / Validation 19,200 분할. 기본 하이퍼파라미터, 필요한 모델에만 스케일링, 5개 Baseline 성능 확인. [EXP유002](../03_experiments/W02_2026-11-09_11-15/logs/EXP유002_5개모델_Normal_Baseline.md)
+3. **실험 3 및 추가 분석:** 팀원 4명 × 640장 = Hand-made 2,560장에 기존 5개 Normal 모델 평가. 성능 저하, 회전·극성·42번 Grayscale 원본 문제 분석. 원본 버전별 수치와 평가 시점은 EXP유003·005 및 EXP유002 8절에 보존한다. **아직 5개 모델 본격 최적화 및 Combined 학습은 실행하지 않음.**
 
 ## 향후 연구 순서
 
@@ -31,6 +31,6 @@ MNIST·EMNIST 숫자 0–9 / 영문 A–F 총 16개 클래스에서 기본 모�
 
 ## 팀원 공유 및 재현성
 
-[5개 학습 전 모델 코드](../02_data/notebooks/model_optimization/README.md)를 공유한다. 기존 실험 2의 데이터 해시·분할·스케일링·기본 모델과 일치하도록 구성했으며, 모델별 `build_candidate()`를 수정하고 **각자 새로 학습**한다. 학습 완료된 `.joblib` 공유와 GitHub Release는 계획에서 제외한다. 전체 재학습 지표 동일성은 별도 검증 전까지 '미검증'으로 표시한다.
+[5개 학습 전 모델 코드](../03_experiments/model_optimization/README.md)를 공유한다. 기존 실험 2의 데이터 해시·분할·스케일링·기본 모델과 일치하도록 구성했으며, 모델별 `build_candidate()`를 수정하고 **각자 새로 학습**한다. 학습 완료된 `.joblib` 공유와 GitHub Release는 계획에서 제외한다. 전체 재학습 지표 동일성은 별도 검증 전까지 '미검증'으로 표시한다.
 
 각 실험의 실제 숫자와 완료 여부는 개별 실험로그의 측정 자료를 우선한다.

@@ -3,7 +3,7 @@
 - 작업일: **2026-11-09**
 - **현재 데이터 출처:** 41·43·44번은 기존 `ML-Project.zip`의 팀원별 JPG, 42번은 새로운 `ml26_42(2).zip` 내부 NPZ의 `X`. 네 작성자 각 640장으로 총 **2,560장**, 16클래스×각 40장. 과거 42번 원본 JPG를 사용한 작업은 아래에 이력으로 별도 기록한다.
 - 목적: MNIST·EMNIST 입력과 극성 및 방향을 맞춘 **28×28, `uint8`, Grayscale 0–255, 검은 배경·밝은 글자**의 4개 NPZ 생성.
-- **연구 이력 보존:** 처음 Grayscale 통일본(회전 전)을 실제 5개 모델로 평가한 뒤 방향 불일치를 발견했다. 최초 점수와 보정 후 점수는 [EXP-유-004 실험일지](../../03_experiments/W02_2026-11-09_11-15/logs/EXP-유-004_Handmade_방향보정_성능평가.md)에 함께 기록한다.
+- **연구 이력 보존:** 처음 Grayscale 통일본(회전 전)을 실제 5개 모델로 평가한 뒤 방향 불일치를 발견했다. 최초 점수와 보정 후 점수는 [EXP유003 실험일지](../../03_experiments/W02_2026-11-09_11-15/logs/EXP유003_Handmade_방향보정_성능평가.md)에 함께 기록한다.
 
 ## 최신 교체 이력 — 42번 Grayscale 재제출 (2026-11-09)
 
@@ -50,16 +50,16 @@
 | 43번 | 256종 | 14.06% | 55.94–66.09% |
 | 44번 | 256종 | 14.21% | 58.28–68.44% |
 
-- 당시 `02_data/notebooks/convert_hand_made.py` 구 버전을 원본 `ML-Project.zip`에 대해 **독립 재실행**해 4개 NPZ의 결과를 실험 3에서 사용한 보정본과 비교했다. **네 파일 모두 바이트 단위로 동일**했으며 위 SHA-256과 일치했다.
+- 당시 `02_data/scripts/convert_hand_made.py` 구 버전을 원본 `ML-Project.zip`에 대해 **독립 재실행**해 4개 NPZ의 결과를 실험 3에서 사용한 보정본과 비교했다. **네 파일 모두 바이트 단위로 동일**했으며 위 SHA-256과 일치했다.
 - 41·42·44번의 회전 변환은 픽셀값의 빈도를 바꾸지 않는다. 43번은 파일 자체가 변경되지 않았다.
 - 이 비교는 **작성자마다 다른 획, 필체, 원본의 밝기 분포 효과까지 통제한 실험은 아니다**. 42번이 밝기 단계가 적다고 해서 정확도 저하 원인이라고 확정할 수 없다.
-- **보정 전 기록을 덮어쓰지 않음:** 교체 이전 Grayscale NPZ는 이전 Git 커밋에서 복구할 수 있고, 보정 전/후 평가 수치는 EXP-유-004 로그 및 두 CSV에 남겨 두었다.
+- **보정 전 기록을 덮어쓰지 않음:** 교체 이전 Grayscale NPZ는 이전 Git 커밋에서 복구할 수 있고, 보정 전/후 평가 수치는 EXP유003 로그 및 두 CSV에 남겨 두었다.
 
 ## 4. 변환 재현
 
 ```bash
 pip install numpy pillow
-python 02_data/notebooks/convert_hand_made.py --source /path/to/ML-Project.zip \
+python 02_data/scripts/convert_hand_made.py --source /path/to/ML-Project.zip \
   --writer42-replacement '/path/to/ml26_42(2).zip' \
   --output-dir 02_data/Hand_made
 # 새 42번 ZIP이 없으면 덮어쓰기를 방지하기 위해 종료됨

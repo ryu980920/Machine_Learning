@@ -8,19 +8,22 @@
 
 ## 1. 완료한 실험 및 근거
 
+**실험 로그 ID는 W02에서 다시 `EXP유001`부터 시작한다.** 옛 결과 CSV·이미지의 `EXP-유-002` ~ `EXP-유-005`는 과거 식별자를 보존한 파일명이며 결과의 내용·수치는 변경하지 않는다.
+
+
 | 구분 | 실제 수행 내용 | 상태 | 주요 근거 |
 |---|---|---|---|
-| **실험 1 — 후보 선정** | 13개 분류 후보를 공식 Training 일부로 빠르게 평가해 **5개 모델 선정** | **완료** | [EXP-유-002](logs/EXP-유-002_13개후보_초기평가_5개선정.md), [13개 후보 비교표](results/EXP-유-002_13models_ranked.csv) |
-| **실험 2 — Normal Baseline** | 동일한 공식 Train **76,800장**으로 기본 설정의 5개 모델 학습, Validation **19,200장** 평가 | **완료** | [EXP-유-003](logs/EXP-유-003_5개모델_Normal_Baseline.md), [5개 모델 비교표](results/EXP-유-003_5models_comparison.csv) |
-| **실험 3 — Hand-made 평가** | 실험 2에서 학습한 5개 모델을 **추가 학습 없이** 팀원 손글씨 **2,560장**에 적용. 방향 오류 및 성능 저하 분석 | **완료** | [EXP-유-004](logs/EXP-유-004_Handmade_방향보정_성능평가.md), [방향 보정 비교표](results/EXP-유-004/comparison_before_after.csv) |
-| **추가 분석 — 최신 데이터 반영** | 새 42번 Grayscale 원본과 구 원본 비교, 새 42번을 반영한 방향 보정 전후 예측 비교 | **완료 (전체 재추론과 구분)** | [EXP-유-005](logs/EXP-유-005_42번_Grayscale_원본재제출_비교.md), [EXP-유-003 8절](logs/EXP-유-003_5개모델_Normal_Baseline.md) |
+| **실험 1 — 후보 선정** | 13개 분류 후보를 공식 Training 일부로 빠르게 평가해 **5개 모델 선정** | **완료** | [EXP유001](logs/EXP유001_13개후보_초기평가_5개선정.md), [13개 후보 비교표](results/EXP-유-002_13models_ranked.csv) |
+| **실험 2 — Normal Baseline** | 동일한 공식 Train **76,800장**으로 기본 설정의 5개 모델 학습, Validation **19,200장** 평가 | **완료** | [EXP유002](logs/EXP유002_5개모델_Normal_Baseline.md), [5개 모델 비교표](results/EXP-유-003_5models_comparison.csv) |
+| **실험 3 — Hand-made 평가** | 실험 2에서 학습한 5개 모델을 **추가 학습 없이** 팀원 손글씨 **2,560장**에 적용. 방향 오류 및 성능 저하 분석 | **완료** | [EXP유003](logs/EXP유003_Handmade_방향보정_성능평가.md), [방향 보정 비교표](results/EXP유003/comparison_before_after.csv) |
+| **추가 분석 — 최신 데이터 반영** | 새 42번 Grayscale 원본과 구 원본 비교, 새 42번을 반영한 방향 보정 전후 예측 비교 | **완료 (전체 재추론과 구분)** | [EXP유004](logs/EXP유004_42번_Grayscale_원본재제출_비교.md), [EXP유002 8절](logs/EXP유002_5개모델_Normal_Baseline.md) |
 
 ### 실험 1 — 13개 후보 평가 및 5개 모델 선정
 
 - 예비 비교 대상 13개 항목: Logistic Regression OvR, Softmax Regression, SGDClassifier, LinearSVC, SVC, KNN, Decision Tree, Random Forest, Extra Trees, AdaBoost, HistGradientBoosting, Perceptron, MLP. SVC 커널 계열은 후보 한 항목으로 관리하며, 13개 항목이 각각 완전히 독립적인 알고리즘 13종이라는 의미는 아니다.
 - **공통 예비 실험:** Train **12,000장(클래스당 750장)** / Validation **3,200장(클래스당 200장)**. 원본·증강본 그룹 분리 및 13개 후보의 평가 인덱스 통일.
 - Accuracy 90% 이상인 모델과 모델 계열 중복을 고려해 Random Forest를 제외하고 **SVC(RBF), HistGradientBoosting, MLP, Extra Trees, KNN**을 후속 비교 대상으로 확정.
-- W01의 LinearSVC·Random Forest·MLP 이론적 우선 검토 결과는 [EXP-유-001](../W01_2026-11-02_11-08/logs/EXP-유-001_16class_분류모델_선정.md)에 당시 기록으로 보존한다. 이것을 실험 1의 실측 선정과 혼동하지 않는다.
+- W01의 LinearSVC·Random Forest·MLP 이론적 우선 검토 결과는 [EXP유001](../W01_2026-11-02_11-08/logs/EXP유001_16class_분류모델_선정.md)에 당시 기록으로 보존한다. 이것을 실험 1의 실측 선정과 혼동하지 않는다.
 
 ### 실험 2 — Normal Baseline (기본 설정)
 
@@ -36,12 +39,12 @@
 | Extra Trees | 96.97% | 0.9695 | 원본 0–255 |
 | KNN | 96.29% | 0.9628 | /255 |
 
-**수치는 기존 실험 2에서 실제 측정한 결과**이며 새 모델 코드로 재학습해 재검증한 값이 아니다. 클래스별 지표·Confusion Matrix·학습/예측 시간·실행 경고는 [EXP-유-003](logs/EXP-유-003_5개모델_Normal_Baseline.md)과 [원본 결과 CSV](results/EXP-유-003_5models_comparison.csv) 참조.
+**수치는 기존 실험 2에서 실제 측정한 결과**이며 새 모델 코드로 재학습해 재검증한 값이 아니다. 클래스별 지표·Confusion Matrix·학습/예측 시간·실행 경고는 [EXP유002](logs/EXP유002_5개모델_Normal_Baseline.md)과 [원본 결과 CSV](results/EXP-유-003_5models_comparison.csv) 참조.
 
 ### 실험 3 — 손글씨 성능 하락과 입력 데이터 문제
 
 - 팀원 **41·42·43·44번 × 각 640장 = 총 2,560장**을 사용하여, **학습된 동일한 Normal 모델 5개를 재학습하지 않고** 평가했다.
-- 과거 구 42번 원본을 사용한 당시 실험에서는 방향 미보정 Accuracy가 **19.88~23.12%**, 방향 보정 후 Accuracy가 **53.24~62.93%**였다. 이는 [EXP-유-004](logs/EXP-유-004_Handmade_방향보정_성능평가.md)에 그대로 보존한다.
+- 과거 구 42번 원본을 사용한 당시 실험에서는 방향 미보정 Accuracy가 **19.88~23.12%**, 방향 보정 후 Accuracy가 **53.24~62.93%**였다. 이는 [EXP유003](logs/EXP유003_Handmade_방향보정_성능평가.md)에 그대로 보존한다.
 - 이후 **42번은 재제출된 256종 밝기 Grayscale 원본**으로 교체했다. 현재 표준 전처리: **41번 90° 반시계 회전 / 새 42번 원본 그대로 / 43번 원본 그대로 / 44번 흑백 반전 후 90° 반시계 회전**. 42번의 과거 회전·반전 설명을 현행 입력 처리로 혼용하지 않는다.
 - 42번의 구/신 원본은 픽셀 배열까지 달라, 정확도 차이를 밝기 단계 하나의 순수한 인과 효과로 주장하지 않는다.
 
@@ -55,7 +58,7 @@
 | Extra Trees | 61.60% |
 | KNN | 58.83% |
 
-위 최신 표는 **기존 41·43·44번의 검증된 예측 재사용 + 새 42번의 신규 추론 결과를 결합**한 자료다. 5개 모델×4명 전체를 새로 독립 재실행했다는 뜻은 아니다. 근거: [EXP-유-003 8절](logs/EXP-유-003_5개모델_Normal_Baseline.md), [최신 비교 CSV](results/EXP-유-003_rotation_v4/rotation_before_after_5models.csv), [예측 출처 설명](results/EXP-유-003_rotation_v4/README.md), [구/신 42번 비교](logs/EXP-유-005_42번_Grayscale_원본재제출_비교.md).
+위 최신 표는 **기존 41·43·44번의 검증된 예측 재사용 + 새 42번의 신규 추론 결과를 결합**한 자료다. 5개 모델×4명 전체를 새로 독립 재실행했다는 뜻은 아니다. 근거: [EXP유002 8절](logs/EXP유002_5개모델_Normal_Baseline.md), [최신 비교 CSV](results/EXP-유-003_rotation_v4/rotation_before_after_5models.csv), [예측 출처 설명](results/EXP-유-003_rotation_v4/README.md), [구/신 42번 비교](logs/EXP유004_42번_Grayscale_원본재제출_비교.md).
 
 **실험을 통해 확인한 문제:** 공식 MNIST·EMNIST Validation에서는 높은 정확도를 보였으나 팀원들이 직접 작성한 Hand-made에서는 큰 하락을 관찰했다. 이미지 방향·극성 등 입력 형식 문제는 일부 확인·보정했지만, **모델 자체의 손글씨 인식 성능 개선은 아직 시작하지 않았다**.
 
@@ -100,7 +103,7 @@
 
 ## 4. 5개 모델 학습 전 코드 및 팀원 실행
 
-후속 모델 최적화에서는 **이미 학습된 `.joblib` 파일을 공유하지 않는다**. [학습 전 코드 5개와 사용법](../../02_data/notebooks/model_optimization/README.md)을 제공하여 팀원이 직접 학습하도록 한다.
+후속 모델 최적화에서는 **이미 학습된 `.joblib` 파일을 공유하지 않는다**. [학습 전 코드 5개와 사용법](../model_optimization/README.md)을 제공하여 팀원이 직접 학습하도록 한다.
 
 1. 담당 모델의 **`build_baseline()`**으로 실험 2 조건을 다시 학습·평가한다.
 2. 같은 공식 Training/Validation 인덱스를 유지하며 **`build_candidate()`**에서 전처리·하이퍼파라미터 등을 조정한다.
