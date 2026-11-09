@@ -1,0 +1,22 @@
+{
+  "source_path": "02_data/datasets/MNIST_EMNIST_official_split_112000.npz",
+  "source_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "source_training_count": 96000,
+  "source_official_test_count_NOT_USED": 16000,
+  "full_training_part": 76800,
+  "full_validation_part": 19200,
+  "screening_train_n": 12000,
+  "screening_val_n": 3200,
+  "per_class_train": 750,
+  "per_class_validation": 200,
+  "validation_group_leakage": 0,
+  "split": "StratifiedGroupKFold(n_splits=5,shuffle=True,random_state=42) first fold",
+  "subsample_train_seed": 42,
+  "subsample_validation_seed": 43,
+  "classes": "0-9,A-F",
+  "sample_shape": "(28,28)",
+  "sklearn_version": "1.8.0",
+  "numpy_version": "2.3.5",
+  "python_version": "3.13.5",
+  "disclaimer": "Early 13-model screening only. No official Test or Hand-made data exposed."
+}
