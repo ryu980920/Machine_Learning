@@ -11,7 +11,7 @@
 | 상태 | 진행 중 (파일 구조 검증 완료, 이미지 품질 검증 미완료) |
 | 이전 실험 | 없음 |
 
-> **자료 구분:** 이 문서는 제공된 `EXP_001_MNIST_EMNIST_실험일지(2).pdf`의 본문을 Markdown으로 변환한 기록이다. 아래 수치와 조건은 PDF 원문을 보존했다. 함께 등록한 [02_official_split_dataset.ipynb](../../../02_data/notebooks/02_official_split_dataset.ipynb)는 공식 분할을 기준으로 재구성한 별도 버전으로, 이 일지의 Training/Validation 구성과 다르다. 원문에서 언급한 `01_dataset_preparation.ipynb` 및 구버전 NPZ 두 파일은 이번 등록 자료에 포함되지 않았다.
+> **자료 구분:** 이 문서는 제공된 `EXP_001_MNIST_EMNIST_실험일지(2).pdf`의 본문을 Markdown으로 변환한 기록이다. 아래 수치와 조건은 PDF 원문을 보존했다. 함께 등록한 [02_official_split_dataset.ipynb](../../../02_data/scripts/02_official_split_dataset.ipynb)는 공식 분할을 기준으로 재구성한 별도 버전으로, 이 일지의 Training/Validation 구성과 다르다. 원문에서 언급한 `01_dataset_preparation.ipynb` 및 구버전 NPZ 두 파일은 이번 등록 자료에 포함되지 않았다.
 
 > **주차별 관리 메모(2026-11-06):** 기존 PDF 전사본을 W01로 배치하며, 원본의 실험 내용·수치·미검증 상태는 유지했다. 상세 수행 과정의 추가 검증과 문장 보완은 추후 별도 수정한다.
 

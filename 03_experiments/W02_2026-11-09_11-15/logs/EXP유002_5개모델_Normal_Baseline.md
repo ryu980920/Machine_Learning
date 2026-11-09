@@ -15,7 +15,7 @@
 | 후속 계획 | [W02 연구계획 단계 C–F](../README.md) — 초기 작성 시 미실시; 이후 Rotation 비교는 **8절에 추가 기록** |
 | 통합 수치 | [5개 모델 원본 성능 CSV](../results/EXP-유-003_5models_comparison.csv) |
 | 세부 수치 | [클래스별 Precision·Recall·F1](../results/EXP-유-003_per_class.csv) · [전체 Confusion Matrix 수치](../results/EXP-유-003_confusion_long.csv) |
-| 재현 코드 | [학습·평가 Python](../../../02_data/notebooks/W02_experiment2/run_experiment2.py) · [픽셀 스케일러](../../../02_data/notebooks/W02_experiment2/pixel_transform.py) |
+| 재현 코드 | [학습·평가 Python](../scripts/experiment2_baseline/run_experiment2.py) · [픽셀 스케일러](../scripts/experiment2_baseline/pixel_transform.py) |
 | 로컬 보관 산출물 | `W02_Experiment2_5models_complete.zip` — 모델 `joblib` 5종, Validation 예측 배열, 분할 인덱스, 실행 로그 및 결과 포함. **대용량 모델 파일은 이번 GitHub 커밋에 업로드하지 않음.** |
 
 ## 1. 실험 배경 및 검증 질문
@@ -123,8 +123,8 @@
 
 ```bash
 export OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 NUMEXPR_NUM_THREADS=2
-python 02_data/notebooks/W02_experiment2/run_experiment2.py --prepare --input 02_data/datasets/MNIST_EMNIST_official_split_112000.npz
-python 02_data/notebooks/W02_experiment2/run_experiment2.py --all --timeout 3600 --input 02_data/datasets/MNIST_EMNIST_official_split_112000.npz
+python 03_experiments/W02_2026-11-09_11-15/scripts/experiment2_baseline/run_experiment2.py --prepare --input 02_data/datasets/MNIST_EMNIST_official_split_112000.npz
+python 03_experiments/W02_2026-11-09_11-15/scripts/experiment2_baseline/run_experiment2.py --all --timeout 3600 --input 02_data/datasets/MNIST_EMNIST_official_split_112000.npz
 ```
 
 이 명령은 **기존 실험 재현 방법**이다. 이번 업로드 작업에서 실행하지 않았다.
@@ -228,4 +228,4 @@ python 02_data/notebooks/W02_experiment2/run_experiment2.py --all --timeout 3600
 - 결과 CSV와 10개 Confusion Matrix는 `../results/EXP-유-003_rotation_v4/`에 함께 등록하는 안. 추후 새 원본으로 완전 신규 전체 재실행할 때는 추가 검증 상태를 구분해서 기록한다.
 
 
-**재현 스크립트:** [run_rotation_comparison.py](../../../02_data/notebooks/W02_experiment3/run_rotation_comparison.py) (모델 ZIP 별도 필요). 실제 배포 수치는 `rotation_review_provenance.json`에 명시한 예측값 재사용·신규 42번 추론 기반이며, 이 코드는 동일 모델 및 동일 데이터로 전체 재실행할 때 사용한다.
+**재현 스크립트:** [run_rotation_comparison.py](../scripts/experiment3_handmade/run_rotation_comparison.py) (모델 ZIP 별도 필요). 실제 배포 수치는 `rotation_review_provenance.json`에 명시한 예측값 재사용·신규 42번 추론 기반이며, 이 코드는 동일 모델 및 동일 데이터로 전체 재실행할 때 사용한다.

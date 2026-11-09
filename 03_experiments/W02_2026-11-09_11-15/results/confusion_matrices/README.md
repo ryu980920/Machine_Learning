@@ -1,4 +1,4 @@
-# EXP-유-003 — Confusion Matrix 컬러 시각화 (5개 모델)
+# EXP유002 — Confusion Matrix 컬러 시각화 (5개 모델)
 
 **연구 단계:** W02 실험 2 — Normal Dataset 기반 5개 모델의 기본 성능 평가.
 
@@ -36,4 +36,4 @@
 
 ![KNeighborsClassifier Confusion Matrix](KNeighbors_confusion_matrix.png)
 
-**실험일지:** [EXP-유-003 — Normal Baseline](../../logs/EXP-유-003_5개모델_Normal_Baseline.md). **기초 숫자:** [long-format Confusion Matrix CSV](../EXP-유-003_confusion_long.csv). **설명:** PNG는 표와 동일한 원본 카운트로 생성한 시각화이며, 지표를 새로 추정하거나 모델을 재학습한 결과가 아니다.
+**실험일지:** [EXP유002 — Normal Baseline](../../logs/EXP유002_5개모델_Normal_Baseline.md). **기초 숫자:** [long-format Confusion Matrix CSV](../EXP-유-003_confusion_long.csv). **설명:** PNG는 표와 동일한 원본 카운트로 생성한 시각화이며, 지표를 새로 추정하거나 모델을 재학습한 결과가 아니다.

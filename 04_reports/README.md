@@ -8,7 +8,7 @@
 | 공식 MNIST·EMNIST Test (16,000) | 같은 최종 모델의 공식 데이터 성능 | 손글씨 Test와 결과 분리 |
 | 교수님 배포 1차 데이터 | 해당 지침에 따른 외부 평가 | 평가 후 모델 개선 여부와 다음 평가의 독립성을 구분 |
 
-기존 실험 1~3 **실제 수행**과 앞으로 계획한 Normal vs Combined → 모델별 최적화 → 최종 Test를 혼동하지 않는다. 팀원들이 수정·학습하는 것은 [5개 학습 전 모델 코드](../02_data/notebooks/model_optimization/README.md)이다. 근거는 [연구계획](../01_project/RESEARCH_PLAN.md) 및 각자의 실험 로그로 연결한다.
+기존 실험 1~3 **실제 수행**과 앞으로 계획한 Normal vs Combined → 모델별 최적화 → 최종 Test를 혼동하지 않는다. 팀원들이 수정·학습하는 것은 [5개 학습 전 모델 코드](../03_experiments/model_optimization/README.md)이다. 근거는 [연구계획](../01_project/RESEARCH_PLAN.md) 및 각자의 실험 로그로 연결한다.
 
 # 04_reports — 발표 및 제출 자료
 
