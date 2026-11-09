@@ -48,12 +48,14 @@
 
 **Hand-made Grayscale 데이터셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번 **각 640장(총 2,560장)**을 원본 JPG 기반 **0–255 Grayscale NPZ**로 통일했습니다(2026-11-09 기존 Binary 파일 교체). Normal 모델의 Hand-made 평가에 사용하며, 후속 Combined 학습에 일부 편입할 경우 **작성자별 보류 평가셋과 학습셋을 겹치지 않게 분리**합니다. [변환 검증 기록](02_data/Hand_made/GRAYSCALE_VERIFICATION.md) 참조.
 
-## 현재 연구 진행 및 다음 단계 — 2026-11-10
+## 최신 연구 진행 및 교수님 지침 반영 — 2026-11-10
 
-**실제 완료:** 13개 후보 평가 → SVC·HGB·MLP·Extra Trees·KNN 5개 선정 → 공식 Training 76,800장 / Validation 19,200장으로 Normal Baseline 평가 → 기존 Hand-made 2,560장 평가 및 이미지 회전·극성·42번 Grayscale 원본 문제 분석.
+**완료:** 13개 후보 평가 및 5개 선정 → 공식 Training 76,800/Validation 19,200에서 Normal Baseline → 기존 Hand-made 2,560장 추론·방향·극성·Grayscale 문제 분석.
 
-**향후 순서:** (1) Hand-made 추가 학습 효과를 Normal vs Combined로 검증 (2) 5개 모델별 최적화 (3) 최적화한 5개 비교 (4) 최종 모델 선정·추가 개선 후 설정 고정 (5) **새로운 Hand-made Test + MNIST·EMNIST 공식 Test 16,000장을 각각 평가** (6) 교수님 1차 배포 데이터셋 평가.
+**향후:** (1) **유용성·김다연·이선형·곽지호 전원** 오분류 원인과 Original/Hand-made 데이터 특성 분석 (2) Normal/Combined 학습 데이터 효과 통제 검증 (3) **전원 자동 전처리 Pipeline·Training Augmentation 실험** + 5개 모델 개선 (4) 동일 Validation에서 최종 모델 선정·고정 (5) 공식 Original Test 16,000장 (6) **교수님 1차 Hand-made Test** — 충분하면 종료 (7) 부족할 때만 기존 개발 자료로 재개선하여 **2차 Test** 후 종료.
 
-- [상세 연구계획](01_project/RESEARCH_PLAN.md) · [의사결정 이력](01_project/DECISION_LOG.md) · [Hand-made 신규 수집·분할안](02_data/HANDMADE_SPLIT_PLAN.md)
-- [팀원용 학습 전 모델 5개 및 실행 가이드](03_experiments/model_optimization/README.md): 원래 Baseline 기본 설정을 재현하고 `build_candidate()`에서 수정·재학습. **학습 완료 .joblib 공유 아님**.
-- 신규 Validation/Test 각 640장은 현재 권장안이지 확정 수량이 아니다. 기존 Hand-made 2,560장의 Combined 추가 학습 여부도 효과 검증 후 결정한다.
+**평가 데이터 구분:** 기존 Hand-made 2,560장은 개발용으로 학습·검증 가능하나 학습에 포함한 샘플을 독립 검증에 중복 사용하면 안 된다. 새로운 작성자 Validation 640장은 **수집 제안**, 별도 Hand-made Test 640장은 **선택안**. 교수님 1·2차 배포 데이터는 모두 **Test 전용**: 전체 성능 확인 이외 이미지·특정 오류를 분석하거나 맞춤 보정/학습에 사용하지 않는다. **사전에 고정한 자동 Pipeline은 Test 추론 시에도 적용 가능**.
+
+- [상세 연구계획](01_project/RESEARCH_PLAN.md) · [4인 병렬 작업계획](01_project/TEAM_PARALLEL_WORKPLAN.md) · [변경 의사결정](01_project/DECISION_LOG.md)
+- [데이터 분할·Test 원칙](02_data/HANDMADE_SPLIT_PLAN.md) · [주차별 오류·개선 실험](03_experiments/README.md)
+- [학습 전 모델 5개](03_experiments/model_optimization/README.md): 현재는 Normal 학습용 기본 코드이며 **Combined·자동 Pipeline·증강은 향후 구현**. 기본 설정 재현 검증도 미완료.

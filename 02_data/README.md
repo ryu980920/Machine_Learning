@@ -5,8 +5,8 @@
 | 폴더 | 내용 | 사용 목적 |
 |---|---|---|
 | [datasets/](datasets/) | 최종 MNIST·EMNIST v3 **112,000장 NPZ**, 검증 보고서 | 공식 분할 기반 모델 개발 데이터 |
-| [notebooks/](scripts/) | 데이터 생성 Notebook, v3 재구성 코드, Hand-made 통일 변환 코드 | 구성 과정 재현 |
-| [Hand_made/](Hand_made/) | 팀원별 독립 손글씨 NPZ **4개, 각 640장** | **Normal/Combined 학습 비교 및 독립 평가용으로 분할** |
+| [scripts/](scripts/) | 데이터 생성 Notebook, v3 재구성 코드, Hand-made 통일 변환 코드 | 구성 과정 재현 |
+| [Hand_made/](Hand_made/) | 팀원별 독립 손글씨 NPZ **4개, 각 640장** | **개발용 오류 분석·Normal/Combined 실험, 학습·검증 중복 방지** |
 
 ## 1. 최종 MNIST·EMNIST 데이터
 
@@ -67,17 +67,22 @@ python 02_data/scripts/convert_hand_made.py --input-dir /path/to/zips \
   --writer42-replacement '/path/to/ml26_42(2).zip' --output-dir 02_data/Hand_made
 ```
 
-## 4. 운영 원칙
+## 4. 교수님 강조 — 데이터 품질·전처리·증강의 역할
 
-- 결과 이미지 및 NPZ를 GitHub에서 비교할 때는 **Grayscale v4 (42번 원본 교체, 2026-11-09)** 여부, 원본 이미지 수, 픽셀 범위(0–255), 정답 레이블, 파일 SHA-256을 확인한다. 이전 Binary v1은 과거 커밋에 보존되어 있다.
-- **Hand-made는 학습에 사용할 수 있다.** Normal/Combined 비교에서는 Hand-made 중 학습용과 평가용을 **겹치지 않게 분리**하고, 비교하는 모델에 동일한 평가 조건을 사용한다. 교수님이 배포하는 평가 데이터는 **1차/2차 단계별 별도 지침**을 따른다.
-- 데이터·코드 변경은 [03_experiments 주차별 기록](../03_experiments/README.md)에 근거를 남기고, 최종 NPZ 버전과 연결한다.
+**전원 참여:** 유용성·김다연·이선형·곽지호 모두 공식 Original과 Hand-made 개발 데이터의 오분류 및 분포 차이를 분석하고, 각자 **중심·크기·기울기·획 굵기·명암·극성·노이즈·잘림·레이블 등**에서 검증할 가설을 정한다. 개선 과제를 특정 한 사람에게만 맡기지 않는다. 개인별 집중 분야는 [병렬 작업계획](../01_project/TEAM_PARALLEL_WORKPLAN.md) 참조.
 
-## 5. 최신 데이터 활용 및 신규 수집 계획 (2026-11-10)
+1. **입력 표준화(과거 실험):** 41·43·44번의 방향·극성을 맞춰 표준 Grayscale NPZ를 만든 것은 **기존 데이터 정비 결과**로 보존한다. 새로운 외부 Test마다 파일을 사람이 수동 회전·수정하라는 의미가 아니다.
+2. **자동 전처리 Pipeline(향후 구현):** 학습/추론 모두 같은 정책으로 중심 정렬·기울기·크기·명암 등을 자동 보정하는 방법을 비교. 특정 작성자 ID나 Test 정답을 조건으로 다르게 처리하지 않는다.
+3. **학습용 데이터 증강:** Training에만 회전·이동·스케일·획 굵기 변형 적용, 원본·증강본이 학습과 Validation에 갈라지지 않도록 기록. 무조건 수량을 늘리는 대신 *지금 부족한 필체 특징*을 채우는지를 확인한다.
+4. **Cleaning vs Pipeline:** 잘못된 레이블·깨진 이미지 등 개발 데이터의 Cleaning과 모든 입력에 동작하는 자동 Pipeline을 구분한다. 전처리 `fit`은 Training에 한정한다.
 
-새롭게 논의한 데이터 구분은 [HANDMADE_SPLIT_PLAN.md](HANDMADE_SPLIT_PLAN.md)에 기록한다.
+## 5. 최신 데이터 분할 및 Test 운영
 
-- 현재 기존 팀원 4명 × 640장 = **Hand-made 2,560장**을 모두 탐색적 평가에 사용한 상태. 향후 **Combined 학습 추가 후보**지만, 실제 효과는 Normal/Combined 비교 실험으로 검증하고 채택 여부를 결정한다.
-- 신규 **Hand-made Validation 640장(8명×80장)** 및 신규 **Hand-made Test 640장(다른 8명×80장)**은 수집 권장안이며 **수집 전·규모 미확정**이다. 기존 학습 작성자와도 겹치지 않게 한다.
-- 개발 단계에는 신규 Validation을 반복 사용하고, 최종 모델·전처리 설정 고정 후 신규 Hand-made Test와 공식 Test 16,000장을 별도로 평가한다.
-- 위쪽 문서의 "새 42번을 이용한 실험 3 재평가 미수행"은 **4명 전체에 대한 모델의 완전 신규 추론 재실행이 없었다**는 구분이다. 새 42번을 실제 추론한 결과와 기존 41·43·44번 예측을 결합한 분석은 [EXP유002 8절](../03_experiments/W02_2026-11-09_11-15/logs/EXP유002_5개모델_Normal_Baseline.md)에 이미 기록돼 있다.
+- **공식 구성:** MNIST·EMNIST **112,000장 = 공식 Training 96,000장 + 공식 Original Test 16,000장**. 교수님 설명의 MNIST 숫자 60,000/10,000 및 EMNIST A–F 각 6,000/1,000과 일치한다. 현재 Baseline은 공식 Training 96,000장을 **76,800 학습·19,200 Validation**으로 내부 분할했으며 기존 수치 재현을 위해 고정한다.
+- **기존 Hand-made 2,560장:** 교수님 설명에 따라 개발 과정에서 **학습·Validation·오류 분석에 사용 가능**. 다만 학습에 사용한 이미지나 작성자를 같은 실험의 독립 Validation/Test라고 부르지 않는다.
+- **신규 Hand-made Validation 640장:** 8명×80장 수집 **권장안·미수집·미확정**. **신규 독립 Hand-made Test 640장은 선택 사항**이며 교수님 외부 Test를 대체하는 필수가 아니다.
+- **교수님 1차·2차 배포 데이터:** 둘 다 **Test 전용**. 최종 모델·Pipeline을 고정한 후 1차에서 전체 성능만 확인. 충분하면 종료, 미흡하면 1차 이미지/특정 오류를 분석하지 않고 기존 개발 자료로만 다시 최적화 → 2차 Test 후 종료.
+- 교수님 Test 원본 이미지는 임의로 수동 수정하지 않는다. **이미 개발 단계에서 확정한 자동 전처리 Pipeline은 Test 추론 과정에 적용 가능**. 배포 지침이 허용한 최소 Cleaning 외에는 데이터 자체를 수정하지 않는다.
+- **Normal vs Combined**는 같은 모델 설정·전처리·평가 데이터에서 학습용 Hand-made 추가 여부만 달리해 측정한다. 성능 개선 결과를 보고 실제 추가 채택을 결정한다.
+
+자세한 분할·누출 방지 조건: [HANDMADE_SPLIT_PLAN.md](HANDMADE_SPLIT_PLAN.md) · [연구계획](../01_project/RESEARCH_PLAN.md).
