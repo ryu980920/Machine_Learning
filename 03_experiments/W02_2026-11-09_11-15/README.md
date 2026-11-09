@@ -15,7 +15,7 @@
 |---|---|---|---|
 | **실험 1 — 후보 선정** | 13개 분류 후보를 공식 Training 일부로 빠르게 평가해 **5개 모델 선정** | **완료** | [EXP유001](logs/EXP유001_13개후보_초기평가_5개선정.md), [13개 후보 비교표](results/EXP-유-002_13models_ranked.csv) |
 | **실험 2 — Normal Baseline** | 동일한 공식 Train **76,800장**으로 기본 설정의 5개 모델 학습, Validation **19,200장** 평가 | **완료** | [EXP유002](logs/EXP유002_5개모델_Normal_Baseline.md), [5개 모델 비교표](results/EXP-유-003_5models_comparison.csv) |
-| **실험 3 — Hand-made 평가** | 실험 2에서 학습한 5개 모델을 **추가 학습 없이** 팀원 손글씨 **2,560장**에 적용. 방향 오류 및 성능 저하 분석 | **완료** | [EXP유003](logs/EXP유003_Handmade_방향보정_성능평가.md), [방향 보정 비교표](results/EXP유003/comparison_before_after.csv) |
+| **실험 3 — Hand-made 평가** | 실험 2에서 학습한 5개 모델을 **추가 학습 없이** 팀원 손글씨 **2,560장**에 적용. 방향 오류 및 성능 저하 분석 | **완료** | [EXP유003](logs/EXP유003_Handmade_방향보정_성능평가.md), [방향 보정 비교표](results/EXP-유-004/comparison_before_after.csv) |
 | **추가 분석 — 최신 데이터 반영** | 새 42번 Grayscale 원본과 구 원본 비교, 새 42번을 반영한 방향 보정 전후 예측 비교 | **완료 (전체 재추론과 구분)** | [EXP유004](logs/EXP유004_42번_Grayscale_원본재제출_비교.md), [EXP유002 8절](logs/EXP유002_5개모델_Normal_Baseline.md) |
 
 ### 실험 1 — 13개 후보 평가 및 5개 모델 선정

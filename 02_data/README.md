@@ -5,7 +5,7 @@
 | 폴더 | 내용 | 사용 목적 |
 |---|---|---|
 | [datasets/](datasets/) | 최종 MNIST·EMNIST v3 **112,000장 NPZ**, 검증 보고서 | 공식 분할 기반 모델 개발 데이터 |
-| [notebooks/](notebooks/) | 데이터 생성 Notebook, v3 재구성 코드, Hand-made 통일 변환 코드 | 구성 과정 재현 |
+| [notebooks/](scripts/) | 데이터 생성 Notebook, v3 재구성 코드, Hand-made 통일 변환 코드 | 구성 과정 재현 |
 | [Hand_made/](Hand_made/) | 팀원별 독립 손글씨 NPZ **4개, 각 640장** | **Normal/Combined 학습 비교 및 독립 평가용으로 분할** |
 
 ## 1. 최종 MNIST·EMNIST 데이터

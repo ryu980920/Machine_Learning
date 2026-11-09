@@ -33,7 +33,7 @@
 
 **판정:** 구 42번은 Grayscale 파일 형식 자체는 정상이지만 중간 밝기 정보가 사실상 없어, 41·43·44번과 제작 조건이 일관적이지 않았다. 새 42번은 256종 밝기값이 실제로 존재해 데이터 형식과 분포 측면에서 더욱 일관된 입력으로 교체할 근거가 확보됐다.
 
-![42번 원본 버전별 표본 비교](../results/EXP유004/writer42_before_after_examples.png)
+![42번 원본 버전별 표본 비교](../results/EXP-유-005/writer42_before_after_examples.png)
 
 **주의:** 구 42번과 새 42번은 같은 클래스·이미지 인덱스를 기준으로 대응하지만 **픽셀 배열은 동일하지 않다**(전체 평균 절대 픽셀 차이 약 **14.65/255**). 따라서 단순히 중간 밝기값만 바꾼 통제 실험이라고 간주하지 않는다.
 
@@ -67,7 +67,7 @@
 | Extra Trees | 4 (-7장) | C (+2장) |
 | KNN | A (-13장) | 9 (+2장) |
 
-원본 수치 전체는 [writer42_old_vs_new.csv](../results/EXP유004/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP유004/writer42_per_class_old_vs_new.csv)에 보존한다.
+원본 수치 전체는 [writer42_old_vs_new.csv](../results/EXP-유-005/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP-유-005/writer42_per_class_old_vs_new.csv)에 보존한다.
 
 ## 5. 결과 해석 및 후속 처리
 
@@ -82,4 +82,4 @@
 - 구 42번 입력: 초기 `EXP유003_Handmade_Test_Results.zip`의 `orientation_corrected_inputs/ml26_42.npz`(로컬 원본 보관, Git 기록으로 이전 NPZ 확인 가능).
 - 새 42번 입력: 현재 `02_data/Hand_made/ml26_42.npz`(원본 픽셀 `X` 보존, **반전 및 회전 없음**).
 - 최신 Rotation 비교 검토 결과: `EXP-유-003_rotation_v4/rotation_before_after_5models.csv`, `rotation_before_predictions.csv`, `rotation_after_predictions.csv`.
-- 실험 4 비교 결과: [writer42_old_vs_new.csv](../results/EXP유004/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP유004/writer42_per_class_old_vs_new.csv).
+- 실험 4 비교 결과: [writer42_old_vs_new.csv](../results/EXP-유-005/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP-유-005/writer42_per_class_old_vs_new.csv).
