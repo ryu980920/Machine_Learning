@@ -62,11 +62,14 @@
 - 수행계획서를 작성하고 제출 여부를 기록합니다.
 - 첫 회의부터 결정 사항과 작업 진행 상황을 남깁니다.
 
-## 7. 최신 연구계획 및 의사결정 — 2026-11-10
+## 7. 최신 계획과 모든 팀원의 병렬 참여 — 2026-11-10
 
-- [RESEARCH_PLAN.md](RESEARCH_PLAN.md): 실험 1~3 완료 현황, Normal vs Combined 효과 검증부터 최종 외부 평가까지 연구 흐름.
-- [DECISION_LOG.md](DECISION_LOG.md): 회의·대화 중 결정, 과거 계획 변경 및 아직 미확정된 사항 구분.
-- [Hand-made 수집·분할 계획](../02_data/HANDMADE_SPLIT_PLAN.md): 신규 작성자 Validation/Test의 역할. 현재 각 640장은 권장안으로 미확정.
-- [5개 모델 학습 전 코드](../03_experiments/model_optimization/README.md): 동일한 Baseline 조건으로 다시 학습한 후 모델별 파라미터 수정·최적화.
+- [전체 연구계획](RESEARCH_PLAN.md): ① 4인 공통 오류·데이터 분석 → ② Normal/Combined 효과 검증 → ③ 자동 Pipeline·증강 중심 최적화 → ④ 5개 비교·최종 모델 확정 → ⑤ Original Test → ⑥ 교수님 1차 Test → ⑦ 필요 시 2차 Test.
+- [4인 병렬 작업계획](TEAM_PARALLEL_WORKPLAN.md): **유용성·김다연·이선형·곽지호 모두 직접 오류 분석, Original/Hand-made 분포 비교, 전처리 또는 증강 방법 실험, 전후 성능 검증**을 수행. 작성자별 집중 주제는 팀장 제안이며 최종 합의·수행 완료를 뜻하지 않는다.
+- [의사결정 이력](DECISION_LOG.md): 교수님 구두 Test 정정, 기존 PDF와 구별된 운영 규칙, 완료/미실시 판단.
+- [Hand-made 데이터 분할 및 Test 정책](../02_data/HANDMADE_SPLIT_PLAN.md): 기존 2,560장 학습/검증 허용(누출 불가), 신규 Validation 640장은 수집 권장안, 신규 독립 Test 640장은 선택안.
+- [학습 전 5개 모델 코드](../03_experiments/model_optimization/README.md): 기존 Baseline 재현용이며 Combined/Pipeline/증강 기능은 **향후 구현 과제**.
 
-기존 01_project 문서의 초기 운영 템플릿은 유지한다. 현재 실험 결과는 주차별 실제 실험 로그를 우선한다. 5개 모델 개선과 Combined 학습은 아직 완료하지 않았다.
+**교수님 1·2차 배포 데이터는 Test 전용.** 모델 고정 후 1차 성능만 확인하고, 충분하면 종료한다. 미흡하면 1차 이미지/오류 분석 없이 기존 개발 데이터로만 개선해 2차 Test를 수행한다. 사전에 정한 자동 전처리 Pipeline의 추론 적용만 허용하며 Test 원본에 대한 개별 수동 수정은 하지 않는다.
+
+**상태:** W02 실험 1~3 수행 기록 보존, 이후 Combined 재학습·자동 Pipeline/증강 실험·외부 Test는 아직 미실시.
