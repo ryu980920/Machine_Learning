@@ -70,7 +70,34 @@
 
 **수치 확인:** [원본 전체 결과 CSV](../results/EXP-유-003_5models_comparison.csv)에는 반올림 전 정확도·Macro F1, `n_iter`, 스케일링, 모델 파일명 등을 담았다. [클래스별 결과 CSV](../results/EXP-유-003_per_class.csv)는 각 클래스의 Precision·Recall·F1·Support를 기록하며, [Confusion Matrix CSV](../results/EXP-유-003_confusion_long.csv)는 실제/예측 레이블별 5×16×16 수치를 보존한다. Confusion Matrix 대각선 합으로 계산한 Accuracy가 원본 5개 값과 모두 일치하는지 재확인했다.
 
-## 5. 관찰 결과와 모델별 해석
+## 5. 모델별 Confusion Matrix 시각화 (16×16 Heatmap)
+
+- **근거:** 실험 2에서 실제 측정한 [Confusion Matrix 원본 CSV](../results/EXP-유-003_confusion_long.csv), 총 5개 모델 × 16×16개 칸. **수치 재학습/재평가 없이** 측정된 원본 값으로 PNG 이미지를 생성했다.
+- **읽는 방법:** **세로축(Actual)** = 실제 문자, **가로축(Predicted)** = 모델이 예측한 문자. 대각선은 정답, 대각선 밖은 오분류. 각 칸의 **숫자는 절대 이미지 수(count)** 이다.
+- **색상:** 작게 나타나는 오분류도 식별할 수 있도록 색상만 `log(1 + count)`로 변환하여 표시한 **로그 컬러 스케일**이다. **표시 숫자 및 Accuracy는 변환하지 않았다.** 컬러 스케일은 모델별 최대 개수에 맞춰 표시하며, 모델 간 오분류 건수 비교는 반드시 숫자를 기준으로 한다.
+- **검증 데이터:** 모델별 동일한 Normal Validation **19,200장**, 클래스 **0–9 및 A–F**. 이미지 5개를 각각 별도의 PNG로 저장하고, [이미지 파일 목록](../results/confusion_matrices/README.md)에 연결한다.
+
+### 1. SVC (RBF) — Validation Accuracy 97.67%
+
+![SVC (RBF) Confusion Matrix 16x16](../results/confusion_matrices/SVC_RBF_confusion_matrix.png)
+
+### 2. HistGradientBoosting — Validation Accuracy 97.46%
+
+![HistGradientBoosting Confusion Matrix 16x16](../results/confusion_matrices/HistGradientBoosting_confusion_matrix.png)
+
+### 3. MLPClassifier — Validation Accuracy 97.32%
+
+![MLPClassifier Confusion Matrix 16x16](../results/confusion_matrices/MLPClassifier_confusion_matrix.png)
+
+### 4. ExtraTreesClassifier — Validation Accuracy 96.97%
+
+![ExtraTreesClassifier Confusion Matrix 16x16](../results/confusion_matrices/ExtraTrees_confusion_matrix.png)
+
+### 5. KNeighborsClassifier — Validation Accuracy 96.29%
+
+![KNeighborsClassifier Confusion Matrix 16x16](../results/confusion_matrices/KNeighbors_confusion_matrix.png)
+
+## 6. 관찰 결과와 모델별 해석
 
 | 모델 | 확인된 결과 | 해석 및 다음 확인 과제 |
 |---|---|---|
@@ -84,7 +111,7 @@
 - **학습 표본 점수 주의:** MLP·Extra Trees의 1,600장 표본 Accuracy는 100%였으나, 이것만으로 과적합이라고 단정하지 않는다.
 - **과거 평가 이력 주의:** 별도 중단된 Training–Test 예비 실행에서 일부 공식 Test 성능을 확인한 이력이 있다. **이번 실험 2에서는 Test를 사용하지 않았지만**, 프로젝트 전체에서 Test가 한 번도 열람되지 않았다고 주장하지 않는다.
 
-## 6. 결론·후속 단계·산출물 관리
+## 7. 결론·후속 단계·산출물 관리
 
 **결론: Normal Dataset의 5개 모델 Baseline 확보 완료.** 다섯 모델이 같은 분할에서 보인 성능과 시간 비용을 모두 수치로 남겼으며, 아직 최종 모델 선정은 보류한다.
 

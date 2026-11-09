@@ -72,6 +72,8 @@ W01에서 검토한 **13개 후보 항목 모두를 초기 예비 평가 대상�
 - **실제 완료 결과:** 5개 모델 모두 고정 Normal Validation **19,200장** 평가 완료. SVC(RBF) 97.67%, HistGradientBoosting 97.46%, MLP 97.32%, Extra Trees 96.97%, KNN 96.29%. 원본 결과·학습/추론 시간·클래스별 지표·Confusion Matrix는 [EXP-유-003 실험 2](logs/EXP-유-003_5개모델_Normal_Baseline.md) 및 [CSV](results/EXP-유-003_5models_comparison.csv)에 기록.
 - **상태:** **완료 — Normal 5개 모델 기본 성능 평가에 한함**. [실험 1](logs/EXP-유-002_13개후보_초기평가_5개선정.md)의 12,000/3,200장 비교와 **별도 실험**이다. Hand-made 평가·Combined 학습·최적화는 아직 미실시.
 
+**실험 2 Confusion Matrix 시각화:** [SVC (RBF)](results/confusion_matrices/SVC_RBF_confusion_matrix.png) · [HistGradientBoosting](results/confusion_matrices/HistGradientBoosting_confusion_matrix.png) · [MLPClassifier](results/confusion_matrices/MLPClassifier_confusion_matrix.png) · [ExtraTreesClassifier](results/confusion_matrices/ExtraTrees_confusion_matrix.png) · [KNeighborsClassifier](results/confusion_matrices/KNeighbors_confusion_matrix.png) · [시각화 설명 및 원본 연결](results/confusion_matrices/README.md). 실제 Validation 19,200장에 대한 **5개 모델의 16×16 컬러 Heatmap PNG**이며, [EXP-유-003](logs/EXP-유-003_5개모델_Normal_Baseline.md)에서 각각 확인할 수 있다.
+
 ### 단계 C — Hand-made 적용 전 정확도 저하 확인 (후속 실험 3)
 
 - **목적:** Hand-made 데이터를 아직 학습하지 않은 Normal 모델 5개를 실제 손글씨에 적용해 공식 Validation 대비 성능 하락과 작성자별 특성을 분석한다.

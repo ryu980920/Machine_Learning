@@ -45,7 +45,7 @@ W03 이후는 실제 진행 내용과 역할이 결정될 때 추가한다. W01�
 | 실험 ID | 담당 | 작업 | 기록 |
 |---|---|---|---|
 | **EXP-유-002 (W02 실험 1)** | 유용성 | **13개 후보 기본 학습·성능 비교 → Accuracy 90% Threshold 및 모델 계열 기준 적용 → 5개 모델 선정** | [실험 로그](W02_2026-11-09_11-15/logs/EXP-유-002_13개후보_초기평가_5개선정.md) · [실측 결과 CSV](W02_2026-11-09_11-15/results/EXP-유-002_13models_ranked.csv) |
-| **EXP-유-003 (W02 실험 2)** | 유용성 | **Normal Dataset 8:2 분할, 5개 모델 기본 성능 평가 (Training 76,800 / Validation 19,200)**; Accuracy·Macro F1·학습/추론 시간 비교 | [실험 로그](03_experiments/W02_2026-11-09_11-15/logs/EXP-유-003_5개모델_Normal_Baseline.md) · [수치 CSV](03_experiments/W02_2026-11-09_11-15/results/EXP-유-003_5models_comparison.csv) |
+| **EXP-유-003 (W02 실험 2)** | 유용성 | **Normal Dataset 8:2 분할, 5개 모델 기본 성능 평가 (Training 76,800 / Validation 19,200)**; Accuracy·Macro F1·학습/추론 시간 비교 | [실험 로그](03_experiments/W02_2026-11-09_11-15/logs/EXP-유-003_5개모델_Normal_Baseline.md) · [수치 CSV](03_experiments/W02_2026-11-09_11-15/results/EXP-유-003_5models_comparison.csv) | · [Confusion Matrix PNG 5종](W02_2026-11-09_11-15/results/confusion_matrices/README.md)
 
 김다연의 발표 작업은 주차별 지시서에 포함하고, 발표 자료는 `04_reports/`에서 관리한다.
 
