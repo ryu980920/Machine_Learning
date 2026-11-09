@@ -1,0 +1,21 @@
+model,writer,wrong_to_right,right_to_wrong,unchanged
+SVC (RBF),41,292,19,329
+SVC (RBF),42,0,0,640
+SVC (RBF),43,0,0,640
+SVC (RBF),44,403,3,234
+HistGradientBoosting,41,252,19,369
+HistGradientBoosting,42,0,0,640
+HistGradientBoosting,43,0,0,640
+HistGradientBoosting,44,339,9,292
+MLP,41,352,24,264
+MLP,42,0,0,640
+MLP,43,0,0,640
+MLP,44,391,6,243
+Extra Trees,41,302,17,321
+Extra Trees,42,0,0,640
+Extra Trees,43,0,0,640
+Extra Trees,44,380,14,246
+KNN,41,238,12,390
+KNN,42,0,0,640
+KNN,43,0,0,640
+KNN,44,373,10,257

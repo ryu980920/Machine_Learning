@@ -1,0 +1,81 @@
+model,key,label,n,old_correct,new_correct,difference_correct
+SVC (RBF),svc,0,40,40,36,-4
+SVC (RBF),svc,1,40,37,36,-1
+SVC (RBF),svc,2,40,38,34,-4
+SVC (RBF),svc,3,40,34,35,1
+SVC (RBF),svc,4,40,26,24,-2
+SVC (RBF),svc,5,40,23,22,-1
+SVC (RBF),svc,6,40,37,35,-2
+SVC (RBF),svc,7,40,11,15,4
+SVC (RBF),svc,8,40,26,32,6
+SVC (RBF),svc,9,40,10,14,4
+SVC (RBF),svc,A,40,33,24,-9
+SVC (RBF),svc,B,40,0,1,1
+SVC (RBF),svc,C,40,27,38,11
+SVC (RBF),svc,D,40,0,6,6
+SVC (RBF),svc,E,40,29,34,5
+SVC (RBF),svc,F,40,38,36,-2
+HistGradientBoosting,hgb,0,40,40,35,-5
+HistGradientBoosting,hgb,1,40,36,32,-4
+HistGradientBoosting,hgb,2,40,34,36,2
+HistGradientBoosting,hgb,3,40,35,37,2
+HistGradientBoosting,hgb,4,40,30,23,-7
+HistGradientBoosting,hgb,5,40,36,30,-6
+HistGradientBoosting,hgb,6,40,33,24,-9
+HistGradientBoosting,hgb,7,40,9,1,-8
+HistGradientBoosting,hgb,8,40,29,37,8
+HistGradientBoosting,hgb,9,40,9,7,-2
+HistGradientBoosting,hgb,A,40,5,22,17
+HistGradientBoosting,hgb,B,40,0,0,0
+HistGradientBoosting,hgb,C,40,9,26,17
+HistGradientBoosting,hgb,D,40,0,0,0
+HistGradientBoosting,hgb,E,40,3,24,21
+HistGradientBoosting,hgb,F,40,8,24,16
+MLP,mlp,0,40,34,34,0
+MLP,mlp,1,40,36,30,-6
+MLP,mlp,2,40,34,35,1
+MLP,mlp,3,40,33,33,0
+MLP,mlp,4,40,23,21,-2
+MLP,mlp,5,40,24,22,-2
+MLP,mlp,6,40,33,34,1
+MLP,mlp,7,40,18,24,6
+MLP,mlp,8,40,30,32,2
+MLP,mlp,9,40,17,15,-2
+MLP,mlp,A,40,24,22,-2
+MLP,mlp,B,40,6,6,0
+MLP,mlp,C,40,37,38,1
+MLP,mlp,D,40,22,22,0
+MLP,mlp,E,40,35,34,-1
+MLP,mlp,F,40,38,40,2
+Extra Trees,extra_trees,0,40,40,38,-2
+Extra Trees,extra_trees,1,40,36,34,-2
+Extra Trees,extra_trees,2,40,39,36,-3
+Extra Trees,extra_trees,3,40,37,37,0
+Extra Trees,extra_trees,4,40,30,23,-7
+Extra Trees,extra_trees,5,40,26,25,-1
+Extra Trees,extra_trees,6,40,29,28,-1
+Extra Trees,extra_trees,7,40,7,3,-4
+Extra Trees,extra_trees,8,40,32,29,-3
+Extra Trees,extra_trees,9,40,8,8,0
+Extra Trees,extra_trees,A,40,29,28,-1
+Extra Trees,extra_trees,B,40,0,0,0
+Extra Trees,extra_trees,C,40,35,37,2
+Extra Trees,extra_trees,D,40,6,7,1
+Extra Trees,extra_trees,E,40,29,28,-1
+Extra Trees,extra_trees,F,40,38,38,0
+KNN,knn,0,40,33,30,-3
+KNN,knn,1,40,37,36,-1
+KNN,knn,2,40,36,32,-4
+KNN,knn,3,40,35,35,0
+KNN,knn,4,40,23,20,-3
+KNN,knn,5,40,21,18,-3
+KNN,knn,6,40,24,21,-3
+KNN,knn,7,40,10,8,-2
+KNN,knn,8,40,21,15,-6
+KNN,knn,9,40,4,6,2
+KNN,knn,A,40,36,23,-13
+KNN,knn,B,40,12,8,-4
+KNN,knn,C,40,38,37,-1
+KNN,knn,D,40,27,20,-7
+KNN,knn,E,40,35,36,1
+KNN,knn,F,40,38,36,-2

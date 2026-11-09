@@ -1,0 +1,86 @@
+{
+  "input_42_sha256": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+  "data_writers": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "before_rotation_applied_to": [],
+  "after_rotation_applied_to": [
+    41,
+    44
+  ],
+  "fixed_writers": [
+    42,
+    43
+  ],
+  "models": [
+    "SVC (RBF)",
+    "HistGradientBoosting",
+    "MLP",
+    "Extra Trees",
+    "KNN"
+  ],
+  "reuse_unchanged_pred_from": "EXP-유-004_Handmade_Test_Results.zip",
+  "new42_pred_from": "EXP3_re_evaluation/results/predictions.csv",
+  "matrix_checks": "10 matrices each 2560, 160/class, trace matches correct",
+  "summary": [
+    {
+      "model": "SVC (RBF)",
+      "n": 2560,
+      "before_correct": 903,
+      "after_correct": 1576,
+      "before_accuracy": 0.352734375,
+      "after_accuracy": 0.615625,
+      "change_percentage_points": 26.2890625,
+      "before_macro_f1": 0.3674044067399102,
+      "after_macro_f1": 0.604037977206742
+    },
+    {
+      "model": "HistGradientBoosting",
+      "n": 2560,
+      "before_correct": 842,
+      "after_correct": 1405,
+      "before_accuracy": 0.32890625,
+      "after_accuracy": 0.548828125,
+      "change_percentage_points": 21.9921875,
+      "before_macro_f1": 0.3332785047366348,
+      "after_macro_f1": 0.5174515541463102
+    },
+    {
+      "model": "MLP",
+      "n": 2560,
+      "before_correct": 896,
+      "after_correct": 1609,
+      "before_accuracy": 0.35,
+      "after_accuracy": 0.628515625,
+      "change_percentage_points": 27.851562500000004,
+      "before_macro_f1": 0.3664558863404829,
+      "after_macro_f1": 0.6241421612834209
+    },
+    {
+      "model": "Extra Trees",
+      "n": 2560,
+      "before_correct": 926,
+      "after_correct": 1577,
+      "before_accuracy": 0.36171875,
+      "after_accuracy": 0.616015625,
+      "change_percentage_points": 25.429687499999996,
+      "before_macro_f1": 0.3714948256283621,
+      "after_macro_f1": 0.5912181524849736
+    },
+    {
+      "model": "KNN",
+      "n": 2560,
+      "before_correct": 917,
+      "after_correct": 1506,
+      "before_accuracy": 0.358203125,
+      "after_accuracy": 0.58828125,
+      "change_percentage_points": 23.007812499999996,
+      "before_macro_f1": 0.3536932094958919,
+      "after_macro_f1": 0.5664200025438473
+    }
+  ],
+  "review_and_deployment": "This dataset and results were reviewed before GitHub deployment; only current commit is a published version."
+}
