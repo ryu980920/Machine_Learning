@@ -44,6 +44,16 @@
 
 ## 현재 상태
 
-공식 분할 기반 [데이터 구성 Notebook](02_data/notebooks/02_official_split_dataset.ipynb)과 [NPZ 데이터셋](02_data/datasets/MNIST_EMNIST_official_split_112000.npz)을 등록했습니다. [EXP-001 실험일지](03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md)는 PDF 원문을 Markdown으로 변환했으며, 이전 데이터 버전의 기록임을 표시했습니다.
+공식 분할 기반 [데이터 구성 Notebook](02_data/notebooks/02_official_split_dataset.ipynb)과 [NPZ 데이터셋](02_data/datasets/MNIST_EMNIST_official_split_112000.npz)을 등록했습니다. [EXP-곽-001 데이터셋 구성 실험일지](03_experiments/W01_2026-11-02_11-08/logs/EXP-곽-001_MNIST_EMNIST_데이터셋_구성.md)는 PDF 원문을 Markdown으로 변환했으며, 이전 데이터 버전의 기록임을 표시했습니다.
 
 **Hand-made Grayscale 데이터셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번 **각 640장(총 2,560장)**을 원본 JPG 기반 **0–255 Grayscale NPZ**로 통일했습니다(2026-11-09 기존 Binary 파일 교체). Normal 모델의 Hand-made 평가에 사용하며, 후속 Combined 학습에 일부 편입할 경우 **작성자별 보류 평가셋과 학습셋을 겹치지 않게 분리**합니다. [변환 검증 기록](02_data/Hand_made/GRAYSCALE_VERIFICATION.md) 참조.
+
+## 현재 연구 진행 및 다음 단계 — 2026-11-10
+
+**실제 완료:** 13개 후보 평가 → SVC·HGB·MLP·Extra Trees·KNN 5개 선정 → 공식 Training 76,800장 / Validation 19,200장으로 Normal Baseline 평가 → 기존 Hand-made 2,560장 평가 및 이미지 회전·극성·42번 Grayscale 원본 문제 분석.
+
+**향후 순서:** (1) Hand-made 추가 학습 효과를 Normal vs Combined로 검증 (2) 5개 모델별 최적화 (3) 최적화한 5개 비교 (4) 최종 모델 선정·추가 개선 후 설정 고정 (5) **새로운 Hand-made Test + MNIST·EMNIST 공식 Test 16,000장을 각각 평가** (6) 교수님 1차 배포 데이터셋 평가.
+
+- [상세 연구계획](01_project/RESEARCH_PLAN.md) · [의사결정 이력](01_project/DECISION_LOG.md) · [Hand-made 신규 수집·분할안](02_data/HANDMADE_SPLIT_PLAN.md)
+- [팀원용 학습 전 모델 5개 및 실행 가이드](02_data/notebooks/model_optimization/README.md): 원래 Baseline 기본 설정을 재현하고 `build_candidate()`에서 수정·재학습. **학습 완료 .joblib 공유 아님**.
+- 신규 Validation/Test 각 640장은 현재 권장안이지 확정 수량이 아니다. 기존 Hand-made 2,560장의 Combined 추가 학습 여부도 효과 검증 후 결정한다.
