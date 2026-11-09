@@ -46,4 +46,4 @@
 
 공식 분할 기반 [데이터 구성 Notebook](02_data/notebooks/02_official_split_dataset.ipynb)과 [NPZ 데이터셋](02_data/datasets/MNIST_EMNIST_official_split_112000.npz)을 등록했습니다. [EXP-001 실험일지](03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md)는 PDF 원문을 Markdown으로 변환했으며, 이전 데이터 버전의 기록임을 표시했습니다.
 
-**Hand-made 독립 테스트셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번의 **640장씩 4개 NPZ(총 2,560장)**를 43번 양식으로 통일하여 등록했습니다. 이 데이터는 학습·튜닝에 사용하지 않습니다.
+**Hand-made Grayscale 데이터셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번 **각 640장(총 2,560장)**을 원본 JPG 기반 **0~255 Grayscale NPZ**로 통일했습니다(2026-11-09 기존 Binary 파일 교체). Normal 모델의 Hand-made 평가에 사용하며, 후속 Combined 학습에 일부 편입할 경우 **작성자별 보류 평가셋과 학습셋을 겹치지 않게 분리**합니다. [변환 검증 기록](02_data/Hand_made/GRAYSCALE_VERIFICATION.md) 참조.

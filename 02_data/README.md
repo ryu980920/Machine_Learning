@@ -21,46 +21,50 @@
 - [W01 이선형 통합 실험 기록](../03_experiments/W01_2026-11-02_11-08/logs/EXP-이-001_중복검증_증강개선.md)에 이전 버전(v2)과 최종 수정(v3)을 구분해 기록했다.
 - **최초 공식 분할 Notebook과 최종 v3는 동일한 버전이 아니다.** 이전 데이터셋 기록인 [EXP-곽-001](../03_experiments/W01_2026-11-02_11-08/logs/EXP-곽-001_MNIST_EMNIST_데이터셋_구성.md)의 수치와도 혼용하지 않는다.
 
-## 2. Hand-made 데이터 4개
+## 2. Hand-made 데이터 4개 — Grayscale 표준 (2026-11-09 교체)
 
-| 파일 | 데이터 크기 | 클래스 | 참고 |
+팀원 원본 JPG(28×28)에서 **중간 밝기값을 보존하는 Grayscale NPZ**로 4개 파일을 다시 생성했다. 기존 0/1 Binary NPZ는 **현재 main 브랜치에서 대체**되었다. 기존 파일은 이전 Git 커밋 이력에 남으며, 원본 개인 ZIP은 저장소에 올리지 않는다.
+
+| 파일 | 데이터 크기 | 픽셀 표현 | 처리 |
 |---|---|---|---|
-| [ml26_41.npz](Hand_made/ml26_41.npz) | 640 × 28 × 28 | 16클래스 × 40장 | JPG와 기존 별도 형식 NPZ에서 43 형식으로 통일 |
-| [ml26_42.npz](Hand_made/ml26_42.npz) | 640 × 28 × 28 | 16클래스 × 40장 | JPG에서 생성, **흑백 극성 반전** |
-| [ml26_43.npz](Hand_made/ml26_43.npz) | 640 × 28 × 28 | 16클래스 × 40장 | 사용자가 제공한 **원본 NPZ 바이트 그대로 보존** |
-| [ml26_44.npz](Hand_made/ml26_44.npz) | 640 × 28 × 28 | 16클래스 × 40장 | JPG와 기존 별도 형식 NPZ에서 43 형식으로 통일, **흑백 극성 반전** |
+| [ml26_41.npz](Hand_made/ml26_41.npz) | 640 × 28 × 28 | 0~255, 256종 | 원본 JPG 밝기 보존 |
+| [ml26_42.npz](Hand_made/ml26_42.npz) | 640 × 28 × 28 | 0~255, **4종** | 흰 배경/검은 글자 → **255 - X** 반전 |
+| [ml26_43.npz](Hand_made/ml26_43.npz) | 640 × 28 × 28 | 0~255, 256종 | **원본 JPG에서 Grayscale 재생성** (과거 Binary NPZ 사용 안 함) |
+| [ml26_44.npz](Hand_made/ml26_44.npz) | 640 × 28 × 28 | 0~255, 256종 | 흰 배경/검은 글자 → **255 - X** 반전 |
 
-총 **2,560장**이며, 네 데이터셋을 합치지 않고 개별 NPZ로 보관한다. 교수님 지침에 따라 **MNIST·EMNIST와 함께 학습하는 Combined Dataset 실험에 사용할 수 있다.** 단, 해당 실험에서 **학습에 포함한 이미지와 평가 이미지는 겹치지 않게** 분리하며, 작성자별 홀드아웃 등 적용한 분할 기준을 기록한다.
+총 **2,560장**, 작성자당 **16개 클래스 × 각 40장**. 네 파일을 합치지 않고 개별 보관한다. 42번은 최초 JPG 자체가 사실상 이진 이미지라 반전해도 중간 밝기가 거의 없다.
 
-### 공통 NPZ 양식 — `ml26_43.npz` 기준
+### 공통 NPZ 양식 — 실험 코드 호환
 
 | Key | Shape | dtype | 내용 |
 |---|---|---|---|
-| `img` | `(640, 28, 28)` | `uint8` | 0/1 이진 이미지, **0=검은 배경, 1=흰 글자** |
+| `img` | `(640, 28, 28)` | `uint8` | **Grayscale 0~255**, 검은 배경·밝은 글자 |
 | `label` | `(640,)` | `<U1` | `'0'`~`'9'`, `'A'`~`'F'` |
-| `label_id` | `(640,)` | `uint8` | 숫자 0~9, 문자 A~F는 10~15 |
+| `label_id` | `(640,)` | `uint8` | 0~9, A~F는 10~15 |
 
-- 원본 JPG는 모두 **28×28**이다. 클래스별 40장씩, 저장 순서는 `0_01 → 1_01 → … → F_01 → 0_02 → … → F_40`이다.
-- JPG 밝기값 **127 초과 → 1**로 이진화하였다. 41·43은 검은 배경에 밝은 글자이며 42·44는 흰 배경에 어두운 글자라서, 42·44만 반전하여 **네 파일 모두 검은 배경=0, 밝은 글자=1**로 통일했다.
-- 43의 원본 NPZ는 전체 640장의 JPG 이진화 결과와 픽셀별로 일치함을 확인한 뒤 변경하지 않았다.
-- 4개 NPZ 모두 `img`, `label`, `label_id` **세 Key만 포함**하며, Shape·dtype·레이블·모든 이미지의 0/1 픽셀을 검증했다.
-- **주의:** 최종 MNIST·EMNIST NPZ의 픽셀 범위 및 데이터 스케일과 Hand-made NPZ의 0/1 값은 다르다. 모델에 넣을 때는 **Training에서 정한 일관된 추론 입력 변환 규칙**을 적용해야 한다.
+- 저장 순서: `0_01 → 1_01 → … → F_01 → 0_02 → … → F_40`. 640장의 순서·정답 배열은 기존과 동일하다.
+- **임계값 이진화, 이미지 확대/축소, 중심 정렬, 회전·증강을 적용하지 않았다.** 원본 JPG의 28×28 밝기값을 보존하고 42·44번만 반전했다.
+- 네 파일 모두 원본 JPG 픽셀/레이블을 재확인하고 NPZ 재읽기 검증, 재생성 바이트 일치 검증을 마쳤다. 정확한 **SHA-256과 작성자별 중간 밝기 비율**은 [GRAYSCALE_VERIFICATION.md](Hand_made/GRAYSCALE_VERIFICATION.md)를 참고한다.
+- **중요 — 실험 3:** 손글씨 `img`에는 이미 0~255 값이 들어 있다. **추가로 `*255`를 수행하지 않는다.** 실험 2에서 저장한 SVC·MLP·KNN의 `PixelScaler255` Pipeline은 그대로 사용한다.
+- 이후 Combined Dataset 실험에서는 손글씨 중 **학습에 사용한 이미지와 평가용 이미지를 분리**한다. 시험용 보류 작성자 등 사용 분할을 기록한다.
 
 ## 3. 코드 및 재현성
 
 - [02_official_split_dataset.ipynb](notebooks/02_official_split_dataset.ipynb): 공식 분할 **초기 데이터셋**을 생성하는 Notebook. 이를 실행하는 것만으로 v3가 재생성되는 것은 아니다.
 - [rebuild_ml04_v3.py](notebooks/rebuild_ml04_v3.py): **공식 분할 초기 NPZ**를 검증된 v3로 업데이트. 원본 SHA와 결과 SHA가 맞는 경우에만 교체하도록 구성.
-- [convert_hand_made.py](notebooks/convert_hand_made.py): 개인별 원본 ZIP `ml26_41.zip`~`ml26_44.zip`에서 43과 같은 형식으로 4개 NPZ를 생성·검증. 원본 ZIP은 저장소에 보관하지 않는다.
+- [convert_hand_made.py](notebooks/convert_hand_made.py): 개인별 원본 JPG ZIP 또는 팀 제출 `ML-Project.zip`에서 **0~255 Grayscale 4개 NPZ를 재생성·검증**한다. 원본 ZIP은 저장소에 보관하지 않는다.
 
 원본 ZIP이 있는 로컬 컴퓨터에서 변환 실행:
 
 ```bash
 pip install numpy pillow
+python 02_data/notebooks/convert_hand_made.py --source /path/to/ML-Project.zip --output-dir 02_data/Hand_made
+# 개별 ZIP 4개가 있는 경우
 python 02_data/notebooks/convert_hand_made.py --input-dir /path/to/zips --output-dir 02_data/Hand_made
 ```
 
 ## 4. 운영 원칙
 
-- 결과 이미지 및 NPZ를 GitHub에서 비교할 때는 버전, 이미지 개수, 이미지 값(0/1과 0~255), 정답 레이블을 확인한다.
+- 결과 이미지 및 NPZ를 GitHub에서 비교할 때는 **Grayscale v2 (2026-11-09)** 여부, 원본 이미지 수, 픽셀 범위(0~255), 정답 레이블, 파일 SHA-256을 확인한다. 이전 Binary v1은 과거 커밋에 보존되어 있다.
 - **Hand-made는 학습에 사용할 수 있다.** Normal/Combined 비교에서는 Hand-made 중 학습용과 평가용을 **겹치지 않게 분리**하고, 비교하는 모델에 동일한 평가 조건을 사용한다. 교수님이 배포하는 평가 데이터는 **1차/2차 단계별 별도 지침**을 따른다.
 - 데이터·코드 변경은 [03_experiments 주차별 기록](../03_experiments/README.md)에 근거를 남기고, 최종 NPZ 버전과 연결한다.
