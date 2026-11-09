@@ -1,4 +1,4 @@
-# EXP-유-005 | W02 실험 4 — 42번 Hand-made 원본 Grayscale 재제출 전후 비교
+# EXP유004 | W02 실험 4 — 42번 Hand-made 원본 Grayscale 재제출 전후 비교
 
 > **확정 기록(2026-11-10 배포).** 실험 범위는 **기존 42번(사실상 Binary인 4단계 밝기)과 새 42번(256단계 Grayscale)**의 데이터 특성 및 동일한 5개 모델의 평가 결과 비교이다. 본 문서는 42번의 데이터 적합성 문제를 분석하며 특정 변환을 통해 정확도를 높이는 것을 목적으로 하지 않는다.
 
@@ -6,8 +6,8 @@
 |---|---|
 | 담당 | 팀장 유용성, 분석·문서화 AI 보조 |
 | 수행일 | 2026-11-09 |
-| 실험 | W02 실험 4 (EXP-유-005, 데이터셋 형식·제작 조건 비교) |
-| 실험 3 최신 비교안 | 기존 `EXP-유-003` Normal Baseline 보존 후 새 42번 기준 Rotation 비교를 추가 비교 절(8절)에 반영. 기존 `EXP-유-004`는 수정하지 않음 |
+| 실험 | W02 실험 4 (EXP유004, 데이터셋 형식·제작 조건 비교) |
+| 실험 3 최신 비교안 | 기존 `EXP유002` Normal Baseline 보존 후 새 42번 기준 Rotation 비교를 추가 비교 절(8절)에 반영. 기존 `EXP유003`는 수정하지 않음 |
 | 비교 대상 | 구 42번 NPZ와 재제출 42번 NPZ, 각각 640장·16개 클래스×40장 |
 | 평가 방식 | **동일하게 실험 2에서 저장된 Normal 모델 5개 사용, 모델 변경 및 재학습 없음** |
 
@@ -33,7 +33,7 @@
 
 **판정:** 구 42번은 Grayscale 파일 형식 자체는 정상이지만 중간 밝기 정보가 사실상 없어, 41·43·44번과 제작 조건이 일관적이지 않았다. 새 42번은 256종 밝기값이 실제로 존재해 데이터 형식과 분포 측면에서 더욱 일관된 입력으로 교체할 근거가 확보됐다.
 
-![42번 원본 버전별 표본 비교](../results/EXP-유-005/writer42_before_after_examples.png)
+![42번 원본 버전별 표본 비교](../results/EXP유004/writer42_before_after_examples.png)
 
 **주의:** 구 42번과 새 42번은 같은 클래스·이미지 인덱스를 기준으로 대응하지만 **픽셀 배열은 동일하지 않다**(전체 평균 절대 픽셀 차이 약 **14.65/255**). 따라서 단순히 중간 밝기값만 바꾼 통제 실험이라고 간주하지 않는다.
 
@@ -67,19 +67,19 @@
 | Extra Trees | 4 (-7장) | C (+2장) |
 | KNN | A (-13장) | 9 (+2장) |
 
-원본 수치 전체는 [writer42_old_vs_new.csv](../results/EXP-유-005/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP-유-005/writer42_per_class_old_vs_new.csv)에 보존한다.
+원본 수치 전체는 [writer42_old_vs_new.csv](../results/EXP유004/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP유004/writer42_per_class_old_vs_new.csv)에 보존한다.
 
 ## 5. 결과 해석 및 후속 처리
 
 1. **입력 형식과 데이터 품질을 구분:** 42번의 구 파일도 `uint8` Grayscale이므로 모델 입력으로 사용하는 것 자체가 형식 오류는 아니었다. 하지만 **밝기 정보가 극도로 제한돼 작성자별 공정한 조건 비교에 교란 요인**이 될 수 있었다.
 2. **새 원본 사용 근거:** 새 42번은 고유 밝기값 256종이며, 별도 반전·회전 없이 28×28 표준 입력을 구성할 수 있었다. 구 버전으로 재평가할 이유가 줄어 **현재 표준 입력을 새 42번으로 교체**했다.
 3. **성능에 대한 비판적 해석:** 일부 모델은 상승하고 일부는 하락했다. 두 원본 사이에는 회색 단계뿐 아니라 실제 픽셀 배열 차이도 있으므로 **정확도 변화가 밝기 단계 수의 영향이라고 인과적으로 단정할 수 없다**. 특히 새로운 데이터가 반드시 모든 모델에서 더 높은 점수를 내야 정상인 것은 아니다.
-4. **연구 기록:** 기존 실험 3의 구 42번 성능은 실험 4의 비교표와 Git 이력으로 보존한다. 최신 42번 기준 전체 2,560장 비교는 `EXP-유-003`의 **추가 분석 항목**에 기록하며, 요청대로 기존 `EXP-유-004`를 변경하지 않는다.
+4. **연구 기록:** 기존 실험 3의 구 42번 성능은 실험 4의 비교표와 Git 이력으로 보존한다. 최신 42번 기준 전체 2,560장 비교는 `EXP유002`의 **추가 분석 항목**에 기록하며, 요청대로 기존 `EXP유003`를 변경하지 않는다.
 5. **향후 과제:** 새 42번을 포함한 현재 데이터를 기준으로 데이터 버전·SHA-256을 고정하고, 이후 모델 변경이나 개선 실험에서는 별도의 보류 평가를 확보한다.
 
 ### 재현 및 검증 자료
 
-- 구 42번 입력: 초기 `EXP-유-004_Handmade_Test_Results.zip`의 `orientation_corrected_inputs/ml26_42.npz`(로컬 원본 보관, Git 기록으로 이전 NPZ 확인 가능).
+- 구 42번 입력: 초기 `EXP유003_Handmade_Test_Results.zip`의 `orientation_corrected_inputs/ml26_42.npz`(로컬 원본 보관, Git 기록으로 이전 NPZ 확인 가능).
 - 새 42번 입력: 현재 `02_data/Hand_made/ml26_42.npz`(원본 픽셀 `X` 보존, **반전 및 회전 없음**).
 - 최신 Rotation 비교 검토 결과: `EXP-유-003_rotation_v4/rotation_before_after_5models.csv`, `rotation_before_predictions.csv`, `rotation_after_predictions.csv`.
-- 실험 4 비교 결과: [writer42_old_vs_new.csv](../results/EXP-유-005/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP-유-005/writer42_per_class_old_vs_new.csv).
+- 실험 4 비교 결과: [writer42_old_vs_new.csv](../results/EXP유004/writer42_old_vs_new.csv), [writer42_per_class_old_vs_new.csv](../results/EXP유004/writer42_per_class_old_vs_new.csv).

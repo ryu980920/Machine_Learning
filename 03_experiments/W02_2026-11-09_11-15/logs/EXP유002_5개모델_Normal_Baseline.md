@@ -1,6 +1,6 @@
-# EXP-유-003 | W02 실험 2 — Normal Dataset 기반 5개 모델 기본 성능 평가
+# EXP유002 | W02 실험 2 — Normal Dataset 기반 5개 모델 기본 성능 평가
 
-> **연구 단계:** [실험 1 — 13개 후보 초기 비교·5개 선정](EXP-유-002_13개후보_초기평가_5개선정.md) 이후의 **실험 2: Normal Dataset Baseline**. 이후 예정된 **실험 3 — Hand-made 적용 전 성능 평가**, **실험 4 — 데이터·모델 문제 분석 및 개선**, **실험 5 — Combined Dataset 추가 학습**, **실험 6 — 최종 모델 선정**의 기준선으로 사용한다.
+> **연구 단계:** [실험 1 — 13개 후보 초기 비교·5개 선정](EXP유001_13개후보_초기평가_5개선정.md) 이후의 **실험 2: Normal Dataset Baseline**. 이후 예정된 **실험 3 — Hand-made 적용 전 성능 평가**, **실험 4 — 데이터·모델 문제 분석 및 개선**, **실험 5 — Combined Dataset 추가 학습**, **실험 6 — 최종 모델 선정**의 기준선으로 사용한다.
 >
 > **실험 목적:** MNIST·EMNIST만을 이용한 동일한 전체 규모 Training/Validation 조건에서, 선정된 **5개 분류기**의 초기 Accuracy, Macro F1, 학습 시간과 추론 시간을 실제 측정하여 후속 Hand-made 데이터의 성능 하락 및 개선 효과를 비교할 기준값을 확보한다.
 >
@@ -11,7 +11,7 @@
 | 수행일 | 2026-11-09 |
 | 담당 | 유용성(팀장), 코드 실행 및 결과 정리 AI 보조 |
 | 상태 | **완료 — Normal Baseline 5개 모델(1–7절), 새 42번 기준 Hand-made Rotation 추가 비교(8절)** |
-| 선행 실험 | [EXP-유-002 — W02 실험 1](EXP-유-002_13개후보_초기평가_5개선정.md) |
+| 선행 실험 | [EXP유001 — W02 실험 1](EXP유001_13개후보_초기평가_5개선정.md) |
 | 후속 계획 | [W02 연구계획 단계 C–F](../README.md) — 초기 작성 시 미실시; 이후 Rotation 비교는 **8절에 추가 기록** |
 | 통합 수치 | [5개 모델 원본 성능 CSV](../results/EXP-유-003_5models_comparison.csv) |
 | 세부 수치 | [클래스별 Precision·Recall·F1](../results/EXP-유-003_per_class.csv) · [전체 Confusion Matrix 수치](../results/EXP-유-003_confusion_long.csv) |
@@ -20,7 +20,7 @@
 
 ## 1. 실험 배경 및 검증 질문
 
-- **이전 단계 결과:** 13개 후보를 소규모로 비교한 뒤, 정확도 90% 이상 및 동일 계열 중복 최소화 기준으로 **SVC(RBF), HistGradientBoosting, MLP, Extra Trees, KNN**을 선정하였다. [실험 1의 학습 12,000/Validation 3,200장 결과](EXP-유-002_13개후보_초기평가_5개선정.md)와 이번 전체 규모 실험은 **비교 목적과 학습 수량이 다른 별도 실험**이다.
+- **이전 단계 결과:** 13개 후보를 소규모로 비교한 뒤, 정확도 90% 이상 및 동일 계열 중복 최소화 기준으로 **SVC(RBF), HistGradientBoosting, MLP, Extra Trees, KNN**을 선정하였다. [실험 1의 학습 12,000/Validation 3,200장 결과](EXP유001_13개후보_초기평가_5개선정.md)와 이번 전체 규모 실험은 **비교 목적과 학습 수량이 다른 별도 실험**이다.
 - **검증할 질문:** 선정된 다섯 모델이 **동일한 약 8:2 Normal Training/Validation 분할**에서 보이는 초기 분류 정확도와 학습·추론 비용은 어떻게 다른가?
 - **후속 실험에서의 역할:** 같은 모델을 Hand-made에 적용했을 때의 정확도 하락 폭을 확인하고, Normal/Combined 학습과 Hyperparameter·Preprocessing 변경 효과를 측정할 **고정된 기준선(Baseline)**이다.
 
@@ -223,8 +223,8 @@ python 02_data/notebooks/W02_experiment2/run_experiment2.py --all --timeout 3600
 - Rotation 보정 전후의 전체 정확도는 32.89–36.17%에서 54.88–62.85%로 향상됐다. 다섯 모델의 정확도·Macro F1 모두 증가했다.
 - 42번 재제출 원본에 따른 효과와 Rotation 보정 효과는 **서로 다른 비교**다. 이 절에서는 42번의 픽셀값과 예측을 전후 동일하게 유지했다.
 - Normal Validation(19,200장, 기존 1–7절)은 전혀 변경되지 않았다. 전체 학습 모델도 재학습하지 않았다.
-- 42번 Binary형과 재제출 Grayscale형의 데이터 품질·예측 차이는 별도 실험 4(`EXP-유-005`)에 기록하고, 중간 밝기만 바뀐 통제 실험으로 해석하지 않는다.
-- 모델 및 예측값: `W02_Experiment2_5models_complete(1).zip`의 저장 `joblib`, 기존 `EXP-유-004_Handmade_Test_Results.zip`의 구 방향 실측 예측, 새 42번 재평가 추론 파일. 대용량 모델 파일은 GitHub에 올리지 않음.
+- 42번 Binary형과 재제출 Grayscale형의 데이터 품질·예측 차이는 별도 실험 4(`EXP유004`)에 기록하고, 중간 밝기만 바뀐 통제 실험으로 해석하지 않는다.
+- 모델 및 예측값: `W02_Experiment2_5models_complete(1).zip`의 저장 `joblib`, 기존 `EXP유003_Handmade_Test_Results.zip`의 구 방향 실측 예측, 새 42번 재평가 추론 파일. 대용량 모델 파일은 GitHub에 올리지 않음.
 - 결과 CSV와 10개 Confusion Matrix는 `../results/EXP-유-003_rotation_v4/`에 함께 등록하는 안. 추후 새 원본으로 완전 신규 전체 재실행할 때는 추가 검증 상태를 구분해서 기록한다.
 
 
