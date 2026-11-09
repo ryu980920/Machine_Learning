@@ -8,10 +8,10 @@ from sklearn.model_selection import StratifiedGroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, precision_recall_fscore_support
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "W02_experiment2"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "W02_2026-11-09_11-15" / "scripts" / "experiment2_baseline"))
 from pixel_transform import PixelScaler255
 
-DEFAULT_DATA = Path(__file__).resolve().parents[2] / "datasets" / "MNIST_EMNIST_official_split_112000.npz"
+DEFAULT_DATA = Path(__file__).resolve().parents[2] / "02_data" / "datasets" / "MNIST_EMNIST_official_split_112000.npz"
 EXPECTED_SHA = "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879"
 LABELS = "0123456789ABCDEF"
 

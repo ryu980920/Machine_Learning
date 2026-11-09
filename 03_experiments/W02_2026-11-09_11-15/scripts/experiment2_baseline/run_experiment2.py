@@ -31,7 +31,7 @@ from joblib import dump
 from pixel_transform import PixelScaler255
 
 ROOT=Path(__file__).resolve().parent
-SOURCE=Path('/mnt/data/ML_04_MNIST_EMNIST_fixed_aug_v3_train_D_duplicate_fixed.npz')
+SOURCE=Path(__file__).resolve().parents[4] / '02_data' / 'datasets' / 'MNIST_EMNIST_official_split_112000.npz'
 EXPECTED_SHA='0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879'
 LABELS='0123456789ABCDEF'
 SPECS={

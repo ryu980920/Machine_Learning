@@ -9,7 +9,7 @@ comparisons, 16x16 confusion matrices and row-level paired predictions.
 From repository root:
     python -m pip install numpy scikit-learn joblib matplotlib
     OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 \
-      python 02_data/notebooks/W02_experiment3/run_rotation_comparison.py \
+      python 03_experiments/W02_2026-11-09_11-15/scripts/experiment3_handmade/run_rotation_comparison.py \
       --model-zip '/path/to/W02_Experiment2_5models_complete(1).zip' \
       --handmade-dir 02_data/Hand_made \
       --out 03_experiments/W02_2026-11-09_11-15/results/EXP-유-003_rotation_v4

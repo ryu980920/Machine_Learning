@@ -6,11 +6,11 @@ writer-42 submission ZIP. The original ML-Project.zip contains the superseded
 writer-42 data; it must not silently overwrite the replacement.
 
 Examples:
-  python 02_data/notebooks/convert_hand_made.py \\
+  python 02_data/scripts/convert_hand_made.py \\
     --source /path/to/ML-Project.zip \\
     --writer42-replacement '/path/to/ml26_42(2).zip' \\
     --output-dir 02_data/Hand_made
-  python 02_data/notebooks/convert_hand_made.py \\
+  python 02_data/scripts/convert_hand_made.py \\
     --input-dir /path/to/original_individual_zips \\
     --writer42-replacement '/path/to/ml26_42(2).zip' \\
     --output-dir 02_data/Hand_made
