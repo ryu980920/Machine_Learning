@@ -1,0 +1,1281 @@
+﻿model,actual_label,predicted_label,count
+SVC (RBF),0,0,1175
+SVC (RBF),0,1,0
+SVC (RBF),0,2,1
+SVC (RBF),0,3,1
+SVC (RBF),0,4,0
+SVC (RBF),0,5,2
+SVC (RBF),0,6,1
+SVC (RBF),0,7,0
+SVC (RBF),0,8,2
+SVC (RBF),0,9,2
+SVC (RBF),0,A,0
+SVC (RBF),0,B,0
+SVC (RBF),0,C,0
+SVC (RBF),0,D,1
+SVC (RBF),0,E,0
+SVC (RBF),0,F,0
+SVC (RBF),1,0,0
+SVC (RBF),1,1,1332
+SVC (RBF),1,2,3
+SVC (RBF),1,3,8
+SVC (RBF),1,4,1
+SVC (RBF),1,5,0
+SVC (RBF),1,6,0
+SVC (RBF),1,7,1
+SVC (RBF),1,8,1
+SVC (RBF),1,9,2
+SVC (RBF),1,A,0
+SVC (RBF),1,B,0
+SVC (RBF),1,C,0
+SVC (RBF),1,D,0
+SVC (RBF),1,E,0
+SVC (RBF),1,F,0
+SVC (RBF),2,0,4
+SVC (RBF),2,1,2
+SVC (RBF),2,2,1164
+SVC (RBF),2,3,4
+SVC (RBF),2,4,5
+SVC (RBF),2,5,3
+SVC (RBF),2,6,3
+SVC (RBF),2,7,3
+SVC (RBF),2,8,4
+SVC (RBF),2,9,0
+SVC (RBF),2,A,0
+SVC (RBF),2,B,0
+SVC (RBF),2,C,0
+SVC (RBF),2,D,0
+SVC (RBF),2,E,0
+SVC (RBF),2,F,0
+SVC (RBF),3,0,1
+SVC (RBF),3,1,0
+SVC (RBF),3,2,7
+SVC (RBF),3,3,1187
+SVC (RBF),3,4,1
+SVC (RBF),3,5,8
+SVC (RBF),3,6,0
+SVC (RBF),3,7,5
+SVC (RBF),3,8,12
+SVC (RBF),3,9,5
+SVC (RBF),3,A,0
+SVC (RBF),3,B,0
+SVC (RBF),3,C,0
+SVC (RBF),3,D,0
+SVC (RBF),3,E,0
+SVC (RBF),3,F,0
+SVC (RBF),4,0,0
+SVC (RBF),4,1,3
+SVC (RBF),4,2,1
+SVC (RBF),4,3,0
+SVC (RBF),4,4,1142
+SVC (RBF),4,5,0
+SVC (RBF),4,6,3
+SVC (RBF),4,7,4
+SVC (RBF),4,8,0
+SVC (RBF),4,9,11
+SVC (RBF),4,A,4
+SVC (RBF),4,B,0
+SVC (RBF),4,C,0
+SVC (RBF),4,D,0
+SVC (RBF),4,E,0
+SVC (RBF),4,F,0
+SVC (RBF),5,0,1
+SVC (RBF),5,1,1
+SVC (RBF),5,2,1
+SVC (RBF),5,3,7
+SVC (RBF),5,4,6
+SVC (RBF),5,5,1057
+SVC (RBF),5,6,6
+SVC (RBF),5,7,0
+SVC (RBF),5,8,4
+SVC (RBF),5,9,1
+SVC (RBF),5,A,0
+SVC (RBF),5,B,0
+SVC (RBF),5,C,0
+SVC (RBF),5,D,0
+SVC (RBF),5,E,0
+SVC (RBF),5,F,0
+SVC (RBF),6,0,4
+SVC (RBF),6,1,2
+SVC (RBF),6,2,2
+SVC (RBF),6,3,0
+SVC (RBF),6,4,4
+SVC (RBF),6,5,5
+SVC (RBF),6,6,1165
+SVC (RBF),6,7,0
+SVC (RBF),6,8,2
+SVC (RBF),6,9,0
+SVC (RBF),6,A,0
+SVC (RBF),6,B,0
+SVC (RBF),6,C,0
+SVC (RBF),6,D,0
+SVC (RBF),6,E,0
+SVC (RBF),6,F,0
+SVC (RBF),7,0,0
+SVC (RBF),7,1,7
+SVC (RBF),7,2,10
+SVC (RBF),7,3,1
+SVC (RBF),7,4,5
+SVC (RBF),7,5,1
+SVC (RBF),7,6,0
+SVC (RBF),7,7,1221
+SVC (RBF),7,8,4
+SVC (RBF),7,9,4
+SVC (RBF),7,A,0
+SVC (RBF),7,B,0
+SVC (RBF),7,C,0
+SVC (RBF),7,D,0
+SVC (RBF),7,E,0
+SVC (RBF),7,F,0
+SVC (RBF),8,0,1
+SVC (RBF),8,1,4
+SVC (RBF),8,2,5
+SVC (RBF),8,3,2
+SVC (RBF),8,4,7
+SVC (RBF),8,5,6
+SVC (RBF),8,6,0
+SVC (RBF),8,7,1
+SVC (RBF),8,8,1138
+SVC (RBF),8,9,6
+SVC (RBF),8,A,0
+SVC (RBF),8,B,0
+SVC (RBF),8,C,0
+SVC (RBF),8,D,0
+SVC (RBF),8,E,0
+SVC (RBF),8,F,0
+SVC (RBF),9,0,3
+SVC (RBF),9,1,5
+SVC (RBF),9,2,0
+SVC (RBF),9,3,8
+SVC (RBF),9,4,19
+SVC (RBF),9,5,6
+SVC (RBF),9,6,0
+SVC (RBF),9,7,7
+SVC (RBF),9,8,6
+SVC (RBF),9,9,1136
+SVC (RBF),9,A,0
+SVC (RBF),9,B,0
+SVC (RBF),9,C,0
+SVC (RBF),9,D,0
+SVC (RBF),9,E,0
+SVC (RBF),9,F,0
+SVC (RBF),A,0,0
+SVC (RBF),A,1,1
+SVC (RBF),A,2,2
+SVC (RBF),A,3,1
+SVC (RBF),A,4,2
+SVC (RBF),A,5,0
+SVC (RBF),A,6,0
+SVC (RBF),A,7,0
+SVC (RBF),A,8,0
+SVC (RBF),A,9,1
+SVC (RBF),A,A,1183
+SVC (RBF),A,B,0
+SVC (RBF),A,C,0
+SVC (RBF),A,D,3
+SVC (RBF),A,E,1
+SVC (RBF),A,F,6
+SVC (RBF),B,0,0
+SVC (RBF),B,1,0
+SVC (RBF),B,2,0
+SVC (RBF),B,3,0
+SVC (RBF),B,4,0
+SVC (RBF),B,5,0
+SVC (RBF),B,6,1
+SVC (RBF),B,7,0
+SVC (RBF),B,8,3
+SVC (RBF),B,9,0
+SVC (RBF),B,A,15
+SVC (RBF),B,B,1162
+SVC (RBF),B,C,2
+SVC (RBF),B,D,9
+SVC (RBF),B,E,6
+SVC (RBF),B,F,2
+SVC (RBF),C,0,1
+SVC (RBF),C,1,0
+SVC (RBF),C,2,1
+SVC (RBF),C,3,0
+SVC (RBF),C,4,0
+SVC (RBF),C,5,1
+SVC (RBF),C,6,2
+SVC (RBF),C,7,0
+SVC (RBF),C,8,1
+SVC (RBF),C,9,0
+SVC (RBF),C,A,0
+SVC (RBF),C,B,1
+SVC (RBF),C,C,1179
+SVC (RBF),C,D,7
+SVC (RBF),C,E,4
+SVC (RBF),C,F,3
+SVC (RBF),D,0,3
+SVC (RBF),D,1,0
+SVC (RBF),D,2,1
+SVC (RBF),D,3,3
+SVC (RBF),D,4,0
+SVC (RBF),D,5,0
+SVC (RBF),D,6,0
+SVC (RBF),D,7,1
+SVC (RBF),D,8,1
+SVC (RBF),D,9,1
+SVC (RBF),D,A,1
+SVC (RBF),D,B,4
+SVC (RBF),D,C,1
+SVC (RBF),D,D,1183
+SVC (RBF),D,E,0
+SVC (RBF),D,F,1
+SVC (RBF),E,0,0
+SVC (RBF),E,1,0
+SVC (RBF),E,2,0
+SVC (RBF),E,3,0
+SVC (RBF),E,4,0
+SVC (RBF),E,5,2
+SVC (RBF),E,6,1
+SVC (RBF),E,7,0
+SVC (RBF),E,8,0
+SVC (RBF),E,9,0
+SVC (RBF),E,A,1
+SVC (RBF),E,B,7
+SVC (RBF),E,C,27
+SVC (RBF),E,D,1
+SVC (RBF),E,E,1145
+SVC (RBF),E,F,16
+SVC (RBF),F,0,0
+SVC (RBF),F,1,0
+SVC (RBF),F,2,2
+SVC (RBF),F,3,1
+SVC (RBF),F,4,0
+SVC (RBF),F,5,0
+SVC (RBF),F,6,0
+SVC (RBF),F,7,1
+SVC (RBF),F,8,1
+SVC (RBF),F,9,0
+SVC (RBF),F,A,5
+SVC (RBF),F,B,1
+SVC (RBF),F,C,5
+SVC (RBF),F,D,0
+SVC (RBF),F,E,1
+SVC (RBF),F,F,1183
+HistGradientBoostingClassifier,0,0,1166
+HistGradientBoostingClassifier,0,1,0
+HistGradientBoostingClassifier,0,2,1
+HistGradientBoostingClassifier,0,3,0
+HistGradientBoostingClassifier,0,4,0
+HistGradientBoostingClassifier,0,5,3
+HistGradientBoostingClassifier,0,6,4
+HistGradientBoostingClassifier,0,7,1
+HistGradientBoostingClassifier,0,8,8
+HistGradientBoostingClassifier,0,9,2
+HistGradientBoostingClassifier,0,A,0
+HistGradientBoostingClassifier,0,B,0
+HistGradientBoostingClassifier,0,C,0
+HistGradientBoostingClassifier,0,D,0
+HistGradientBoostingClassifier,0,E,0
+HistGradientBoostingClassifier,0,F,0
+HistGradientBoostingClassifier,1,0,0
+HistGradientBoostingClassifier,1,1,1321
+HistGradientBoostingClassifier,1,2,6
+HistGradientBoostingClassifier,1,3,9
+HistGradientBoostingClassifier,1,4,3
+HistGradientBoostingClassifier,1,5,0
+HistGradientBoostingClassifier,1,6,0
+HistGradientBoostingClassifier,1,7,2
+HistGradientBoostingClassifier,1,8,6
+HistGradientBoostingClassifier,1,9,1
+HistGradientBoostingClassifier,1,A,0
+HistGradientBoostingClassifier,1,B,0
+HistGradientBoostingClassifier,1,C,0
+HistGradientBoostingClassifier,1,D,0
+HistGradientBoostingClassifier,1,E,0
+HistGradientBoostingClassifier,1,F,0
+HistGradientBoostingClassifier,2,0,3
+HistGradientBoostingClassifier,2,1,3
+HistGradientBoostingClassifier,2,2,1155
+HistGradientBoostingClassifier,2,3,8
+HistGradientBoostingClassifier,2,4,5
+HistGradientBoostingClassifier,2,5,1
+HistGradientBoostingClassifier,2,6,4
+HistGradientBoostingClassifier,2,7,5
+HistGradientBoostingClassifier,2,8,5
+HistGradientBoostingClassifier,2,9,1
+HistGradientBoostingClassifier,2,A,2
+HistGradientBoostingClassifier,2,B,0
+HistGradientBoostingClassifier,2,C,0
+HistGradientBoostingClassifier,2,D,0
+HistGradientBoostingClassifier,2,E,0
+HistGradientBoostingClassifier,2,F,0
+HistGradientBoostingClassifier,3,0,1
+HistGradientBoostingClassifier,3,1,1
+HistGradientBoostingClassifier,3,2,8
+HistGradientBoostingClassifier,3,3,1184
+HistGradientBoostingClassifier,3,4,1
+HistGradientBoostingClassifier,3,5,9
+HistGradientBoostingClassifier,3,6,1
+HistGradientBoostingClassifier,3,7,8
+HistGradientBoostingClassifier,3,8,5
+HistGradientBoostingClassifier,3,9,8
+HistGradientBoostingClassifier,3,A,0
+HistGradientBoostingClassifier,3,B,0
+HistGradientBoostingClassifier,3,C,0
+HistGradientBoostingClassifier,3,D,0
+HistGradientBoostingClassifier,3,E,0
+HistGradientBoostingClassifier,3,F,0
+HistGradientBoostingClassifier,4,0,0
+HistGradientBoostingClassifier,4,1,2
+HistGradientBoostingClassifier,4,2,3
+HistGradientBoostingClassifier,4,3,1
+HistGradientBoostingClassifier,4,4,1142
+HistGradientBoostingClassifier,4,5,0
+HistGradientBoostingClassifier,4,6,3
+HistGradientBoostingClassifier,4,7,3
+HistGradientBoostingClassifier,4,8,1
+HistGradientBoostingClassifier,4,9,13
+HistGradientBoostingClassifier,4,A,0
+HistGradientBoostingClassifier,4,B,0
+HistGradientBoostingClassifier,4,C,0
+HistGradientBoostingClassifier,4,D,0
+HistGradientBoostingClassifier,4,E,0
+HistGradientBoostingClassifier,4,F,0
+HistGradientBoostingClassifier,5,0,4
+HistGradientBoostingClassifier,5,1,3
+HistGradientBoostingClassifier,5,2,1
+HistGradientBoostingClassifier,5,3,6
+HistGradientBoostingClassifier,5,4,1
+HistGradientBoostingClassifier,5,5,1052
+HistGradientBoostingClassifier,5,6,6
+HistGradientBoostingClassifier,5,7,1
+HistGradientBoostingClassifier,5,8,6
+HistGradientBoostingClassifier,5,9,4
+HistGradientBoostingClassifier,5,A,0
+HistGradientBoostingClassifier,5,B,0
+HistGradientBoostingClassifier,5,C,0
+HistGradientBoostingClassifier,5,D,0
+HistGradientBoostingClassifier,5,E,0
+HistGradientBoostingClassifier,5,F,0
+HistGradientBoostingClassifier,6,0,2
+HistGradientBoostingClassifier,6,1,2
+HistGradientBoostingClassifier,6,2,2
+HistGradientBoostingClassifier,6,3,0
+HistGradientBoostingClassifier,6,4,3
+HistGradientBoostingClassifier,6,5,4
+HistGradientBoostingClassifier,6,6,1164
+HistGradientBoostingClassifier,6,7,0
+HistGradientBoostingClassifier,6,8,7
+HistGradientBoostingClassifier,6,9,0
+HistGradientBoostingClassifier,6,A,0
+HistGradientBoostingClassifier,6,B,0
+HistGradientBoostingClassifier,6,C,0
+HistGradientBoostingClassifier,6,D,0
+HistGradientBoostingClassifier,6,E,0
+HistGradientBoostingClassifier,6,F,0
+HistGradientBoostingClassifier,7,0,0
+HistGradientBoostingClassifier,7,1,3
+HistGradientBoostingClassifier,7,2,9
+HistGradientBoostingClassifier,7,3,0
+HistGradientBoostingClassifier,7,4,4
+HistGradientBoostingClassifier,7,5,0
+HistGradientBoostingClassifier,7,6,0
+HistGradientBoostingClassifier,7,7,1226
+HistGradientBoostingClassifier,7,8,4
+HistGradientBoostingClassifier,7,9,5
+HistGradientBoostingClassifier,7,A,2
+HistGradientBoostingClassifier,7,B,0
+HistGradientBoostingClassifier,7,C,0
+HistGradientBoostingClassifier,7,D,0
+HistGradientBoostingClassifier,7,E,0
+HistGradientBoostingClassifier,7,F,0
+HistGradientBoostingClassifier,8,0,0
+HistGradientBoostingClassifier,8,1,6
+HistGradientBoostingClassifier,8,2,3
+HistGradientBoostingClassifier,8,3,2
+HistGradientBoostingClassifier,8,4,4
+HistGradientBoostingClassifier,8,5,5
+HistGradientBoostingClassifier,8,6,3
+HistGradientBoostingClassifier,8,7,0
+HistGradientBoostingClassifier,8,8,1135
+HistGradientBoostingClassifier,8,9,12
+HistGradientBoostingClassifier,8,A,0
+HistGradientBoostingClassifier,8,B,0
+HistGradientBoostingClassifier,8,C,0
+HistGradientBoostingClassifier,8,D,0
+HistGradientBoostingClassifier,8,E,0
+HistGradientBoostingClassifier,8,F,0
+HistGradientBoostingClassifier,9,0,4
+HistGradientBoostingClassifier,9,1,3
+HistGradientBoostingClassifier,9,2,1
+HistGradientBoostingClassifier,9,3,7
+HistGradientBoostingClassifier,9,4,11
+HistGradientBoostingClassifier,9,5,6
+HistGradientBoostingClassifier,9,6,1
+HistGradientBoostingClassifier,9,7,6
+HistGradientBoostingClassifier,9,8,12
+HistGradientBoostingClassifier,9,9,1137
+HistGradientBoostingClassifier,9,A,1
+HistGradientBoostingClassifier,9,B,0
+HistGradientBoostingClassifier,9,C,1
+HistGradientBoostingClassifier,9,D,0
+HistGradientBoostingClassifier,9,E,0
+HistGradientBoostingClassifier,9,F,0
+HistGradientBoostingClassifier,A,0,0
+HistGradientBoostingClassifier,A,1,0
+HistGradientBoostingClassifier,A,2,2
+HistGradientBoostingClassifier,A,3,0
+HistGradientBoostingClassifier,A,4,2
+HistGradientBoostingClassifier,A,5,0
+HistGradientBoostingClassifier,A,6,0
+HistGradientBoostingClassifier,A,7,0
+HistGradientBoostingClassifier,A,8,0
+HistGradientBoostingClassifier,A,9,0
+HistGradientBoostingClassifier,A,A,1176
+HistGradientBoostingClassifier,A,B,2
+HistGradientBoostingClassifier,A,C,3
+HistGradientBoostingClassifier,A,D,4
+HistGradientBoostingClassifier,A,E,1
+HistGradientBoostingClassifier,A,F,10
+HistGradientBoostingClassifier,B,0,0
+HistGradientBoostingClassifier,B,1,0
+HistGradientBoostingClassifier,B,2,0
+HistGradientBoostingClassifier,B,3,0
+HistGradientBoostingClassifier,B,4,0
+HistGradientBoostingClassifier,B,5,0
+HistGradientBoostingClassifier,B,6,1
+HistGradientBoostingClassifier,B,7,0
+HistGradientBoostingClassifier,B,8,1
+HistGradientBoostingClassifier,B,9,0
+HistGradientBoostingClassifier,B,A,12
+HistGradientBoostingClassifier,B,B,1164
+HistGradientBoostingClassifier,B,C,1
+HistGradientBoostingClassifier,B,D,13
+HistGradientBoostingClassifier,B,E,7
+HistGradientBoostingClassifier,B,F,1
+HistGradientBoostingClassifier,C,0,1
+HistGradientBoostingClassifier,C,1,0
+HistGradientBoostingClassifier,C,2,0
+HistGradientBoostingClassifier,C,3,0
+HistGradientBoostingClassifier,C,4,1
+HistGradientBoostingClassifier,C,5,1
+HistGradientBoostingClassifier,C,6,0
+HistGradientBoostingClassifier,C,7,0
+HistGradientBoostingClassifier,C,8,0
+HistGradientBoostingClassifier,C,9,0
+HistGradientBoostingClassifier,C,A,1
+HistGradientBoostingClassifier,C,B,3
+HistGradientBoostingClassifier,C,C,1170
+HistGradientBoostingClassifier,C,D,11
+HistGradientBoostingClassifier,C,E,7
+HistGradientBoostingClassifier,C,F,5
+HistGradientBoostingClassifier,D,0,2
+HistGradientBoostingClassifier,D,1,0
+HistGradientBoostingClassifier,D,2,1
+HistGradientBoostingClassifier,D,3,0
+HistGradientBoostingClassifier,D,4,0
+HistGradientBoostingClassifier,D,5,0
+HistGradientBoostingClassifier,D,6,0
+HistGradientBoostingClassifier,D,7,0
+HistGradientBoostingClassifier,D,8,0
+HistGradientBoostingClassifier,D,9,0
+HistGradientBoostingClassifier,D,A,1
+HistGradientBoostingClassifier,D,B,9
+HistGradientBoostingClassifier,D,C,1
+HistGradientBoostingClassifier,D,D,1182
+HistGradientBoostingClassifier,D,E,0
+HistGradientBoostingClassifier,D,F,4
+HistGradientBoostingClassifier,E,0,0
+HistGradientBoostingClassifier,E,1,0
+HistGradientBoostingClassifier,E,2,0
+HistGradientBoostingClassifier,E,3,0
+HistGradientBoostingClassifier,E,4,0
+HistGradientBoostingClassifier,E,5,0
+HistGradientBoostingClassifier,E,6,0
+HistGradientBoostingClassifier,E,7,0
+HistGradientBoostingClassifier,E,8,1
+HistGradientBoostingClassifier,E,9,0
+HistGradientBoostingClassifier,E,A,2
+HistGradientBoostingClassifier,E,B,9
+HistGradientBoostingClassifier,E,C,15
+HistGradientBoostingClassifier,E,D,1
+HistGradientBoostingClassifier,E,E,1160
+HistGradientBoostingClassifier,E,F,12
+HistGradientBoostingClassifier,F,0,0
+HistGradientBoostingClassifier,F,1,1
+HistGradientBoostingClassifier,F,2,0
+HistGradientBoostingClassifier,F,3,0
+HistGradientBoostingClassifier,F,4,0
+HistGradientBoostingClassifier,F,5,2
+HistGradientBoostingClassifier,F,6,0
+HistGradientBoostingClassifier,F,7,1
+HistGradientBoostingClassifier,F,8,0
+HistGradientBoostingClassifier,F,9,0
+HistGradientBoostingClassifier,F,A,5
+HistGradientBoostingClassifier,F,B,0
+HistGradientBoostingClassifier,F,C,5
+HistGradientBoostingClassifier,F,D,0
+HistGradientBoostingClassifier,F,E,7
+HistGradientBoostingClassifier,F,F,1179
+MLPClassifier,0,0,1167
+MLPClassifier,0,1,0
+MLPClassifier,0,2,1
+MLPClassifier,0,3,0
+MLPClassifier,0,4,0
+MLPClassifier,0,5,1
+MLPClassifier,0,6,3
+MLPClassifier,0,7,1
+MLPClassifier,0,8,1
+MLPClassifier,0,9,5
+MLPClassifier,0,A,0
+MLPClassifier,0,B,0
+MLPClassifier,0,C,3
+MLPClassifier,0,D,3
+MLPClassifier,0,E,0
+MLPClassifier,0,F,0
+MLPClassifier,1,0,0
+MLPClassifier,1,1,1326
+MLPClassifier,1,2,2
+MLPClassifier,1,3,9
+MLPClassifier,1,4,1
+MLPClassifier,1,5,0
+MLPClassifier,1,6,2
+MLPClassifier,1,7,3
+MLPClassifier,1,8,2
+MLPClassifier,1,9,2
+MLPClassifier,1,A,1
+MLPClassifier,1,B,0
+MLPClassifier,1,C,0
+MLPClassifier,1,D,0
+MLPClassifier,1,E,0
+MLPClassifier,1,F,0
+MLPClassifier,2,0,3
+MLPClassifier,2,1,3
+MLPClassifier,2,2,1151
+MLPClassifier,2,3,10
+MLPClassifier,2,4,6
+MLPClassifier,2,5,0
+MLPClassifier,2,6,2
+MLPClassifier,2,7,5
+MLPClassifier,2,8,4
+MLPClassifier,2,9,0
+MLPClassifier,2,A,2
+MLPClassifier,2,B,0
+MLPClassifier,2,C,3
+MLPClassifier,2,D,1
+MLPClassifier,2,E,0
+MLPClassifier,2,F,2
+MLPClassifier,3,0,1
+MLPClassifier,3,1,0
+MLPClassifier,3,2,7
+MLPClassifier,3,3,1192
+MLPClassifier,3,4,0
+MLPClassifier,3,5,13
+MLPClassifier,3,6,0
+MLPClassifier,3,7,3
+MLPClassifier,3,8,5
+MLPClassifier,3,9,3
+MLPClassifier,3,A,0
+MLPClassifier,3,B,0
+MLPClassifier,3,C,0
+MLPClassifier,3,D,1
+MLPClassifier,3,E,1
+MLPClassifier,3,F,0
+MLPClassifier,4,0,0
+MLPClassifier,4,1,4
+MLPClassifier,4,2,2
+MLPClassifier,4,3,1
+MLPClassifier,4,4,1133
+MLPClassifier,4,5,0
+MLPClassifier,4,6,7
+MLPClassifier,4,7,3
+MLPClassifier,4,8,1
+MLPClassifier,4,9,11
+MLPClassifier,4,A,4
+MLPClassifier,4,B,0
+MLPClassifier,4,C,1
+MLPClassifier,4,D,0
+MLPClassifier,4,E,0
+MLPClassifier,4,F,1
+MLPClassifier,5,0,3
+MLPClassifier,5,1,1
+MLPClassifier,5,2,2
+MLPClassifier,5,3,8
+MLPClassifier,5,4,4
+MLPClassifier,5,5,1047
+MLPClassifier,5,6,6
+MLPClassifier,5,7,3
+MLPClassifier,5,8,6
+MLPClassifier,5,9,2
+MLPClassifier,5,A,0
+MLPClassifier,5,B,0
+MLPClassifier,5,C,1
+MLPClassifier,5,D,0
+MLPClassifier,5,E,0
+MLPClassifier,5,F,1
+MLPClassifier,6,0,3
+MLPClassifier,6,1,1
+MLPClassifier,6,2,3
+MLPClassifier,6,3,1
+MLPClassifier,6,4,5
+MLPClassifier,6,5,3
+MLPClassifier,6,6,1162
+MLPClassifier,6,7,0
+MLPClassifier,6,8,2
+MLPClassifier,6,9,1
+MLPClassifier,6,A,1
+MLPClassifier,6,B,0
+MLPClassifier,6,C,2
+MLPClassifier,6,D,0
+MLPClassifier,6,E,0
+MLPClassifier,6,F,0
+MLPClassifier,7,0,0
+MLPClassifier,7,1,3
+MLPClassifier,7,2,9
+MLPClassifier,7,3,2
+MLPClassifier,7,4,2
+MLPClassifier,7,5,1
+MLPClassifier,7,6,0
+MLPClassifier,7,7,1222
+MLPClassifier,7,8,4
+MLPClassifier,7,9,6
+MLPClassifier,7,A,2
+MLPClassifier,7,B,0
+MLPClassifier,7,C,1
+MLPClassifier,7,D,1
+MLPClassifier,7,E,0
+MLPClassifier,7,F,0
+MLPClassifier,8,0,3
+MLPClassifier,8,1,8
+MLPClassifier,8,2,7
+MLPClassifier,8,3,8
+MLPClassifier,8,4,2
+MLPClassifier,8,5,6
+MLPClassifier,8,6,1
+MLPClassifier,8,7,2
+MLPClassifier,8,8,1122
+MLPClassifier,8,9,8
+MLPClassifier,8,A,0
+MLPClassifier,8,B,0
+MLPClassifier,8,C,0
+MLPClassifier,8,D,0
+MLPClassifier,8,E,2
+MLPClassifier,8,F,1
+MLPClassifier,9,0,1
+MLPClassifier,9,1,1
+MLPClassifier,9,2,0
+MLPClassifier,9,3,5
+MLPClassifier,9,4,18
+MLPClassifier,9,5,7
+MLPClassifier,9,6,0
+MLPClassifier,9,7,5
+MLPClassifier,9,8,6
+MLPClassifier,9,9,1144
+MLPClassifier,9,A,3
+MLPClassifier,9,B,0
+MLPClassifier,9,C,0
+MLPClassifier,9,D,0
+MLPClassifier,9,E,0
+MLPClassifier,9,F,0
+MLPClassifier,A,0,0
+MLPClassifier,A,1,0
+MLPClassifier,A,2,2
+MLPClassifier,A,3,0
+MLPClassifier,A,4,3
+MLPClassifier,A,5,0
+MLPClassifier,A,6,0
+MLPClassifier,A,7,1
+MLPClassifier,A,8,0
+MLPClassifier,A,9,0
+MLPClassifier,A,A,1174
+MLPClassifier,A,B,6
+MLPClassifier,A,C,1
+MLPClassifier,A,D,4
+MLPClassifier,A,E,2
+MLPClassifier,A,F,7
+MLPClassifier,B,0,2
+MLPClassifier,B,1,0
+MLPClassifier,B,2,0
+MLPClassifier,B,3,0
+MLPClassifier,B,4,0
+MLPClassifier,B,5,0
+MLPClassifier,B,6,0
+MLPClassifier,B,7,0
+MLPClassifier,B,8,2
+MLPClassifier,B,9,0
+MLPClassifier,B,A,12
+MLPClassifier,B,B,1161
+MLPClassifier,B,C,5
+MLPClassifier,B,D,6
+MLPClassifier,B,E,9
+MLPClassifier,B,F,3
+MLPClassifier,C,0,1
+MLPClassifier,C,1,0
+MLPClassifier,C,2,1
+MLPClassifier,C,3,1
+MLPClassifier,C,4,0
+MLPClassifier,C,5,2
+MLPClassifier,C,6,2
+MLPClassifier,C,7,0
+MLPClassifier,C,8,0
+MLPClassifier,C,9,0
+MLPClassifier,C,A,0
+MLPClassifier,C,B,1
+MLPClassifier,C,C,1176
+MLPClassifier,C,D,6
+MLPClassifier,C,E,8
+MLPClassifier,C,F,2
+MLPClassifier,D,0,4
+MLPClassifier,D,1,0
+MLPClassifier,D,2,0
+MLPClassifier,D,3,4
+MLPClassifier,D,4,0
+MLPClassifier,D,5,0
+MLPClassifier,D,6,0
+MLPClassifier,D,7,1
+MLPClassifier,D,8,0
+MLPClassifier,D,9,0
+MLPClassifier,D,A,2
+MLPClassifier,D,B,3
+MLPClassifier,D,C,3
+MLPClassifier,D,D,1180
+MLPClassifier,D,E,1
+MLPClassifier,D,F,2
+MLPClassifier,E,0,0
+MLPClassifier,E,1,0
+MLPClassifier,E,2,0
+MLPClassifier,E,3,0
+MLPClassifier,E,4,0
+MLPClassifier,E,5,3
+MLPClassifier,E,6,1
+MLPClassifier,E,7,0
+MLPClassifier,E,8,0
+MLPClassifier,E,9,0
+MLPClassifier,E,A,4
+MLPClassifier,E,B,7
+MLPClassifier,E,C,19
+MLPClassifier,E,D,0
+MLPClassifier,E,E,1155
+MLPClassifier,E,F,11
+MLPClassifier,F,0,0
+MLPClassifier,F,1,0
+MLPClassifier,F,2,0
+MLPClassifier,F,3,1
+MLPClassifier,F,4,1
+MLPClassifier,F,5,0
+MLPClassifier,F,6,1
+MLPClassifier,F,7,0
+MLPClassifier,F,8,0
+MLPClassifier,F,9,0
+MLPClassifier,F,A,7
+MLPClassifier,F,B,1
+MLPClassifier,F,C,5
+MLPClassifier,F,D,6
+MLPClassifier,F,E,5
+MLPClassifier,F,F,1173
+ExtraTreesClassifier,0,0,1167
+ExtraTreesClassifier,0,1,0
+ExtraTreesClassifier,0,2,0
+ExtraTreesClassifier,0,3,0
+ExtraTreesClassifier,0,4,1
+ExtraTreesClassifier,0,5,1
+ExtraTreesClassifier,0,6,7
+ExtraTreesClassifier,0,7,0
+ExtraTreesClassifier,0,8,5
+ExtraTreesClassifier,0,9,1
+ExtraTreesClassifier,0,A,0
+ExtraTreesClassifier,0,B,1
+ExtraTreesClassifier,0,C,0
+ExtraTreesClassifier,0,D,2
+ExtraTreesClassifier,0,E,0
+ExtraTreesClassifier,0,F,0
+ExtraTreesClassifier,1,0,0
+ExtraTreesClassifier,1,1,1333
+ExtraTreesClassifier,1,2,4
+ExtraTreesClassifier,1,3,3
+ExtraTreesClassifier,1,4,1
+ExtraTreesClassifier,1,5,1
+ExtraTreesClassifier,1,6,0
+ExtraTreesClassifier,1,7,3
+ExtraTreesClassifier,1,8,2
+ExtraTreesClassifier,1,9,0
+ExtraTreesClassifier,1,A,0
+ExtraTreesClassifier,1,B,0
+ExtraTreesClassifier,1,C,0
+ExtraTreesClassifier,1,D,0
+ExtraTreesClassifier,1,E,0
+ExtraTreesClassifier,1,F,1
+ExtraTreesClassifier,2,0,5
+ExtraTreesClassifier,2,1,3
+ExtraTreesClassifier,2,2,1153
+ExtraTreesClassifier,2,3,6
+ExtraTreesClassifier,2,4,5
+ExtraTreesClassifier,2,5,2
+ExtraTreesClassifier,2,6,3
+ExtraTreesClassifier,2,7,6
+ExtraTreesClassifier,2,8,6
+ExtraTreesClassifier,2,9,1
+ExtraTreesClassifier,2,A,2
+ExtraTreesClassifier,2,B,0
+ExtraTreesClassifier,2,C,0
+ExtraTreesClassifier,2,D,0
+ExtraTreesClassifier,2,E,0
+ExtraTreesClassifier,2,F,0
+ExtraTreesClassifier,3,0,0
+ExtraTreesClassifier,3,1,1
+ExtraTreesClassifier,3,2,8
+ExtraTreesClassifier,3,3,1172
+ExtraTreesClassifier,3,4,0
+ExtraTreesClassifier,3,5,12
+ExtraTreesClassifier,3,6,2
+ExtraTreesClassifier,3,7,13
+ExtraTreesClassifier,3,8,13
+ExtraTreesClassifier,3,9,5
+ExtraTreesClassifier,3,A,0
+ExtraTreesClassifier,3,B,0
+ExtraTreesClassifier,3,C,0
+ExtraTreesClassifier,3,D,0
+ExtraTreesClassifier,3,E,0
+ExtraTreesClassifier,3,F,0
+ExtraTreesClassifier,4,0,2
+ExtraTreesClassifier,4,1,5
+ExtraTreesClassifier,4,2,2
+ExtraTreesClassifier,4,3,0
+ExtraTreesClassifier,4,4,1135
+ExtraTreesClassifier,4,5,0
+ExtraTreesClassifier,4,6,2
+ExtraTreesClassifier,4,7,2
+ExtraTreesClassifier,4,8,1
+ExtraTreesClassifier,4,9,17
+ExtraTreesClassifier,4,A,2
+ExtraTreesClassifier,4,B,0
+ExtraTreesClassifier,4,C,0
+ExtraTreesClassifier,4,D,0
+ExtraTreesClassifier,4,E,0
+ExtraTreesClassifier,4,F,0
+ExtraTreesClassifier,5,0,2
+ExtraTreesClassifier,5,1,1
+ExtraTreesClassifier,5,2,1
+ExtraTreesClassifier,5,3,11
+ExtraTreesClassifier,5,4,3
+ExtraTreesClassifier,5,5,1050
+ExtraTreesClassifier,5,6,7
+ExtraTreesClassifier,5,7,0
+ExtraTreesClassifier,5,8,4
+ExtraTreesClassifier,5,9,2
+ExtraTreesClassifier,5,A,1
+ExtraTreesClassifier,5,B,0
+ExtraTreesClassifier,5,C,1
+ExtraTreesClassifier,5,D,0
+ExtraTreesClassifier,5,E,0
+ExtraTreesClassifier,5,F,1
+ExtraTreesClassifier,6,0,5
+ExtraTreesClassifier,6,1,3
+ExtraTreesClassifier,6,2,1
+ExtraTreesClassifier,6,3,0
+ExtraTreesClassifier,6,4,1
+ExtraTreesClassifier,6,5,4
+ExtraTreesClassifier,6,6,1167
+ExtraTreesClassifier,6,7,0
+ExtraTreesClassifier,6,8,1
+ExtraTreesClassifier,6,9,0
+ExtraTreesClassifier,6,A,0
+ExtraTreesClassifier,6,B,1
+ExtraTreesClassifier,6,C,1
+ExtraTreesClassifier,6,D,0
+ExtraTreesClassifier,6,E,0
+ExtraTreesClassifier,6,F,0
+ExtraTreesClassifier,7,0,0
+ExtraTreesClassifier,7,1,10
+ExtraTreesClassifier,7,2,12
+ExtraTreesClassifier,7,3,0
+ExtraTreesClassifier,7,4,3
+ExtraTreesClassifier,7,5,0
+ExtraTreesClassifier,7,6,0
+ExtraTreesClassifier,7,7,1213
+ExtraTreesClassifier,7,8,3
+ExtraTreesClassifier,7,9,9
+ExtraTreesClassifier,7,A,3
+ExtraTreesClassifier,7,B,0
+ExtraTreesClassifier,7,C,0
+ExtraTreesClassifier,7,D,0
+ExtraTreesClassifier,7,E,0
+ExtraTreesClassifier,7,F,0
+ExtraTreesClassifier,8,0,3
+ExtraTreesClassifier,8,1,4
+ExtraTreesClassifier,8,2,5
+ExtraTreesClassifier,8,3,4
+ExtraTreesClassifier,8,4,7
+ExtraTreesClassifier,8,5,8
+ExtraTreesClassifier,8,6,5
+ExtraTreesClassifier,8,7,2
+ExtraTreesClassifier,8,8,1116
+ExtraTreesClassifier,8,9,11
+ExtraTreesClassifier,8,A,1
+ExtraTreesClassifier,8,B,4
+ExtraTreesClassifier,8,C,0
+ExtraTreesClassifier,8,D,0
+ExtraTreesClassifier,8,E,0
+ExtraTreesClassifier,8,F,0
+ExtraTreesClassifier,9,0,2
+ExtraTreesClassifier,9,1,6
+ExtraTreesClassifier,9,2,2
+ExtraTreesClassifier,9,3,16
+ExtraTreesClassifier,9,4,13
+ExtraTreesClassifier,9,5,6
+ExtraTreesClassifier,9,6,1
+ExtraTreesClassifier,9,7,4
+ExtraTreesClassifier,9,8,9
+ExtraTreesClassifier,9,9,1129
+ExtraTreesClassifier,9,A,2
+ExtraTreesClassifier,9,B,0
+ExtraTreesClassifier,9,C,0
+ExtraTreesClassifier,9,D,0
+ExtraTreesClassifier,9,E,0
+ExtraTreesClassifier,9,F,0
+ExtraTreesClassifier,A,0,0
+ExtraTreesClassifier,A,1,1
+ExtraTreesClassifier,A,2,3
+ExtraTreesClassifier,A,3,0
+ExtraTreesClassifier,A,4,3
+ExtraTreesClassifier,A,5,0
+ExtraTreesClassifier,A,6,0
+ExtraTreesClassifier,A,7,1
+ExtraTreesClassifier,A,8,1
+ExtraTreesClassifier,A,9,1
+ExtraTreesClassifier,A,A,1171
+ExtraTreesClassifier,A,B,2
+ExtraTreesClassifier,A,C,1
+ExtraTreesClassifier,A,D,5
+ExtraTreesClassifier,A,E,2
+ExtraTreesClassifier,A,F,9
+ExtraTreesClassifier,B,0,1
+ExtraTreesClassifier,B,1,0
+ExtraTreesClassifier,B,2,1
+ExtraTreesClassifier,B,3,3
+ExtraTreesClassifier,B,4,0
+ExtraTreesClassifier,B,5,0
+ExtraTreesClassifier,B,6,2
+ExtraTreesClassifier,B,7,0
+ExtraTreesClassifier,B,8,4
+ExtraTreesClassifier,B,9,0
+ExtraTreesClassifier,B,A,20
+ExtraTreesClassifier,B,B,1134
+ExtraTreesClassifier,B,C,1
+ExtraTreesClassifier,B,D,21
+ExtraTreesClassifier,B,E,9
+ExtraTreesClassifier,B,F,4
+ExtraTreesClassifier,C,0,1
+ExtraTreesClassifier,C,1,0
+ExtraTreesClassifier,C,2,1
+ExtraTreesClassifier,C,3,0
+ExtraTreesClassifier,C,4,2
+ExtraTreesClassifier,C,5,2
+ExtraTreesClassifier,C,6,0
+ExtraTreesClassifier,C,7,0
+ExtraTreesClassifier,C,8,0
+ExtraTreesClassifier,C,9,0
+ExtraTreesClassifier,C,A,0
+ExtraTreesClassifier,C,B,2
+ExtraTreesClassifier,C,C,1173
+ExtraTreesClassifier,C,D,8
+ExtraTreesClassifier,C,E,7
+ExtraTreesClassifier,C,F,4
+ExtraTreesClassifier,D,0,7
+ExtraTreesClassifier,D,1,0
+ExtraTreesClassifier,D,2,4
+ExtraTreesClassifier,D,3,2
+ExtraTreesClassifier,D,4,0
+ExtraTreesClassifier,D,5,0
+ExtraTreesClassifier,D,6,1
+ExtraTreesClassifier,D,7,0
+ExtraTreesClassifier,D,8,1
+ExtraTreesClassifier,D,9,0
+ExtraTreesClassifier,D,A,2
+ExtraTreesClassifier,D,B,3
+ExtraTreesClassifier,D,C,2
+ExtraTreesClassifier,D,D,1177
+ExtraTreesClassifier,D,E,0
+ExtraTreesClassifier,D,F,1
+ExtraTreesClassifier,E,0,0
+ExtraTreesClassifier,E,1,0
+ExtraTreesClassifier,E,2,0
+ExtraTreesClassifier,E,3,0
+ExtraTreesClassifier,E,4,0
+ExtraTreesClassifier,E,5,1
+ExtraTreesClassifier,E,6,0
+ExtraTreesClassifier,E,7,0
+ExtraTreesClassifier,E,8,3
+ExtraTreesClassifier,E,9,0
+ExtraTreesClassifier,E,A,2
+ExtraTreesClassifier,E,B,10
+ExtraTreesClassifier,E,C,24
+ExtraTreesClassifier,E,D,0
+ExtraTreesClassifier,E,E,1147
+ExtraTreesClassifier,E,F,13
+ExtraTreesClassifier,F,0,0
+ExtraTreesClassifier,F,1,3
+ExtraTreesClassifier,F,2,2
+ExtraTreesClassifier,F,3,1
+ExtraTreesClassifier,F,4,3
+ExtraTreesClassifier,F,5,1
+ExtraTreesClassifier,F,6,0
+ExtraTreesClassifier,F,7,1
+ExtraTreesClassifier,F,8,0
+ExtraTreesClassifier,F,9,0
+ExtraTreesClassifier,F,A,2
+ExtraTreesClassifier,F,B,0
+ExtraTreesClassifier,F,C,5
+ExtraTreesClassifier,F,D,1
+ExtraTreesClassifier,F,E,0
+ExtraTreesClassifier,F,F,1181
+KNeighborsClassifier,0,0,1157
+KNeighborsClassifier,0,1,0
+KNeighborsClassifier,0,2,1
+KNeighborsClassifier,0,3,0
+KNeighborsClassifier,0,4,0
+KNeighborsClassifier,0,5,1
+KNeighborsClassifier,0,6,5
+KNeighborsClassifier,0,7,0
+KNeighborsClassifier,0,8,0
+KNeighborsClassifier,0,9,1
+KNeighborsClassifier,0,A,0
+KNeighborsClassifier,0,B,0
+KNeighborsClassifier,0,C,3
+KNeighborsClassifier,0,D,17
+KNeighborsClassifier,0,E,0
+KNeighborsClassifier,0,F,0
+KNeighborsClassifier,1,0,0
+KNeighborsClassifier,1,1,1343
+KNeighborsClassifier,1,2,0
+KNeighborsClassifier,1,3,1
+KNeighborsClassifier,1,4,1
+KNeighborsClassifier,1,5,0
+KNeighborsClassifier,1,6,0
+KNeighborsClassifier,1,7,2
+KNeighborsClassifier,1,8,0
+KNeighborsClassifier,1,9,1
+KNeighborsClassifier,1,A,0
+KNeighborsClassifier,1,B,0
+KNeighborsClassifier,1,C,0
+KNeighborsClassifier,1,D,0
+KNeighborsClassifier,1,E,0
+KNeighborsClassifier,1,F,0
+KNeighborsClassifier,2,0,6
+KNeighborsClassifier,2,1,10
+KNeighborsClassifier,2,2,1143
+KNeighborsClassifier,2,3,4
+KNeighborsClassifier,2,4,2
+KNeighborsClassifier,2,5,0
+KNeighborsClassifier,2,6,3
+KNeighborsClassifier,2,7,10
+KNeighborsClassifier,2,8,1
+KNeighborsClassifier,2,9,2
+KNeighborsClassifier,2,A,4
+KNeighborsClassifier,2,B,0
+KNeighborsClassifier,2,C,4
+KNeighborsClassifier,2,D,2
+KNeighborsClassifier,2,E,1
+KNeighborsClassifier,2,F,0
+KNeighborsClassifier,3,0,0
+KNeighborsClassifier,3,1,3
+KNeighborsClassifier,3,2,9
+KNeighborsClassifier,3,3,1179
+KNeighborsClassifier,3,4,0
+KNeighborsClassifier,3,5,12
+KNeighborsClassifier,3,6,2
+KNeighborsClassifier,3,7,3
+KNeighborsClassifier,3,8,11
+KNeighborsClassifier,3,9,6
+KNeighborsClassifier,3,A,0
+KNeighborsClassifier,3,B,0
+KNeighborsClassifier,3,C,0
+KNeighborsClassifier,3,D,1
+KNeighborsClassifier,3,E,0
+KNeighborsClassifier,3,F,0
+KNeighborsClassifier,4,0,1
+KNeighborsClassifier,4,1,9
+KNeighborsClassifier,4,2,0
+KNeighborsClassifier,4,3,0
+KNeighborsClassifier,4,4,1134
+KNeighborsClassifier,4,5,0
+KNeighborsClassifier,4,6,0
+KNeighborsClassifier,4,7,0
+KNeighborsClassifier,4,8,0
+KNeighborsClassifier,4,9,21
+KNeighborsClassifier,4,A,2
+KNeighborsClassifier,4,B,0
+KNeighborsClassifier,4,C,1
+KNeighborsClassifier,4,D,0
+KNeighborsClassifier,4,E,0
+KNeighborsClassifier,4,F,0
+KNeighborsClassifier,5,0,5
+KNeighborsClassifier,5,1,1
+KNeighborsClassifier,5,2,0
+KNeighborsClassifier,5,3,10
+KNeighborsClassifier,5,4,1
+KNeighborsClassifier,5,5,1041
+KNeighborsClassifier,5,6,11
+KNeighborsClassifier,5,7,3
+KNeighborsClassifier,5,8,1
+KNeighborsClassifier,5,9,5
+KNeighborsClassifier,5,A,0
+KNeighborsClassifier,5,B,1
+KNeighborsClassifier,5,C,2
+KNeighborsClassifier,5,D,0
+KNeighborsClassifier,5,E,3
+KNeighborsClassifier,5,F,0
+KNeighborsClassifier,6,0,5
+KNeighborsClassifier,6,1,4
+KNeighborsClassifier,6,2,1
+KNeighborsClassifier,6,3,0
+KNeighborsClassifier,6,4,2
+KNeighborsClassifier,6,5,5
+KNeighborsClassifier,6,6,1164
+KNeighborsClassifier,6,7,0
+KNeighborsClassifier,6,8,0
+KNeighborsClassifier,6,9,0
+KNeighborsClassifier,6,A,0
+KNeighborsClassifier,6,B,0
+KNeighborsClassifier,6,C,3
+KNeighborsClassifier,6,D,0
+KNeighborsClassifier,6,E,0
+KNeighborsClassifier,6,F,0
+KNeighborsClassifier,7,0,0
+KNeighborsClassifier,7,1,13
+KNeighborsClassifier,7,2,3
+KNeighborsClassifier,7,3,0
+KNeighborsClassifier,7,4,3
+KNeighborsClassifier,7,5,0
+KNeighborsClassifier,7,6,0
+KNeighborsClassifier,7,7,1219
+KNeighborsClassifier,7,8,2
+KNeighborsClassifier,7,9,10
+KNeighborsClassifier,7,A,2
+KNeighborsClassifier,7,B,0
+KNeighborsClassifier,7,C,0
+KNeighborsClassifier,7,D,1
+KNeighborsClassifier,7,E,0
+KNeighborsClassifier,7,F,0
+KNeighborsClassifier,8,0,4
+KNeighborsClassifier,8,1,15
+KNeighborsClassifier,8,2,2
+KNeighborsClassifier,8,3,15
+KNeighborsClassifier,8,4,10
+KNeighborsClassifier,8,5,14
+KNeighborsClassifier,8,6,2
+KNeighborsClassifier,8,7,5
+KNeighborsClassifier,8,8,1077
+KNeighborsClassifier,8,9,12
+KNeighborsClassifier,8,A,2
+KNeighborsClassifier,8,B,6
+KNeighborsClassifier,8,C,2
+KNeighborsClassifier,8,D,0
+KNeighborsClassifier,8,E,3
+KNeighborsClassifier,8,F,1
+KNeighborsClassifier,9,0,2
+KNeighborsClassifier,9,1,5
+KNeighborsClassifier,9,2,0
+KNeighborsClassifier,9,3,9
+KNeighborsClassifier,9,4,9
+KNeighborsClassifier,9,5,4
+KNeighborsClassifier,9,6,1
+KNeighborsClassifier,9,7,4
+KNeighborsClassifier,9,8,2
+KNeighborsClassifier,9,9,1154
+KNeighborsClassifier,9,A,0
+KNeighborsClassifier,9,B,0
+KNeighborsClassifier,9,C,0
+KNeighborsClassifier,9,D,0
+KNeighborsClassifier,9,E,0
+KNeighborsClassifier,9,F,0
+KNeighborsClassifier,A,0,0
+KNeighborsClassifier,A,1,6
+KNeighborsClassifier,A,2,2
+KNeighborsClassifier,A,3,0
+KNeighborsClassifier,A,4,10
+KNeighborsClassifier,A,5,0
+KNeighborsClassifier,A,6,1
+KNeighborsClassifier,A,7,0
+KNeighborsClassifier,A,8,0
+KNeighborsClassifier,A,9,2
+KNeighborsClassifier,A,A,1157
+KNeighborsClassifier,A,B,2
+KNeighborsClassifier,A,C,2
+KNeighborsClassifier,A,D,5
+KNeighborsClassifier,A,E,2
+KNeighborsClassifier,A,F,11
+KNeighborsClassifier,B,0,4
+KNeighborsClassifier,B,1,2
+KNeighborsClassifier,B,2,5
+KNeighborsClassifier,B,3,3
+KNeighborsClassifier,B,4,1
+KNeighborsClassifier,B,5,1
+KNeighborsClassifier,B,6,1
+KNeighborsClassifier,B,7,0
+KNeighborsClassifier,B,8,3
+KNeighborsClassifier,B,9,0
+KNeighborsClassifier,B,A,18
+KNeighborsClassifier,B,B,1101
+KNeighborsClassifier,B,C,10
+KNeighborsClassifier,B,D,34
+KNeighborsClassifier,B,E,15
+KNeighborsClassifier,B,F,2
+KNeighborsClassifier,C,0,1
+KNeighborsClassifier,C,1,0
+KNeighborsClassifier,C,2,0
+KNeighborsClassifier,C,3,0
+KNeighborsClassifier,C,4,1
+KNeighborsClassifier,C,5,2
+KNeighborsClassifier,C,6,0
+KNeighborsClassifier,C,7,0
+KNeighborsClassifier,C,8,0
+KNeighborsClassifier,C,9,0
+KNeighborsClassifier,C,A,0
+KNeighborsClassifier,C,B,2
+KNeighborsClassifier,C,C,1189
+KNeighborsClassifier,C,D,2
+KNeighborsClassifier,C,E,3
+KNeighborsClassifier,C,F,0
+KNeighborsClassifier,D,0,16
+KNeighborsClassifier,D,1,3
+KNeighborsClassifier,D,2,3
+KNeighborsClassifier,D,3,1
+KNeighborsClassifier,D,4,0
+KNeighborsClassifier,D,5,0
+KNeighborsClassifier,D,6,0
+KNeighborsClassifier,D,7,0
+KNeighborsClassifier,D,8,0
+KNeighborsClassifier,D,9,0
+KNeighborsClassifier,D,A,2
+KNeighborsClassifier,D,B,6
+KNeighborsClassifier,D,C,1
+KNeighborsClassifier,D,D,1167
+KNeighborsClassifier,D,E,0
+KNeighborsClassifier,D,F,1
+KNeighborsClassifier,E,0,0
+KNeighborsClassifier,E,1,2
+KNeighborsClassifier,E,2,0
+KNeighborsClassifier,E,3,0
+KNeighborsClassifier,E,4,0
+KNeighborsClassifier,E,5,1
+KNeighborsClassifier,E,6,0
+KNeighborsClassifier,E,7,0
+KNeighborsClassifier,E,8,0
+KNeighborsClassifier,E,9,0
+KNeighborsClassifier,E,A,0
+KNeighborsClassifier,E,B,4
+KNeighborsClassifier,E,C,50
+KNeighborsClassifier,E,D,2
+KNeighborsClassifier,E,E,1112
+KNeighborsClassifier,E,F,29
+KNeighborsClassifier,F,0,0
+KNeighborsClassifier,F,1,20
+KNeighborsClassifier,F,2,1
+KNeighborsClassifier,F,3,1
+KNeighborsClassifier,F,4,7
+KNeighborsClassifier,F,5,2
+KNeighborsClassifier,F,6,0
+KNeighborsClassifier,F,7,0
+KNeighborsClassifier,F,8,0
+KNeighborsClassifier,F,9,1
+KNeighborsClassifier,F,A,1
+KNeighborsClassifier,F,B,0
+KNeighborsClassifier,F,C,9
+KNeighborsClassifier,F,D,3
+KNeighborsClassifier,F,E,4
+KNeighborsClassifier,F,F,1151
