@@ -12,7 +12,7 @@
 | 담당 | 유용성(팀장), 코드 실행 및 결과 정리 AI 보조 |
 | 상태 | **완료 — 실험 2의 5개 Normal Baseline 평가에 한함** |
 | 선행 실험 | [EXP-유-002 — W02 실험 1](EXP-유-002_13개후보_초기평가_5개선정.md) |
-| 후속 계획 | [W02 연구계획 단계 C~F](../README.md) — **미실시** |
+| 후속 계획 | [W02 연구계획 단계 C–F](../README.md) — **미실시** |
 | 통합 수치 | [5개 모델 원본 성능 CSV](../results/EXP-유-003_5models_comparison.csv) |
 | 세부 수치 | [클래스별 Precision·Recall·F1](../results/EXP-유-003_per_class.csv) · [전체 Confusion Matrix 수치](../results/EXP-유-003_confusion_long.csv) |
 | 재현 코드 | [학습·평가 Python](../../../02_data/notebooks/W02_experiment2/run_experiment2.py) · [픽셀 스케일러](../../../02_data/notebooks/W02_experiment2/pixel_transform.py) |
@@ -58,7 +58,7 @@
 
 ## 4. 5개 모델 실측 결과
 
-**Validation Accuracy 내림차순**, 단위: 정확도 %, Macro F1 0~1, 시간 초, 이미지당 추론 ms.
+**Validation Accuracy 내림차순**, 단위: 정확도 %, Macro F1 0–1, 시간 초, 이미지당 추론 ms.
 
 | 순위 | 모델 | Train 표본 1,600장 Acc. | **Val. 19,200장 Acc.** | **Macro F1** | **학습 시간(s)** | **추론 시간(s)** | ms/장 | 수렴 경고 |
 |---:|---|---:|---:|---:|---:|---:|---:|---|

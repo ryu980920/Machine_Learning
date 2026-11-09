@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-숫자 **0~9**와 대문자 **A~F**(총 16개 클래스)를 인식하는 머신러닝 모델을 학습합니다. 기존 **eMNIST** 데이터로 학습한 모델을 직접 만든 손글씨 데이터에 적용하여 성능 차이를 확인하고, 성능 저하 원인을 분석한 뒤 데이터 처리와 모델 학습 방법을 개선합니다.
+숫자 **0–9**와 대문자 **A–F**(총 16개 클래스)를 인식하는 머신러닝 모델을 학습합니다. 기존 **eMNIST** 데이터로 학습한 모델을 직접 만든 손글씨 데이터에 적용하여 성능 차이를 확인하고, 성능 저하 원인을 분석한 뒤 데이터 처리와 모델 학습 방법을 개선합니다.
 
 최종 정확도뿐 아니라 **문제 발견 → 원인 분석 → 해결 방법 시도 → 결과 검증**에 이르는 과정을 기록하는 것이 중요합니다.
 
@@ -46,4 +46,4 @@
 
 공식 분할 기반 [데이터 구성 Notebook](02_data/notebooks/02_official_split_dataset.ipynb)과 [NPZ 데이터셋](02_data/datasets/MNIST_EMNIST_official_split_112000.npz)을 등록했습니다. [EXP-001 실험일지](03_experiments/logs/EXP-001_MNIST_EMNIST_실험일지.md)는 PDF 원문을 Markdown으로 변환했으며, 이전 데이터 버전의 기록임을 표시했습니다.
 
-**Hand-made Grayscale 데이터셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번 **각 640장(총 2,560장)**을 원본 JPG 기반 **0~255 Grayscale NPZ**로 통일했습니다(2026-11-09 기존 Binary 파일 교체). Normal 모델의 Hand-made 평가에 사용하며, 후속 Combined 학습에 일부 편입할 경우 **작성자별 보류 평가셋과 학습셋을 겹치지 않게 분리**합니다. [변환 검증 기록](02_data/Hand_made/GRAYSCALE_VERIFICATION.md) 참조.
+**Hand-made Grayscale 데이터셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번 **각 640장(총 2,560장)**을 원본 JPG 기반 **0–255 Grayscale NPZ**로 통일했습니다(2026-11-09 기존 Binary 파일 교체). Normal 모델의 Hand-made 평가에 사용하며, 후속 Combined 학습에 일부 편입할 경우 **작성자별 보류 평가셋과 학습셋을 겹치지 않게 분리**합니다. [변환 검증 기록](02_data/Hand_made/GRAYSCALE_VERIFICATION.md) 참조.
