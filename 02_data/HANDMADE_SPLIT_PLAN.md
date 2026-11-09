@@ -28,6 +28,15 @@ MNIST 0–9 60,000 Training·10,000 Test, EMNIST A–F **각 6,000 Training·1,0
 
 새 작성자 Validation이 있으면 학습·Validation·Test 간 작성자를 분리하는 것이 우선 권장이다. 작성자 정보가 없다면 '작성자 분리 검증'이라고 표현하지 않는다. 데이터 부족으로 자체 Test 수집은 미뤄도 교수님 Test가 최종 외부 평가 역할을 한다.
 
+### 기존 2,560장으로만 검증하는 경우: 작성자 그룹 CV (제안·미실시)
+
+새로운 Validation 데이터를 확보하지 않고 Combined 학습에 기존 2,560장을 사용한다면 **실제 작성자 ID 기준 Group CV/Leave-One-Writer-Out**를 검토한다. 41·42·43·44번이 각각 독립된 단일 작성자일 때에는 각 Fold에서 1명 640장 Validation, 나머지 3명 1,920장 Hand-made Training + 동일 공식 Training의 4-Fold 비교가 가능하다. 한 제출 파일에 여러 작성자가 섞였거나 동일 작성자가 여러 파일에 있다면 실제 작성자 그룹을 기준으로 재설계해야 한다.
+
+- Normal/Combined의 **평가 Fold와 전처리·하이퍼파라미터를 고정**해 손글씨 추가 효과를 먼저 비교한다.
+- Fold별 Accuracy·Macro F1 및 평균·표준편차를 기록한다. 작성자 수가 적어 편차가 클 수 있고 이미 탐색에 이용한 데이터이므로 **독립 Test가 아닌 개발용**이다.
+- 신규 작성자 Validation을 따로 확보한다면 기존 2,560장 전체를 Combined Training에 사용할 수 있어 기존 2,560장 내부 CV가 필수는 아니다.
+- 교수님은 제출한 손글씨 외에 **새 Hand-made를 더 작성해 학습에 추가하는 것**도 허용한다. 수집한 자료의 사용처/작성자/레이블/변환 이력을 기록하고 검증용과 겹치지 않도록 한다. CV 및 추가 수집량 모두 미확정이다.
+
 ## 3. 원본 수정과 추론 시 전처리 Pipeline은 다르다
 
 - **개발용 데이터 Cleaning:** 잘못된 레이블·인식 불가능/누락 이미지 등 품질 문제를 기록하고, 원본과 정제본의 관계·수량을 보존. Training에서 다양한 필체를 학습할 수 있도록 augmentation 가능.
@@ -43,4 +52,4 @@ MNIST 0–9 60,000 Training·10,000 Test, EMNIST A–F **각 6,000 Training·1,0
 4. 원본/변환 파일, SHA-256, 이미지 형식, 데이터 split, 함수·파라미터, 성능 전후 및 실패 사례를 [실험일지](../03_experiments/EXPERIMENT_TEMPLATE.md)에 연결한다.
 5. 어떤 모델도 교수님 1·2차 Test로 학습·튜닝하지 않는다. Final 평가 전 모델과 Pipeline을 동결한다.
 
-[상위 데이터 안내](README.md) · [최신 연구계획](../01_project/RESEARCH_PLAN.md) · [전원 병렬 작업계획](../01_project/TEAM_PARALLEL_WORKPLAN.md).
+[상위 데이터 안내](README.md) · [최신 연구계획](../01_project/RESEARCH_PLAN.md).

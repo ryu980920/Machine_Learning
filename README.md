@@ -56,6 +56,8 @@
 
 **평가 데이터 구분:** 기존 Hand-made 2,560장은 개발용으로 학습·검증 가능하나 학습에 포함한 샘플을 독립 검증에 중복 사용하면 안 된다. 새로운 작성자 Validation 640장은 **수집 제안**, 별도 Hand-made Test 640장은 **선택안**. 교수님 1·2차 배포 데이터는 모두 **Test 전용**: 전체 성능 확인 이외 이미지·특정 오류를 분석하거나 맞춤 보정/학습에 사용하지 않는다. **사전에 고정한 자동 Pipeline은 Test 추론 시에도 적용 가능**.
 
-- [상세 연구계획](01_project/RESEARCH_PLAN.md) · [4인 병렬 작업계획](01_project/TEAM_PARALLEL_WORKPLAN.md) · [변경 의사결정](01_project/DECISION_LOG.md)
+- [상세 연구계획](01_project/RESEARCH_PLAN.md) · [변경 의사결정](01_project/DECISION_LOG.md)
 - [데이터 분할·Test 원칙](02_data/HANDMADE_SPLIT_PLAN.md) · [주차별 오류·개선 실험](03_experiments/README.md)
 - [학습 전 모델 5개](03_experiments/model_optimization/README.md): 현재는 Normal 학습용 기본 코드이며 **Combined·자동 Pipeline·증강은 향후 구현**. 기본 설정 재현 검증도 미완료.
+
+**작성자 기준 검증 선택지:** 기존 2,560장만 Combined 학습·평가에 쓰는 경우에는 실제 작성자 ID를 기준으로 Group CV를 검토한다(4개 독립 작성자라면 4-Fold 예시). 새로운 작성자의 Validation을 확보하면 CV가 반드시 필요한 것은 아니다. 교수님 설명에 따라 **추가 Hand-made 손글씨를 작성해 Training을 보강하는 것**도 허용된다. 개인별 역할 분담은 팀장이 직접 작성한다.

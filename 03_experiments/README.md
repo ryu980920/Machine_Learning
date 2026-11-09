@@ -7,7 +7,7 @@
 - **W01 완료 기록:** 데이터 구성 및 v3 중복·증강 검증, 3개 후보 이론적 검토. 육안 품질 검수·실행 재현은 원래 로그의 상태를 따른다.
 - **W02 실험 1~3 완료:** 13개 후보 실측 → SVC·HGB·MLP·Extra Trees·KNN 5개 선정 → 공식 Train 76,800/Validation 19,200 Normal Baseline → Hand-made 2,560장 초기 성능 하락·방향/극성·42번 Grayscale 비교.
 - **향후·미실시:** 본격 자동 전처리 Pipeline 실험, 5개 Combined 학습, 모델 최적화, 신규 Validation 수집, 최종 Test.
-- [최신 연구계획](../01_project/RESEARCH_PLAN.md) · [4인 병렬 작업계획](../01_project/TEAM_PARALLEL_WORKPLAN.md) · [손글씨 데이터 운용](../02_data/HANDMADE_SPLIT_PLAN.md).
+- [최신 연구계획](../01_project/RESEARCH_PLAN.md) · [손글씨 데이터 운용](../02_data/HANDMADE_SPLIT_PLAN.md).
 
 ## 주차별 목차
 
@@ -45,7 +45,7 @@
 | **Pipeline/증강 실험** | 각자 다른 자동 전처리 또는 Training 증강 가설을 개발·검증; 임의 수동 이미지 보정과 구별 | Raw vs 개선, 변수 고정, Accuracy·Macro F1·시간 |
 | **모델 비교·로그** | 동일 Validation에서 Normal/Combined와 후보 모델 효과를 검증하고 악화 결과도 기록 | Notebook, CSV/Confusion Matrix, 실험일지·다음 시도 |
 
-개인별 집중 주제는 [TEAM_PARALLEL_WORKPLAN.md](../01_project/TEAM_PARALLEL_WORKPLAN.md)의 **제안 배정표**를 따른다. 확정이나 완료로 기록하지 않고 팀 협의 후 수정 가능하다. **한 사람이 전처리를 전담하고 다른 팀원들은 하이퍼파라미터만 맡는 운영은 지양**한다.
+팀원별 구체적인 역할·담당 모델·병렬 일정은 팀장이 직접 작성할 예정이므로 현재는 미확정이다. 교수님 강조사항인 오류 분석·데이터 처리·전처리 검증의 중요성만 공통 원칙으로 남긴다.
 
 ## 다음 실험 순서 및 데이터 정책
 
@@ -54,6 +54,10 @@
 3. 공식 **Original Test 16,000장**으로 기존 데이터 일반화 평가. 새 작성자 Hand-made Validation 640장(8명×80)은 **권장안·수집 전**, 신규 독립 Hand-made Test 640장은 **선택안**.
 4. **교수님 1차 Test는 완성 후 전체 성능만 확인**. 충분하면 종료. 미흡하면 **1차 데이터 분석 없이** 기존 개발 자료로만 재개선 → **교수님 2차 Test**에서 최종 확인 후 종료.
 5. Test의 이미지별 오류·특정 클래스·분포·Confusion Matrix를 열람/분석해 설정을 맞추는 일 금지. **사전에 결정된 자동 전처리 Pipeline은 Test 추론 때도 적용 가능**하지만 교수님 원본 이미지의 개별 수동 수정은 하지 않는다.
+
+## 추가 손글씨 및 CV 설계 (미확정)
+
+기존 2,560장 외에 새 손글씨를 수집해 Training을 보강할 수 있다. 기존 손글씨만으로 Combined 학습·검증을 병행한다면 실제 작성자 기준 Group CV를 검토한다(41~44 각각 독립된 한 사람이라는 전제에만 4-Fold 1,920장/640장 예시 적용). 신규 Validation을 따로 수집하면 CV는 필수가 아니다. 모든 경우 학습 이미지·작성자와 Validation을 분리하며 교수님 1·2차 Test를 개발에 쓰지 않는다.
 
 ## 파일 관리·재현성
 
