@@ -1,7 +1,7 @@
 # W02 — 2주차 연구계획 (교수님 피드백 반영)
 
 - **기간:** 2026-11-09 ~ 2026-11-15
-- **상태:** **A단계(13개 기본 평가·5개 선정) 및 B단계(Normal 5개 기본 평가) 완료 / C~F는 미실시**
+- **상태:** **A단계(13개 모델 평가), B단계(Normal Baseline), C단계(Hand-made 평가·방향 보정) 완료 / D~F는 미실시**
 - **근거:** 2026-11-09 팀장이 전달한 교수님 피드백. W01의 이론 검토만으로 최종 모델을 확정하지 않고 **실측 데이터로 후보군을 좁힌 뒤 최적화 결과로 최종 선택**한다.
 - **이전 기록:** [W01 작업 및 결과](../W01_2026-11-02_11-08/README.md) · [W01 모델 검토 로그](../W01_2026-11-02_11-08/logs/EXP-유-001_16class_분류모델_선정.md)
 
@@ -74,14 +74,15 @@ W01에서 검토한 **13개 후보 항목 모두를 초기 예비 평가 대상�
 
 **실험 2 Confusion Matrix 시각화:** [SVC (RBF)](results/confusion_matrices/SVC_RBF_confusion_matrix.png) · [HistGradientBoosting](results/confusion_matrices/HistGradientBoosting_confusion_matrix.png) · [MLPClassifier](results/confusion_matrices/MLPClassifier_confusion_matrix.png) · [ExtraTreesClassifier](results/confusion_matrices/ExtraTrees_confusion_matrix.png) · [KNeighborsClassifier](results/confusion_matrices/KNeighbors_confusion_matrix.png) · [시각화 설명 및 원본 연결](results/confusion_matrices/README.md). 실제 Validation 19,200장에 대한 **5개 모델의 16×16 컬러 Heatmap PNG**이며, [EXP-유-003](logs/EXP-유-003_5개모델_Normal_Baseline.md)에서 각각 확인할 수 있다.
 
-### 단계 C — Hand-made 적용 전 정확도 저하 확인 (후속 실험 3)
+### 단계 C — Hand-made 인식 성능 평가 및 방향 보정 (실험 3 완료)
 
 - **목적:** Hand-made 데이터를 아직 학습하지 않은 Normal 모델 5개를 실제 손글씨에 적용해 공식 Validation 대비 성능 하락과 작성자별 특성을 분석한다.
 - **데이터:** `02_data/Hand_made/ml26_41.npz` ~ `ml26_44.npz` (작성자 4명×640장=2,560장). 이미지 방향·글씨 위치·극성·픽셀 범위를 검사한다. **2026-11-09에 Hand-made 4개 NPZ를 원본 JPG 기반 0~255 Grayscale로 교체**했으며, 42·44번은 흑백 반전했다. 입력에 추가 `*255`를 하지 않고 실험 2 모델의 기존 스케일링 Pipeline만 유지한다.
 - **평가 구분:** Hand-made **전체 2,560장에 대한 초기 탐색적 평가**는 작성자별 성능·오분류를 기술하는 데 쓸 수 있다. 다만 뒤에서 Combined 학습에 추가할 이미지는 최종 미사용 평가셋이 아니므로, **학습 전/후 정량 비교용으로는 미리 지정한 보류 작성자 이미지**를 고정해서 사용한다.
 - **지표:** `Hand-made Validation Accuracy - Normal Validation Accuracy`(**%p**), 클래스별 Macro F1/Confusion Matrix, 작성자별 Accuracy, 추론 시간. 이 차이는 입력 분포가 다른 두 데이터에 대한 **관찰된 성능 차이**이지 그 자체로 원인 증명은 아니다.
 - **완료 기준:** 5개 Normal 모델 각각의 공식 Validation 및 Hand-made 정확도 비교, 작성자별 결과, 대표 오분류 이미지, 입력 데이터 검사 기록.
-- **상태:** **모델 평가는 계획**. Grayscale Hand-made NPZ 4개 재생성·검증 및 GitHub 교체는 2026-11-09 완료. [변환 검증](../../02_data/Hand_made/GRAYSCALE_VERIFICATION.md).
+- **실제 완료:** 원본 JPG에서 42·44 흑백 극성을 반전한 Grayscale 데이터로 5개 모델 평가(**19.88~23.12%**). 41·42·44번 방향 불일치를 발견해 반시계 90° 보정 후 같은 모델로 재평가(**53.24~62.93%**). **보정 전·후 결과 모두 보존**, 실험 2의 학습 모델 재학습 없음.
+- **상태:** **완료 — [EXP-유-004 실험일지](logs/EXP-유-004_Handmade_방향보정_성능평가.md)** · [전체 비교](results/EXP-유-004/comparison_before_after.csv) · [작성자별 비교](results/EXP-유-004/per_writer_before_after.csv) · [변환 검증](../../02_data/Hand_made/GRAYSCALE_VERIFICATION.md).
 
 ### 단계 D — 성능 하락 원인 분석 및 5개 모델별 개선 (후속 실험 4)
 
@@ -118,7 +119,7 @@ W01에서 검토한 **13개 후보 항목 모두를 초기 예비 평가 대상�
 - **완료 기준:** 최종 1개 모델 선정 사유(실측 수치), 5개 모델 최적화 후 성능표, 근접 후보 추가 Fine-tuning 결과(필요 시), 독립 Test 결과.
 - **상태:** **계획**.
 
-> **주차 범위:** W02에서는 **A단계(실험 1: 13개 후보 평가·5개 선정) 및 B단계(실험 2: Normal Dataset 5개 모델 Baseline)가 완료**되었다. **C~F는 아직 진행하지 않았으며**, 후속 주차에 걸쳐 진행할 수 있다. C~F의 수치나 완료 상태를 미리 채우지 않는다.
+> **주차 범위:** W02에서는 **A단계(실험 1: 13개 후보 평가·5개 선정) 및 B단계(실험 2: Normal Dataset 5개 모델 Baseline)가 완료**되었다. **C는 완료했고 D~F는 아직 진행하지 않았으며**, 후속 주차에 걸쳐 진행할 수 있다. D~F의 수치나 완료 상태를 미리 채우지 않는다.
 
 ## 3. 실험 간 공통 비교 원칙
 
@@ -148,4 +149,4 @@ W01에서 검토한 **13개 후보 항목 모두를 초기 예비 평가 대상�
 
 - W01: 이론적 모델 검토 및 데이터셋 v3 구성·검증. W02: **기존 13개 후보 전체의 소규모 예비 학습 → 실제 수치에 근거한 5개 모델 선정 → 최적화 실험 착수**.
 - 기존 [실험일지 양식](../EXPERIMENT_TEMPLATE.md)에 따라 개별 실험의 입력, 조건, 변경 이유, 실행 코드, 결과 및 검증을 기록한다. 실패한 실험도 보존한다.
-- W02 종료 시 `WEEK_SUMMARY.md`를 작성하되 **실제로 확인한 결과만** 기록한다. 현재 W02의 **13개 후보 실측·5개 선정(실험 1)**과 **Normal Dataset 5개 Baseline(실험 2)**까지 완료했다. Hand-made 평가, 5개 최적화 및 최종 1개 선정은 **미실시/미확정**이다.
+- W02 종료 시 `WEEK_SUMMARY.md`를 작성하되 **실제로 확인한 결과만** 기록한다. 현재 W02의 **실험 1(13개 후보 실측·5개 선정)**, **실험 2(Normal 5개 Baseline)** 및 **실험 3(Hand-made 미보정·방향 보정 평가)**까지 완료했다. 5개 최적화 및 최종 1개 선정은 **미실시/미확정**이다.

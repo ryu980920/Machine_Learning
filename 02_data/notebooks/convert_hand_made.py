@@ -13,7 +13,10 @@ Outputs:
 
 The original JPEGs are 28x28. The code does NOT threshold, resize, augment,
 or normalize pixels. Writers 42 and 44 have light backgrounds and are
-inverted as 255 - gray. Existing binary NPZs are not used as sources.
+inverted as 255 - gray. Writers 41, 42, and 44 are rotated 90 degrees
+counterclockwise to match the upright orientation of writer 43. Existing
+binary NPZs are not used as sources. The pre-orientation Grayscale version
+and its Test scores remain documented in EXP-유-004.
 
 Usage:
   pip install numpy pillow
@@ -35,6 +38,7 @@ from PIL import Image
 LABELS = "0123456789ABCDEF"
 IDS = (41, 42, 43, 44)
 INVERT_IDS = {42, 44}
+ROTATE_IDS = {41, 42, 44}
 
 
 def read_writer(archive: ZipFile, writer: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -51,6 +55,8 @@ def read_writer(archive: ZipFile, writer: int) -> tuple[np.ndarray, np.ndarray, 
     images = np.stack(pixels, axis=0)
     if writer in INVERT_IDS:
         images = 255 - images
+    if writer in ROTATE_IDS:
+        images = np.rot90(images, k=1, axes=(1, 2)).copy()
     labels = np.array([name.split("_")[0] for name in expected], dtype="<U1")
     ids = np.array([LABELS.index(ch) for ch in labels], dtype=np.uint8)
     if images.shape != (640, 28, 28) or images.dtype != np.uint8:
@@ -73,7 +79,7 @@ def write_npz(archive: ZipFile, writer: int, output_dir: Path) -> Path:
             raise AssertionError("NPZ round-trip verification failed")
     digest = sha256(output_path.read_bytes()).hexdigest()
     print(f"ml26_{writer}: samples=640 classes=16 shape={img.shape} "
-          f"gray_levels={len(np.unique(img))} inverted={writer in INVERT_IDS} "
+          f"gray_levels={len(np.unique(img))} inverted={writer in INVERT_IDS} rotated_ccw90={writer in ROTATE_IDS} "
           f"sha256={digest}")
     return output_path
 
