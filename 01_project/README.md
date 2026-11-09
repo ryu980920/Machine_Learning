@@ -61,3 +61,12 @@
 - 팀원별 담당 업무 및 공유 방식을 확정합니다.
 - 수행계획서를 작성하고 제출 여부를 기록합니다.
 - 첫 회의부터 결정 사항과 작업 진행 상황을 남깁니다.
+
+## 7. 최신 연구계획 및 의사결정 — 2026-11-10
+
+- [RESEARCH_PLAN.md](RESEARCH_PLAN.md): 실험 1~3 완료 현황, Normal vs Combined 효과 검증부터 최종 외부 평가까지 연구 흐름.
+- [DECISION_LOG.md](DECISION_LOG.md): 회의·대화 중 결정, 과거 계획 변경 및 아직 미확정된 사항 구분.
+- [Hand-made 수집·분할 계획](../02_data/HANDMADE_SPLIT_PLAN.md): 신규 작성자 Validation/Test의 역할. 현재 각 640장은 권장안으로 미확정.
+- [5개 모델 학습 전 코드](../02_data/notebooks/model_optimization/README.md): 동일한 Baseline 조건으로 다시 학습한 후 모델별 파라미터 수정·최적화.
+
+기존 01_project 문서의 초기 운영 템플릿은 유지한다. 현재 실험 결과는 주차별 실제 실험 로그를 우선한다. 5개 모델 개선과 Combined 학습은 아직 완료하지 않았다.
