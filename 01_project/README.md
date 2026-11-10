@@ -70,7 +70,7 @@
 - [Hand-made 데이터 분할 및 Test 정책](../02_data/HANDMADE_SPLIT_PLAN.md): 기존 2,560장 학습/검증 허용(누출 불가), 신규 Validation 640장은 수집 권장안, 신규 독립 Test 640장은 선택안.
 - [학습 전 5개 모델 코드](../03_experiments/model_optimization/README.md): 기존 Baseline 재현용이며 Combined/Pipeline/증강 기능은 **향후 구현 과제**.
 
-**교수님 1·2차 배포 데이터는 Test 전용.** 모델 고정 후 1차 성능만 확인하고, 충분하면 종료한다. 미흡하면 1차 이미지/오류 분석 없이 기존 개발 데이터로만 개선해 2차 Test를 수행한다. 사전에 정한 자동 전처리 Pipeline의 추론 적용만 허용하며 Test 원본에 대한 개별 수동 수정은 하지 않는다.
+**교수님 최신 직접 답변 반영:** 1차 Hand-made는 두 최적 모델을 먼저 고정해 **최초 Test로 평가**한다. 성능이 충분하면 그대로 보고하며, 부족하면 **1차 데이터를 Validation으로 전환해 오분류·특성 분석 및 추가 최적화에 활용 가능**하다. 이후 모델과 자동 Pipeline을 다시 고정해 **2차 Hand-made를 최종 Test로 한 번만 평가**한다. Original Test 16,000장과 2차 Test는 모델 튜닝에 사용하지 않는다.
 
 **상태:** W02 실험 1~3 수행 기록 보존, 이후 Combined 재학습·자동 Pipeline/증강 실험·외부 Test는 아직 미실시.
 
