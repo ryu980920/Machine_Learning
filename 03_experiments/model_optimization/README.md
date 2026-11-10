@@ -46,10 +46,10 @@ python 03_experiments/model_optimization/run.py --model svc --variant candidate
 **이 폴더의 현행 `common.py`·`run.py`는 Original 데이터의 Baseline/Candidate 훈련·Validation 전용이다.** 실제 Hand-made Combined 로더, 이미지 중심/크기/기울기/명암 자동 Pipeline, Training Augmentation 기능은 **아직 구현되지 않았고, 다음 연구 단계의 개발 대상**이다. `build_candidate()` 함수만 바꾼다고 손글씨가 자동으로 Combined 학습되거나 이미지가 정렬되지는 않는다.
 
 - **4명 모두** 개발용 Hand-made 오류·원본/손글씨 이미지 특징을 분석하고 Pipeline/증강 실험을 직접 수행한다. 팀원별 구체적인 모델·업무 배정은 팀장이 따로 정한다.
-- **Normal vs Combined 통제 실험:** 기본 모델·전처리·Validation 인덱스를 고정해 손글씨 학습 추가 효과만 먼저 분리 평가한다.
+- **Normal/Combined 독립 최적화:** 교수님 직접 답변에 따라 각각 최적 모델을 선정·최적화한다. 동일 모델 설정에서 학습 데이터만 바꾸는 Normal vs Combined는 추가 학습 효과를 측정하는 **보조 통제 실험**이다.
 - **데이터 최적화:** 추론 시 고정 자동 Pipeline은 모델 일부; 회전·이동·크기·획 굵기 Augmentation은 **Training만**; 세부 방법이 정확도를 올리는지 개발용 Validation에서 실측한다.
 - **모델 최적화:** 동일 Validation으로 후보별 Accuracy·Macro F1·모델 학습시간·Pipeline 처리시간·추론시간 비교. Epoch가 없는 모델에 가짜 Epoch Curve를 만들지 않는다. Notebook에 실제 실행·출력·학습곡선을 담아 보고한다.
-- **교수님 Test:** 1·2차 모두 독립 평가용. 학습·오류 분석·맞춤 전처리 설계에 절대 사용하지 않는다. 전체 성능 확인만 하며 1차 충분 시 종료, 미흡하면 개발용 데이터로만 개선 후 2차를 평가한다.
+- **평가 순서:** 모델 2개 동결 → **Original Test 16,000장** → **교수님 1차 Hand-made Test**. 성능 만족 시 그대로 보고서 제출; 부족하면 1차를 **Validation 전환**하여 오류·전처리·모델 보완 후 재동결, **2차 최종 Test 단 한 번** 평가. 2차 및 Original Test로 튜닝하지 않는다.
 - **결과 파일 주의:** 현재 Runner에서 같은 `--model`, `--variant`, `--output` 조합을 반복 실행하면 `metrics.json` 등이 **덮어써질 수 있다**. 반복 실험은 `--output`에 각자 고유 경로 또는 `EXP유001` 등 실행 식별자를 지정해 파일을 보존한다. 실행 환경·수치의 완전 재현은 아직 검증되지 않았다.
 
 **추가 손글씨·CV 후속 구현:** 교수님은 새 Hand-made를 학습용으로 추가하는 방법을 허용했다. 기존 2,560장만으로 Combined 학습·검증을 병행하려면 실제 작성자 기준 Group CV가 적절할 수 있다. **현재 `run.py`에는 Combined 학습이나 작성자 Group CV 기능이 구현되어 있지 않다.** 신규 작성자 Validation을 따로 확보하면 기존 2,560장 내부 CV는 필수가 아니다.

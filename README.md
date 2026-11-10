@@ -48,16 +48,34 @@
 
 **Hand-made Grayscale 데이터셋:** [02_data/Hand_made](02_data/Hand_made/)에 41·42·43·44번 **각 640장(총 2,560장)**을 원본 JPG 기반 **0–255 Grayscale NPZ**로 통일했습니다(2026-11-09 기존 Binary 파일 교체). Normal 모델의 Hand-made 평가에 사용하며, 후속 Combined 학습에 일부 편입할 경우 **작성자별 보류 평가셋과 학습셋을 겹치지 않게 분리**합니다. [변환 검증 기록](02_data/Hand_made/GRAYSCALE_VERIFICATION.md) 참조.
 
-## 최신 연구 진행 및 교수님 지침 반영 — 2026-11-10
+## 확정 연구 흐름도 — 2026-11-10
 
-**완료:** 13개 후보 평가 및 5개 선정 → 공식 Training 76,800/Validation 19,200에서 Normal Baseline → 기존 Hand-made 2,560장 추론·방향·극성·Grayscale 문제 분석.
+```mermaid
+flowchart TD
+    A["기존 Hand-made 2,560장 오류·데이터 특성 분석"] --> B["전처리·증강 및 학습 데이터 개선"]
+    B --> N["Normal 모델 독립 최적화"]
+    B --> C["Combined 모델 독립 최적화"]
+    N --> D["Normal / Combined 최적 모델 2개 선정 및 설정 고정"]
+    C --> D
+    D --> E["Original Test 16,000장 평가<br/>MNIST 10,000 + EMNIST A–F 6,000"]
+    E --> F["교수님 1차 Hand-made Test 평가<br/>우선 독립 Test로 사용"]
+    F --> G{"1차 성능이 만족스러운가?"}
+    G -->|예| H["현재 모델·평가 결과로 보고서 제출"]
+    G -->|아니오| I["1차 데이터를 Validation으로 전환<br/>오류 분석·전처리·모델 보완"]
+    I --> J["Normal / Combined 모델 필요 시 재최적화<br/>설정 다시 고정"]
+    J --> K["교수님 2차 Hand-made 최종 Test<br/>단 한 번 평가"]
+    K --> L["최종 결과 보고 및 종료"]
+```
 
-**향후:** (1) **유용성·김다연·이선형·곽지호 전원** 오분류 원인과 Original/Hand-made 데이터 특성 분석 (2) Normal/Combined 학습 데이터 효과 통제 검증 (3) **전원 자동 전처리 Pipeline·Training Augmentation 실험** + 5개 모델 개선 (4) 동일 Validation에서 최종 모델 선정·고정 (5) 공식 Original Test 16,000장 (6) **교수님 1차 Hand-made Test** — 충분하면 종료 (7) 부족할 때만 기존 개발 자료로 재개선하여 **2차 Test** 후 종료.
+**교수님 최신 직접 답변:** Original Test는 이 팀의 공식 구성 기준 **MNIST 10,000장 + EMNIST A–F 6,000장 = 16,000장**으로 사용한다(사용자 확인). **1차 Hand-made는 첫 평가 후 Validation으로 전환 가능**, **2차는 최종 Test로 1회만 사용**한다. Normal과 Combined는 **각각 별도로 최적 모델을 선정**하며 같은 알고리즘일 필요가 없다.
 
-**평가 데이터 구분:** 기존 Hand-made 2,560장은 개발용으로 학습·검증 가능하나 학습에 포함한 샘플을 독립 검증에 중복 사용하면 안 된다. 새로운 작성자 Validation 640장은 **수집 제안**, 별도 Hand-made Test 640장은 **선택안**. 교수님 1·2차 배포 데이터는 모두 **Test 전용**: 전체 성능 확인 이외 이미지·특정 오류를 분석하거나 맞춤 보정/학습에 사용하지 않는다. **사전에 고정한 자동 Pipeline은 Test 추론 시에도 적용 가능**.
+**팀 채택 운영안:** 두 모델을 먼저 선정·고정하고 Original Test 16,000장 → 교수님 1차 Hand-made Test 순서로 평가한다. **1차 성능이 충분하면 그대로 보고서 작성·제출**, 부족할 때에만 1차를 *개발용 Validation*으로 전환해 개선하고 2차에서 한 번 최종 평가한다. 이는 팀이 선택한 1차 활용 전략이며 교수님 답변 자체가 모든 경우의 2차 생략을 명시한 것은 아니다.
 
-- [상세 연구계획](01_project/RESEARCH_PLAN.md) · [변경 의사결정](01_project/DECISION_LOG.md)
-- [데이터 분할·Test 원칙](02_data/HANDMADE_SPLIT_PLAN.md) · [주차별 오류·개선 실험](03_experiments/README.md)
-- [학습 전 모델 5개](03_experiments/model_optimization/README.md): 현재는 Normal 학습용 기본 코드이며 **Combined·자동 Pipeline·증강은 향후 구현**. 기본 설정 재현 검증도 미완료.
+**독립성:** 1차를 Validation으로 활용하기 시작하면 수정된 모델에 대한 1차 점수는 독립 Test가 아니다. 2차는 결과 확인 후 다시 튜닝하지 않는다. Original Test도 모델을 선택·튜닝하는 데이터로 사용하지 않고, 모델 버전별 평가 결과를 명확히 기록한다. 자동 입력 Pipeline은 각 평가 전에 고정한 설정으로 실행한다.
 
-**작성자 기준 검증 선택지:** 기존 2,560장만 Combined 학습·평가에 쓰는 경우에는 실제 작성자 ID를 기준으로 Group CV를 검토한다(4개 독립 작성자라면 4-Fold 예시). 새로운 작성자의 Validation을 확보하면 CV가 반드시 필요한 것은 아니다. 교수님 설명에 따라 **추가 Hand-made 손글씨를 작성해 Training을 보강하는 것**도 허용된다. 개인별 역할 분담은 팀장이 직접 작성한다.
+**현재 실제 완료:** W02 실험 1(13개 후보 중 5개 선정), 실험 2(공식 Train 76,800 / Validation 19,200으로 Normal Baseline 평가), 실험 3(기존 Hand-made 2,560장 성능·방향·Grayscale 오류 분석). **Normal/Combined의 독립 최적화 및 외부 Test는 아직 미실시**다.
+
+- [흐름도와 조건별 상세 설명](01_project/RESEARCH_FLOW.md) · [전체 연구계획](01_project/RESEARCH_PLAN.md) · [의사결정 이력](01_project/DECISION_LOG.md).
+- [Hand-made 분할·그룹 CV 및 Test 정책](02_data/HANDMADE_SPLIT_PLAN.md) · [후속 W02 실험 순서](03_experiments/W02_2026-11-09_11-15/README.md).
+- 기존 2,560장의 오류 분석은 개발에 활용 가능하다. 신규 작성자 Validation 수집과 추가 손글씨 학습 데이터 수집도 가능하다. **팀원별 상세 업무 배정은 팀장이 직접 작성한다.**
+- [학습 전 모델 5개 실행 안내](03_experiments/model_optimization/README.md): 현재 Combined와 자동 Pipeline/그룹 CV는 미구현이며 계획을 완료로 표기하지 않는다.
