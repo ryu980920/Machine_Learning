@@ -30,8 +30,8 @@
 | ID | 담당 | 실제 수행 | 기록 |
 |---|---|---|---|
 | EXP유001 | 유용성 | 13개 후보 평가 및 최종 5개 선정 | [로그](W02_2026-11-09_11-15/logs/EXP유001_13개후보_초기평가_5개선정.md) · [실측 CSV](W02_2026-11-09_11-15/results/EXP-유-002_13models_ranked.csv) |
-| EXP유002 | 유용성 | 5개 Normal Baseline 및 새 42번 기준 후속 비교(8절) | [로그](W02_2026-11-09_11-15/logs/EXP유002_5개모델_Normal_Baseline.md) · [CSV](W02_2026-11-09_11-15/results/EXP-유-003_5models_comparison.csv) |
-| EXP유003 | 유용성 | 과거 원본 기준 손글씨 방향 보정 분석 | [로그](W02_2026-11-09_11-15/logs/EXP유003_Handmade_방향보정_성능평가.md) |
+| EXP유002 | 유용성 | **공식 MNIST·EMNIST Normal Baseline만** 측정(1~7절) | [로그](W02_2026-11-09_11-15/logs/EXP유002_5개모델_Normal_Baseline.md) · [CSV](W02_2026-11-09_11-15/results/EXP-유-003_5models_comparison.csv) |
+| EXP유003 | 유용성 | **현행 새 42번 포함, 5개 모델·2,560장 전후 40회 재추론** 및 오분류·회전 분석 | [개정 로그](W02_2026-11-09_11-15/logs/EXP유003_Handmade_방향보정_성능평가.md) · [재실행 검증](W02_2026-11-09_11-15/results/EXP-유-003_rotation_v4/REVALIDATION_20261111.md) |
 | EXP유004 | 유용성 | 구/신 42번 Grayscale 원본 비교 | [로그](W02_2026-11-09_11-15/logs/EXP유004_42번_Grayscale_원본재제출_비교.md) |
 
 중간 발표 원본은 [04_reports](../04_reports/README.md)에 보존한다. 기존 CSV·이미지의 `EXP-유-00X` 파일명은 과거 실측 결과 식별자이므로 변경하지 않았다.
