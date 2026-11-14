@@ -2,14 +2,9 @@ name: Normal MLP Pixcel Attribution (Stage 1-2)
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/mlp_pixcel_attribution.yml"
-      - "05_model_optimize/MLP/Normal/scripts/Pixcel_Attribution.py"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   pixcel-attribution:
@@ -48,16 +43,3 @@ jobs:
           path: 05_model_optimize/MLP/Normal/results/Pixcel_Attribution/
           retention-days: 30
           if-no-files-found: warn
-
-      - name: Commit verified images CSV and metadata to Normal results folder
-        if: success() && github.ref == 'refs/heads/main'
-        run: |
-          git add -- 05_model_optimize/MLP/Normal/results/Pixcel_Attribution
-          if git diff --cached --quiet; then
-            echo "No changed results"
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "Publish verified Normal MLP Pixcel_Attribution stage 1-2 results"
-            git push origin HEAD:main
-          fi
