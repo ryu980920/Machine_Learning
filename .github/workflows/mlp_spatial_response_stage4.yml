@@ -1,0 +1,49 @@
+name: Normal MLP Spatial Distribution and Response (EXP003)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mlp_spatial_response_stage4.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  spatial-response:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout unchanged Normal MLP source data and frozen Stage 3 model
+        uses: actions/checkout@v4
+
+      - name: Python baseline environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned baseline and scientific libraries
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scipy==1.17.0" "scikit-learn==1.8.0" "matplotlib==3.10.7"
+
+      - name: Execute geometry and hidden activation/IG paired analysis (NO official Test)
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/Spatial_Response_Analysis.py \
+            --out "${{ runner.temp }}/normal_mlp_spatial_response_exp003" --batch 1024
+
+      - name: Preserve EXP003 artifacts for user review (NO commit)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-mlp-exp003-spatial-response-review
+          path: ${{ runner.temp }}/normal_mlp_spatial_response_exp003/
+          retention-days: 30
+          if-no-files-found: warn
