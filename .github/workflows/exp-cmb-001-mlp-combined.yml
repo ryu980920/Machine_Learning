@@ -1,0 +1,61 @@
+name: EXP-CMB-001 Combined MLP writer-group CV
+
+# Approved one-time experiment branch push; outputs are uploaded as transient Actions Artifacts only.
+# No commits/pushes to main and no automatic publication under results/.
+on:
+  push:
+    branches:
+      - exp/mlp-combined-cv-001
+    paths:
+      - '05_model_optimize/MLP/Combined/scripts/**'
+      - '.github/workflows/exp-cmb-001-mlp-combined.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  combined-mlp-cv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out current repository
+        uses: actions/checkout@v4
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Verify experiment runner on synthetic data
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Verify split and source checksums
+        env:
+          OPENBLAS_NUM_THREADS: 2
+          OMP_NUM_THREADS: 2
+          MKL_NUM_THREADS: 2
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
+            --official 02_data/datasets/MNIST_EMNIST_official_split_112000.npz \
+            --handmade-dir 02_data/Hand_made \
+            --output ./exp_cmb_001_preflight --check-only
+      - name: Train and evaluate 4 folds
+        env:
+          OPENBLAS_NUM_THREADS: 2
+          OMP_NUM_THREADS: 2
+          MKL_NUM_THREADS: 2
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
+            --official 02_data/datasets/MNIST_EMNIST_official_split_112000.npz \
+            --handmade-dir 02_data/Hand_made \
+            --output ./exp_cmb_001_results
+      - name: Preserve reproducibility and metrics artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-001-cv-outputs
+          path: |
+            exp_cmb_001_preflight/
+            exp_cmb_001_results/
+          if-no-files-found: warn
+          retention-days: 30
