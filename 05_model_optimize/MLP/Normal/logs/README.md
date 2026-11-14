@@ -8,3 +8,5 @@
 - **[EXP유001 — Pixcel_Attribution (1·2단계)](EXP유001_Pixcel_Attribution.md)**: 기존 Normal MLP의 검증된 분류 결과를 기준으로 98개 실제 이미지의 픽셀 기여도를 계산한 원인 진단 기록. **3단계 입력 변화 실험·최적화 미실시**.
 
 - **[EXP유002 — Input_Sensitivity (3단계)](EXP유002_Input_Sensitivity.md)**: 공식 19,200장/손글씨 2,560장의 위치·밝기·굵기·크기 변화 민감도를 정량 검증. **20조건, 456,960개 예측**. 모델 전처리 도입 및 최적화는 아직 미실시.
+
+- **[EXP유003 — Spatial Distribution & MLP Response](EXP유003_Spatial_Response.md)**: 공식 Training/Validation과 개발용 Hand-made의 중심·크기 분포 차이 및 예측·은닉층 반응을 고정 모델로 분석. **98,560장 특징·130,560건 대응 분석**, 자동 중심 정렬 도입/학습 최적화 미실시.
