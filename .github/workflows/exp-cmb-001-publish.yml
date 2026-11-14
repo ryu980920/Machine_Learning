@@ -1,0 +1,83 @@
+name: EXP-CMB-001 approved one-time results publication
+on:
+  push:
+    branches:
+      - exp/mlp-combined-cv-001
+    paths:
+      - '.github/workflows/exp-cmb-001-publish.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish-reviewed-results:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout approved experiment branch
+        uses: actions/checkout@v4
+        with:
+          ref: exp/mlp-combined-cv-001
+          persist-credentials: true
+      - name: Install exact experiment runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned packages
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Recover the original successful experiment artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "${RUNNER_TEMP}/exp_cmb_001_artifact"
+          gh run download 43622998640 --repo ryu980920/Machine_Learning --name EXP-CMB-001-cv-outputs --dir "${RUNNER_TEMP}/exp_cmb_001_artifact"
+          test -f "${RUNNER_TEMP}/exp_cmb_001_artifact/exp_cmb_001_results/OOF_predictions.csv"
+          test -f "${RUNNER_TEMP}/exp_cmb_001_artifact/exp_cmb_001_results/trained_models/normal_mlp.joblib"
+      - name: Package verified originals into the approved compact 11-file layout
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          import os
+          source=Path(os.environ['RUNNER_TEMP'])/'exp_cmb_001_artifact'
+          target=Path(os.environ['RUNNER_TEMP'])/'EXP_CMB_001_original_results.zip'
+          with ZipFile(target,'w',compression=ZIP_DEFLATED,compresslevel=6) as z:
+              for p in sorted(source.rglob('*')):
+                  if p.is_file():
+                      z.write(p,p.relative_to(source).as_posix())
+          print('Recovered original output files:',len([p for p in source.rglob('*') if p.is_file()]))
+          print('Zip path:',target)
+          PY
+          EXP_CMB_SOURCE_ZIP="${RUNNER_TEMP}/EXP_CMB_001_original_results.zip" python .github/temp/exp_cmb_001_publish_once.py
+      - name: Verify exact requested content before any git commit
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,zipfile,json
+          root=Path('05_model_optimize/MLP/Combined')
+          d=root/'results'/'EXP_CMB_001'
+          fs=[p for p in d.rglob('*') if p.is_file() and p.name!='README.md']
+          assert len(fs)==11,(len(fs),[str(x) for x in fs])
+          with (d/'metrics_summary.csv').open(encoding='utf-8-sig') as f:
+              a=list(csv.DictReader(f))
+          assert len(a)==15
+          oof=[r for r in a if r['evaluation']=='pooled_OOF']
+          assert len(oof)==2
+          assert {(r['model'],r['accuracy']) for r in oof}=={('Normal','0.62578125'),('Combined','0.8125')}
+          with zipfile.ZipFile(d/'trained_models.zip') as z:assert len(z.namelist())==5
+          manifest=json.loads((d/'experiment_manifest.json').read_text())
+          assert not manifest['tests']['original_test_used'] and not manifest['tests']['professor_test_used']
+          assert (root/'logs'/'EXP유001_Combined_MLP_4Fold_CV_Baseline.md').exists()
+          print('VERIFIED: 11 results, 15 metrics rows, 5 original trained models, original Test unused')
+          PY
+      - name: Commit only approved EXP-CMB-001 deliverables on the experiment branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add 05_model_optimize/MLP/Combined/logs/EXP유001_Combined_MLP_4Fold_CV_Baseline.md
+          git add 05_model_optimize/MLP/Combined/results/EXP_CMB_001
+          git diff --cached --stat
+          git commit -m "EXP-CMB-001: publish compact validated CV results and experiment log"
+          git push origin HEAD:exp/mlp-combined-cv-001
