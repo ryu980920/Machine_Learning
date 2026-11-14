@@ -165,9 +165,10 @@ def write_features(file, domain, x, y, writer, index, augmented=None, batch=1024
     """One compact row per source image, with threshold-robustness columns."""
     fields=["dataset","writer","sample_index","class","augmented"]
     keys=list(shape_features(x[:1]).keys())
+    write_header = not file.exists() or file.stat().st_size == 0
     with gzip.open(file,"at",newline="",encoding="utf-8") as stream:
         csvwriter=csv.DictWriter(stream,fieldnames=fields+keys)
-        if stream.tell()==0:
+        if write_header:
             csvwriter.writeheader()
         for beg in range(0,len(y),batch):
             end=min(beg+batch,len(y))
