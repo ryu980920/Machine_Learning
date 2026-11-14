@@ -1,0 +1,120 @@
+name: Publish Verified Normal MLP EXP004 Automatic Centering (one-time)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish_normal_mlp_exp004_once.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout approved experiment log, manifest and source code
+        uses: actions/checkout@v4
+
+      - name: Retrieve exact successful EXP004 review artifact (no retraining)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 43638979287 --repo "$GITHUB_REPOSITORY" \
+            --name normal-mlp-exp004-automatic-centering-review \
+            --dir 05_model_optimize/MLP/Normal/results/Automatic_Centering
+
+      - name: Verify every original EXP004 artifact by SHA-256 and study assertions
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          import gzip
+          import hashlib
+          import json
+          from pathlib import Path
+
+          p=Path("05_model_optimize/MLP/Normal/results/Automatic_Centering")
+          checks={
+            "SUMMARY.md":"a218e64f267a79bdab5f9924812db96215db86257775176858fa6a7c3a96cfdf",
+            "accuracy_comparison.png":"64201b7036cf3df1c7ec4634340056f83e72d6100907d398ea224743de9e0e64",
+            "exp004_alignment_stats.csv":"66ff7aa03dd341c8acdccc0b556af614b87b91b0149b07ecacd1f9ea9cb0654c",
+            "exp004_bbox.joblib":"09976f913cf48046f5782d9915bae031e957367da40048ab470afb6a82feb362",
+            "exp004_confusions.csv":"5bf4cfd74f97f5aefff9c829f665790acdc9399c8425ac7bdaefe68e3293d966",
+            "exp004_group_metrics.csv":"1810fa279353d3c2c42ee0331b633123c4b4f19241e4f5e71e5aa8a614f022bd",
+            "exp004_mass.joblib":"3c1aac362d75ff5c4d9652188c1c4fd97524525f5409ec00d5a6c56fa3ad27ef",
+            "exp004_predictions.csv.gz":"0dbdbe369a73a037cd192896f20a94b4cbb361f981540c9a4ae7d9cb73eaf613",
+            "exp004_run_metadata.json":"265899d0c35df749e7c58b31b0ed9181f940d69e9d72d10115824e2d6bed5f58",
+            "exp004_typical_confusions.csv":"ff5607175a056bd02d4aa7ba1ccd829132b6913859d60821cf1abe7bd7def355",
+          }
+          for name, expected in checks.items():
+            assert (p/name).is_file(),f"Missing original artifact: {name}"
+            with (p/name).open("rb") as f:
+              actual=hashlib.file_digest(f,"sha256").hexdigest()
+            assert actual==expected,f"Checksum mismatch {name}: {actual}"
+
+          meta=json.loads((p/"exp004_run_metadata.json").read_text(encoding="utf-8"))
+          assert meta["study"]=="EXP유004 Automatic_Centering"
+          assert meta["official_train"]==76800 and meta["official_validation"]==19200
+          assert meta["handmade"]==2560
+          assert meta["official_test_read"] is False
+          assert meta["professor_test_read"] is False
+          assert meta["handmade_used_in_fit"] is False
+          assert meta["handmade_used_for_preprocessing_policy"] is False
+          assert meta["new_models_fit_on_official_train"]==["Center_of_Mass","Bounding_Box_Center"]
+          assert meta["baseline_historical_official_cm_l1"]==0
+          assert meta["baseline_historical_handmade_prediction_mismatches"]==0
+          assert meta["baseline_model_sha256"]=="9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a"
+          assert meta["center_policy"]["target_xy"]==[13.5,13.5]
+          assert meta["center_policy"]["threshold"]==32.0
+
+          nrows={
+            "exp004_group_metrics.csv":144,
+            "exp004_alignment_stats.csv":6,
+            "exp004_confusions.csv":1536,
+            "exp004_typical_confusions.csv":36,
+          }
+          for name, expected in nrows.items():
+            with (p/name).open(encoding="utf-8-sig", newline="") as f:
+              got=sum(1 for _ in csv.DictReader(f))
+            assert got==expected,(name,got,expected)
+          with gzip.open(p/"exp004_predictions.csv.gz","rt",encoding="utf-8-sig",newline="") as f:
+            got=sum(1 for _ in csv.DictReader(f))
+          assert got==21760,got
+
+          with (p/"exp004_group_metrics.csv").open(encoding="utf-8-sig",newline="") as f:
+            rows=list(csv.DictReader(f))
+          def get(domain,method):
+            return next(x for x in rows if x["dataset"]==domain and x["method"]==method
+                        and x["group_type"]=="all" and x["group"]=="all")
+          expected={
+            ("OfficialVal","Normal"):(.9731770833333333,18685),
+            ("OfficialVal","Center_of_Mass"):(.9691666666666666,18608),
+            ("OfficialVal","Bounding_Box_Center"):(.9730729166666666,18683),
+            ("Handmade","Normal"):(.628515625,1609),
+            ("Handmade","Center_of_Mass"):(.77109375,1974),
+            ("Handmade","Bounding_Box_Center"):(.616015625,1577),
+          }
+          for pair,(accuracy,correct) in expected.items():
+            r=get(*pair)
+            assert abs(float(r["accuracy"])-accuracy)<1e-12,(pair,r)
+            assert int(r["correct"])==correct,(pair,r)
+          print("EXP004 VERIFIED: 10 exact files; 21,760 predictions; 144 group metrics; "
+                "no Test or Handmade fitting; six aggregate accuracies match.")
+          PY
+
+      - name: Commit only user-approved verified EXP004 research artifacts
+        run: |
+          git add -- 05_model_optimize/MLP/Normal/results/Automatic_Centering/
+          git diff --cached --stat
+          if git diff --cached --quiet; then
+            echo "All EXP004 result files are already published."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Publish verified EXP유004 Automatic Centering original results and trained candidates"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
