@@ -1,0 +1,332 @@
+{
+  "experiment_id": "EXP-CMB-001",
+  "experiment_date_kst": "2026-11-15",
+  "run_status": "success",
+  "source_repository": "ryu980920/Machine_Learning",
+  "source_branch": "exp/mlp-combined-cv-001",
+  "github_actions": {
+    "run_id": 43622998640,
+    "job_id": 132532593279,
+    "run_url": "https://github.com/ryu980920/Machine_Learning/actions/runs/43622998640",
+    "source_artifact_id": 14124782428,
+    "artifact_sha256": "53de75b62b17ffd5906d784f2ec6f5b4a0b8b95b07ec9d61456af3b1237f9041"
+  },
+  "dataset_sha256": {
+    "official_v3": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+    "handmade": {
+      "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+      "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+      "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+      "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+    }
+  },
+  "input_data_paths": {
+    "official": "02_data/datasets/MNIST_EMNIST_official_split_112000.npz",
+    "handmade_directory": "02_data/Hand_made",
+    "handmade_files": [
+      "ml26_41.npz",
+      "ml26_42.npz",
+      "ml26_43.npz",
+      "ml26_44.npz"
+    ]
+  },
+  "model": "MLPClassifier(random_state=42)",
+  "pipeline": "PixelScaler255 (X/255.0) -> MLPClassifier(random_state=42)",
+  "mlp_hyperparameters": {
+    "activation": "relu",
+    "alpha": 0.0001,
+    "batch_size": "auto",
+    "beta_1": 0.9,
+    "beta_2": 0.999,
+    "early_stopping": false,
+    "epsilon": 1e-08,
+    "hidden_layer_sizes": [
+      100
+    ],
+    "learning_rate": "constant",
+    "learning_rate_init": 0.001,
+    "max_fun": 15000,
+    "max_iter": 200,
+    "momentum": 0.9,
+    "n_iter_no_change": 10,
+    "nesterovs_momentum": true,
+    "power_t": 0.5,
+    "random_state": 42,
+    "shuffle": true,
+    "solver": "adam",
+    "tol": 0.0001,
+    "validation_fraction": 0.1,
+    "verbose": false,
+    "warm_start": false
+  },
+  "official_split": {
+    "algorithm": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42), first fold",
+    "train_n": 76800,
+    "validation_n": 19200,
+    "train_class_counts_0_to_15": [
+      4738,
+      5394,
+      4766,
+      4905,
+      4674,
+      4337,
+      4734,
+      5012,
+      4681,
+      4759,
+      4800,
+      4800,
+      4800,
+      4800,
+      4800,
+      4800
+    ],
+    "validation_class_counts_0_to_15": [
+      1185,
+      1348,
+      1192,
+      1226,
+      1168,
+      1084,
+      1184,
+      1253,
+      1170,
+      1190,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200
+    ],
+    "group_overlap": 0
+  },
+  "official_split_file": "official_split_indices.npz",
+  "handmade_cv": "leave-one-writer-out / 4 folds",
+  "folds": [
+    {
+      "held_out_writer": 41,
+      "combined_official_training_row_indices": "official_split_indices.npz:train_idx",
+      "combined_handmade_training": {
+        "42": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "43": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "44": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        }
+      },
+      "handmade_validation": {
+        "writer": 41,
+        "original_row_indices": [
+          0,
+          639
+        ],
+        "n": 640
+      },
+      "official_development_validation": "official_split_indices.npz:val_idx",
+      "note": "Original Hand-made NPZ row order. 0-based inclusive indices. Validation writer excluded from Combined training."
+    },
+    {
+      "held_out_writer": 42,
+      "combined_official_training_row_indices": "official_split_indices.npz:train_idx",
+      "combined_handmade_training": {
+        "41": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "43": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "44": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        }
+      },
+      "handmade_validation": {
+        "writer": 42,
+        "original_row_indices": [
+          0,
+          639
+        ],
+        "n": 640
+      },
+      "official_development_validation": "official_split_indices.npz:val_idx",
+      "note": "Original Hand-made NPZ row order. 0-based inclusive indices. Validation writer excluded from Combined training."
+    },
+    {
+      "held_out_writer": 43,
+      "combined_official_training_row_indices": "official_split_indices.npz:train_idx",
+      "combined_handmade_training": {
+        "41": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "42": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "44": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        }
+      },
+      "handmade_validation": {
+        "writer": 43,
+        "original_row_indices": [
+          0,
+          639
+        ],
+        "n": 640
+      },
+      "official_development_validation": "official_split_indices.npz:val_idx",
+      "note": "Original Hand-made NPZ row order. 0-based inclusive indices. Validation writer excluded from Combined training."
+    },
+    {
+      "held_out_writer": 44,
+      "combined_official_training_row_indices": "official_split_indices.npz:train_idx",
+      "combined_handmade_training": {
+        "41": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "42": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        },
+        "43": {
+          "original_row_indices": [
+            0,
+            639
+          ],
+          "n": 640
+        }
+      },
+      "handmade_validation": {
+        "writer": 44,
+        "original_row_indices": [
+          0,
+          639
+        ],
+        "n": 640
+      },
+      "official_development_validation": "official_split_indices.npz:val_idx",
+      "note": "Original Hand-made NPZ row order. 0-based inclusive indices. Validation writer excluded from Combined training."
+    }
+  ],
+  "runtime": {
+    "python_version": "3.13.18",
+    "numpy_version": "2.3.5",
+    "scikit_learn_version": "1.8.0"
+  },
+  "model_fit_warnings": {
+    "Normal": [],
+    "Combined heldout 41": [],
+    "Combined heldout 42": [],
+    "Combined heldout 43": [],
+    "Combined heldout 44": []
+  },
+  "models_zip_members_sha256": {
+    "combined_heldout_41_mlp.joblib": "10b2cc695f7597258ccab3e9c350248cec8f74af1d77e63676cf05d0e78a8538",
+    "combined_heldout_42_mlp.joblib": "c3c16d1d8c9d4232ec78a8c1cdd52c31543c034d8df2cf7a1cad8beec82c76f0",
+    "combined_heldout_43_mlp.joblib": "bd0377ff690ce529ee88e4d747c2942511efb6077ab82e5a94ac963135336ea0",
+    "combined_heldout_44_mlp.joblib": "a8ff1f3601faf4c752af44ced67712b226a94759a8af36be90f560b7d17a78c3",
+    "normal_mlp.joblib": "1b4284ce996c2e25c59a2b89bac02aae923d6c0ccdfd1e204d308c59c8cc3315"
+  },
+  "evaluations": {
+    "normal_handmade_oof": {
+      "n": 2560,
+      "accuracy": 0.62578125,
+      "macro_f1": 0.623045592999997
+    },
+    "combined_handmade_oof": {
+      "n": 2560,
+      "accuracy": 0.8125,
+      "macro_f1": 0.8120430780652209
+    },
+    "combined_minus_normal_accuracy_pp": 18.671875000000004,
+    "normal_official_dev_validation": {
+      "n": 19200,
+      "accuracy": 0.9722395833333334,
+      "macro_f1": 0.9720713991109994
+    }
+  },
+  "prediction_reconciliation": {
+    "normal_wrong_combined_correct": 540,
+    "normal_correct_combined_wrong": 62,
+    "net_additional_correct": 478
+  },
+  "visualization": {
+    "type": "Viridis count and row-normalized confusion matrices",
+    "class_order": "0123456789ABCDEF",
+    "n_per_class": 160,
+    "count_scale": [
+      0,
+      160
+    ],
+    "normalized_scale_percent": [
+      0,
+      100
+    ],
+    "zero_annotations_hidden": true,
+    "input_cm_csv_sha256": {
+      "Normal": "f3372cf387d48712264573f34a778a6f87fbd541a64ee6614d69374f0c7385f2",
+      "Combined": "fdbf1733d1413169cfa8a6e72ebf9fb54899493bd48d256fa01f9b6cb2e789e2"
+    },
+    "original_blues_and_comparison_images_excluded": true,
+    "plots_generated_without_retraining": true
+  },
+  "tests": {
+    "original_test_used": false,
+    "professor_test_used": false,
+    "official_train_validation_row_intersection": 0,
+    "official_source_group_intersection": 0,
+    "handmade_train_validation_writer_intersection": 0,
+    "postprocessing_changed_predictions": false
+  },
+  "notes": [
+    "Hand-made OOF is development cross-validation, not a final independent Test.",
+    "Combined pooled OOF consists of four independent fitted models, not one final combined model.",
+    "Historical W02 Normal baseline weights were not reused: a new Normal was fitted under matching configuration in the same controlled experiment.",
+    "metrics_summary.csv is a long-form table merging prior metrics CSVs; omitted derived confusion matrices and per-class metrics are reproducible from OOF_predictions.csv."
+  ]
+}

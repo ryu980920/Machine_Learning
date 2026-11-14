@@ -1,7 +1,7 @@
 # MLPClassifier / Combined — 실측 결과
 
-실제 실행에서 산출한 Accuracy·Precision·Recall·F1 CSV, Confusion Matrix, Learning Curve, 학습/전처리/추론 시간과 오류 이미지 등을 저장한다.
+- [EXP_CMB_001 — Normal/Combined 작성자별 4-Fold CV 결과](EXP_CMB_001/README.md) (실행 완료: 2026-11-15)
 
-각 파일은 [logs/](../logs/README.md)의 해당 실험일지와 연결해 결과의 출처를 명확히 한다. 원본·검증·Test 데이터가 무엇인지 파일 또는 로그에 표기한다.
+파일 중복을 줄이기 위해 OOF 전체 예측값을 보존하고, 클래스별 지표와 CM 숫자 CSV는 이 예측에서 재계산한다. **최종 게시 그림**은 Viridis CM 4개와 Training Loss PNG 1개다. 모델 ZIP과 Train/Validation 실제 분할 인덱스를 함께 보존한다.
 
-현재 등록된 최적화 실험 결과 없음.
+[실험로그](../logs/EXP유001_Combined_MLP_4Fold_CV_Baseline.md) · [실행 코드](../scripts/README.md).
