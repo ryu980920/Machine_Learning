@@ -1,6 +1,6 @@
 # MLPClassifier — Normal 모델 최적화
 
-**현재 상태: EXP유001 Pixcel_Attribution과 EXP유002 Input_Sensitivity 완료.** 두 실험은 원인 진단이며, 전처리 최적화 모델 개발은 아직 실시하지 않았다.
+**현재 상태: EXP유001 Pixcel_Attribution, EXP유002 Input_Sensitivity, EXP유003 Spatial_Response 완료.** 세 실험 모두 원인 진단이며, 자동 중심 정렬을 포함한 실제 Pipeline 최적화는 아직 실시하지 않았다.
 
 ## 등록한 실험
 
@@ -8,6 +8,7 @@
 |---|---|---|---|
 | **EXP유001 — Pixcel_Attribution** | 공식 Validation과 Hand-made 정답·오분류 이미지 98장 추출, Integrated Gradients 기여도 분석 | **완료 (진단)** | [실험 로그](logs/EXP유001_Pixcel_Attribution.md) · [실행 코드](scripts/Pixcel_Attribution.py) · [실제 결과](results/Pixcel_Attribution/README.md) |
 | **EXP유002 — Input_Sensitivity** | 기존 MLP를 고정하고 위치·밝기·굵기·크기 20조건을 21,760장에 적용해 **456,960건**의 민감도를 비교 | **완료 (진단)** | [실험 로그](logs/EXP유002_Input_Sensitivity.md) · [실행 코드](scripts/Input_Sensitivity.py) · [실제 결과](results/Input_Sensitivity/README.md) |
+| **EXP유003 — Spatial_Response** | 공식 Train·Validation/손글씨의 **98,560장 공간 분포 비교**, **130,560건**의 고정 모델 반응, **72개 IG** | **완료 (진단)** | [실험 로그](logs/EXP유003_Spatial_Response.md) · [실행 코드](scripts/Spatial_Response_Analysis.py) · [결과 원본](results/Spatial_Response/README.md) |
 
 ## 연구 대상
 
