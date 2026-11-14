@@ -136,6 +136,15 @@
 
 ![오분류 대표 이미지의 원본·변형별 확률](../results/Input_Sensitivity/stage3_probability_curves.png)
 
+**변형별 실측 그래프(원본 CSV에서 재생성):**
+
+![공식/손글씨 변형 조건별 정확도 변화](../results/Input_Sensitivity/STAGE3_Accuracy_Change_Comparison.png)
+
+![숫자와 문자의 반대 방향 정확도 변화](../results/Input_Sensitivity/STAGE3_Digit_Letter_Tradeoff.png)
+
+![손글씨 작성자별 민감도](../results/Input_Sensitivity/STAGE3_Per_Writer.png)
+
+
 ## 5. 판단과 다음 실험
 
 - **확인:** 현재 Normal MLP가 작은 **공간 위치 이동과 크기 변경에 매우 민감**하다는 관찰을 원본 이미지 대비 단일 변수 변형으로 검증했다.
