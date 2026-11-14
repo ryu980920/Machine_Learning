@@ -1,0 +1,178 @@
+{
+  "scope": "Normal MLP Stage 3 input-only sensitivity experiment",
+  "source_code": "05_model_optimize/MLP/Normal/scripts/Input_Sensitivity.py",
+  "official_test_read": false,
+  "handmade_training": false,
+  "model_hyperparameters_modified": false,
+  "data_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "official_n": 19200,
+  "handmade_n": 2560,
+  "n_variants_including_original": 21,
+  "n_nontrivial_variants": 20,
+  "total_prediction_rows": 456960,
+  "original_accuracy": {
+    "OfficialVal": 0.9731770833333333,
+    "Handmade": 0.628515625
+  },
+  "baseline_validation_cm_L1_difference": 0,
+  "baseline_handmade_prediction_difference": 0,
+  "baseline_not_identical_to_stage12": false,
+  "stage12_focus_changed_prediction_count": 0,
+  "focus_n": 106,
+  "focus_rows": 2226,
+  "transforms": [
+    {
+      "name": "original",
+      "family": "original",
+      "value": null
+    },
+    {
+      "name": "shift_L1",
+      "family": "shift",
+      "value": [
+        -1,
+        0
+      ]
+    },
+    {
+      "name": "shift_R1",
+      "family": "shift",
+      "value": [
+        1,
+        0
+      ]
+    },
+    {
+      "name": "shift_U1",
+      "family": "shift",
+      "value": [
+        0,
+        -1
+      ]
+    },
+    {
+      "name": "shift_D1",
+      "family": "shift",
+      "value": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "shift_L2",
+      "family": "shift",
+      "value": [
+        -2,
+        0
+      ]
+    },
+    {
+      "name": "shift_R2",
+      "family": "shift",
+      "value": [
+        2,
+        0
+      ]
+    },
+    {
+      "name": "shift_U2",
+      "family": "shift",
+      "value": [
+        0,
+        -2
+      ]
+    },
+    {
+      "name": "shift_D2",
+      "family": "shift",
+      "value": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "brightness_080",
+      "family": "brightness",
+      "value": 0.8
+    },
+    {
+      "name": "brightness_090",
+      "family": "brightness",
+      "value": 0.9
+    },
+    {
+      "name": "brightness_110",
+      "family": "brightness",
+      "value": 1.1
+    },
+    {
+      "name": "brightness_120",
+      "family": "brightness",
+      "value": 1.2
+    },
+    {
+      "name": "stroke_thin_25",
+      "family": "stroke",
+      "value": [
+        "thin",
+        0.25
+      ]
+    },
+    {
+      "name": "stroke_thin_40",
+      "family": "stroke",
+      "value": [
+        "thin",
+        0.4
+      ]
+    },
+    {
+      "name": "stroke_thick_25",
+      "family": "stroke",
+      "value": [
+        "thick",
+        0.25
+      ]
+    },
+    {
+      "name": "stroke_thick_40",
+      "family": "stroke",
+      "value": [
+        "thick",
+        0.4
+      ]
+    },
+    {
+      "name": "scale_090",
+      "family": "scale",
+      "value": 0.9
+    },
+    {
+      "name": "scale_095",
+      "family": "scale",
+      "value": 0.95
+    },
+    {
+      "name": "scale_105",
+      "family": "scale",
+      "value": 1.05
+    },
+    {
+      "name": "scale_110",
+      "family": "scale",
+      "value": 1.1
+    }
+  ],
+  "floating_precision": "mixed float32 fitted MLP forward, float64 softmax",
+  "brightness_clip_fraction_basis": "all 784 image pixels",
+  "ink_mass_change_basis": "relative sum of 0-255 pixel intensity",
+  "warnings": [],
+  "elapsed_seconds": 82.949287792,
+  "versions": {
+    "python": "3.13.18",
+    "sklearn": "1.8.0",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.7"
+  }
+}
