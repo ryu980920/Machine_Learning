@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 from collections import defaultdict
 import csv
+import hashlib
 import gzip
 import json
 import math
@@ -442,6 +443,7 @@ def run(args):
     condition_summary=[]
     group_summary=[]
     relation_summary=[]
+    stratified_response=[]
     paired_count=0
     with gzip.open(out/"paired_geometry_model_response.csv.gz","wt",newline="",encoding="utf-8") as f:
         fields=[
@@ -560,6 +562,31 @@ def run(args):
                             "mean_hidden_relative_l2":float(hl2[subset].mean()),
                             "mean_ref_distance_change":float(np.nanmean((d1-d0)[subset])),
                         })
+                # Separate every writer and true class BEFORE comparing
+                # "closer" against outcome; prevents cross-class aggregation
+                # from masquerading as within-class association.
+                strata = [("ALL_WRITERS",np.ones(n,dtype=bool))]
+                if domain=="Handmade":
+                    strata += [(str(ww),writers==ww) for ww in (41,42,43,44)]
+                for group_id,member in strata:
+                    for cl,c in enumerate(LABELS):
+                        for base_state,orig_state in [
+                            ("original_wrong",orig_pred!=y),
+                            ("original_correct",orig_pred==y)
+                        ]:
+                            for side,flag in [("closer",closer),("not_closer",~closer)]:
+                                subset=member & (y==cl) & orig_state & flag
+                                count=int(subset.sum())
+                                if not count:continue
+                                stratified_response.append({
+                                    "dataset":domain,"variant":v.name,
+                                    "writer":group_id,"true":c,"baseline_status":base_state,
+                                    "direction":side,"n":count,
+                                    "corrections":int((correction&subset).sum()),
+                                    "induced":int((induction&subset).sum()),
+                                    "accuracy_after":float((pred[subset]==y[subset]).mean()),
+                                    "mean_delta_true_margin":float((margins-m0)[subset].mean()),
+                                })
                 for group_name,group_mask in [
                   ("digits",y<10),("letters",y>=10),
                   *([(f"writer_{ww}",writers==ww) for ww in (41,42,43,44)]
@@ -580,6 +607,7 @@ def run(args):
     csvwrite(out/"spatial_response_summary.csv",condition_summary)
     csvwrite(out/"spatial_response_groups.csv",group_summary)
     csvwrite(out/"geometry_proximity_vs_outcome.csv",relation_summary)
+    csvwrite(out/"geometry_proximity_by_writer_class.csv",stratified_response)
 
     # Diagnostic figures: descriptive, with no fitted regression or causal claims.
     fig,axs=plt.subplots(1,2,figsize=(11,4.5),squeeze=False)
@@ -629,6 +657,7 @@ def run(args):
     meta={
       "study":"EXP유003 Spatial Distribution & MLP Response",
       "stage3_model_path":str(MODEL_PATH.relative_to(ROOT)),
+      "stage3_model_sha256":hashlib.file_digest(MODEL_PATH.open("rb"),"sha256").hexdigest(),
       "model_fitted_here":False,"official_test_read":False,"handmade_used_for_fit":False,
       "official_npz_sha256":off_sha,
       "number_of_source_images":int(len(ytr)+len(yva)+len(yhm)),
@@ -700,7 +729,7 @@ def run(args):
       "See CSV/PNG/NPZ files for exact counts, classes, writers and fixed-model activations.",
     ])
     (out/"SUMMARY.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
-    print(f"EXP003 COMPLETE: {paired_count} paired rows; {len(focusrows)} focus responses, "
+    print(f"EXP003 COMPLETE: {paired_count} paired rows; {len(stratified_response)} strata; {len(focusrows)} focus responses, "
           f"{len(igrows)} IG maps",flush=True)
 
 
