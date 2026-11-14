@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/mlp_input_sensitivity_stage3.yml"
+      - "05_model_optimize/MLP/Normal/scripts/Input_Sensitivity.py"
 
 permissions:
   contents: read
