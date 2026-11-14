@@ -4,4 +4,5 @@
 
 **시작점:** [기존 초기 MLPClassifier 코드](../../../../03_experiments/model_optimization/mlp.py). 초깃값을 수정하지 말고 이번 최적화 실험의 실행 코드는 여기에서 독립 버전으로 관리한다.
 
-현재 등록된 최적화 실행 코드 없음.
+- **[Pixcel_Attribution.py](Pixcel_Attribution.py)**: 공식 Training 기반으로 기존 Normal MLP를 재학습·검증하고, 공식 Validation/Hand-made의 정상·오분류 이미지 98개에서 Integrated Gradients를 계산한다. 실행 결과는 [EXP유001](../logs/EXP유001_Pixcel_Attribution.md)에 기록. **추론 입력 변경이나 하이퍼파라미터 최적화는 하지 않음.**
+- [재현 GitHub Actions](../../../../.github/workflows/mlp_pixcel_attribution.yml) — 실제 데이터·코드가 있는 저장소에서 실행하여 [결과](../results/Pixcel_Attribution/README.md)를 생성한다.
