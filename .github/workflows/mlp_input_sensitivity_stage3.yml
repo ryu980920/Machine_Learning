@@ -2,11 +2,6 @@ name: Normal MLP Input Sensitivity - Stage 3
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/mlp_input_sensitivity_stage3.yml"
-      - "05_model_optimize/MLP/Normal/scripts/Input_Sensitivity.py"
 
 permissions:
   contents: read
