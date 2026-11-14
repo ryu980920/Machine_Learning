@@ -1,27 +1,28 @@
 # MLPClassifier — Combined 모델 최적화
 
-**현재 상태: 실험 로그 미등록.** 새 파일을 기록할 때 실제 실행 결과와 계획을 구분한다.
+**진행 상태:** EXP-CMB-001 통제 Baseline 완료 (2026-11-15), 후속 최적화 미실시.
 
-## 연구 대상
+## 등록된 실험
 
-- **Training:** 공식 MNIST·EMNIST Training + 분리된 Hand-made Training 데이터. 정확한 수량·작성자·Fold는 실험마다 기록.
-- **Validation:** 같은 작성자의 학습/검증 중복을 피한 작성자 그룹 CV 또는 별도 신규 작성자 Validation. Fold마다 MLPClassifier 모델을 새로 학습하고, 각 Fold에서 보류 작성자에 대한 Confusion Matrix를 얻는다.
-- **주의:** 아직 Combined 학습/Group CV Runner가 기존 [초기 모델 실행 코드](../../../03_experiments/model_optimization/README.md)에 구현된 것은 아니다. 실제 구현과 검증 내역을 반드시 함께 저장.
+- **[EXP유001 — Combined MLP 4-Fold CV Baseline](logs/EXP유001_Combined_MLP_4Fold_CV_Baseline.md)** — Normal vs Combined, 손글씨 작성자 4명 OOF, 공식 Validation 보존 점검
+- **[EXP-CMB-001 결과 폴더](results/EXP_CMB_001/README.md)** — 통합 지표·전체 OOF 예측·분할 인덱스·모델 ZIP·최종 Viridis CM
+- **[재현·시각화 실행 코드](scripts/README.md)** — 학습, 분할 검증, 4개 CM 재생성
 
-## 매 실험의 순서
+## Baseline 결과 (Hand-made OOF 2,560장)
 
-1. **Confusion Matrix와 오분류 사례 분석** — 사용 데이터/레이블, 주요 혼동과 비율 기록.
-2. **오차 원인 가설 및 강의 개념 연결** — 이미지·모델 특성과 연결한 검증 가능한 가설.
-3. **개선 조건 설정·실행** — 전처리, Training 증강, 데이터 구성, Hyperparameter의 변경 변수 분리.
-4. **동일 개발 Validation으로 재평가** — Accuracy·Precision·Recall·F1, Confusion Matrix 및 Iteration에 따른 Training Loss 및 가능하면 Validation 점수, 학습·추론 시간.
-5. **결론 및 후속 실험** — 성공과 실패 모두 실험일지·CSV·그림에 연결.
+| 지표 | Normal | Combined |
+|---|---:|---:|
+| Accuracy | 62.5781% | **81.2500%** |
+| Macro F1 | 0.623046 | **0.812043** |
 
-## 저장 경로
+Combined는 **76,800장 공식 Train + 각 Fold의 Hand-made 1,920장**으로 다시 학습하여, 제외한 작성자 640장씩을 검증했다. 위 OOF 결과는 서로 다른 4개의 모델을 합친 **개발 평가**이고, 독립 Test 또는 단일 최종 모델 성능이 아니다. 공식 Original Test/교수님 Test는 사용하지 않았다.
 
-- [logs/](logs/README.md): [공통 실험일지 양식](../../EXPERIMENT_TEMPLATE.md)을 복사해 개별 Markdown 저장
-- [scripts/](scripts/README.md): 실행 Python·Notebook 및 사용 방법
-- [results/](results/README.md): 지표 CSV, Confusion Matrix, Learning Curve, 실제 실행 증빙
+## 기록 및 재현 원칙
 
-**원칙:** 공식 Original Test 16,000장과 교수님 최종 2차 Test는 모델 튜닝에 사용하지 않는다. 교수님 1차 데이터는 최초 Test 후 성능이 부족할 때에만 Validation으로 전환한다. 기록에는 모델 버전과 데이터 누출 여부를 명시한다.
+- `logs/`: 문제 → 가설 → 수행 방법 → 실제 지표 → 판단 → 다음 실험
+- `scripts/`: 재실행 스크립트, 픽셀 스케일러, 검증 코드, 버전 고정 패키지
+- `results/EXP_CMB_001/`: **핵심 결과 11개** (지표·원본 예측·Loss·manifest·분할·모델 ZIP 6개 + Viridis CM 4개 및 Loss PNG 5개)
+- 새 최적화 실험에서는 Training과 Validation에 같은 필체 작성자나 이미지를 중복 사용하지 않는다.
+- [05 전체 규칙](../../README.md) · [실험일지 양식](../../EXPERIMENT_TEMPLATE.md) · [연구 흐름도](../../../01_project/RESEARCH_FLOW.md)
 
-[상위 모델 안내](../README.md) · [05 전체 안내](../../README.md) · [연구 흐름도](../../../01_project/RESEARCH_FLOW.md).
+**최종 시각화:** Viridis Count 2개와 Normalized 2개. 최초 생성된 Blues CM, 비교 패널, SVG 및 재생성 가능한 중복 CM CSV는 결과 저장소에 남기지 않는다.
