@@ -3,18 +3,6 @@ name: EXP-CMB-001 Combined MLP writer-group CV
 # Approved one-time experiment branch push; outputs are uploaded as transient Actions Artifacts only.
 # No commits/pushes to main and no automatic publication under results/.
 on:
-  push:
-    branches:
-      - exp/mlp-combined-cv-001
-    paths:
-      - '05_model_optimize/MLP/Combined/scripts/**'
-      - '.github/workflows/exp-cmb-001-mlp-combined.yml'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '05_model_optimize/MLP/Combined/scripts/**'
-      - '.github/workflows/exp-cmb-001-mlp-combined.yml'
   workflow_dispatch:
 
 permissions:
