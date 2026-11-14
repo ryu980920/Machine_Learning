@@ -1,0 +1,350 @@
+﻿model_fold,iteration,loss
+Normal,1,0.5437971
+Normal,2,0.25349227
+Normal,3,0.19078907
+Normal,4,0.15317698
+Normal,5,0.12967715
+Normal,6,0.11025986
+Normal,7,0.09662282
+Normal,8,0.08610952
+Normal,9,0.076498285
+Normal,10,0.06838789
+Normal,11,0.06294876
+Normal,12,0.055993054
+Normal,13,0.050441843
+Normal,14,0.046084713
+Normal,15,0.04189271
+Normal,16,0.03790224
+Normal,17,0.03475502
+Normal,18,0.031069266
+Normal,19,0.028507989
+Normal,20,0.026084103
+Normal,21,0.024639992
+Normal,22,0.021740958
+Normal,23,0.019723387
+Normal,24,0.017952835
+Normal,25,0.016076438
+Normal,26,0.01488467
+Normal,27,0.013288104
+Normal,28,0.012318007
+Normal,29,0.011377086
+Normal,30,0.01048784
+Normal,31,0.0098706875
+Normal,32,0.008475775
+Normal,33,0.008409948
+Normal,34,0.0073024924
+Normal,35,0.006655275
+Normal,36,0.006308069
+Normal,37,0.0051715616
+Normal,38,0.0065143676
+Normal,39,0.0067134206
+Normal,40,0.0046433546
+Normal,41,0.003486063
+Normal,42,0.0032622062
+Normal,43,0.0042206137
+Normal,44,0.010232763
+Normal,45,0.0056582084
+Normal,46,0.0026191382
+Normal,47,0.0021156752
+Normal,48,0.0019628797
+Normal,49,0.001871195
+Normal,50,0.001855665
+Normal,51,0.012538376
+Normal,52,0.0059386464
+Normal,53,0.0026721177
+Normal,54,0.0018076289
+Normal,55,0.0016792911
+Normal,56,0.0016052218
+Normal,57,0.0015571546
+Normal,58,0.0015302252
+Normal,59,0.0015058334
+Normal,60,0.012311507
+Normal,61,0.005570505
+Normal,62,0.0020153427
+Normal,63,0.001578868
+Normal,64,0.001462764
+Normal,65,0.0014172613
+Normal,66,0.0013858025
+Combined held-out 41,1,0.56287795
+Combined held-out 41,2,0.27984747
+Combined held-out 41,3,0.21300252
+Combined held-out 41,4,0.17184399
+Combined held-out 41,5,0.1440956
+Combined held-out 41,6,0.1240672
+Combined held-out 41,7,0.10901021
+Combined held-out 41,8,0.09683396
+Combined held-out 41,9,0.085930526
+Combined held-out 41,10,0.07777739
+Combined held-out 41,11,0.07007121
+Combined held-out 41,12,0.06361937
+Combined held-out 41,13,0.058090124
+Combined held-out 41,14,0.053505465
+Combined held-out 41,15,0.04889691
+Combined held-out 41,16,0.044182584
+Combined held-out 41,17,0.040176734
+Combined held-out 41,18,0.03721125
+Combined held-out 41,19,0.033650637
+Combined held-out 41,20,0.031198664
+Combined held-out 41,21,0.028644899
+Combined held-out 41,22,0.026403015
+Combined held-out 41,23,0.02447092
+Combined held-out 41,24,0.022197198
+Combined held-out 41,25,0.02047431
+Combined held-out 41,26,0.017965237
+Combined held-out 41,27,0.017136218
+Combined held-out 41,28,0.015313121
+Combined held-out 41,29,0.014839839
+Combined held-out 41,30,0.013744468
+Combined held-out 41,31,0.012054043
+Combined held-out 41,32,0.011289176
+Combined held-out 41,33,0.010364081
+Combined held-out 41,34,0.010296802
+Combined held-out 41,35,0.008732258
+Combined held-out 41,36,0.008144557
+Combined held-out 41,37,0.007602777
+Combined held-out 41,38,0.007839178
+Combined held-out 41,39,0.00689637
+Combined held-out 41,40,0.0057369918
+Combined held-out 41,41,0.006105656
+Combined held-out 41,42,0.0071029956
+Combined held-out 41,43,0.0074397265
+Combined held-out 41,44,0.004601787
+Combined held-out 41,45,0.0032643005
+Combined held-out 41,46,0.0037274389
+Combined held-out 41,47,0.009380138
+Combined held-out 41,48,0.005627968
+Combined held-out 41,49,0.0035254816
+Combined held-out 41,50,0.0029681348
+Combined held-out 41,51,0.0023723715
+Combined held-out 41,52,0.0025138133
+Combined held-out 41,53,0.012557692
+Combined held-out 41,54,0.00658262
+Combined held-out 41,55,0.0025165998
+Combined held-out 41,56,0.0020417382
+Combined held-out 41,57,0.0019111062
+Combined held-out 41,58,0.0021335282
+Combined held-out 41,59,0.0018540571
+Combined held-out 41,60,0.0018036183
+Combined held-out 41,61,0.0066854157
+Combined held-out 41,62,0.012276862
+Combined held-out 41,63,0.0031223246
+Combined held-out 41,64,0.0018605257
+Combined held-out 41,65,0.0017001918
+Combined held-out 41,66,0.0016471797
+Combined held-out 41,67,0.0016160873
+Combined held-out 41,68,0.0027191695
+Combined held-out 41,69,0.014830846
+Combined held-out 41,70,0.0030028613
+Combined held-out 41,71,0.0017934601
+Combined held-out 41,72,0.0016252309
+Combined held-out 41,73,0.0015684301
+Combined held-out 41,74,0.0015235079
+Combined held-out 41,75,0.0015053943
+Combined held-out 41,76,0.0027666134
+Combined held-out 42,1,0.5641414
+Combined held-out 42,2,0.2788806
+Combined held-out 42,3,0.21210593
+Combined held-out 42,4,0.17144628
+Combined held-out 42,5,0.14372331
+Combined held-out 42,6,0.12359401
+Combined held-out 42,7,0.108802035
+Combined held-out 42,8,0.096717484
+Combined held-out 42,9,0.08562136
+Combined held-out 42,10,0.07742646
+Combined held-out 42,11,0.06950243
+Combined held-out 42,12,0.062754005
+Combined held-out 42,13,0.057288777
+Combined held-out 42,14,0.0528657
+Combined held-out 42,15,0.048751876
+Combined held-out 42,16,0.04368281
+Combined held-out 42,17,0.040161263
+Combined held-out 42,18,0.036483996
+Combined held-out 42,19,0.033318315
+Combined held-out 42,20,0.029924203
+Combined held-out 42,21,0.02754515
+Combined held-out 42,22,0.025635084
+Combined held-out 42,23,0.02383952
+Combined held-out 42,24,0.021728162
+Combined held-out 42,25,0.020004204
+Combined held-out 42,26,0.017236425
+Combined held-out 42,27,0.016055942
+Combined held-out 42,28,0.014991754
+Combined held-out 42,29,0.013815582
+Combined held-out 42,30,0.01337414
+Combined held-out 42,31,0.012128343
+Combined held-out 42,32,0.011306575
+Combined held-out 42,33,0.00962568
+Combined held-out 42,34,0.009018723
+Combined held-out 42,35,0.008409162
+Combined held-out 42,36,0.008320782
+Combined held-out 42,37,0.008024905
+Combined held-out 42,38,0.0070885248
+Combined held-out 42,39,0.006325633
+Combined held-out 42,40,0.005663305
+Combined held-out 42,41,0.006083465
+Combined held-out 42,42,0.008555645
+Combined held-out 42,43,0.004874912
+Combined held-out 42,44,0.0038297735
+Combined held-out 42,45,0.0042705527
+Combined held-out 42,46,0.0053890403
+Combined held-out 42,47,0.00786769
+Combined held-out 42,48,0.0040379902
+Combined held-out 42,49,0.0025774986
+Combined held-out 42,50,0.0022642151
+Combined held-out 42,51,0.00220135
+Combined held-out 42,52,0.0022663693
+Combined held-out 42,53,0.016475718
+Combined held-out 42,54,0.0041686157
+Combined held-out 42,55,0.0022849792
+Combined held-out 42,56,0.0020150924
+Combined held-out 42,57,0.0019119302
+Combined held-out 42,58,0.0018487948
+Combined held-out 42,59,0.0018318157
+Combined held-out 42,60,0.0017768594
+Combined held-out 42,61,0.009766726
+Combined held-out 42,62,0.010607975
+Combined held-out 42,63,0.0027187779
+Combined held-out 42,64,0.0018558921
+Combined held-out 42,65,0.0017147391
+Combined held-out 42,66,0.001651642
+Combined held-out 42,67,0.0015968168
+Combined held-out 42,68,0.0015917137
+Combined held-out 43,1,0.56089324
+Combined held-out 43,2,0.2745405
+Combined held-out 43,3,0.20890614
+Combined held-out 43,4,0.17020331
+Combined held-out 43,5,0.14408457
+Combined held-out 43,6,0.12477815
+Combined held-out 43,7,0.109996825
+Combined held-out 43,8,0.09832755
+Combined held-out 43,9,0.0875441
+Combined held-out 43,10,0.07877927
+Combined held-out 43,11,0.07137861
+Combined held-out 43,12,0.064862676
+Combined held-out 43,13,0.059437014
+Combined held-out 43,14,0.05431517
+Combined held-out 43,15,0.050262272
+Combined held-out 43,16,0.045919195
+Combined held-out 43,17,0.041245237
+Combined held-out 43,18,0.03772757
+Combined held-out 43,19,0.034436814
+Combined held-out 43,20,0.031700782
+Combined held-out 43,21,0.02909167
+Combined held-out 43,22,0.02687131
+Combined held-out 43,23,0.02483985
+Combined held-out 43,24,0.023281433
+Combined held-out 43,25,0.020779284
+Combined held-out 43,26,0.018346177
+Combined held-out 43,27,0.017190592
+Combined held-out 43,28,0.01636833
+Combined held-out 43,29,0.014985669
+Combined held-out 43,30,0.013693324
+Combined held-out 43,31,0.01230701
+Combined held-out 43,32,0.012002197
+Combined held-out 43,33,0.0105631435
+Combined held-out 43,34,0.010029188
+Combined held-out 43,35,0.008754676
+Combined held-out 43,36,0.008925823
+Combined held-out 43,37,0.0072349524
+Combined held-out 43,38,0.008056038
+Combined held-out 43,39,0.007250603
+Combined held-out 43,40,0.006310637
+Combined held-out 43,41,0.0071327984
+Combined held-out 43,42,0.0061888266
+Combined held-out 43,43,0.0049778074
+Combined held-out 43,44,0.0050637284
+Combined held-out 43,45,0.008455571
+Combined held-out 43,46,0.0048876125
+Combined held-out 43,47,0.0041352925
+Combined held-out 43,48,0.0030906063
+Combined held-out 43,49,0.002953825
+Combined held-out 43,50,0.010326044
+Combined held-out 43,51,0.005294642
+Combined held-out 43,52,0.002727522
+Combined held-out 43,53,0.0022183084
+Combined held-out 43,54,0.0020616385
+Combined held-out 43,55,0.0020319435
+Combined held-out 43,56,0.011735313
+Combined held-out 43,57,0.005661235
+Combined held-out 43,58,0.0025354503
+Combined held-out 43,59,0.0019011707
+Combined held-out 43,60,0.0018056748
+Combined held-out 43,61,0.0017640449
+Combined held-out 43,62,0.0090612145
+Combined held-out 43,63,0.0066889096
+Combined held-out 43,64,0.0028419748
+Combined held-out 43,65,0.0019478255
+Combined held-out 43,66,0.0016972185
+Combined held-out 43,67,0.0016436221
+Combined held-out 43,68,0.0015843423
+Combined held-out 43,69,0.0015590683
+Combined held-out 43,70,0.0015481266
+Combined held-out 44,1,0.56268126
+Combined held-out 44,2,0.27757877
+Combined held-out 44,3,0.21086411
+Combined held-out 44,4,0.17088619
+Combined held-out 44,5,0.14345424
+Combined held-out 44,6,0.12326341
+Combined held-out 44,7,0.10814977
+Combined held-out 44,8,0.095744684
+Combined held-out 44,9,0.08478429
+Combined held-out 44,10,0.07621616
+Combined held-out 44,11,0.068697825
+Combined held-out 44,12,0.0618173
+Combined held-out 44,13,0.05608382
+Combined held-out 44,14,0.05141288
+Combined held-out 44,15,0.047597725
+Combined held-out 44,16,0.042504396
+Combined held-out 44,17,0.03849485
+Combined held-out 44,18,0.03552252
+Combined held-out 44,19,0.032139238
+Combined held-out 44,20,0.02950528
+Combined held-out 44,21,0.026612092
+Combined held-out 44,22,0.024752636
+Combined held-out 44,23,0.022591017
+Combined held-out 44,24,0.02091848
+Combined held-out 44,25,0.018930847
+Combined held-out 44,26,0.01696397
+Combined held-out 44,27,0.015245864
+Combined held-out 44,28,0.014359234
+Combined held-out 44,29,0.013383369
+Combined held-out 44,30,0.012516385
+Combined held-out 44,31,0.010810526
+Combined held-out 44,32,0.0098980805
+Combined held-out 44,33,0.009548956
+Combined held-out 44,34,0.009294071
+Combined held-out 44,35,0.009098412
+Combined held-out 44,36,0.0073400754
+Combined held-out 44,37,0.0065601133
+Combined held-out 44,38,0.0081224535
+Combined held-out 44,39,0.0059444476
+Combined held-out 44,40,0.005381134
+Combined held-out 44,41,0.005302555
+Combined held-out 44,42,0.006642167
+Combined held-out 44,43,0.0064820084
+Combined held-out 44,44,0.0067623775
+Combined held-out 44,45,0.0039639575
+Combined held-out 44,46,0.0029241382
+Combined held-out 44,47,0.0032612246
+Combined held-out 44,48,0.008773064
+Combined held-out 44,49,0.005738022
+Combined held-out 44,50,0.0027291265
+Combined held-out 44,51,0.0020948593
+Combined held-out 44,52,0.00205183
+Combined held-out 44,53,0.0019768442
+Combined held-out 44,54,0.0034894617
+Combined held-out 44,55,0.013088049
+Combined held-out 44,56,0.002922262
+Combined held-out 44,57,0.002118093
+Combined held-out 44,58,0.0018007347
+Combined held-out 44,59,0.0017094219
+Combined held-out 44,60,0.0016831
+Combined held-out 44,61,0.0016610884
+Combined held-out 44,62,0.0016952604
+Combined held-out 44,63,0.013086353
+Combined held-out 44,64,0.007640104
+Combined held-out 44,65,0.0024160186
+Combined held-out 44,66,0.0017595545
+Combined held-out 44,67,0.0016099621
+Combined held-out 44,68,0.0015603915
+Combined held-out 44,69,0.0015241491
