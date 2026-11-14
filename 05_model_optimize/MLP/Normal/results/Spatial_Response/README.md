@@ -4,7 +4,7 @@
 
 - [실험 로그 — EXP유003_Spatial_Response.md](../../logs/EXP유003_Spatial_Response.md)
 - [분석 코드 — Spatial_Response_Analysis.py](../../scripts/Spatial_Response_Analysis.py)
-- [재현용 GitHub Actions 수동 실행](../../../../.github/workflows/mlp_spatial_response_stage4.yml)
+- [재현용 GitHub Actions 수동 실행](../../../../../.github/workflows/mlp_spatial_response_stage4.yml)
 
 ## 실행 요약
 
