@@ -1,0 +1,90 @@
+name: Publish Verified Normal MLP EXP003 Spatial Response (one-time)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish_normal_mlp_spatial_response_once.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout approved EXP003 documentation and source code
+        uses: actions/checkout@v4
+
+      - name: Download completed experiment artifact without rerunning model
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 43634701305 --repo "$GITHUB_REPOSITORY" \
+            --name normal-mlp-exp003-spatial-response-review \
+            --dir 05_model_optimize/MLP/Normal/results/Spatial_Response
+
+      - name: Verify original source artifact exact digests and row counts
+        run: |
+          python - <<'PY'
+          import csv,gzip,hashlib,json
+          from pathlib import Path
+          p=Path("05_model_optimize/MLP/Normal/results/Spatial_Response")
+          expected={
+              "run_metadata.json":"db007619af94f149ecb8df4de47576d16573f9162c328dd4d2f106257b696754",
+              "all_image_geometry.csv.gz":"65d30a291d301e4d9b1e8d8d43d5820a08fe367c08ef28d4da734f4491a3105e",
+              "paired_geometry_model_response.csv.gz":"8df49987f175f19e495fe5cd28ed61ff8a88b6a8d64087b1ce58bc2b91e8d445",
+              "geometry_proximity_by_writer_class.csv":"7ae9b5f491589eaebeee5ddb73465e9fbead6d14ddce83723329e21e1166030b",
+              "focus_ig_maps.npz":"8e3b70c0d389b5b6a19950b73fead3f5e640baa3b21f68c8d760081c23135130"
+          }
+          for name,hashvalue in expected.items():
+              with (p/name).open("rb") as f:
+                  observed=hashlib.file_digest(f,"sha256").hexdigest()
+              assert observed==hashvalue,(name,observed)
+          d=json.loads((p/"run_metadata.json").read_text())
+          assert d["model_fitted_here"] is False and d["official_test_read"] is False
+          assert d["handmade_used_for_fit"] is False
+          assert d["number_of_source_images"]==98560
+          assert (d["train"],d["validation"],d["handmade"])==(76800,19200,2560)
+          assert (d["paired_response_rows"],d["focus_response_rows"],d["focus_ig_maps"])==(130560,636,72)
+          assert d["baseline_official_CM_difference"]==0
+          assert d["baseline_handmade_prediction_difference"]==0
+          assert d["stage3_model_sha256"]=="9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a"
+          rows={
+              "geometry_distribution_summary.csv":153,
+              "per_class_geometry_differences.csv":96,
+              "spatial_response_summary.csv":12,
+              "geometry_proximity_vs_outcome.csv":66,
+              "geometry_proximity_by_writer_class.csv":1777,
+              "focus_hidden_responses.csv":636,
+              "focus_ig_completeness.csv":72,
+          }
+          for name,n in rows.items():
+              with (p/name).open(encoding="utf-8-sig",newline="") as f:
+                  assert sum(1 for _ in csv.DictReader(f))==n,name
+          for name,n in [("all_image_geometry.csv.gz",98560),
+                         ("paired_geometry_model_response.csv.gz",130560)]:
+              with gzip.open(p/name,mode="rt",encoding="utf-8-sig") as f:
+                  assert sum(1 for _ in csv.DictReader(f))==n,name
+          assert len(list((p/"focus_ig_grids").glob("focus_*.png")))==5
+          for name in ("SUMMARY.md","center_scatter.png","bbox_width_distributions.png",
+                       "per_class_spatial_difference.png","hidden_response_by_transform.png"):
+              assert (p/name).is_file(),name
+          print("PASSED: verified original EXP003 source, 98,560 images and 130,560 paired inputs")
+          PY
+
+      - name: Commit approved EXP003 files under Normal results folder
+        run: |
+          git add -- 05_model_optimize/MLP/Normal/results/Spatial_Response/
+          git diff --cached --stat
+          if git diff --cached --quiet; then
+            echo "Result already committed"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Publish approved EXP유003 Normal MLP Spatial_Response evidence"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
