@@ -1,0 +1,63 @@
+name: Normal MLP Pixcel Attribution (Stage 1-2)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mlp_pixcel_attribution.yml"
+      - "05_model_optimize/MLP/Normal/scripts/Pixcel_Attribution.py"
+
+permissions:
+  contents: write
+
+jobs:
+  pixcel-attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout official datasets and unchanged Normal MLP Baseline
+        uses: actions/checkout@v4
+
+      - name: Set up original Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned scientific packages
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scipy==1.17.0" "scikit-learn==1.8.0" "matplotlib==3.10.7"
+
+      - name: Execute only Stage 1 and 2 (no official Test, no Stage 3)
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/Pixcel_Attribution.py \
+            --out 05_model_optimize/MLP/Normal/results/Pixcel_Attribution
+
+      - name: Preserve complete stage 1-2 evidence as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-MLP-Pixcel_Attribution
+          path: 05_model_optimize/MLP/Normal/results/Pixcel_Attribution/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Commit verified images CSV and metadata to Normal results folder
+        if: success() && github.ref == 'refs/heads/main'
+        run: |
+          git add -- 05_model_optimize/MLP/Normal/results/Pixcel_Attribution
+          if git diff --cached --quiet; then
+            echo "No changed results"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Publish verified Normal MLP Pixcel_Attribution stage 1-2 results"
+            git push origin HEAD:main
+          fi
