@@ -9,3 +9,5 @@
 
 - **[Input_Sensitivity.py](Input_Sensitivity.py)**: 고정된 Normal MLP로 입력 변형 20조건+원본을 비교하고, 456,960개 예측 결과를 저장하는 실험. 코드 변경·재학습 모델을 다른 변형마다 변경하지 않음. [EXP유002 로그](../logs/EXP유002_Input_Sensitivity.md).
 - **[plot_input_sensitivity.py](plot_input_sensitivity.py)**: EXP유002의 CSV에서 공식/손글씨 비교, 숫자/문자 상충, 작성자별 민감도 그래프 3개 재생성.
+
+- **[Spatial_Response_Analysis.py](Spatial_Response_Analysis.py)**: EXP유002의 보관된 Normal MLP 가중치를 수정·재학습하지 않고, 공식/Hand-made 공간 분포·오류 교정 관련성·은닉층/IG 반응을 재현한다. [EXP유003 로그](../logs/EXP유003_Spatial_Response.md) · [결과](../results/Spatial_Response/README.md) · [수동 GitHub Actions](../../../../.github/workflows/mlp_spatial_response_stage4.yml).
