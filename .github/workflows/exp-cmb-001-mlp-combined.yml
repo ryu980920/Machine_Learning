@@ -9,6 +9,12 @@ on:
     paths:
       - '05_model_optimize/MLP/Combined/scripts/**'
       - '.github/workflows/exp-cmb-001-mlp-combined.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '05_model_optimize/MLP/Combined/scripts/**'
+      - '.github/workflows/exp-cmb-001-mlp-combined.yml'
   workflow_dispatch:
 
 permissions:
