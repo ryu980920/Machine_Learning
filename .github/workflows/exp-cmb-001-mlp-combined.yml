@@ -1,7 +1,7 @@
 name: EXP-CMB-001 Combined MLP writer-group CV
 
-# Approved one-time experiment branch push; outputs are uploaded as transient Actions Artifacts only.
-# No commits/pushes to main and no automatic publication under results/.
+# Manual-only reproducibility workflow for the completed EXP-CMB-001 training experiment.
+# It does not publish or commit results. The reviewed 11-file results are stored separately on the experiment branch.
 on:
   workflow_dispatch:
 
