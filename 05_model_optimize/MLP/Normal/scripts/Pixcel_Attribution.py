@@ -235,6 +235,40 @@ def save_plots(views: list[dict], out: Path, batch: int = 6):
         plt.close(fig)
 
 
+def save_focus_grid(views: list[dict], wanted: list[tuple], output: Path):
+    """Create reproducible manuscript-friendly views from verified selected cases."""
+    picked = []
+    for domain, true, predicted, writer, sample_idx in wanted:
+        matching = [v for v in views if
+            v["row"]["domain"] == domain and
+            v["row"]["true"] == true and
+            v["row"]["predicted"] == predicted and
+            (writer is None or v["row"]["writer"] == writer) and
+            (sample_idx is None or v["row"]["index"] == sample_idx)]
+        if not matching:
+            raise RuntimeError(f"Missing focus-grid input: {(domain, true, predicted, writer, sample_idx)}")
+        picked.append(matching[0])
+    fig, axes = plt.subplots(len(picked), 3, figsize=(11.4, 2.35 * len(picked)),
+                             squeeze=False)
+    for j, case in enumerate(picked):
+        meta, img, attr = case["row"], case["img"], case["ig"]
+        bound = max(float(np.abs(attr).max()), 1e-8)
+        axes[j, 0].imshow(img, cmap="gray", vmin=0, vmax=255)
+        axes[j, 1].imshow(attr, cmap="RdBu_r", vmin=-bound, vmax=bound)
+        axes[j, 2].imshow(np.abs(attr), cmap="magma", vmin=0, vmax=bound)
+        case_desc = (f"writer {meta['writer']} / image {meta['index']}" if meta["writer"] >= 0
+                     else f"official train index {meta['index']}")
+        axes[j, 0].set_title(f"{meta['domain']}  {meta['true']} -> {meta['predicted']}\n{case_desc}", fontsize=9)
+        axes[j, 1].set_title("Signed Integrated Gradients", fontsize=9)
+        axes[j, 2].set_title("Absolute Integrated Gradients", fontsize=9)
+        for ax in axes[j]:
+            ax.set_xticks([])
+            ax.set_yticks([])
+    fig.tight_layout()
+    fig.savefig(output, dpi=150)
+    plt.close(fig)
+
+
 def write_csv(path: Path, rows: list[dict]):
     if not rows:
         return
@@ -301,6 +335,20 @@ def main():
     np.savez_compressed(out / "selected_pixels_and_IG.npz",
         pixels=np.stack(o_raw+h_raw), IG=np.stack(o_attrs+h_attrs))
     save_plots(o_views+h_views, out)
+    focus = o_views + h_views
+    save_focus_grid(focus, [
+        ("Handmade", "5", "F", 43, 53),
+        ("Handmade", "B", "8", 42, 27),
+        ("Handmade", "9", "4", 41, 25),
+    ], out / "MLP_Pixcel_Attribution_handmade_examples.png")
+    save_focus_grid(focus, [
+        ("OfficialVal", "9", "4", None, None),
+        ("OfficialVal", "E", "C", None, None),
+        ("OfficialVal", "3", "5", None, None),
+        ("Handmade", "5", "F", 43, 53),
+        ("Handmade", "B", "8", 42, 27),
+        ("Handmade", "9", "4", 41, 25),
+    ], out / "MLP_Pixcel_Attribution_6_examples.png")
 
     if cm_historical_l1 != 0 or hand_disagreements != 0:
         raise RuntimeError("Retrained baseline predictions do not match the published W02 results")
