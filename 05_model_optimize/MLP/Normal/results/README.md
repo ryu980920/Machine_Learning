@@ -9,3 +9,5 @@
 - **[Input_Sensitivity/](Input_Sensitivity/README.md)**: EXP유002(3단계)의 456,960행 예측 CSV.gz, 조건별 정량표, 106장 집중 사례, 원본/변형 PNG, 학습 모델 체크포인트. *진단 목적이며 개선 모델의 Test 결과가 아니다.*
 
 - **[Spatial_Response/](Spatial_Response/README.md)**: EXP유003의 공식/손글씨 **98,560장 특징 CSV.gz**, **130,560행 대응 입력/은닉층 반응 CSV.gz**, 클래스·작성자별 공간 분포, **72개 IG 지도**, 그림 및 원본 메타데이터. *자동 전처리 개발/모델 성능 개선 실험 아님.*
+
+- **[Automatic_Centering/](Automatic_Centering/README.md)**: EXP유004의 공식 Validation **19,200장**과 Hand-made **2,560장** 1:1 비교 예측 CSV.gz, **144행 그룹 지표**, Confusion Matrix, 정렬 오차·획손실, 성능 그래프, **Center of Mass / Bounding Box 학습 후보 모델 2개**를 원본 성공 실행 Artifact에서 검증하여 저장. *기본 Normal 모델 교체나 최종 Pipeline 선택은 아직 하지 않음.*
