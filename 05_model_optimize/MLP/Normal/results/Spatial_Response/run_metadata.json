@@ -1,0 +1,62 @@
+{
+  "study": "EXP유003 Spatial Distribution & MLP Response",
+  "stage3_model_path": "05_model_optimize/MLP/Normal/results/Input_Sensitivity/normal_mlp_refit_stage3.joblib",
+  "stage3_model_sha256": "9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a",
+  "model_fitted_here": false,
+  "official_test_read": false,
+  "handmade_used_for_fit": false,
+  "official_npz_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "number_of_source_images": 98560,
+  "train": 76800,
+  "train_original": 72521,
+  "train_augmented": 4279,
+  "validation": 19200,
+  "handmade": 2560,
+  "valid_feature_measurements": {
+    "OfficialTrain": {
+      "32": 76800,
+      "64": 76800,
+      "128": 76800
+    },
+    "OfficialVal": {
+      "32": 19200,
+      "64": 19200,
+      "128": 19200
+    },
+    "Handmade": {
+      "32": 2560,
+      "64": 2560,
+      "128": 2560
+    }
+  },
+  "baseline_official_accuracy": 0.9731770833333333,
+  "baseline_handmade_accuracy": 0.628515625,
+  "baseline_official_CM_difference": 0,
+  "baseline_handmade_prediction_difference": 0,
+  "geometry_thresholds": [
+    32,
+    64,
+    128
+  ],
+  "geometry_reference": "per-class official model training median, robust IQR standardization",
+  "target_labels_used_only_for_posthoc_analysis": true,
+  "paired_conditions": [
+    "original",
+    "shift_L1",
+    "shift_R1",
+    "shift_D1",
+    "scale_090",
+    "scale_095"
+  ],
+  "paired_response_rows": 130560,
+  "focus_samples": 106,
+  "focus_response_rows": 636,
+  "focus_ig_maps": 72,
+  "software": {
+    "python": "3.13.18",
+    "sklearn": "1.8.0",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "elapsed_sec": 70.470266627
+}
