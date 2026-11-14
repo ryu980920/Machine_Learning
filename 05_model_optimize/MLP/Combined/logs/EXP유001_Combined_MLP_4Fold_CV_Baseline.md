@@ -102,7 +102,27 @@
 - `8 ↔ B` 양방향 오류는 **93장 → 53장**으로 줄었지만 잔존한다.
 - F로의 과다 예측은 감소했으며, F Precision은 **37.14% → 73.13%**로 개선됐다.
 
-**최종 그래프:** [Normal Count](../results/EXP_CMB_001/figures/normal_count_viridis.png) · [Combined Count](../results/EXP_CMB_001/figures/combined_count_viridis.png) · [Normal Row-normalized](../results/EXP_CMB_001/figures/normal_normalized_viridis.png) · [Combined Row-normalized](../results/EXP_CMB_001/figures/combined_normalized_viridis.png).
+**Confusion Matrix — Count (색상 범위 0–160장)**
+
+**그림 1. Normal MLP — Hand-made OOF Confusion Matrix (Count)**
+
+![Normal MLP Hand-made OOF Confusion Matrix, Count, viridis](../results/EXP_CMB_001/figures/normal_count_viridis.png)
+
+**그림 2. Combined MLP — Hand-made OOF Confusion Matrix (Count)**
+
+![Combined MLP Hand-made OOF Confusion Matrix, Count, viridis](../results/EXP_CMB_001/figures/combined_count_viridis.png)
+
+**Confusion Matrix — Row-normalized (행별 0–100%)**
+
+**그림 3. Normal MLP — Hand-made OOF Confusion Matrix (Row-normalized)**
+
+![Normal MLP Hand-made OOF Confusion Matrix, Row-normalized, viridis](../results/EXP_CMB_001/figures/normal_normalized_viridis.png)
+
+**그림 4. Combined MLP — Hand-made OOF Confusion Matrix (Row-normalized)**
+
+![Combined MLP Hand-made OOF Confusion Matrix, Row-normalized, viridis](../results/EXP_CMB_001/figures/combined_normalized_viridis.png)
+
+*네 그래프는 동일한 2,560장 OOF 예측에 기반하며, 비교를 위해 Count와 Row-normalized 각각 동일 색상 범위를 사용했다.*
 
 ### 4.4 공식 개발 Validation 성능
 
@@ -126,7 +146,13 @@
 | Combined (43 보류) | 70 | 35.60초 | 0.001548 |
 | Combined (44 보류) | 69 | 35.60초 | 0.001524 |
 
-Loss Curve는 **Iteration별 Training Loss**이며 Validation Loss를 측정한 것이 아니다. 5개 모델 모두 학습 경고가 발생하지 않았다. [Loss Curve](../results/EXP_CMB_001/figures/MLP_loss_curves.png) · [원본 수치](../results/EXP_CMB_001/loss_curves.csv).
+Loss Curve는 **Iteration별 Training Loss**이며 Validation Loss를 측정한 것이 아니다. 5개 모델 모두 학습 경고가 발생하지 않았다. [원본 수치 `loss_curves.csv`](../results/EXP_CMB_001/loss_curves.csv).
+
+**그림 5. Normal 및 Combined 4-Fold MLP — Training Loss Curve**
+
+![Normal 및 Combined 4-Fold MLP Training Loss Curve](../results/EXP_CMB_001/figures/MLP_loss_curves.png)
+
+*Normal 모델 1개와 Combined Fold별 모델 4개, 총 5개 모델의 학습 반복에 따른 Training Loss를 나타낸다.*
 
 ## 5. 결과 판단 및 다음 실험
 
