@@ -1,8 +1,11 @@
 # MLPClassifier / Combined — 실험 로그
 
-실험마다 `EXP[작성자코드][번호]_[실험주제].md` 형태의 **Markdown 파일**을 여기에 저장한다.
+실험마다 `EXP[작성자코드][번호]_[주제].md` 형식의 Markdown 파일을 등록한다.
 
-- **공통 양식:** [05 최적화 전용 양식](../../../EXPERIMENT_TEMPLATE.md) · [기존 상세 양식](../../../../03_experiments/EXPERIMENT_TEMPLATE.md)
-- 기록 순서: **오류 분석 → 원인 가설 → 강의 내용에 근거한 개선 → 실행 조건 → 실측 결과 → 다음 실험**.
-- 작성자·실행일·데이터 버전·모델 설정·비교 지표·실제 코드/그림 경로를 명시한다.
-- 아직 등록된 최적화 실험 없음.
+## 등록된 실험
+
+- [EXP유001 — Combined MLP 4-Fold CV Baseline](EXP유001_Combined_MLP_4Fold_CV_Baseline.md) (2026-11-15) — Hand-made 포함 효과 검증, 작성자별 4-Fold OOF, 공식 개발 Validation 성능 및 남은 오분류 분석.
+
+실험일지의 지표는 반드시 [원본 통합 결과](../results/EXP_CMB_001/README.md) 및 [재현 코드](../scripts/README.md)와 연결한다.
+
+[최적화 공통 양식](../../../EXPERIMENT_TEMPLATE.md) · [전체 기록 규칙](../../../../03_experiments/EXPERIMENT_TEMPLATE.md).
