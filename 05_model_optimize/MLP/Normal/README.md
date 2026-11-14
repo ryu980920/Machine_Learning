@@ -1,6 +1,13 @@
 # MLPClassifier — Normal 모델 최적화
 
-**현재 상태: 실험 로그 미등록.** 새 파일을 기록할 때 실제 실행 결과와 계획을 구분한다.
+**현재 상태: EXP유001 Pixcel_Attribution (1·2단계) 완료.** 아직 Normal MLP 최적화·입력 변화 실험은 수행하지 않았다.
+
+## 등록한 실험
+
+| ID | 내용 | 상태 | 근거 |
+|---|---|---|---|
+| **EXP유001 — Pixcel_Attribution** | 공식 Validation과 Hand-made 정답·오분류 이미지 98장 추출, Integrated Gradients 기여도 분석 | **완료 (진단)** | [실험 로그](logs/EXP유001_Pixcel_Attribution.md) · [실행 코드](scripts/Pixcel_Attribution.py) · [실제 결과](results/Pixcel_Attribution/README.md) |
+| **후속 입력 민감도 분석** | 위치·밝기·굵기·크기 단일 변수 변화 | **미실시, 별도 로그 예정** | EXP유001과 분리 |
 
 ## 연구 대상
 
