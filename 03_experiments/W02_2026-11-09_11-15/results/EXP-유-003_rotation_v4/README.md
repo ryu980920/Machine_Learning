@@ -14,9 +14,22 @@
 - [rotation_before_after_5models.csv](rotation_before_after_5models.csv): 5개 모델 전체 Accuracy/Macro F1, 전·후 정답 수·증가폭.
 - [rotation_before_after_by_writer.csv](rotation_before_after_by_writer.csv): 41·42·43·44번 작성자별 전후 결과(**42·43은 동일 값**).
 - `rotation_before_predictions.csv`, `rotation_after_predictions.csv`: 전후 각 **12,800건**, 총 **25,600건**. 새 재실행과 키 기준 동일함을 검증.
-- `confusion_matrix_{svc,hgb,mlp,extra_trees,knn}_{before,after}.csv/.png`: **총 10개** 16×16 Confusion Matrix. 실제 레이블은 행, 예측 레이블은 열. 각 Matrix 총 2,560, 클래스별 160장.
+- `confusion_matrix_{svc,hgb,mlp,extra_trees,knn}_{before,after}.csv`: **원본 10개** 16×16 Confusion Matrix. 실제 레이블은 행, 예측 레이블은 열. 각 Matrix 총 2,560장, 클래스별 160장.
+- 각 CSV에서 **Viridis Count PNG 10개**와 **Viridis Row-normalized PNG 10개**를 생성했다. Count는 0–160장, Row-normalized는 0–100%의 공통 컬러 범위를 사용한다. 원본 셀 값·Accuracy·모델은 변경하지 않았다.
 - `rotation_confusion_long.csv`, `rotation_per_class.csv`: 전체 클래스별 혼동 수·Precision/Recall/F1.
 - `rotation_accuracy_before_after.png`: 전체 Accuracy 그래프. 재실행 수치가 완전히 일치하여 기존 동일 데이터 그래프를 유지.
 - **재현 코드:** [run_rotation_comparison.py](../../scripts/experiment3_handmade/run_rotation_comparison.py) (신뢰된 모델 ZIP이 별도로 필요).
+
+## Viridis Confusion Matrix (Count / Row-normalized)
+
+| 모델 | Before Count | Before Row-normalized | After Count | After Row-normalized |
+|---|---|---|---|---|
+| SVC (RBF) | [Count](confusion_matrix_svc_before.png) | [Normalized](confusion_matrix_svc_before_normalized.png) | [Count](confusion_matrix_svc_after.png) | [Normalized](confusion_matrix_svc_after_normalized.png) |
+| HistGradientBoosting | [Count](confusion_matrix_hgb_before.png) | [Normalized](confusion_matrix_hgb_before_normalized.png) | [Count](confusion_matrix_hgb_after.png) | [Normalized](confusion_matrix_hgb_after_normalized.png) |
+| MLP | [Count](confusion_matrix_mlp_before.png) | [Normalized](confusion_matrix_mlp_before_normalized.png) | [Count](confusion_matrix_mlp_after.png) | [Normalized](confusion_matrix_mlp_after_normalized.png) |
+| Extra Trees | [Count](confusion_matrix_extra_trees_before.png) | [Normalized](confusion_matrix_extra_trees_before_normalized.png) | [Count](confusion_matrix_extra_trees_after.png) | [Normalized](confusion_matrix_extra_trees_after_normalized.png) |
+| KNN | [Count](confusion_matrix_knn_before.png) | [Normalized](confusion_matrix_knn_before_normalized.png) | [Count](confusion_matrix_knn_after.png) | [Normalized](confusion_matrix_knn_after_normalized.png) |
+
+재생성: [표준화 코드](../../scripts/standardize_all_cm.py). 모델 재추론·재학습 없이 게시된 Count CSV만 읽어 생성한다.
 
 **역사 기록 보존:** 2026-11-09 최초 집계에서는 저장된 과거 예측값 일부를 재사용했으므로, 2026-11-11 **독립 전체 재실행**과 정확히 구분해 기록한다. 원본 EXP유002 8절과 구 42번 EXP유003은 [archive 폴더](../../logs/archive/EXP유003_20261109_구42번_원문.md)에 보존한다.

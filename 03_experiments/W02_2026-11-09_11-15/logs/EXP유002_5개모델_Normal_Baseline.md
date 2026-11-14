@@ -74,28 +74,48 @@
 
 - **근거:** 실험 2에서 실제 측정한 [Confusion Matrix 원본 CSV](../results/EXP-유-003_confusion_long.csv), 총 5개 모델 × 16×16개 칸. **수치 재학습/재평가 없이** 측정된 원본 값으로 PNG 이미지를 생성했다.
 - **읽는 방법:** **세로축(Actual)** = 실제 문자, **가로축(Predicted)** = 모델이 예측한 문자. 대각선은 정답, 대각선 밖은 오분류. 각 칸의 **숫자는 절대 이미지 수(count)** 이다.
-- **색상:** 작게 나타나는 오분류도 식별할 수 있도록 색상만 `log(1 + count)`로 변환하여 표시한 **로그 컬러 스케일**이다. **표시 숫자 및 Accuracy는 변환하지 않았다.** 컬러 스케일은 모델별 최대 개수에 맞춰 표시하며, 모델 간 오분류 건수 비교는 반드시 숫자를 기준으로 한다.
-- **검증 데이터:** 모델별 동일한 Normal Validation **19,200장**, 클래스 **0–9 및 A–F**. 이미지 5개를 각각 별도의 PNG로 저장하고, [이미지 파일 목록](../results/confusion_matrices/README.md)에 연결한다.
+- **색상:** 5개 모델 모두 **Viridis**를 사용한다. Count형은 작은 오분류도 보이도록 색에만 `log(1 + count)`를 적용하고, **모든 모델의 컬러 범위를 0–1,400장으로 고정**했다. Row-normalized형은 실제 클래스별 예측 비율을 0–100%로 고정했다. **Count형의 셀 숫자와 Accuracy는 원본 값 그대로**다.
+- **검증 데이터:** 모델별 동일한 Normal Validation **19,200장**, 클래스 **0–9 및 A–F**. Count·Row-normalized 이미지 각 5개, 총 10개 PNG로 저장하고, [이미지 파일 목록](../results/confusion_matrices/README.md)에 연결한다.
 
 ### 1. SVC (RBF) — Validation Accuracy 97.67%
 
 ![SVC (RBF) Confusion Matrix 16x16](../results/confusion_matrices/SVC_RBF_confusion_matrix.png)
 
+**Row-normalized Confusion Matrix (%)**
+
+![SVC (RBF) Row-normalized Confusion Matrix](../results/confusion_matrices/SVC_RBF_confusion_matrix_normalized.png)
+
 ### 2. HistGradientBoosting — Validation Accuracy 97.46%
 
 ![HistGradientBoosting Confusion Matrix 16x16](../results/confusion_matrices/HistGradientBoosting_confusion_matrix.png)
+
+**Row-normalized Confusion Matrix (%)**
+
+![HistGradientBoosting Row-normalized Confusion Matrix](../results/confusion_matrices/HistGradientBoosting_confusion_matrix_normalized.png)
 
 ### 3. MLPClassifier — Validation Accuracy 97.32%
 
 ![MLPClassifier Confusion Matrix 16x16](../results/confusion_matrices/MLPClassifier_confusion_matrix.png)
 
+**Row-normalized Confusion Matrix (%)**
+
+![MLPClassifier Row-normalized Confusion Matrix](../results/confusion_matrices/MLPClassifier_confusion_matrix_normalized.png)
+
 ### 4. ExtraTreesClassifier — Validation Accuracy 96.97%
 
 ![ExtraTreesClassifier Confusion Matrix 16x16](../results/confusion_matrices/ExtraTrees_confusion_matrix.png)
 
+**Row-normalized Confusion Matrix (%)**
+
+![ExtraTreesClassifier Row-normalized Confusion Matrix](../results/confusion_matrices/ExtraTrees_confusion_matrix_normalized.png)
+
 ### 5. KNeighborsClassifier — Validation Accuracy 96.29%
 
 ![KNeighborsClassifier Confusion Matrix 16x16](../results/confusion_matrices/KNeighbors_confusion_matrix.png)
+
+**Row-normalized Confusion Matrix (%)**
+
+![KNeighborsClassifier Row-normalized Confusion Matrix](../results/confusion_matrices/KNeighbors_confusion_matrix_normalized.png)
 
 ## 6. 관찰 결과와 모델별 해석
 

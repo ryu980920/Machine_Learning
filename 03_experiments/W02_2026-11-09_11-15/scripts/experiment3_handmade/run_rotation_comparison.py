@@ -95,27 +95,18 @@ def csv_write(path: Path, rows: list[dict]):
         writer.writerows(rows)
 
 
-def confusion_png(path: Path, cm: np.ndarray, name: str, stage: str):
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(figsize=(10.4, 9.2), dpi=135)
-    im = ax.imshow(cm, cmap='Blues', vmin=0, vmax=160)
-    ax.set_xticks(range(16), list(LABELS))
-    ax.set_yticks(range(16), list(LABELS))
-    ax.set_xlabel('Predicted')
-    ax.set_ylabel('True')
-    ax.set_title(f'{name} — Rotation {stage} (n=2,560)')
-    for i in range(16):
-        for j in range(16):
-            v = int(cm[i, j])
-            if v:
-                ax.text(j, i, str(v), ha='center', va='center', fontsize=7,
-                        color='white' if v >= 60 else 'black')
-    fig.colorbar(im, ax=ax, fraction=.045)
-    fig.tight_layout()
-    fig.savefig(path)
-    plt.close(fig)
+def confusion_png(path: Path, cm: np.ndarray, name: str, stage: str, kind: str = 'count'):
+    # Use the same Viridis renderer as the archived CSV-only regeneration.
+    # Never modify model predictions or the confusion-matrix cell values.
+    script_dir = str(Path(__file__).resolve().parents[1])
+    if script_dir not in sys.path:
+        sys.path.insert(0, script_dir)
+    from standardize_all_cm import draw
+
+    title = f'{name} | Rotation {stage} | Hand-made (n=2,560)'
+    if kind == 'normalized':
+        title += ' | Row-normalized (%)'
+    draw(cm, title, kind, 'handmade', path)
 
 
 def load_saved_models(archive: Path, target: Path) -> dict[str, Path]:
@@ -193,6 +184,7 @@ def run(args):
                             for i in range(16)]
                 csv_write(args.out / f'confusion_matrix_{key}_{stage}.csv', csv_rows)
                 confusion_png(args.out / f'confusion_matrix_{key}_{stage}.png', cm, name, stage)
+                confusion_png(args.out / f'confusion_matrix_{key}_{stage}_normalized.png', cm, name, stage, 'normalized')
                 for i in range(16):
                     for j in range(16):
                         confusion_rows.append({'model': name, 'stage': stage,
