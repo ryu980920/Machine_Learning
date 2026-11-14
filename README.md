@@ -16,6 +16,7 @@
 | [02_data](02_data/README.md) | eMNIST·손글씨 데이터 제작, 전처리와 검수 기록 |
 | [03_experiments](03_experiments/README.md) | 모델 학습·성능 평가·개선 실험 및 시행착오 |
 | [04_reports](04_reports/README.md) | 중간 발표, 최종보고서 및 제출 자료 |
+| [05_model_optimize](05_model_optimize/README.md) | 5개 모델별 Normal·Combined 독립 최적화, 실험일지·코드·결과 |
 
 각 폴더는 **개요 → 작업 내용 → 진행 현황 → 결과 및 자료 → 특이사항 및 시행착오 → 향후 계획** 순서로 작성합니다.
 

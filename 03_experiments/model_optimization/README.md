@@ -53,3 +53,7 @@ python 03_experiments/model_optimization/run.py --model svc --variant candidate
 - **결과 파일 주의:** 현재 Runner에서 같은 `--model`, `--variant`, `--output` 조합을 반복 실행하면 `metrics.json` 등이 **덮어써질 수 있다**. 반복 실험은 `--output`에 각자 고유 경로 또는 `EXP유001` 등 실행 식별자를 지정해 파일을 보존한다. 실행 환경·수치의 완전 재현은 아직 검증되지 않았다.
 
 **추가 손글씨·CV 후속 구현:** 교수님은 새 Hand-made를 학습용으로 추가하는 방법을 허용했다. 기존 2,560장만으로 Combined 학습·검증을 병행하려면 실제 작성자 기준 Group CV가 적절할 수 있다. **현재 `run.py`에는 Combined 학습이나 작성자 Group CV 기능이 구현되어 있지 않다.** 신규 작성자 Validation을 따로 확보하면 기존 2,560장 내부 CV는 필수가 아니다.
+
+## 모델별 본격 최적화 기록 위치
+
+기본 설정 `build_baseline()` 및 `build_candidate()`는 계속 이 폴더에 보존한다. 각 팀원의 **Normal / Combined 독립 최적화 로그·코드·결과는 [05_model_optimize](../../05_model_optimize/README.md)** 아래 모델별 폴더에 기록한다. 두 경로를 서로 대체하거나 기존 W02 Baseline 로그를 이동하지 않는다.
