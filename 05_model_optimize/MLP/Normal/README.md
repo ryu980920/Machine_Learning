@@ -1,6 +1,6 @@
 # MLPClassifier — Normal 모델 최적화
 
-**현재 상태: EXP유001 Pixcel_Attribution, EXP유002 Input_Sensitivity, EXP유003 Spatial_Response 완료.** 세 실험 모두 원인 진단이며, 자동 중심 정렬을 포함한 실제 Pipeline 최적화는 아직 실시하지 않았다.
+**현재 상태: EXP유001 Pixcel_Attribution, EXP유002 Input_Sensitivity, EXP유003 Spatial_Response, EXP유004 Automatic_Centering 실행·정식 기록 완료.** EXP유004는 실제 중심 정렬 비교 실험이며 **후보 모델 검증 결과의 공개와 최종 Pipeline 채택은 별개**다.
 
 ## 등록한 실험
 
@@ -9,6 +9,7 @@
 | **EXP유001 — Pixcel_Attribution** | 공식 Validation과 Hand-made 정답·오분류 이미지 98장 추출, Integrated Gradients 기여도 분석 | **완료 (진단)** | [실험 로그](logs/EXP유001_Pixcel_Attribution.md) · [실행 코드](scripts/Pixcel_Attribution.py) · [실제 결과](results/Pixcel_Attribution/README.md) |
 | **EXP유002 — Input_Sensitivity** | 기존 MLP를 고정하고 위치·밝기·굵기·크기 20조건을 21,760장에 적용해 **456,960건**의 민감도를 비교 | **완료 (진단)** | [실험 로그](logs/EXP유002_Input_Sensitivity.md) · [실행 코드](scripts/Input_Sensitivity.py) · [실제 결과](results/Input_Sensitivity/README.md) |
 | **EXP유003 — Spatial_Response** | 공식 Train·Validation/손글씨의 **98,560장 공간 분포 비교**, **130,560건**의 고정 모델 반응, **72개 IG** | **완료 (진단)** | [실험 로그](logs/EXP유003_Spatial_Response.md) · [실행 코드](scripts/Spatial_Response_Analysis.py) · [결과 원본](results/Spatial_Response/README.md) |
+| **EXP유004 — Automatic_Centering** | 공식 Train 76,800장으로 **Center of Mass / Bounding Box** 신규 MLP 학습 후 공식 Validation 19,200장·Hand-made 2,560장 전수 비교. **CoM Hand-made +14.26%p, 문자 −6.77%p** | **완료 (실험 결과 배포, Pipeline 채택 보류)** | [실험 로그](logs/EXP유004_Automatic_Centering.md) · [실행 코드](scripts/Automatic_Centering_Experiment.py) · [원본 결과](results/Automatic_Centering/README.md) |
 
 ## 연구 대상
 
