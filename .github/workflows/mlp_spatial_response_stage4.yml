@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/mlp_spatial_response_stage4.yml"
+      - "05_model_optimize/MLP/Normal/scripts/Spatial_Response_Analysis.py"
 
 permissions:
   contents: read
