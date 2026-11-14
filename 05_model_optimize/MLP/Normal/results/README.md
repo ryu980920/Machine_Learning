@@ -7,3 +7,5 @@
 - **[Pixcel_Attribution/](Pixcel_Attribution/README.md)**: EXP유001(1·2단계)의 실제 선택 표본 CSV, 2,560장 예측 검증 CSV, 픽셀/IG NPZ, 이미지 19장(대표 2장 + 상세 17장), 실행 메타데이터. 기존 모델을 변경하지 않은 분석 결과이며 성능 개선 수치를 포함하지 않는다.
 
 - **[Input_Sensitivity/](Input_Sensitivity/README.md)**: EXP유002(3단계)의 456,960행 예측 CSV.gz, 조건별 정량표, 106장 집중 사례, 원본/변형 PNG, 학습 모델 체크포인트. *진단 목적이며 개선 모델의 Test 결과가 아니다.*
+
+- **[Spatial_Response/](Spatial_Response/README.md)**: EXP유003의 공식/손글씨 **98,560장 특징 CSV.gz**, **130,560행 대응 입력/은닉층 반응 CSV.gz**, 클래스·작성자별 공간 분포, **72개 IG 지도**, 그림 및 원본 메타데이터. *자동 전처리 개발/모델 성능 개선 실험 아님.*
