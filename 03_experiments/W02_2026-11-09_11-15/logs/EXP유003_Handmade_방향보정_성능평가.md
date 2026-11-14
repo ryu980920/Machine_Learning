@@ -101,32 +101,52 @@
 
 ## 6. 모델별 Confusion Matrix — 재실행 확인된 16×16
 
-**축:** 세로 Actual(실제 레이블), 가로 Predicted(예측 레이블), 클래스 `0123456789ABCDEF`. 각 모델별 보정 전·후 **10개의 Matrix**, 각각 전체 2,560장, 클래스당 160장. 색은 시각화용이고 셀 숫자는 실제 오분류 건수다. **2026-11-11 새 전체 추론이 기존 최신 CSV와 일치하여, 이미 게시된 동일 수치의 PNG 파일을 재사용했다.**
+**축:** 세로 True(실제 레이블), 가로 Predicted(예측 레이블), 클래스 `0123456789ABCDEF`. 보정 전·후 **원본 Count Matrix 10개**, 각각 전체 2,560장, 클래스당 160장. 2026-11-11 새 전체 추론과 기존 최신 CSV가 일치했으며, **원본 CSV 수치를 유지한 채 그림만 Viridis Count 10장·Row-normalized(%) 10장으로 재생성**했다. Count는 0–160장, Row-normalized는 0–100% 공통 스케일이며, 학습 및 예측값 변경은 없다.
 
 ### 6.1 SVC (RBF)
 보정 전: ![SVC 회전 전](../results/EXP-유-003_rotation_v4/confusion_matrix_svc_before.png)
 
+![SVC before Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_svc_before_normalized.png)
+
 보정 후: ![SVC 회전 후](../results/EXP-유-003_rotation_v4/confusion_matrix_svc_after.png)
+
+![SVC after Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_svc_after_normalized.png)
 
 ### 6.2 HistGradientBoosting
 보정 전: ![HGB 회전 전](../results/EXP-유-003_rotation_v4/confusion_matrix_hgb_before.png)
 
+![HGB before Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_hgb_before_normalized.png)
+
 보정 후: ![HGB 회전 후](../results/EXP-유-003_rotation_v4/confusion_matrix_hgb_after.png)
+
+![HGB after Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_hgb_after_normalized.png)
 
 ### 6.3 MLP
 보정 전: ![MLP 회전 전](../results/EXP-유-003_rotation_v4/confusion_matrix_mlp_before.png)
 
+![MLP before Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_mlp_before_normalized.png)
+
 보정 후: ![MLP 회전 후](../results/EXP-유-003_rotation_v4/confusion_matrix_mlp_after.png)
+
+![MLP after Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_mlp_after_normalized.png)
 
 ### 6.4 Extra Trees
 보정 전: ![Extra Trees 회전 전](../results/EXP-유-003_rotation_v4/confusion_matrix_extra_trees_before.png)
 
+![EXTRA_TREES before Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_extra_trees_before_normalized.png)
+
 보정 후: ![Extra Trees 회전 후](../results/EXP-유-003_rotation_v4/confusion_matrix_extra_trees_after.png)
+
+![EXTRA_TREES after Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_extra_trees_after_normalized.png)
 
 ### 6.5 KNN
 보정 전: ![KNN 회전 전](../results/EXP-유-003_rotation_v4/confusion_matrix_knn_before.png)
 
+![KNN before Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_knn_before_normalized.png)
+
 보정 후: ![KNN 회전 후](../results/EXP-유-003_rotation_v4/confusion_matrix_knn_after.png)
+
+![KNN after Row-normalized Confusion Matrix](../results/EXP-유-003_rotation_v4/confusion_matrix_knn_after_normalized.png)
 
 ## 7. 실험 결과·해석 및 후속 연구
 
