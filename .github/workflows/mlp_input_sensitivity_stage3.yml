@@ -1,0 +1,49 @@
+name: Normal MLP Input Sensitivity - Stage 3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mlp_input_sensitivity_stage3.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  input-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout existing Normal MLP experiment and datasets
+        uses: actions/checkout@v4
+
+      - name: Set up Python matching baseline
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned scientific libraries
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scipy==1.17.0" "scikit-learn==1.8.0" "matplotlib==3.10.7"
+
+      - name: Run independent Stage 3 diagnosis without model changes
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/Input_Sensitivity.py \
+            --out "${{ runner.temp }}/normal_mlp_input_sensitivity" --batch-size 1024
+
+      - name: Upload Stage 3 diagnostic outputs for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-mlp-input-sensitivity-stage3
+          path: ${{ runner.temp }}/normal_mlp_input_sensitivity/
+          retention-days: 30
+          if-no-files-found: warn
