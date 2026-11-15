@@ -1,0 +1,64 @@
+name: EXP-CMB-002 Frozen MLP Error Evidence
+
+on:
+  push:
+    branches:
+      - exp/cmb002-evidence-20261116
+    paths:
+      - '.github/workflows/exp-cmb-002-evidence.yml'
+      - '05_model_optimize/MLP/Combined/scripts/exp_cmb002_evidence.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Check out the experiment branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact EXP-CMB-001 runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Verify original experiment code integrity on synthetic examples
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Revalidate original OOF and run no-training evidence analysis
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb002_evidence.py \
+            --out 05_model_optimize/MLP/Combined/results/Error_Analysis
+      - name: Upload review-only evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-002-review-evidence
+          path: 05_model_optimize/MLP/Combined/results/Error_Analysis/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Commit generated evidence to the experiment branch only
+        if: success() && github.ref == 'refs/heads/exp/cmb002-evidence-20261116'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Error_Analysis/
+          if git diff --staged --quiet; then
+            echo 'Review evidence is unchanged'
+          else
+            git commit -m 'research: store reproducible EXP-CMB-002 evidence [skip ci]'
+            git push
+          fi
