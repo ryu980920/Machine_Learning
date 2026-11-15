@@ -265,6 +265,7 @@ def topology_analysis(rows,raw,models,out):
         b=[x for x in this if x["condition"]=="distance_matched_control"]
         paired.append({"writer":w,"index_in_writer":idx,"actual":cls,
           "baseline_correct":int(row["combined_correct"]),
+          "n_valid_proposals":len(proposals),
           "mean_edges_loss_selected":float(np.mean([x["connectivity_change"] for x in a])),
           "mean_edges_loss_control":float(np.mean([x["connectivity_change"] for x in b])),
           "mean_distance_selected":float(np.mean([x["mean_swap_distance"] for x in a])),
@@ -296,9 +297,56 @@ def topology_analysis(rows,raw,models,out):
           "mean_edges_control":float(np.mean([r["mean_edges_loss_control"] for r in sel])),
           "mean_move_selected":float(np.mean([r["mean_distance_selected"] for r in sel])),
           "mean_move_control":float(np.mean([r["mean_distance_control"] for r in sel])),
-          "n_candidates_per_image":54,"n_each_condition":8})
+          "candidate_count_min":min(r["n_valid_proposals"] for r in sel),
+          "candidate_count_max":max(r["n_valid_proposals"] for r in sel),
+          "n_each_condition":8})
     core.write_csv(out/"topology_contrasts.csv",summaries)
     return len(selected),len(paired),summaries
+
+
+
+def pair_specific_checks(rows, repeats=4000):
+    """Exploratory direct-error vs correct controls, sensitivity to threshold.
+
+    This is POST-HOC after viewing the baseline and initial follow-up, not an
+    independent confirmatory test; interpret adjusted p-values accordingly.
+    """
+    specs=(
+        (43,"8","B",("width","width_t64","width_t128",
+                     "ink_ratio","ink_ratio_t64","ink_ratio_t128",
+                     "middle_mass_fraction")),
+        (41,"D","0",("cx","cx_t64","cx_t128","left_mass_fraction","width")),
+        (43,"0","D",("cy","cy_t64","cy_t128","width","ink_ratio")),
+        (41,"B","8",("width","ink_ratio","middle_mass_fraction"))
+    )
+    results=[]
+    for w,actual,wrong,variables in specs:
+        group=[r for r in rows if r["writer"]==w and r["true_label"]==actual
+               and r["combined_pred"] in (actual,wrong)]
+        y=np.asarray([r["combined_pred"]==wrong for r in group],dtype=bool)
+        assert len(group)>=20 and y.sum()>=4 and (~y).sum()>=4
+        arr=np.asarray([[float(r[ft]) for ft in variables] for r in group])
+        rng=np.random.default_rng(20261116+1000*w+core.LABELS.index(actual))
+        obs=arr[y].mean(axis=0)-arr[~y].mean(axis=0)
+        pcount=np.zeros(len(variables),dtype=int)
+        for trial in range(repeats):
+            perm=rng.permutation(y)
+            diff=arr[perm].mean(axis=0)-arr[~perm].mean(axis=0)
+            pcount+=(np.abs(diff)>=np.abs(obs))
+        p=(pcount+1)/(repeats+1)
+        for j,ft in enumerate(variables):
+            results.append({"writer":w,"actual":actual,"wrong_prediction":wrong,
+             "feature":ft,"n_wrong":int(y.sum()),"n_correct":int((~y).sum()),
+             "wrong_mean":float(arr[y,j].mean()),"correct_mean":float(arr[~y,j].mean()),
+             "wrong_minus_correct":float(obs[j]),"perm_p_posthoc":float(p[j]),
+             "permutation_count":repeats})
+    idx=sorted(range(len(results)),key=lambda i:results[i]["perm_p_posthoc"])
+    q=1.0
+    for rank in range(len(idx)-1,-1,-1):
+        i=idx[rank]
+        q=min(q,results[i]["perm_p_posthoc"]*len(idx)/(rank+1))
+        results[i]["BH_q_across_posthoc_tests"]=float(q)
+    return results
 
 
 def main():
@@ -322,6 +370,8 @@ def main():
     target=targeted_permutations(focus,(*core.FEATURES,*FEATURES_MORPH),repeats=2000)
     core.write_csv(out/"targeted_writer_class_tests.csv",target)
     selected,nvalid,topology=topology_analysis(focus,raw,models,out)
+    pair_checks=pair_specific_checks(focus)
+    core.write_csv(out/"pair_specific_threshold_sensitivity.csv",pair_checks)
     summary={"status":"followup completed; interpret with explicit A/B decision",
        "n_focus_images":640,"n_morph_features":len(FEATURES_MORPH),
        "morphology_associations":morph,
@@ -329,6 +379,7 @@ def main():
        "targeted_five_groups":[list(v) for v in TARGETS],
        "topology_selected_images":selected,"topology_valid_images":nvalid,
        "topology_contrasts":topology,
+       "posthoc_pair_specific_threshold_tests":pair_checks,
        "caveats":[
         "OOF repeatedly investigated as development data; not independent validation.",
         "Morphology descriptors overlap global geometry and do not isolate human semantic strokes.",
@@ -361,6 +412,7 @@ def main():
        "BH q<0.05 among 5 selected strata × 18 features: "+str(len(sig))+".",
        "This is **exploratory** even if significant; selected strata arise from baseline errors.",
        "See targeted_writer_class_tests.csv for all adjusted p-values.",
+       "Direct error-pair versus correct-control threshold checks are in pair_specific_threshold_sensitivity.csv (post-hoc; BH across all checks).",
        "",
        "**Limits:** the pixel swaps are matched on 4 exchanges and displacement and preserve histogram, bounding box, thresholded foreground pixel count, with <=0.3px CoM movement. Four-neighbour connectivity is only a morphological proxy. No final causal claim of semantic shape recognition.",
        ""])
