@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/exp-cmb-002-evidence.yml'
       - '05_model_optimize/MLP/Combined/scripts/exp_cmb002_evidence.py'
+      - '05_model_optimize/MLP/Combined/scripts/exp_cmb002_followup.py'
   workflow_dispatch:
 
 permissions:
@@ -41,6 +42,14 @@ jobs:
           NUMEXPR_NUM_THREADS: '2'
         run: |
           python 05_model_optimize/MLP/Combined/scripts/exp_cmb002_evidence.py \
+            --out 05_model_optimize/MLP/Combined/results/Error_Analysis
+      - name: Continue EXP-CMB-002 with writer-specific morphology and controlled pixel swaps
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb002_followup.py \
             --out 05_model_optimize/MLP/Combined/results/Error_Analysis
       - name: Upload review-only evidence
         if: always()
