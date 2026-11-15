@@ -1,0 +1,102 @@
+name: Normal HypA EXP004 Stage3 BBox Size Strength Sweep
+
+on:
+  push:
+    branches: [exp/normal-a-exp004-stroke-normalization-20261116]
+    paths:
+      - ".github/workflows/mlp-normal-hypA-exp004-stage3.yml"
+      - "05_model_optimize/MLP/Normal/scripts/exp_a004_strength_sweep.py"
+      - "05_model_optimize/MLP/Normal/scripts/exp_a004_aggregate_strength.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stage3:
+    name: Size Strength ${{ matrix.condition }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [C10_Size020, C11_Size035, C12_Size050, C13_Size065, C14_Size080]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install pinned scientific stack
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP_A004_requirements.txt
+      - name: Test size normalization on synthetic images
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+        run: python 05_model_optimize/MLP/Normal/scripts/exp_a004_strength_sweep.py --self-test
+      - name: Train 3 repeat-seeded official-only MLP models
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          PYTHONUNBUFFERED: "1"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_strength_sweep.py \
+            --repo-root . \
+            --out-dir "05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage3/${{ matrix.condition }}" \
+            --condition "${{ matrix.condition }}" --seeds 42 43 44 --max-iter 200
+      - name: Preserve real experiment data and models
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-a004-${{ matrix.condition }}
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage3/${{ matrix.condition }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  summarize:
+    needs: stage3
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: normal-a004-*
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage3/
+          merge-multiple: false
+      - name: Verify all metrics and original three-threshold gate
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_aggregate_strength.py \
+            --root 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage3
+      - name: Upload full Stage3 review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypA-EXP004-Stage3-complete-review
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage3/
+          retention-days: 30
+      - name: Commit factual evidence only to experimental branch
+        if: success() && github.ref == 'refs/heads/exp/normal-a-exp004-stroke-normalization-20261116'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cd 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage3/
+          git add SUMMARY.md run_index.json pass_by_seed.csv method_summary.csv all_pair_errors.csv all_group_metrics.csv
+          for condition in C10_Size020 C11_Size035 C12_Size050 C13_Size065 C14_Size080; do
+            git add "normal-a004-$condition/group_metrics.csv"
+            git add "normal-a004-$condition/pair_errors.csv"
+            git add "normal-a004-$condition/fit_metrics.csv"
+            git add "normal-a004-$condition/run_manifest.json"
+            git add "normal-a004-$condition/real_handmade_examples.png"
+          done
+          if git diff --staged --quiet; then echo 'No new evidence'; else
+            git commit -m 'research: record EXP004 Stage3 size strength results [skip ci]'
+            git push
+          fi
