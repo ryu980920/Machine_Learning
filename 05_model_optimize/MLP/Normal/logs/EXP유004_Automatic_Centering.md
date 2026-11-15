@@ -96,7 +96,18 @@
 5. **추가 검증 필요:** 현재 한 번의 **random_state=42** 학습 결과다. 복수 학습 Seed, 문자 정확도 하락의 원인, 새 작성자 독립 평가가 필요하다. 공식 Test / 교수님 Test는 **최종 단계까지 보존**한다.
 6. **자동 배포/서비스 반영 금지:** 이번 기록의 배포는 **연구 결과 보관·공유**만 뜻하며, 기본 Normal MLP 코드를 후보 모델로 대체하거나 추론 Pipeline을 변경하지 않았다.
 
-## 7. 증빙과 재현 방법
+## 7. 후속 분석 — CoM 이동 자체 vs 재학습 영향 (승인 후 배포)
+
+[**EXP유004_CoM_판단근거_후속분석.md**](EXP유004_CoM_판단근거_후속분석.md)에서 기존 Normal MLP를 고정한 원본/CoM 입력을 비교하고, **동일한 CoM 입력에서 두 모델**을 비교했다.
+
+- **기존 모델에 CoM 이동만 적용:** 숫자 56.31%→82.00% (**+25.69%p**), 문자 73.75%→52.40% (**−21.35%p**).
+- **같은 CoM 입력에서 재학습 모델로 변경:** 숫자 82.00%→83.19% (**+1.19%p**), 문자 52.40%→66.98% (**+14.58%p**).
+- 실제 **5→F 교정**, **B→8 신규 오류**의 Signed Integrated Gradients를 함께 계산했다.
+- **핵심 판단:** 이동만으로 상반된 변화가 나타나 기존 MLP의 **입력 픽셀 절대 위치 의존성**을 확인했다. 재학습은 문자 성능을 회복시키지만 최종 개선에 충분하지 않다.
+- [후속 분석 CSV·IG 원본](../results/Automatic_Centering/CoM_Decision_Review/README.md) · [분석 코드](../scripts/CoM_Decision_Diagnostic.py) · [성공 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43686466736)
+- 후속 분석은 **기존 저장 모델 사용, 재학습 없음, Test 미사용**. 아직 ±1px 위치 증강(EXP유005 후보) 등 새 개선 방법을 실행하지 않았으며 기본 모델 Pipeline도 변경하지 않았다.
+
+## 8. 증빙과 재현 방법
 
 - [원본 결과 디렉터리와 파일 해시/목록](../results/Automatic_Centering/README.md)
 - [실험 코드](../scripts/Automatic_Centering_Experiment.py) · [자동 정렬 구현](../scripts/Automatic_Centering_Transformer.py)
