@@ -1,0 +1,64 @@
+{
+  "source_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "condition": "C8_Stroke030_MedianWidth035",
+  "preprocessing": {
+    "condition": "C8_Stroke030_MedianWidth035",
+    "training_fit_count": 76800,
+    "fit_data": "OfficialTrainOnly",
+    "uses_labels": false,
+    "uses_writer": false,
+    "com_last": true,
+    "topology_guard": true,
+    "stroke": {
+      "strength": 0.3,
+      "median": 3.0,
+      "q20": 1.8284271247461903,
+      "q80": 3.0
+    },
+    "shape": {
+      "kind": "width",
+      "strength": 0.35,
+      "median": 18.0,
+      "q20": 14.0,
+      "q80": 21.0
+    },
+    "handmade_topology_changes_after_full_transform": 0,
+    "handmade_ink_loss_any": 657,
+    "reference_eval_note": "Handmade is development diagnostic only; neither preprocessing nor model fitted on it."
+  },
+  "model": "MLPClassifier(100 ReLU hidden nodes)",
+  "max_iter": 200,
+  "seeds_planned": [
+    42,
+    43,
+    44
+  ],
+  "seed_results": [
+    {
+      "condition": "C8_Stroke030_MedianWidth035",
+      "seed": 42,
+      "iteration": 200,
+      "training_loss": 0.0012811463220476953,
+      "fit_seconds": 223.3,
+      "checkpoint_sha256": "e171643f36bce98003059da3f9eb136f361fef8c8fe56a27734b7b5bb25c12e0"
+    },
+    {
+      "condition": "C8_Stroke030_MedianWidth035",
+      "seed": 43,
+      "iteration": 200,
+      "training_loss": 0.0013726547295877876,
+      "fit_seconds": 173.5,
+      "checkpoint_sha256": "6df9e271c65d2475d5b28e25e9bb6e1666916f1b80f44346bfbbd3259f987a56"
+    },
+    {
+      "condition": "C8_Stroke030_MedianWidth035",
+      "seed": 44,
+      "iteration": 200,
+      "training_loss": 0.006598634412419951,
+      "fit_seconds": 128.6,
+      "checkpoint_sha256": "28766f32a0f4dbd269fe24d0ebfdba15c38efc26110ee094018fdff4c75fd85d"
+    }
+  ],
+  "official_original_test_used": false,
+  "professor_test_used": false
+}

@@ -1,0 +1,84 @@
+{
+  "conditions": [
+    "C5_Stroke045",
+    "C6_Stroke060",
+    "C7_MedianWidth035",
+    "C8_Stroke030_MedianWidth035",
+    "C9_BBoxLongside20"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "trained_models": 15,
+  "official_original_test_used": false,
+  "professor_test_used": false,
+  "gate": {
+    "Handmade/letters": 0.8,
+    "Handmade/digits": 0.85,
+    "OfficialVal/all": 0.973
+  },
+  "results": [
+    {
+      "condition": "C5_Stroke045",
+      "letters": 0.7649305555555556,
+      "digits": 0.8954166666666666,
+      "official_val": 0.9693229166666667,
+      "six_directional_errors": 154.33333333333334,
+      "letters_sd": 0.018659762281311693,
+      "digits_sd": 0.004741586115308749,
+      "official_val_sd": 0.0018236605625011717,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C6_Stroke060",
+      "letters": 0.7913194444444445,
+      "digits": 0.9039583333333333,
+      "official_val": 0.9667013888888889,
+      "six_directional_errors": 132,
+      "letters_sd": 0.010146971664029473,
+      "digits_sd": 0.008799463367476197,
+      "official_val_sd": 0.002732707273604304,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C7_MedianWidth035",
+      "letters": 0.71875,
+      "digits": 0.8574999999999999,
+      "official_val": 0.9729861111111111,
+      "six_directional_errors": 203.66666666666666,
+      "letters_sd": 0.009355689989796873,
+      "digits_sd": 0.0061871843353822975,
+      "official_val_sd": 0.0006913995747131784,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C8_Stroke030_MedianWidth035",
+      "letters": 0.7402777777777778,
+      "digits": 0.8872916666666667,
+      "official_val": 0.9669965277777778,
+      "six_directional_errors": 177.33333333333334,
+      "letters_sd": 0.027903361948422828,
+      "digits_sd": 0.010972661735219737,
+      "official_val_sd": 0.007384862428924187,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C9_BBoxLongside20",
+      "letters": 0.9097222222222222,
+      "digits": 0.8535416666666666,
+      "official_val": 0.9556944444444444,
+      "six_directional_errors": 82.33333333333333,
+      "letters_sd": 0.013348876935236861,
+      "digits_sd": 0.005690208451561542,
+      "official_val_sd": 0.005351222800000661,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    }
+  ]
+}
