@@ -1,0 +1,17 @@
+﻿method,actual,rival,baseline_errors,new_errors,delta_errors
+bbox_center,0,D,30,43,13
+bbox_center,D,0,29,35,6
+bbox_center,8,B,27,40,13
+bbox_center,B,8,26,36,10
+bbox_size,0,D,30,33,3
+bbox_size,D,0,29,6,-23
+bbox_size,8,B,27,48,21
+bbox_size,B,8,26,4,-22
+com_center,0,D,30,25,-5
+com_center,D,0,29,35,6
+com_center,8,B,27,15,-12
+com_center,B,8,26,35,9
+size_then_com,0,D,30,13,-17
+size_then_com,D,0,29,11,-18
+size_then_com,8,B,27,30,3
+size_then_com,B,8,26,14,-12
