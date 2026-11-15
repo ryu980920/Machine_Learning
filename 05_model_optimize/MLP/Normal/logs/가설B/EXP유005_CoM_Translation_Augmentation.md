@@ -36,12 +36,6 @@ B 대비 C에서 Hand-made **전체 +0.7031%p**(178장 교정·160장 신규 오
 
 A 대비 C의 숫자 **+3.8125%p**, 문자 **+0.1042%p**(960장 중 정답 1장 증가).
 
-### 핵심 근거 그래프
-
-![Hand-made 숫자·문자 정확도 상충 및 반복5 대조군과 ±1px 증강 비교](figures/EXP유005_accuracy_tradeoff.svg)
-
-위 그래프는 실제 `exp005_group_metrics.csv`의 숫자·문자·전체 정확도만 시각화했다. **숫자 +2.56%p, 문자 −2.40%p**는 B(반복 5회) 대비 C(±1px 증강)의 차이이며, 그림의 각 행은 x축 범위가 서로 다르다.
-
 ## 4. 대표 오분류
 
 | 실제→예측 | A: CoM | B: 반복5 | C: ±1px |
@@ -61,4 +55,4 @@ B/C의 총 학습 샘플 수는 같지만 B **33 epochs·85.13초**, C **108 epo
 
 - [실행 코드](../../scripts/CoM_Translation_Augmentation_Experiment.py)
 - [실험 성공 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43691538540) · [워크플로](../../../../../.github/workflows/mlp_exp005_com_translation_augmentation_review.yml)
-- 별도 보관: `SUMMARY.md`, `exp005_group_metrics.csv`, `exp005_confusion_matrices.csv`, `exp005_confusion_pairs.csv`, `exp005_paired_transitions.csv`, `exp005_handmade_predictions.csv.gz`, `exp005_learning_curves.csv`, `exp005_metadata.json`, 후보 모델 2종. 핵심 비교 그래프만 `figures/`에 보관했다. 원본 CSV·후보 모델 파일은 아직 업로드하지 않았다.
+- 별도 보관: `SUMMARY.md`, `exp005_group_metrics.csv`, `exp005_confusion_matrices.csv`, `exp005_confusion_pairs.csv`, `exp005_paired_transitions.csv`, `exp005_handmade_predictions.csv.gz`, `exp005_learning_curves.csv`, `exp005_metadata.json`, 후보 모델 2종. 원본 CSV·후보 모델 파일은 아직 GitHub에 업로드하지 않았다. 위 표는 실제 실험값이며 별도 제작한 요약 그래프는 첨부하지 않는다.
