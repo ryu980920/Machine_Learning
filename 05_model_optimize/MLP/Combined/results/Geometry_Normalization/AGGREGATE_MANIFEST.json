@@ -1,0 +1,48 @@
+{
+  "experiment_id": "EXP-CMB-004",
+  "methods": [
+    "bbox_center",
+    "bbox_size",
+    "com_center",
+    "size_then_com"
+  ],
+  "comparison_criterion": "explanatory evidence, no accuracy/F1 gate",
+  "writer_heldout": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "official_test_used": false,
+  "professor_final_test_used": false,
+  "completed_method_count": 4,
+  "trained_model_count": 16,
+  "baseline_retrained": false,
+  "size_target": 20,
+  "method_model_member_hashes": {
+    "bbox_center": {
+      "bbox_center_heldout_41_mlp.joblib": "cd5fe444444800b9596a1e3e2cb66e2f98d60635a82cfa05626149cb77ef0d4e",
+      "bbox_center_heldout_42_mlp.joblib": "32e9cc087b75eb48093e00e108485f23361fb0da6e6777f21f78e16c94f7c5fb",
+      "bbox_center_heldout_43_mlp.joblib": "a6c0f1b588638b84d74c234ecb004afe82433a4615abb00be956d1298f70a25a",
+      "bbox_center_heldout_44_mlp.joblib": "f5687e741530dfec1e17c59f2319f6e7db8dda6d87d5ff2b139295b4cfc25a4f"
+    },
+    "bbox_size": {
+      "bbox_size_heldout_41_mlp.joblib": "41ed8e22097833dbe2c8211d4a973c9fd81286f72fc49ce46211838c37e9137f",
+      "bbox_size_heldout_42_mlp.joblib": "f353e28b93285ae21fa9bd805e6ee4706523a4feef7efa715b48dc8e97d3f91e",
+      "bbox_size_heldout_43_mlp.joblib": "0fa7d948d7a7afb9dcf3a1d462a4579fad35e94742821d97ec249baa87249bb1",
+      "bbox_size_heldout_44_mlp.joblib": "4633ae24494959d416c6589405e5f40d6477824f0cd9a15ba5eee0409063af84"
+    },
+    "com_center": {
+      "com_center_heldout_41_mlp.joblib": "6fda696c04dd1f3b5e0de5805909b9d055ac0c11a54abb1318934619ae4dcf96",
+      "com_center_heldout_42_mlp.joblib": "b065d606c3f8bd5a4a1cf6a15643efbac78221d133bbdb9db8df5d3263ecbe6a",
+      "com_center_heldout_43_mlp.joblib": "4b1373ec3431b4cf779d935272af79442eb63447b7746240b934c06368cfeb2f",
+      "com_center_heldout_44_mlp.joblib": "9c5e5dba967237c874578a460a3b56cf81537bcfdc88422596fb649ef7bc742d"
+    },
+    "size_then_com": {
+      "size_then_com_heldout_41_mlp.joblib": "7f732e7d1efc03c9579a17dd107fd7b0f6585ae44a60e74120e43db1e1d39176",
+      "size_then_com_heldout_42_mlp.joblib": "8222c33f34ed5547d8d01f89d13041cf07c86c7e1df52b0c743b116b89ecc6be",
+      "size_then_com_heldout_43_mlp.joblib": "9c2e97bc5ae1f85ae90cf264abbe2a88a4353136bd754dbd1682ae421dc295a8",
+      "size_then_com_heldout_44_mlp.joblib": "b169b0ae3d60ae6a0f0c6535e2ed76a0d9569ca81cee26274c44c1add5e3699e"
+    }
+  }
+}

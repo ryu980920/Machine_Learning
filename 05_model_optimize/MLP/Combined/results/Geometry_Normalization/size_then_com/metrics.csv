@@ -1,0 +1,2 @@
+﻿method,n,correct,accuracy,macro_precision,macro_recall,macro_f1,corrected,induced,both_wrong_same,both_wrong_changed,both_correct,prediction_flip,delta_correct,baseline_accuracy,delta_accuracy_pp,preprocessing_seconds,wall_seconds
+size_then_com,2560,2277,0.889453125,0.8945147700170235,0.889453125,0.8898203772057809,343,146,58,79,1934,568,197,0.8125,7.695312499999996,4.712970886999997,182.76485318599998

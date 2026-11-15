@@ -1,0 +1,17 @@
+﻿method,writer,actual,rival,baseline_errors,new_errors
+bbox_size,41,0,D,0,13
+bbox_size,42,0,D,0,2
+bbox_size,43,0,D,28,3
+bbox_size,44,0,D,2,15
+bbox_size,41,D,0,16,2
+bbox_size,42,D,0,11,2
+bbox_size,43,D,0,1,2
+bbox_size,44,D,0,1,0
+bbox_size,41,8,B,1,19
+bbox_size,42,8,B,2,10
+bbox_size,43,8,B,18,4
+bbox_size,44,8,B,6,15
+bbox_size,41,B,8,14,2
+bbox_size,42,B,8,5,2
+bbox_size,43,B,8,0,0
+bbox_size,44,B,8,7,0

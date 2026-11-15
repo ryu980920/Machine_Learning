@@ -1,0 +1,52 @@
+name: EXP-CMB-004 Four-Way Input versus Retraining Controls
+
+on:
+  push:
+    branches: [exp/cmb004-geometry-normalization-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-004-4way-controls.yml'
+      - '05_model_optimize/MLP/Combined/scripts/exp_cmb004_cross_diagnostic.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  four-way-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install baseline runtime (no new model training)
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Verify frozen and retrained models with raw/transformed 4-way controls
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/exp_cmb004_cross_diagnostic.py
+      - name: Upload additional explanatory evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-004-four-way-retraining-controls
+          path: |
+            05_model_optimize/MLP/Combined/results/Geometry_Normalization/CROSS_4WAY_SUMMARY.md
+            05_model_optimize/MLP/Combined/results/Geometry_Normalization/cross_4way_*.csv
+          retention-days: 30
+      - name: Save controls on experiment branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Geometry_Normalization/CROSS_4WAY_SUMMARY.md
+          git add 05_model_optimize/MLP/Combined/results/Geometry_Normalization/cross_4way_*.csv
+          if git diff --staged --quiet; then
+            echo 'Controls unchanged'
+          else
+            git commit -m 'research: store EXP-CMB-004 input-vs-training control results [skip ci]'
+            git push
+          fi

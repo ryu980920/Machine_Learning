@@ -1,0 +1,3 @@
+﻿method,group,n,correct,accuracy,macro_precision,macro_recall,macro_f1,corrected,induced,both_wrong_same,both_wrong_changed,both_correct,prediction_flip,delta_correct,baseline_accuracy
+bbox_size,digits,1600,1160,0.725,0.921434674411256,0.725,0.808790975053776,129,242,98,100,1031,471,-113,0.795625
+bbox_size,letters,960,908,0.9458333333333333,0.9648424976143688,0.9458333333333334,0.955121202658692,117,16,18,18,791,151,101,0.840625

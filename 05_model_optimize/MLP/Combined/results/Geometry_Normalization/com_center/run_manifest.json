@@ -1,0 +1,42 @@
+{
+  "experiment": "EXP-CMB-004",
+  "status": "method completed, combined mechanism comparison pending",
+  "method": "com_center",
+  "target_longside_pixels": 20,
+  "foreground_threshold": 32,
+  "source_sha256": {
+    "official_v3": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+    "handmade": {
+      "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+      "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+      "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+      "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+    }
+  },
+  "baseline_exp_cmb_001_oof_correct": 2080,
+  "handmade_writer_heldout": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "official_train_n": 76800,
+  "official_val_n": 19200,
+  "per_fold_handmade_train_n": 1920,
+  "per_fold_validation_n": 640,
+  "trained_models_sha256": {
+    "com_center_heldout_41_mlp.joblib": "6fda696c04dd1f3b5e0de5805909b9d055ac0c11a54abb1318934619ae4dcf96",
+    "com_center_heldout_42_mlp.joblib": "b065d606c3f8bd5a4a1cf6a15643efbac78221d133bbdb9db8df5d3263ecbe6a",
+    "com_center_heldout_43_mlp.joblib": "4b1373ec3431b4cf779d935272af79442eb63447b7746240b934c06368cfeb2f",
+    "com_center_heldout_44_mlp.joblib": "9c5e5dba967237c874578a460a3b56cf81537bcfdc88422596fb649ef7bc742d"
+  },
+  "scikit_learn_version": "1.8.0",
+  "numpy_version": "2.3.5",
+  "scipy_version": "1.18.1",
+  "no_test_used": true,
+  "author_or_true_label_in_preprocessing": false,
+  "method_explanatory_success_requires_not_accuracy_threshold": true,
+  "training_seconds_total": 132.21260583000006,
+  "preprocess_seconds_total": 0.6388633889999937,
+  "total_seconds": 150.911105408
+}

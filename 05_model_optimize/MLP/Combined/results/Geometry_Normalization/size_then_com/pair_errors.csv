@@ -1,0 +1,17 @@
+﻿method,writer,actual,rival,baseline_errors,new_errors
+size_then_com,41,0,D,0,4
+size_then_com,42,0,D,0,3
+size_then_com,43,0,D,28,0
+size_then_com,44,0,D,2,6
+size_then_com,41,D,0,16,0
+size_then_com,42,D,0,11,2
+size_then_com,43,D,0,1,6
+size_then_com,44,D,0,1,3
+size_then_com,41,8,B,1,16
+size_then_com,42,8,B,2,1
+size_then_com,43,8,B,18,1
+size_then_com,44,8,B,6,12
+size_then_com,41,B,8,14,4
+size_then_com,42,B,8,5,7
+size_then_com,43,B,8,0,2
+size_then_com,44,B,8,7,1
