@@ -1,0 +1,239 @@
+{
+  "status": "experimental_evidence_created; A/B go/no-go requires interpretation",
+  "source": "EXP-CMB-001 original OOF and frozen models",
+  "n_images": 2560,
+  "n_focus_images": 640,
+  "baseline_oof_accuracy": 0.8125,
+  "transitions": {
+    "both_correct": 1540,
+    "both_wrong": 418,
+    "corrected": 540,
+    "new_error": 62
+  },
+  "focus_pairs": {
+    "0->D": {
+      "combined": 30,
+      "writer_breakdown": {
+        "41": 0,
+        "42": 0,
+        "43": 28,
+        "44": 2
+      },
+      "new_error": 1,
+      "same_wrong": 25,
+      "other_wrong": 4
+    },
+    "D->0": {
+      "combined": 29,
+      "writer_breakdown": {
+        "41": 16,
+        "42": 11,
+        "43": 1,
+        "44": 1
+      },
+      "new_error": 10,
+      "same_wrong": 11,
+      "other_wrong": 8
+    },
+    "8->B": {
+      "combined": 27,
+      "writer_breakdown": {
+        "41": 1,
+        "42": 2,
+        "43": 18,
+        "44": 6
+      },
+      "new_error": 5,
+      "same_wrong": 22,
+      "other_wrong": 0
+    },
+    "B->8": {
+      "combined": 26,
+      "writer_breakdown": {
+        "41": 14,
+        "42": 5,
+        "43": 0,
+        "44": 7
+      },
+      "new_error": 2,
+      "same_wrong": 20,
+      "other_wrong": 4
+    }
+  },
+  "feature_associations": [
+    {
+      "feature": "cx",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": 0.07247371143380728,
+      "centered_covariance": 0.014650447526169775,
+      "stratified_permutation_p": 0.33026789284286284,
+      "bh_fdr_q": 0.48308676529388245,
+      "permutations": 2500
+    },
+    {
+      "feature": "cy",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": -0.11390096463858655,
+      "centered_covariance": -0.023024902031432492,
+      "stratified_permutation_p": 0.11995201919232307,
+      "bh_fdr_q": 0.48308676529388245,
+      "permutations": 2500
+    },
+    {
+      "feature": "width",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": 0.07178057898673858,
+      "centered_covariance": 0.014510331885014544,
+      "stratified_permutation_p": 0.34506197520991605,
+      "bh_fdr_q": 0.48308676529388245,
+      "permutations": 2500
+    },
+    {
+      "feature": "height",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": 0.011889178685466704,
+      "centered_covariance": 0.002403378894425306,
+      "stratified_permutation_p": 0.8648540583766493,
+      "bh_fdr_q": 0.8648540583766493,
+      "permutations": 2500
+    },
+    {
+      "feature": "ink_ratio",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": -0.07423639188259402,
+      "centered_covariance": -0.015006770624704156,
+      "stratified_permutation_p": 0.327469012395042,
+      "bh_fdr_q": 0.48308676529388245,
+      "permutations": 2500
+    },
+    {
+      "feature": "gray_mean",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": -0.07263501274415313,
+      "centered_covariance": -0.01468305433402314,
+      "stratified_permutation_p": 0.3338664534186325,
+      "bh_fdr_q": 0.48308676529388245,
+      "permutations": 2500
+    },
+    {
+      "feature": "stroke_proxy",
+      "n": 640,
+      "n_errors": 180,
+      "error_minus_correct_mean_z": 0.019054865815776048,
+      "centered_covariance": 0.003851911351431374,
+      "stratified_permutation_p": 0.7940823670531787,
+      "bh_fdr_q": 0.8648540583766493,
+      "permutations": 2500
+    }
+  ],
+  "A_IG_n_model_evaluations": 178,
+  "A_distinct_images": 89,
+  "A_max_abs_IG_completeness_residual": 0.20160006579072842,
+  "A_region_ablation_exploratory": {
+    "center_horizontal": {
+      "n_distinct_images": 89,
+      "mean_excess_abs_logit": 4.082217722873707,
+      "bootstrap95": [
+        2.438310023941782,
+        5.925292270618555
+      ],
+      "per_image_fraction_excess_positive": 0.5955056179775281
+    },
+    "center_vertical": {
+      "n_distinct_images": 88,
+      "mean_excess_abs_logit": 0.13974212611453296,
+      "bootstrap95": [
+        -0.7649801408252622,
+        1.0450757237263113
+      ],
+      "per_image_fraction_excess_positive": 0.4318181818181818
+    },
+    "left_middle": {
+      "n_distinct_images": 88,
+      "mean_excess_abs_logit": 2.1541592695269904,
+      "bootstrap95": [
+        1.0947268688848681,
+        3.2913707785243127
+      ],
+      "per_image_fraction_excess_positive": 0.6136363636363636
+    },
+    "right_middle": {
+      "n_distinct_images": 87,
+      "mean_excess_abs_logit": 1.1734832220521876,
+      "bootstrap95": [
+        0.35637338997230383,
+        2.017519559353588
+      ],
+      "per_image_fraction_excess_positive": 0.5172413793103449
+    }
+  },
+  "writer_metrics": [
+    {
+      "writer": 41,
+      "n": 640,
+      "accuracy": 0.759375,
+      "macro_recall": 0.759375,
+      "0_to_D": 0,
+      "D_to_0": 16,
+      "8_to_B": 1,
+      "B_to_8": 14
+    },
+    {
+      "writer": 42,
+      "n": 640,
+      "accuracy": 0.85625,
+      "macro_recall": 0.85625,
+      "0_to_D": 0,
+      "D_to_0": 11,
+      "8_to_B": 2,
+      "B_to_8": 5
+    },
+    {
+      "writer": 43,
+      "n": 640,
+      "accuracy": 0.7859375,
+      "macro_recall": 0.7859375,
+      "0_to_D": 28,
+      "D_to_0": 1,
+      "8_to_B": 18,
+      "B_to_8": 0
+    },
+    {
+      "writer": 44,
+      "n": 640,
+      "accuracy": 0.8484375,
+      "macro_recall": 0.8484375,
+      "0_to_D": 2,
+      "D_to_0": 1,
+      "8_to_B": 6,
+      "B_to_8": 7
+    }
+  ],
+  "rules": {
+    "B": "Look for within-writer-and-class BH q<0.05, nontrivial effect, across-writer consistency, and threshold robustness before recommending spatial normalization",
+    "A": "Logit/IG and prespecified region ablation show input coordinate relevance only. To claim meaningful stroke topology requires structure-preserving controls. Do not equate signed IG to semantic shape.",
+    "decision": "A/B are not mutually exclusive. If evidence cannot distinguish pathways, report INCONCLUSIVE and extend EXP-CMB-002, not advance."
+  },
+  "environment": {
+    "numpy": "2.3.5",
+    "sklearn": "1.8.0",
+    "scipy": "1.18.1"
+  },
+  "elapsed_seconds": 6.090532754000002,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "new_training_runs": 0,
+  "model_sha_members": {
+    "combined_heldout_41_mlp.joblib": "10b2cc695f7597258ccab3e9c350248cec8f74af1d77e63676cf05d0e78a8538",
+    "combined_heldout_42_mlp.joblib": "c3c16d1d8c9d4232ec78a8c1cdd52c31543c034d8df2cf7a1cad8beec82c76f0",
+    "combined_heldout_43_mlp.joblib": "bd0377ff690ce529ee88e4d747c2942511efb6077ab82e5a94ac963135336ea0",
+    "combined_heldout_44_mlp.joblib": "a8ff1f3601faf4c752af44ced67712b226a94759a8af36be90f560b7d17a78c3",
+    "normal_mlp.joblib": "1b4284ce996c2e25c59a2b89bac02aae923d6c0ccdfd1e204d308c59c8cc3315"
+  }
+}
