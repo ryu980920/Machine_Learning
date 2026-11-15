@@ -1,0 +1,114 @@
+name: Normal Hypothesis A EXP004 Stroke and Width MLP Training
+
+on:
+  push:
+    branches: [exp/normal-a-exp004-stroke-normalization-20261116]
+    paths:
+      - ".github/workflows/mlp-normal-hypA-exp004.yml"
+      - "05_model_optimize/MLP/Normal/scripts/exp_a004_official_mlp.py"
+      - "05_model_optimize/MLP/Normal/scripts/stroke_normalization.py"
+      - "05_model_optimize/MLP/Normal/scripts/width_normalization.py"
+      - "05_model_optimize/MLP/Normal/scripts/exp_a004_aggregate.py"
+      - "05_model_optimize/MLP/Normal/scripts/EXP_A004_requirements.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    name: Train ${{ matrix.condition }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [C0_CoM, C1_Stroke015, C2_Stroke030, C3_GlyphWidth015, C4_Stroke015_GlyphWidth015]
+    steps:
+      - name: Checkout experimental branch with official original TRAIN data
+        uses: actions/checkout@v4
+      - name: Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install verified pinned packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP_A004_requirements.txt
+      - name: Test label-blind transforms before any real learning
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_official_mlp.py --self-test
+      - name: Train 3 seeded MLPs for the selected candidate and evaluate
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          MPLBACKEND: "Agg"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_official_mlp.py \
+            --repo-root . \
+            --out-dir "05_model_optimize/MLP/Normal/results/Stroke_Normalization/${{ matrix.condition }}" \
+            --condition "${{ matrix.condition }}" --seeds 42 43 44 --max-iter 200
+      - name: Archive actual output (models, all predictions, metrics and real input images)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: normal-a004-${{ matrix.condition }}
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization/${{ matrix.condition }}/
+          if-no-files-found: warn
+          retention-days: 30
+
+  summarize:
+    name: Compare all five methods and verify 80/85/97.30 gate
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact experimental branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Download full experiment artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: normal-a004-*
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization/
+          merge-multiple: false
+      - name: Compute seeded summaries and strict gate
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_aggregate.py \
+            --root 05_model_optimize/MLP/Normal/results/Stroke_Normalization
+      - name: Archive combined review evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypA-EXP004-complete-review
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization/
+          retention-days: 30
+      - name: Commit only review metrics and genuine example images to experiment branch
+        if: success() && github.ref == 'refs/heads/exp/normal-a-exp004-stroke-normalization-20261116'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cd 05_model_optimize/MLP/Normal/results/Stroke_Normalization/
+          git add SUMMARY.md run_index.json pass_by_seed.csv method_summary.csv all_pair_errors.csv all_group_metrics.csv
+          for condition in C0_CoM C1_Stroke015 C2_Stroke030 C3_GlyphWidth015 C4_Stroke015_GlyphWidth015; do
+            git add "normal-a004-$condition/group_metrics.csv"
+            git add "normal-a004-$condition/pair_errors.csv"
+            git add "normal-a004-$condition/fit_metrics.csv"
+            git add "normal-a004-$condition/run_manifest.json"
+            git add "normal-a004-$condition/real_handmade_examples.png"
+          done
+          if git diff --staged --quiet; then
+            echo 'No new evidence'
+          else
+            git commit -m "research: save reviewed Normal hypothesis A EXP004 metrics [skip ci]"
+            git push
+          fi
