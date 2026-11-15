@@ -1,0 +1,59 @@
+{
+  "source_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "condition": "C1_Stroke015",
+  "preprocessing": {
+    "condition": "C1_Stroke015",
+    "training_fit_count": 76800,
+    "fit_data": "OfficialTrainOnly",
+    "uses_labels": false,
+    "uses_writer": false,
+    "com_last": true,
+    "topology_guard": true,
+    "stroke": {
+      "strength": 0.15,
+      "threshold": 64,
+      "median": 3.0,
+      "q20": 1.8284271247461903,
+      "q80": 3.0,
+      "n": 76800
+    },
+    "handmade_topology_changes_after_full_transform": 0,
+    "handmade_ink_loss_any": 855,
+    "reference_eval_note": "Handmade is development diagnostic only; neither preprocessing nor model fitted on it."
+  },
+  "model": "MLPClassifier(100 ReLU hidden nodes)",
+  "max_iter": 200,
+  "seeds_planned": [
+    42,
+    43,
+    44
+  ],
+  "seed_results": [
+    {
+      "condition": "C1_Stroke015",
+      "seed": 42,
+      "iteration": 200,
+      "training_loss": 0.0011599081955848117,
+      "fit_seconds": 81.9,
+      "checkpoint_sha256": "d9e93b28a9ec324d0896f31db5da191e3dd784577cc092d1cc06b4efab1eabf7"
+    },
+    {
+      "condition": "C1_Stroke015",
+      "seed": 43,
+      "iteration": 200,
+      "training_loss": 0.0011862936857739786,
+      "fit_seconds": 81.6,
+      "checkpoint_sha256": "3aa31b5bea31c843bd86b1b8b841fdcaf519f020fcfc468e84532d0ab27e8d3f"
+    },
+    {
+      "condition": "C1_Stroke015",
+      "seed": 44,
+      "iteration": 200,
+      "training_loss": 0.00113511421878584,
+      "fit_seconds": 79.9,
+      "checkpoint_sha256": "acb6af2b3df4d8994d36007dcb06fce7d975f6b4ffb043c2a8091c189b861a64"
+    }
+  ],
+  "official_original_test_used": false,
+  "professor_test_used": false
+}
