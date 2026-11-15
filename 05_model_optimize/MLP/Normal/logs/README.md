@@ -11,6 +11,5 @@
 
 - **[EXP유003 — Spatial Distribution & MLP Response](EXP유003_Spatial_Response.md)**: 공식 Training/Validation과 개발용 Hand-made의 중심·크기 분포 차이 및 예측·은닉층 반응을 고정 모델로 분석. **98,560장 특징·130,560건 대응 분석**, 자동 중심 정렬 도입/학습 최적화 미실시.
 
-- **[EXP유004 후속 — CoM 픽셀 판단근거 분석](EXP유004_CoM_판단근거_후속분석.md)**: 모델을 고정하고 이동 전후 평가, 동일 CoM 입력에서 기존/재학습 MLP 비교, 5/F·B/8 IG. 숫자 **+25.69%p**, 문자 **−21.35%p**는 이미지 이동만으로도 발생함을 확인. 실험 4에 통합 기록, 별도 EXP 번호 부여하지 않음.
 
-- **[EXP유004 — Automatic_Centering](EXP유004_Automatic_Centering.md)**: 공식 Training으로 Center of Mass와 Bounding Box 전처리 MLP를 동일 조건 학습하고 공식 Validation/Hand-made 전수 평가. CoM은 Hand-made **62.85→77.11%**, 공식 Validation **97.32→96.92%**, **숫자 개선·문자 악화**를 함께 기록. 정식 연구 결과 배포 완료, **최종 Pipeline 채택 전 검증 필요**.
+- **[EXP유004 — Automatic Centering 및 CoM 판단근거 통합 실험](EXP유004_Automatic_Centering.md)**: 같은 EXP유004에서 Center of Mass/Bounding Box MLP 학습, 공식 Validation/Hand-made 평가와 **기존 고정 모델의 CoM 이동 전후**, **같은 CoM 이미지에서 재학습 가중치 비교**, 5/F·B/8 Signed IG를 모두 기록. CoM MLP Hand-made **62.85→77.11%**; 이동만으로 숫자 **+25.69%p**, 문자 **−21.35%p**. **단일 로그·단일 결과 폴더**, 최종 Pipeline 채택 전 추가 검증 필요.
