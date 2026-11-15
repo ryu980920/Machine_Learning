@@ -1,0 +1,49 @@
+name: EXP004 CoM Pixel Decision Mechanism (review only)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mlp_exp004_com_decision_review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  com-decision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout original Hand-made images and frozen baseline and CoM candidates
+        uses: actions/checkout@v4
+
+      - name: Setup pinned Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install validated scientific stack
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scipy==1.17.0" "scikit-learn==1.8.0" "matplotlib==3.10.7"
+
+      - name: Run controlled input-movement versus retrained-weight decisions and paired signed IG
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/CoM_Decision_Diagnostic.py \
+            --out "$RUNNER_TEMP/normal_mlp_exp004_com_decision_review"
+
+      - name: Save independent analysis without publishing to the repository
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exp004-com-pixel-decision-review
+          path: ${{ runner.temp }}/normal_mlp_exp004_com_decision_review/
+          retention-days: 30
+          if-no-files-found: warn
