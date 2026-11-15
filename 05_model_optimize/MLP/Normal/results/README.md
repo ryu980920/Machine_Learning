@@ -10,4 +10,6 @@
 
 - **[Spatial_Response/](Spatial_Response/README.md)**: EXP유003의 공식/손글씨 **98,560장 특징 CSV.gz**, **130,560행 대응 입력/은닉층 반응 CSV.gz**, 클래스·작성자별 공간 분포, **72개 IG 지도**, 그림 및 원본 메타데이터. *자동 전처리 개발/모델 성능 개선 실험 아님.*
 
+- **[Automatic_Centering/CoM_Decision_Review/](Automatic_Centering/CoM_Decision_Review/README.md)**: EXP유004의 승인된 **후속 통제 분석 원본 9개**. Normal 모델 입력 이동/CoM 모델 재학습 영향 분리, Hand-made 2,560장별 4조건 예측과 숫자·문자 지표, 두 IG 그림, 체크섬·실행 증빙. 신규 모델 학습 및 Test 사용 없음.
+
 - **[Automatic_Centering/](Automatic_Centering/README.md)**: EXP유004의 공식 Validation **19,200장**과 Hand-made **2,560장** 1:1 비교 예측 CSV.gz, **144행 그룹 지표**, Confusion Matrix, 정렬 오차·획손실, 성능 그래프, **Center of Mass / Bounding Box 학습 후보 모델 2개**를 원본 성공 실행 Artifact에서 검증하여 저장. *기본 Normal 모델 교체나 최종 Pipeline 선택은 아직 하지 않음.*
