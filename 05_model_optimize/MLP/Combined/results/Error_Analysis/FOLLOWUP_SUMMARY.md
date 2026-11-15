@@ -34,5 +34,6 @@
 BH q<0.05 among 5 selected strata × 18 features: 6.
 This is **exploratory** even if significant; selected strata arise from baseline errors.
 See targeted_writer_class_tests.csv for all adjusted p-values.
+Direct error-pair versus correct-control threshold checks are in pair_specific_threshold_sensitivity.csv (post-hoc; BH across all checks).
 
 **Limits:** the pixel swaps are matched on 4 exchanges and displacement and preserve histogram, bounding box, thresholded foreground pixel count, with <=0.3px CoM movement. Four-neighbour connectivity is only a morphological proxy. No final causal claim of semantic shape recognition.
