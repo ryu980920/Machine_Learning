@@ -1,0 +1,102 @@
+name: Normal HypA EXP004 Stage2 Stroke and Shape Followup
+
+on:
+  push:
+    branches: [exp/normal-a-exp004-stroke-normalization-20261116]
+    paths:
+      - ".github/workflows/mlp-normal-hypA-exp004-stage2.yml"
+      - "05_model_optimize/MLP/Normal/scripts/exp_a004_followup.py"
+      - "05_model_optimize/MLP/Normal/scripts/exp_a004_aggregate_followup.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stage2:
+    name: Continue EXP004 ${{ matrix.condition }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [C5_Stroke045, C6_Stroke060, C7_MedianWidth035, C8_Stroke030_MedianWidth035, C9_BBoxLongside20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Reuse verified pinned scientific environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP_A004_requirements.txt
+      - name: Test updated geometric normalizers before training
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+        run: python 05_model_optimize/MLP/Normal/scripts/exp_a004_followup.py --self-test
+      - name: Official TRAIN only: 3 seeded MLP fits and heldout validation
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          PYTHONUNBUFFERED: "1"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_followup.py \
+            --repo-root . \
+            --out-dir "05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage2/${{ matrix.condition }}" \
+            --condition "${{ matrix.condition }}" --seeds 42 43 44 --max-iter 200
+      - name: Upload all verified predictions, real images, and models
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-a004-${{ matrix.condition }}
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage2/${{ matrix.condition }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  summarize:
+    needs: stage2
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: normal-a004-*
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage2/
+          merge-multiple: false
+      - name: Apply original EXP004 three-metric criterion to Stage2
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp_a004_aggregate_followup.py \
+            --root 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage2
+      - name: Preserve full Stage2 review Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypA-EXP004-Stage2-complete-review
+          path: 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage2/
+          retention-days: 30
+      - name: Store only measured Stage2 results to experimental branch, not main
+        if: success() && github.ref == 'refs/heads/exp/normal-a-exp004-stroke-normalization-20261116'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cd 05_model_optimize/MLP/Normal/results/Stroke_Normalization_Stage2/
+          git add SUMMARY.md run_index.json pass_by_seed.csv method_summary.csv all_pair_errors.csv all_group_metrics.csv
+          for condition in C5_Stroke045 C6_Stroke060 C7_MedianWidth035 C8_Stroke030_MedianWidth035 C9_BBoxLongside20; do
+            git add "normal-a004-$condition/group_metrics.csv"
+            git add "normal-a004-$condition/pair_errors.csv"
+            git add "normal-a004-$condition/fit_metrics.csv"
+            git add "normal-a004-$condition/run_manifest.json"
+            git add "normal-a004-$condition/real_handmade_examples.png"
+          done
+          if git diff --staged --quiet; then echo 'No new results'; else
+            git commit -m 'research: record EXP004 Stage2 MLP outcomes [skip ci]'
+            git push
+          fi
