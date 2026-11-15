@@ -49,3 +49,9 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 8. **사용자 검토·승인 후** PR을 Ready for review로 전환하고 `main`에 병합한다. 기존 `main`과 변경이 겹치면 충돌부터 해결한다.
 
 **시간 절약 원칙:** 학습은 Actions에서 한 번 실행하고 Artifact를 기준으로 CSV·이미지를 정리한다. CM 색상 변경·결과표 정리는 저장된 OOF 예측으로 다시 생성하고 학습을 재실행하지 않는다. GitHub Actions Run ID, 브랜치, 커밋 SHA 및 Artifact ID를 새 실험일지에 기록한다.
+
+## 후속 분석·가설별 코드 배치
+
+[초기분석 로그](../logs/초기분석/README.md)의 **EXP유002 Error Analysis**와 **EXP유003 Input Sensitivity**는 현재 계획 단계다. 실행 코드는 새 실험 ID로 생성하며, 완료된 [EXP-CMB-001 실행 코드](combined_mlp_writer_cv.py)를 덮어쓰지 않는다. [가설 A](../logs/가설A/README.md)·[가설 B](../logs/가설B/README.md)도 동일한 `scripts/`에서 독립 코드로 관리한다.
+
+각 코드에는 모델/입력 SHA 확인, 작성자 보류 Fold 검증, 공식 Original Test 및 교수님 Test 미사용, 출력 경로와 실행 버전을 기록한다. 변경이 필요 없는 분석은 저장된 OOF·모델에서 수행해 Baseline 학습을 반복하지 않는다.
