@@ -8,7 +8,7 @@
 
 **하나의 EXP유004에 두 검증 단계를 통합:** (1) Center of Mass·Bounding Box 정렬 모델을 공식 Training으로 학습·평가, (2) 기존 Normal MLP를 고정한 CoM 이동 통제 및 동일 CoM 입력에서 재학습 효과·Signed IG 검증. **서로 다른 두 실행을 하나의 연구 로그로 기록**하며 학습 여부를 단계별로 구분한다.
 
-[정렬·모델 학습 코드](../scripts/Automatic_Centering_Experiment.py) · [CoM 판단근거 분석 코드](../scripts/CoM_Decision_Diagnostic.py) · [중심 정렬 Transformer](../scripts/Automatic_Centering_Transformer.py) · [통합 결과 폴더](../results/Automatic_Centering/README.md)
+[정렬·모델 학습 코드](../../scripts/Automatic_Centering_Experiment.py) · [CoM 판단근거 분석 코드](../../scripts/CoM_Decision_Diagnostic.py) · [중심 정렬 Transformer](../../scripts/Automatic_Centering_Transformer.py) · [통합 결과 폴더](../../results/Automatic_Centering/README.md)
 
 ## 1. CM에서 출발한 오차 가설과 선행 연구
 
@@ -17,7 +17,7 @@
 - **EXP유003 — Spatial_Response:** 공식 데이터와 Hand-made의 공간 분포 차이, 같은 이미지의 위치 변화와 오분류/은닉층 반응의 연관성 관찰.
 - **EXP유004의 가설:** 학습과 추론 양쪽에서 이미지별 중심을 무감독·일관된 규칙으로 정렬하면 실제 손글씨 인식의 성능이 개선될 수 있다. **중심을 잘 옮겼다는 사실 자체와 분류 성능 개선은 별도 검증 대상이다.**
 
-[실행 코드](../scripts/Automatic_Centering_Experiment.py) · [중심 정렬 Transformer](../scripts/Automatic_Centering_Transformer.py) · [실제 결과](../results/Automatic_Centering/README.md) · [성공한 GitHub Actions #43638979287](https://github.com/ryu980920/Machine_Learning/actions/runs/43638979287)
+[실행 코드](../../scripts/Automatic_Centering_Experiment.py) · [중심 정렬 Transformer](../../scripts/Automatic_Centering_Transformer.py) · [실제 결과](../../results/Automatic_Centering/README.md) · [성공한 GitHub Actions #43638979287](https://github.com/ryu980920/Machine_Learning/actions/runs/43638979287)
 
 ## 2. 실행 조건 및 통제
 
@@ -52,7 +52,7 @@
 | Hand-made 2,560장 | **Center of Mass** | **1,974** | **77.1094%** | **+14.2578%p** | **0.7704** | **533 / 168** |
 | Hand-made 2,560장 | Bounding Box | 1,577 | 61.6016% | −1.2500%p | 0.6204 | 337 / 369 |
 
-![기존 Normal 및 두 정렬 후보의 공식/Hand-made 정확도](../results/Automatic_Centering/accuracy_comparison.png)
+![기존 Normal 및 두 정렬 후보의 공식/Hand-made 정확도](../../results/Automatic_Centering/accuracy_comparison.png)
 
 - Center of Mass Hand-made의 정답 개수는 기존보다 **365장 증가(533장 교정 − 168장 신규 오류)**했다.
 - Bounding Box는 기존보다 **32장 감소(337장 교정 − 369장 신규 오류)**했다.
@@ -75,7 +75,7 @@
 - 문자 **B: 40.00% → 33.12%**, **C: 95.00% → 83.75%**, **D: 63.12% → 53.12%**, **F: 87.50% → 77.50%**.
 - **5→F 오류 60건 → 12건으로 감소**, **B→8 오류 53건 → 79건으로 증가**. 따라서 숫자 개선이 특정 문자 혼동을 함께 해결한 것은 아니다.
 
-16개 클래스의 전체 Accuracy·Precision·Recall·F1, 작성자별 숫자/문자 성능 및 기존 예측과의 1:1 비교는 [exp004_group_metrics.csv](../results/Automatic_Centering/exp004_group_metrics.csv)와 [exp004_predictions.csv.gz](../results/Automatic_Centering/exp004_predictions.csv.gz)에 남겨두었다.
+16개 클래스의 전체 Accuracy·Precision·Recall·F1, 작성자별 숫자/문자 성능 및 기존 예측과의 1:1 비교는 [exp004_group_metrics.csv](../../results/Automatic_Centering/exp004_group_metrics.csv)와 [exp004_predictions.csv.gz](../../results/Automatic_Centering/exp004_predictions.csv.gz)에 남겨두었다.
 
 ## 5. 중심 정렬의 정확성과 획 정보 손실
 
@@ -108,7 +108,7 @@
 - 기존 확정 Normal·CoM Pipeline의 가중치 **재학습하지 않음**, 기존 EXP유004의 2,560장 원본 예측을 **전수 일치 검증**.
 - CoM 목표좌표 **(13.5,13.5)**, 밝기 임계값 **32**, 정수 픽셀 병진 이동, 보간 없음.
 - **공식 Original Test 16,000장과 교수님 Test 모두 미사용.** Hand-made 데이터 학습·전처리 하이퍼파라미터 탐색 미실시.
-- 예측 비교 결과는 [four_way_predictions.csv](../results/Automatic_Centering/four_way_predictions.csv)에 같은 이미지별로 4조건을 나란히 저장했다.
+- 예측 비교 결과는 [four_way_predictions.csv](../../results/Automatic_Centering/four_way_predictions.csv)에 같은 이미지별로 4조건을 나란히 저장했다.
 
 | Hand-made | ① Normal/raw | ② Normal/CoM: 이동만 | ③ CoMModel/CoM: 이동+재학습 |
 |---|---:|---:|---:|
@@ -150,7 +150,7 @@ Hand-made **작성자 42, 이미지 #501**. 실제 이동량 **X +3px, Y +1px**.
 | 기존 Normal MLP + CoM 이미지 | **5 (정답)** | +28.35 |
 | CoM 학습 MLP + 같은 CoM 이미지 | **5 (정답)** | +19.11 |
 
-![5→F 오류 교정 실제 입력과 Signed IG](../results/Automatic_Centering/IG_5_wrong_F_to_5.png)
+![5→F 오류 교정 실제 입력과 Signed IG](../../results/Automatic_Centering/IG_5_wrong_F_to_5.png)
 
 ### 7.2 문자 B→8 신규 오류가 발생한 경우
 
@@ -162,7 +162,7 @@ Hand-made **작성자 44, 이미지 #155**. 실제 이동량 **X +2px, Y 0px**.
 | 기존 Normal MLP + CoM 이미지 | **8 (오답)** | −9.54 |
 | CoM 학습 MLP + 같은 CoM 이미지 | **8 (오답)** | −2.63 |
 
-![B→8 신규 오답 실제 입력과 Signed IG](../results/Automatic_Centering/IG_B_correct_to_wrong_8.png)
+![B→8 신규 오답 실제 입력과 Signed IG](../../results/Automatic_Centering/IG_B_correct_to_wrong_8.png)
 
 실제 **5→F 교정 유형 37장**, **B→8 신규 오답 유형 14장**을 확인했고, 작성자를 분산하여 대표 샘플의 Signed IG를 계산했다. 선택한 사례의 로그잇 변화와 IG를 전체 오류의 유일한 원인이라고 일반화하지 않는다.
 
@@ -193,11 +193,11 @@ Hand-made **작성자 44, 이미지 #155**. 실제 이동량 **X +2px, Y 0px**.
 
 ## 9. 원본 산출물과 재현 근거
 
-- **통합 결과:** [results/Automatic_Centering/README.md](../results/Automatic_Centering/README.md) — 두 단계의 실측 **19개 원본 파일**을 단일 폴더에 보관. 충돌하는 `SUMMARY.md`와 `metadata.json`은 2단계 것만 `CoM_Decision_SUMMARY.md`와 `CoM_Decision_metadata.json`로 이름을 바꾸고 **바이트 내용과 SHA-256은 그대로 보존**했다.
-- **1단계 정렬 학습·평가:** [GitHub Actions #43638979287](https://github.com/ryu980920/Machine_Learning/actions/runs/43638979287) · Artifact **14131562043**. [학습 코드](../scripts/Automatic_Centering_Experiment.py), [Transformer](../scripts/Automatic_Centering_Transformer.py).
-- **2단계 기존 가중치 고정·IG:** [GitHub Actions #43686466736](https://github.com/ryu980920/Machine_Learning/actions/runs/43686466736) · Artifact **14150383005**. [분석 코드](../scripts/CoM_Decision_Diagnostic.py).
-- **1단계 21,760개 대응 예측:** [exp004_predictions.csv.gz](../results/Automatic_Centering/exp004_predictions.csv.gz), [그룹 지표](../results/Automatic_Centering/exp004_group_metrics.csv), [Confusion Matrix](../results/Automatic_Centering/exp004_confusions.csv).
-- **2단계 2,560장 × 4조건:** [four_way_predictions.csv](../results/Automatic_Centering/four_way_predictions.csv), [정확도](../results/Automatic_Centering/four_way_summary.csv), [교정·신규오류](../results/Automatic_Centering/contrasts.csv), [Signed IG](../results/Automatic_Centering/selected_ig_diagnostics.csv), [5/F](../results/Automatic_Centering/IG_5_wrong_F_to_5.png)·[B/8](../results/Automatic_Centering/IG_B_correct_to_wrong_8.png).
+- **통합 결과:** [results/Automatic_Centering/README.md](../../results/Automatic_Centering/README.md) — 두 단계의 실측 **19개 원본 파일**을 단일 폴더에 보관. 충돌하는 `SUMMARY.md`와 `metadata.json`은 2단계 것만 `CoM_Decision_SUMMARY.md`와 `CoM_Decision_metadata.json`로 이름을 바꾸고 **바이트 내용과 SHA-256은 그대로 보존**했다.
+- **1단계 정렬 학습·평가:** [GitHub Actions #43638979287](https://github.com/ryu980920/Machine_Learning/actions/runs/43638979287) · Artifact **14131562043**. [학습 코드](../../scripts/Automatic_Centering_Experiment.py), [Transformer](../../scripts/Automatic_Centering_Transformer.py).
+- **2단계 기존 가중치 고정·IG:** [GitHub Actions #43686466736](https://github.com/ryu980920/Machine_Learning/actions/runs/43686466736) · Artifact **14150383005**. [분석 코드](../../scripts/CoM_Decision_Diagnostic.py).
+- **1단계 21,760개 대응 예측:** [exp004_predictions.csv.gz](../../results/Automatic_Centering/exp004_predictions.csv.gz), [그룹 지표](../../results/Automatic_Centering/exp004_group_metrics.csv), [Confusion Matrix](../../results/Automatic_Centering/exp004_confusions.csv).
+- **2단계 2,560장 × 4조건:** [four_way_predictions.csv](../../results/Automatic_Centering/four_way_predictions.csv), [정확도](../../results/Automatic_Centering/four_way_summary.csv), [교정·신규오류](../../results/Automatic_Centering/contrasts.csv), [Signed IG](../../results/Automatic_Centering/selected_ig_diagnostics.csv), [5/F](../../results/Automatic_Centering/IG_5_wrong_F_to_5.png)·[B/8](../../results/Automatic_Centering/IG_B_correct_to_wrong_8.png).
 - **원본 모델 SHA-256:** Normal `9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a`, CoM `3c1aac362d75ff5c4d9652188c1c4fd97524525f5409ec00d5a6c56fa3ad27ef`.
 - **조건:** Python 3.13.18 · NumPy 2.3.5 · SciPy 1.17.0 · scikit-learn 1.8.0 · matplotlib 3.10.7. 저장된 joblib은 신뢰 가능한 파일만 불러오며, 기존 검증 환경에서 원본 경로로 실행한다.
 

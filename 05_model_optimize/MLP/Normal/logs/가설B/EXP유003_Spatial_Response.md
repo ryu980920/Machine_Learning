@@ -9,9 +9,9 @@
 | 실험 ID / 실시일 | **EXP유003 (MLP / Normal)** · 2026-11-15 KST |
 | 단계 | **공간 분포 및 MLP 내부 반응 분석 (진단 완료)** |
 | 담당 | 유용성 / 분석·검증·문서화 AI 보조 |
-| 선행 실험 | [EXP유001 — Pixcel_Attribution](EXP유001_Pixcel_Attribution.md) → [EXP유002 — Input_Sensitivity](EXP유002_Input_Sensitivity.md) |
-| 코드 | [Spatial_Response_Analysis.py](../scripts/Spatial_Response_Analysis.py) |
-| 결과 원본 | [results/Spatial_Response/](../results/Spatial_Response/README.md) |
+| 선행 실험 | [EXP유001 — Pixcel_Attribution](../초기분석/EXP유001_Pixcel_Attribution.md) → [EXP유002 — Input_Sensitivity](../초기분석/EXP유002_Input_Sensitivity.md) |
+| 코드 | [Spatial_Response_Analysis.py](../../scripts/Spatial_Response_Analysis.py) |
+| 결과 원본 | [results/Spatial_Response/](../../results/Spatial_Response/README.md) |
 | 검증 실행 | [GitHub Actions #43634701305 (success)](https://github.com/ryu980920/Machine_Learning/actions/runs/43634701305), Artifact: \`normal-mlp-exp003-spatial-response-review\` |
 | 범위 | **분포·오류와의 연관성·기존 고정 MLP 내부 활성화와 IG 비교**만 수행. **자동 정렬 도입/모델 최적화 미실시** |
 
@@ -27,7 +27,7 @@
 
 | 구분 | 실제 적용 |
 |---|---|
-| 모델 | EXP유002의 [저장된 Normal MLP 체크포인트](../results/Input_Sensitivity/normal_mlp_refit_stage3.joblib) **그대로 로드**, **재학습 0회** |
+| 모델 | EXP유002의 [저장된 Normal MLP 체크포인트](../../results/Input_Sensitivity/normal_mlp_refit_stage3.joblib) **그대로 로드**, **재학습 0회** |
 | 체크포인트 SHA-256 | \`9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a\` |
 | 공식 NPZ SHA-256 | \`0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879\` |
 | 공식 Train | **76,800장**, 원본 72,521장 / 증강 4,279장 — 분리 분석 |
@@ -71,9 +71,9 @@
 
 가로·위치 차이가 16개 클래스에 일률적으로 동일하지 않다. 특히 **B의 너비 차이 8px**은 B→8 오분류와 연결해 추가 조사할 가치가 있다. 임계값 32·64·128로 계산했을 때도 모든 원본 이미지가 유효한 글자 영역을 가지고 있었으며, 주요 차이 방향의 안정성을 확인했다.
 
-![클래스별 중심 X·너비 중앙값 차이](../results/Spatial_Response/per_class_spatial_difference.png)
+![클래스별 중심 X·너비 중앙값 차이](../../results/Spatial_Response/per_class_spatial_difference.png)
 
-![글자 중심 위치 비교](../results/Spatial_Response/center_scatter.png)
+![글자 중심 위치 비교](../../results/Spatial_Response/center_scatter.png)
 
 ## 4. 실제 결과 B — 공간 분포와 교정의 연관성
 
@@ -107,9 +107,9 @@
 
 대표 18개 이미지에 대해 **동일한 고정 경쟁 클래스 기준**으로 IG를 계산하였고, 최대 절댓값 completeness residual은 **약 0.100**이었다. 배경 0픽셀의 기여도가 0인 것은 검은 기준 이미지 선택의 영향도 있으므로, 기여도 분포가 *형태 학습의 인과적 증거*라고 해석하지 않는다.
 
-![실제 이미지의 이동·축소 전후 IG](../results/Spatial_Response/focus_ig_grids/focus_01.png)
+![실제 이미지의 이동·축소 전후 IG](../../results/Spatial_Response/focus_ig_grids/focus_01.png)
 
-전체 5개 IG 비교 이미지는 [focus_ig_grids/](../results/Spatial_Response/focus_ig_grids/)에 있다.
+전체 5개 IG 비교 이미지는 [focus_ig_grids/](../../results/Spatial_Response/focus_ig_grids/)에 있다.
 
 ## 6. 판단과 다음 연구
 
@@ -131,11 +131,11 @@
 
 ## 7. 원본 결과·재현 근거
 
-- [기하학적 특징 98,560행](../results/Spatial_Response/all_image_geometry.csv.gz) · [공식/손글씨 요약 153행](../results/Spatial_Response/geometry_distribution_summary.csv)
-- [클래스·작성자별 차이 96행](../results/Spatial_Response/per_class_geometry_differences.csv) · [공식 클래스 참조값](../results/Spatial_Response/official_class_references.csv)
-- [변형 전후 전수 결과 130,560행](../results/Spatial_Response/paired_geometry_model_response.csv.gz) · [조건별 요약](../results/Spatial_Response/spatial_response_summary.csv)
-- [공간거리와 교정·악화](../results/Spatial_Response/geometry_proximity_vs_outcome.csv) · [클래스/작성자 내 분리 1,777행](../results/Spatial_Response/geometry_proximity_by_writer_class.csv)
-- [은닉층 반응 636행](../results/Spatial_Response/focus_hidden_responses.csv) · [IG 72행](../results/Spatial_Response/focus_ig_completeness.csv) · [IG 배열](../results/Spatial_Response/focus_ig_maps.npz)
-- [검증 메타데이터](../results/Spatial_Response/run_metadata.json) · [실행 요약](../results/Spatial_Response/SUMMARY.md)
-- [재현 코드](../scripts/Spatial_Response_Analysis.py) · [Actions 워크플로](../../../../.github/workflows/mlp_spatial_response_stage4.yml)
+- [기하학적 특징 98,560행](../../results/Spatial_Response/all_image_geometry.csv.gz) · [공식/손글씨 요약 153행](../../results/Spatial_Response/geometry_distribution_summary.csv)
+- [클래스·작성자별 차이 96행](../../results/Spatial_Response/per_class_geometry_differences.csv) · [공식 클래스 참조값](../../results/Spatial_Response/official_class_references.csv)
+- [변형 전후 전수 결과 130,560행](../../results/Spatial_Response/paired_geometry_model_response.csv.gz) · [조건별 요약](../../results/Spatial_Response/spatial_response_summary.csv)
+- [공간거리와 교정·악화](../../results/Spatial_Response/geometry_proximity_vs_outcome.csv) · [클래스/작성자 내 분리 1,777행](../../results/Spatial_Response/geometry_proximity_by_writer_class.csv)
+- [은닉층 반응 636행](../../results/Spatial_Response/focus_hidden_responses.csv) · [IG 72행](../../results/Spatial_Response/focus_ig_completeness.csv) · [IG 배열](../../results/Spatial_Response/focus_ig_maps.npz)
+- [검증 메타데이터](../../results/Spatial_Response/run_metadata.json) · [실행 요약](../../results/Spatial_Response/SUMMARY.md)
+- [재현 코드](../../scripts/Spatial_Response_Analysis.py) · [Actions 워크플로](../../../../../.github/workflows/mlp_spatial_response_stage4.yml)
 - [GitHub Actions 성공 원본 실행 #43634701305](https://github.com/ryu980920/Machine_Learning/actions/runs/43634701305), 원본 Artifact \`normal-mlp-exp003-spatial-response-review\`.

@@ -2,7 +2,7 @@
 
 **실제 성공 실행의 원본 산출물:** [GitHub Actions #43634701305](https://github.com/ryu980920/Machine_Learning/actions/runs/43634701305), Artifact \`normal-mlp-exp003-spatial-response-review\`. 현재 폴더의 수치는 성공한 실행 산출물에 근거한다. EXP유001·002의 기존 결과는 유지한다.
 
-- [실험 로그 — EXP유003_Spatial_Response.md](../../logs/EXP유003_Spatial_Response.md)
+- [실험 로그 — EXP유003_Spatial_Response.md](../../logs/가설B/EXP유003_Spatial_Response.md)
 - [분석 코드 — Spatial_Response_Analysis.py](../../scripts/Spatial_Response_Analysis.py)
 - [재현용 GitHub Actions 수동 실행](../../../../../.github/workflows/mlp_spatial_response_stage4.yml)
 

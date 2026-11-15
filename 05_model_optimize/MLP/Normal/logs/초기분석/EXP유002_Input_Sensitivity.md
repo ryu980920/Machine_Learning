@@ -10,8 +10,8 @@
 | 담당 | 유용성 / 실험 실행·자료 검토 및 문서화 AI 보조 |
 | 단계 및 상태 | **3단계 입력 단일 변수 민감도 실험 완료 / 개선 모델 개발은 미실시** |
 | 이전 실험 | [EXP유001 — Pixcel_Attribution (1·2단계)](EXP유001_Pixcel_Attribution.md) |
-| 실행 코드 | [Input_Sensitivity.py](../scripts/Input_Sensitivity.py) |
-| 실측 결과 | [results/Input_Sensitivity/](../results/Input_Sensitivity/README.md) |
+| 실행 코드 | [Input_Sensitivity.py](../../scripts/Input_Sensitivity.py) |
+| 실측 결과 | [results/Input_Sensitivity/](../../results/Input_Sensitivity/README.md) |
 | GitHub Actions | [성공 실행 #43629898144](https://github.com/ryu980920/Machine_Learning/actions/runs/43629898144); 결과 Artifact: `normal-mlp-input-sensitivity-stage3` |
 | 실행 환경 | GitHub Actions Ubuntu, Python 3.13.18 / NumPy 2.3.5 / SciPy 1.17.0 / scikit-learn 1.8.0 / matplotlib 3.10.7 |
 
@@ -28,7 +28,7 @@
 
 | 설정 | 적용 내용 |
 |---|---|
-| 모델 | [기존 `MLPClassifier(random_state=42)`](../../../../03_experiments/model_optimization/mlp.py), 기본 은닉층 100개·ReLU·Adam, `PixelScaler255`로 입력 /255 |
+| 모델 | [기존 `MLPClassifier(random_state=42)`](../../../../../03_experiments/model_optimization/mlp.py), 기본 은닉층 100개·ReLU·Adam, `PixelScaler255`로 입력 /255 |
 | 학습 | 공식 NPZ의 `X_train`에서 `StratifiedGroupKFold(5,shuffle=True,random_state=42)` 첫 Fold **76,800장**만 재학습 |
 | 평가 | 공식 **Validation 19,200장** + 현재 손글씨 **41·42·43·44번 각 640장=2,560장**. 손글씨는 학습에 편입하지 않음 |
 | 데이터 SHA-256 | 공식 NPZ: `0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879`; 손글씨는 [EXP유001 원본 해시](EXP유001_Pixcel_Attribution.md)와 코드에서 검증 |
@@ -130,19 +130,19 @@
 | **8→B** | 41 | **20** | **7** |
 | **0→D** | 47 | **32** | **28** |
 
-혼동쌍의 감소는 **일부가 다른 오답으로 이동한 경우를 포함**하므로, 감소 건수를 곧바로 교정 건수로 해석하지 않는다. 상세 결과는 [stage3_error_pairs.csv](../results/Input_Sensitivity/stage3_error_pairs.csv)에서 원래 혼동쌍의 교정 수·그대로 오분류·다른 오답 전환을 구분하여 확인한다.
+혼동쌍의 감소는 **일부가 다른 오답으로 이동한 경우를 포함**하므로, 감소 건수를 곧바로 교정 건수로 해석하지 않는다. 상세 결과는 [stage3_error_pairs.csv](../../results/Input_Sensitivity/stage3_error_pairs.csv)에서 원래 혼동쌍의 교정 수·그대로 오분류·다른 오답 전환을 구분하여 확인한다.
 
-![입력 변형의 실제 대표 이미지](../results/Input_Sensitivity/stage3_example_grid.png)
+![입력 변형의 실제 대표 이미지](../../results/Input_Sensitivity/stage3_example_grid.png)
 
-![오분류 대표 이미지의 원본·변형별 확률](../results/Input_Sensitivity/stage3_probability_curves.png)
+![오분류 대표 이미지의 원본·변형별 확률](../../results/Input_Sensitivity/stage3_probability_curves.png)
 
 **변형별 실측 그래프(원본 CSV에서 재생성):**
 
-![공식/손글씨 변형 조건별 정확도 변화](../results/Input_Sensitivity/STAGE3_Accuracy_Change_Comparison.png)
+![공식/손글씨 변형 조건별 정확도 변화](../../results/Input_Sensitivity/STAGE3_Accuracy_Change_Comparison.png)
 
-![숫자와 문자의 반대 방향 정확도 변화](../results/Input_Sensitivity/STAGE3_Digit_Letter_Tradeoff.png)
+![숫자와 문자의 반대 방향 정확도 변화](../../results/Input_Sensitivity/STAGE3_Digit_Letter_Tradeoff.png)
 
-![손글씨 작성자별 민감도](../results/Input_Sensitivity/STAGE3_Per_Writer.png)
+![손글씨 작성자별 민감도](../../results/Input_Sensitivity/STAGE3_Per_Writer.png)
 
 
 ## 5. 판단과 다음 실험
@@ -157,16 +157,16 @@
 
 | 파일 | 내용 |
 |---|---|
-| [Input_Sensitivity.py](../scripts/Input_Sensitivity.py) | 학습·변형·정량평가 원본 실행 코드 |
-| [stage3_sensitivity_summary.csv](../results/Input_Sensitivity/stage3_sensitivity_summary.csv) | 전체 2데이터×21조건 지표 |
-| [stage3_per_class.csv](../results/Input_Sensitivity/stage3_per_class.csv) | 16클래스×2데이터×21조건 |
-| [stage3_per_writer.csv](../results/Input_Sensitivity/stage3_per_writer.csv) | 4명×21조건 |
-| [stage3_error_pairs.csv](../results/Input_Sensitivity/stage3_error_pairs.csv) | 주요 혼동쌍 13개×2데이터×21조건 |
-| [stage3_focus_106.csv](../results/Input_Sensitivity/stage3_focus_106.csv) | 선정된 106장, 21조건의 이미지별 확률·예측 |
-| [stage3_predictions.csv.gz](../results/Input_Sensitivity/stage3_predictions.csv.gz) | 총 **456,960행** 예측 상세 내역 (gzip 압축 CSV) |
-| [stage3_run_metadata.json](../results/Input_Sensitivity/stage3_run_metadata.json) | 해시·실행환경·조건·재현 검증 |
-| [normal_mlp_refit_stage3.joblib](../results/Input_Sensitivity/normal_mlp_refit_stage3.joblib) | 3단계에 사용한 가중치 체크포인트 |
-| [stage3_example_grid.png](../results/Input_Sensitivity/stage3_example_grid.png), [stage3_probability_curves.png](../results/Input_Sensitivity/stage3_probability_curves.png) | 실제 변형 이미지·확률 비교 |
-| [SUMMARY.md](../results/Input_Sensitivity/SUMMARY.md) | 실행 스크립트 자동 생성 요약 |
+| [Input_Sensitivity.py](../../scripts/Input_Sensitivity.py) | 학습·변형·정량평가 원본 실행 코드 |
+| [stage3_sensitivity_summary.csv](../../results/Input_Sensitivity/stage3_sensitivity_summary.csv) | 전체 2데이터×21조건 지표 |
+| [stage3_per_class.csv](../../results/Input_Sensitivity/stage3_per_class.csv) | 16클래스×2데이터×21조건 |
+| [stage3_per_writer.csv](../../results/Input_Sensitivity/stage3_per_writer.csv) | 4명×21조건 |
+| [stage3_error_pairs.csv](../../results/Input_Sensitivity/stage3_error_pairs.csv) | 주요 혼동쌍 13개×2데이터×21조건 |
+| [stage3_focus_106.csv](../../results/Input_Sensitivity/stage3_focus_106.csv) | 선정된 106장, 21조건의 이미지별 확률·예측 |
+| [stage3_predictions.csv.gz](../../results/Input_Sensitivity/stage3_predictions.csv.gz) | 총 **456,960행** 예측 상세 내역 (gzip 압축 CSV) |
+| [stage3_run_metadata.json](../../results/Input_Sensitivity/stage3_run_metadata.json) | 해시·실행환경·조건·재현 검증 |
+| [normal_mlp_refit_stage3.joblib](../../results/Input_Sensitivity/normal_mlp_refit_stage3.joblib) | 3단계에 사용한 가중치 체크포인트 |
+| [stage3_example_grid.png](../../results/Input_Sensitivity/stage3_example_grid.png), [stage3_probability_curves.png](../../results/Input_Sensitivity/stage3_probability_curves.png) | 실제 변형 이미지·확률 비교 |
+| [SUMMARY.md](../../results/Input_Sensitivity/SUMMARY.md) | 실행 스크립트 자동 생성 요약 |
 
 **아카이브 출처:** [GitHub Actions #43629898144](https://github.com/ryu980920/Machine_Learning/actions/runs/43629898144)의 `normal-mlp-input-sensitivity-stage3` Artifact. 모든 지표는 **해당 성공 실행의 원본 CSV**에서 기록했다.

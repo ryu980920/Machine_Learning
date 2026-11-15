@@ -2,7 +2,7 @@
 
 **연구 원본 19개 파일을 이 폴더 한 곳에 보관한다.** Center of Mass/Bounding Box 정렬 학습·평가(1단계), CoM 이동 자체와 재학습 효과의 분리·픽셀 기여도(2단계)는 **모두 하나의 실험 EXP유004**에 속한다.
 
-[**단일 통합 실험 로그**](../../logs/EXP유004_Automatic_Centering.md) · [중심 정렬 실험 코드](../../scripts/Automatic_Centering_Experiment.py) · [CoM 픽셀 판단 분석 코드](../../scripts/CoM_Decision_Diagnostic.py) · [정렬 Transformer](../../scripts/Automatic_Centering_Transformer.py)
+[**단일 통합 실험 로그**](../../logs/가설B/EXP유004_Automatic_Centering.md) · [중심 정렬 실험 코드](../../scripts/Automatic_Centering_Experiment.py) · [CoM 픽셀 판단 분석 코드](../../scripts/CoM_Decision_Diagnostic.py) · [정렬 Transformer](../../scripts/Automatic_Centering_Transformer.py)
 
 ## 1. 실측 결과의 핵심
 

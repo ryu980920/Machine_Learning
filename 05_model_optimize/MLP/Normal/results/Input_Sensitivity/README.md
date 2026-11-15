@@ -2,7 +2,7 @@
 
 **실험 범위:** 입력 위치(8)·밝기(4)·획 굵기(4)·크기(4) 총 20개 변형 + 원본(1). 고정된 MLP Baseline에 **공식 Validation 19,200장과 개발용 Hand-made 2,560장**을 적용하여 전체 **456,960행** 예측하였다. **공식 Test 및 Hand-made Training 미사용**, 모델 개선/튜닝이 아닌 민감도 진단.
 
-- [실험 로그 — EXP유002_Input_Sensitivity.md](../../logs/EXP유002_Input_Sensitivity.md)
+- [실험 로그 — EXP유002_Input_Sensitivity.md](../../logs/초기분석/EXP유002_Input_Sensitivity.md)
 - [실험 원본 코드 — Input_Sensitivity.py](../../scripts/Input_Sensitivity.py)
 - [정량 비교 그래프 재생성 코드](../../scripts/plot_input_sensitivity.py)
 - [성공한 GitHub Actions 실행 #43629898144](https://github.com/ryu980920/Machine_Learning/actions/runs/43629898144) — 2026-11-15 KST; `normal-mlp-input-sensitivity-stage3` Artifact

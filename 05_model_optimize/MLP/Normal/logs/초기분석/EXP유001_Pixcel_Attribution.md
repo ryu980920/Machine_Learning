@@ -9,10 +9,10 @@
 | ID / 수행일 | **EXP유001 (MLP / Normal)** / 2026-11-15 |
 | 담당 | 유용성 / 코드 실행·결과 검증 및 문서화 AI 보조 |
 | 상태 | **1단계 표본 추출 + 2단계 픽셀 기여도 분석 완료** |
-| 코드 | [Pixcel_Attribution.py](../scripts/Pixcel_Attribution.py) |
-| 결과 | [results/Pixcel_Attribution/](../results/Pixcel_Attribution/README.md) |
-| 실행 근거 | [GitHub Actions 성공 실행 #43624586601](https://github.com/ryu980920/Machine_Learning/actions/runs/43624586601) (초기 동일 분석 로직); [현재 재현 워크플로](../../../../.github/workflows/mlp_pixcel_attribution.yml) |
-| 선행 자료 | [W02 Normal Baseline](../../../../03_experiments/W02_2026-11-09_11-15/logs/EXP유002_5개모델_Normal_Baseline.md), [W02 Hand-made 평가](../../../../03_experiments/W02_2026-11-09_11-15/logs/EXP유003_Handmade_방향보정_성능평가.md) |
+| 코드 | [Pixcel_Attribution.py](../../scripts/Pixcel_Attribution.py) |
+| 결과 | [results/Pixcel_Attribution/](../../results/Pixcel_Attribution/README.md) |
+| 실행 근거 | [GitHub Actions 성공 실행 #43624586601](https://github.com/ryu980920/Machine_Learning/actions/runs/43624586601) (초기 동일 분석 로직); [현재 재현 워크플로](../../../../../.github/workflows/mlp_pixcel_attribution.yml) |
+| 선행 자료 | [W02 Normal Baseline](../../../../../03_experiments/W02_2026-11-09_11-15/logs/EXP유002_5개모델_Normal_Baseline.md), [W02 Hand-made 평가](../../../../../03_experiments/W02_2026-11-09_11-15/logs/EXP유003_Handmade_방향보정_성능평가.md) |
 
 ## 1. 문제 발견과 원인 가설
 
@@ -28,7 +28,7 @@
 
 | 요소 | 이번 실험에서 실제 적용한 조건 |
 |---|---|
-| 모델 | 기존 [MLP Baseline 정의](../../../../03_experiments/model_optimization/mlp.py) 그대로: `MLPClassifier(random_state=42)`, 은닉층 100개/ReLU, Adam, `alpha=0.0001`, `max_iter=200` |
+| 모델 | 기존 [MLP Baseline 정의](../../../../../03_experiments/model_optimization/mlp.py) 그대로: `MLPClassifier(random_state=42)`, 은닉층 100개/ReLU, Adam, `alpha=0.0001`, `max_iter=200` |
 | 입력 | 28×28 Grayscale → 784차원 `float32`, 기존 `PixelScaler255`로 **/255** |
 | 데이터 | `02_data/datasets/MNIST_EMNIST_official_split_112000.npz` / SHA-256: `0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879` |
 | 데이터 분할 | 공식 `X_train` 96,000장 내부에서 `StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)` 첫 Fold → **Train 76,800장 / Validation 19,200장** |
@@ -58,7 +58,7 @@ python 05_model_optimize/MLP/Normal/scripts/Pixcel_Attribution.py \
 | Hand-made | **12** | **44** | **56** |
 | **합계** | **24** | **74** | **98** |
 
-각 샘플의 정답·예측·작성자/인덱스·정답 확률·예측 확률은 [selected_cases.csv](../results/Pixcel_Attribution/selected_cases.csv)에 기록했다. 원본 이미지와 기여도 배열은 [selected_pixels_and_IG.npz](../results/Pixcel_Attribution/selected_pixels_and_IG.npz)에 같은 순서로 저장했다.
+각 샘플의 정답·예측·작성자/인덱스·정답 확률·예측 확률은 [selected_cases.csv](../../results/Pixcel_Attribution/selected_cases.csv)에 기록했다. 원본 이미지와 기여도 배열은 [selected_pixels_and_IG.npz](../../results/Pixcel_Attribution/selected_pixels_and_IG.npz)에 같은 순서로 저장했다.
 
 **표본 선택의 한계:** 오류 쌍을 의도적으로 선정한 98장이므로, 이 표본의 예측 확률 분포가 전체 Validation 또는 Hand-made 모집단을 대표하지 않는다.
 
@@ -96,11 +96,11 @@ python 05_model_optimize/MLP/Normal/scripts/Pixcel_Attribution.py \
 
 선별된 **Hand-made 오분류 44장 중 31장**, 공식 오분류 **30장 중 19장**에서 잘못 예측한 클래스에 90% 이상 확률을 부여했다. 이는 **선별 표본에 대한 관찰**이며 전체 오류 비율이나 모델 전체의 확률 보정 상태를 의미하지 않는다.
 
-![Hand-made 주요 오분류와 픽셀 기여도](../results/Pixcel_Attribution/MLP_Pixcel_Attribution_handmade_examples.png)
+![Hand-made 주요 오분류와 픽셀 기여도](../../results/Pixcel_Attribution/MLP_Pixcel_Attribution_handmade_examples.png)
 
-![공식 Validation 및 Hand-made 주요 사례 비교](../results/Pixcel_Attribution/MLP_Pixcel_Attribution_6_examples.png)
+![공식 Validation 및 Hand-made 주요 사례 비교](../../results/Pixcel_Attribution/MLP_Pixcel_Attribution_6_examples.png)
 
-전체 98장 상세 그림은 [review_grids/](../results/Pixcel_Attribution/review_grids/)에, 수치 및 예측 결과는 [results/Pixcel_Attribution](../results/Pixcel_Attribution/README.md)에 보관한다.
+전체 98장 상세 그림은 [review_grids/](../../results/Pixcel_Attribution/review_grids/)에, 수치 및 예측 결과는 [results/Pixcel_Attribution](../../results/Pixcel_Attribution/README.md)에 보관한다.
 
 ## 5. 해석·판정 및 후속 실험
 
@@ -111,9 +111,9 @@ python 05_model_optimize/MLP/Normal/scripts/Pixcel_Attribution.py \
 
 ### 산출물과 재현 근거
 
-- [selected_cases.csv](../results/Pixcel_Attribution/selected_cases.csv) — 원본 인덱스·예측·확률·IG 수치
-- [handmade_all_predictions.csv](../results/Pixcel_Attribution/handmade_all_predictions.csv) — 2,560장 재검증
-- [run_metadata.json](../results/Pixcel_Attribution/run_metadata.json) — 버전·해시·재현 검증 및 IG 적분 잔차
-- [selected_pixels_and_IG.npz](../results/Pixcel_Attribution/selected_pixels_and_IG.npz) — 입력/IG 원본 수치
-- [review_grids/](../results/Pixcel_Attribution/review_grids/) — 원본·Signed IG·Absolute IG 이미지 비교
-- [Pixcel_Attribution.py](../scripts/Pixcel_Attribution.py) · [GitHub Actions](../../../../.github/workflows/mlp_pixcel_attribution.yml) — 독립 재현 코드
+- [selected_cases.csv](../../results/Pixcel_Attribution/selected_cases.csv) — 원본 인덱스·예측·확률·IG 수치
+- [handmade_all_predictions.csv](../../results/Pixcel_Attribution/handmade_all_predictions.csv) — 2,560장 재검증
+- [run_metadata.json](../../results/Pixcel_Attribution/run_metadata.json) — 버전·해시·재현 검증 및 IG 적분 잔차
+- [selected_pixels_and_IG.npz](../../results/Pixcel_Attribution/selected_pixels_and_IG.npz) — 입력/IG 원본 수치
+- [review_grids/](../../results/Pixcel_Attribution/review_grids/) — 원본·Signed IG·Absolute IG 이미지 비교
+- [Pixcel_Attribution.py](../../scripts/Pixcel_Attribution.py) · [GitHub Actions](../../../../../.github/workflows/mlp_pixcel_attribution.yml) — 독립 재현 코드

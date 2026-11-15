@@ -2,7 +2,7 @@
 
 이 폴더의 파일은 **Normal MLP Baseline의 분류 결과 및 입력 픽셀 기여도 분석**을 GitHub Actions에서 재실행한 실제 산출물이다. 3단계 입력 변형, 전처리 도입, 모델 최적화는 포함하지 않는다.
 
-- [실험 로그](../../logs/EXP유001_Pixcel_Attribution.md)
+- [실험 로그](../../logs/초기분석/EXP유001_Pixcel_Attribution.md)
 - [Python 재현 코드](../../scripts/Pixcel_Attribution.py)
 - [성공한 GitHub Actions 실행 기록](https://github.com/ryu980920/Machine_Learning/actions/runs/43628471307)
 
