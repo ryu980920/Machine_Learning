@@ -34,7 +34,7 @@ jobs:
           OMP_NUM_THREADS: "2"
           MKL_NUM_THREADS: "2"
         run: python 05_model_optimize/MLP/Normal/scripts/exp_a004_followup.py --self-test
-      - name: Official TRAIN only: 3 seeded MLP fits and heldout validation
+      - name: "Official TRAIN only - 3 seeded MLP fits and heldout validation"
         env:
           OPENBLAS_NUM_THREADS: "2"
           OMP_NUM_THREADS: "2"
