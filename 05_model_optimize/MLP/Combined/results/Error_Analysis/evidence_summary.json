@@ -66,7 +66,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": 0.07247371143380728,
-      "centered_covariance": 0.014650447526169775,
+      "centered_covariance": 0.014650447526169771,
       "stratified_permutation_p": 0.33026789284286284,
       "bh_fdr_q": 0.48308676529388245,
       "permutations": 2500
@@ -76,7 +76,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": -0.11390096463858655,
-      "centered_covariance": -0.023024902031432492,
+      "centered_covariance": -0.0230249020314325,
       "stratified_permutation_p": 0.11995201919232307,
       "bh_fdr_q": 0.48308676529388245,
       "permutations": 2500
@@ -86,7 +86,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": 0.07178057898673858,
-      "centered_covariance": 0.014510331885014544,
+      "centered_covariance": 0.014510331885014539,
       "stratified_permutation_p": 0.34506197520991605,
       "bh_fdr_q": 0.48308676529388245,
       "permutations": 2500
@@ -96,7 +96,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": 0.011889178685466704,
-      "centered_covariance": 0.002403378894425306,
+      "centered_covariance": 0.002403378894425307,
       "stratified_permutation_p": 0.8648540583766493,
       "bh_fdr_q": 0.8648540583766493,
       "permutations": 2500
@@ -106,7 +106,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": -0.07423639188259402,
-      "centered_covariance": -0.015006770624704156,
+      "centered_covariance": -0.015006770624704163,
       "stratified_permutation_p": 0.327469012395042,
       "bh_fdr_q": 0.48308676529388245,
       "permutations": 2500
@@ -116,7 +116,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": -0.07263501274415313,
-      "centered_covariance": -0.01468305433402314,
+      "centered_covariance": -0.014683054334023133,
       "stratified_permutation_p": 0.3338664534186325,
       "bh_fdr_q": 0.48308676529388245,
       "permutations": 2500
@@ -126,7 +126,7 @@
       "n": 640,
       "n_errors": 180,
       "error_minus_correct_mean_z": 0.019054865815776048,
-      "centered_covariance": 0.003851911351431374,
+      "centered_covariance": 0.0038519113514313688,
       "stratified_permutation_p": 0.7940823670531787,
       "bh_fdr_q": 0.8648540583766493,
       "permutations": 2500
@@ -134,40 +134,40 @@
   ],
   "A_IG_n_model_evaluations": 178,
   "A_distinct_images": 89,
-  "A_max_abs_IG_completeness_residual": 0.20160006579072842,
+  "A_max_abs_IG_completeness_residual": 0.20160006579072487,
   "A_region_ablation_exploratory": {
     "center_horizontal": {
       "n_distinct_images": 89,
-      "mean_excess_abs_logit": 4.082217722873707,
+      "mean_excess_abs_logit": 4.0822177228737075,
       "bootstrap95": [
-        2.438310023941782,
+        2.4383100239417828,
         5.925292270618555
       ],
       "per_image_fraction_excess_positive": 0.5955056179775281
     },
     "center_vertical": {
       "n_distinct_images": 88,
-      "mean_excess_abs_logit": 0.13974212611453296,
+      "mean_excess_abs_logit": 0.1397421261145336,
       "bootstrap95": [
-        -0.7649801408252622,
+        -0.7649801408252611,
         1.0450757237263113
       ],
       "per_image_fraction_excess_positive": 0.4318181818181818
     },
     "left_middle": {
       "n_distinct_images": 88,
-      "mean_excess_abs_logit": 2.1541592695269904,
+      "mean_excess_abs_logit": 2.15415926952699,
       "bootstrap95": [
-        1.0947268688848681,
-        3.2913707785243127
+        1.0947268688848684,
+        3.2913707785243114
       ],
       "per_image_fraction_excess_positive": 0.6136363636363636
     },
     "right_middle": {
       "n_distinct_images": 87,
-      "mean_excess_abs_logit": 1.1734832220521876,
+      "mean_excess_abs_logit": 1.1734832220521871,
       "bootstrap95": [
-        0.35637338997230383,
+        0.35637338997230356,
         2.017519559353588
       ],
       "per_image_fraction_excess_positive": 0.5172413793103449
@@ -225,7 +225,7 @@
     "sklearn": "1.8.0",
     "scipy": "1.18.1"
   },
-  "elapsed_seconds": 6.090532754000002,
+  "elapsed_seconds": 8.579424240000009,
   "original_test_used": false,
   "professor_test_used": false,
   "new_training_runs": 0,

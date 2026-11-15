@@ -1,0 +1,258 @@
+{
+  "status": "followup completed; interpret with explicit A/B decision",
+  "n_focus_images": 640,
+  "n_morph_features": 11,
+  "morphology_associations": [
+    {
+      "feature": "holes_128",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": -0.10315145129151813,
+      "p": 0.1752749083638787,
+      "q": 0.2754319988575237,
+      "strata": 16
+    },
+    {
+      "feature": "connected_components_128",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.10667862926419718,
+      "p": 0.0583138953682106,
+      "q": 0.1583472175941353,
+      "strata": 16
+    },
+    {
+      "feature": "left_mass_fraction",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": -0.0919539934034294,
+      "p": 0.2092635788070643,
+      "q": 0.28773742085971343,
+      "strata": 16
+    },
+    {
+      "feature": "right_mass_fraction",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": -0.010777850459161395,
+      "p": 0.8830389870043319,
+      "q": 0.9713428857047651,
+      "strata": 16
+    },
+    {
+      "feature": "middle_mass_fraction",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.07968554789982968,
+      "p": 0.28390536487837387,
+      "q": 0.34699544596245696,
+      "strata": 16
+    },
+    {
+      "feature": "upper_mass_fraction",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.14597961645777746,
+      "p": 0.05298233922025991,
+      "q": 0.1583472175941353,
+      "strata": 16
+    },
+    {
+      "feature": "central_row_mass_fraction",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.14952466910308043,
+      "p": 0.040986337887370876,
+      "q": 0.1583472175941353,
+      "strata": 16
+    },
+    {
+      "feature": "left_column_mass_fraction",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": -0.0006417318038274367,
+      "p": 0.9930023325558147,
+      "q": 0.9930023325558147,
+      "strata": 16
+    },
+    {
+      "feature": "bilateral_asymmetry",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.11920474656849406,
+      "p": 0.11462845718093968,
+      "q": 0.2101521714983894,
+      "strata": 16
+    },
+    {
+      "feature": "upper_lower_asymmetry",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.2253116870610638,
+      "p": 0.002999000333222259,
+      "q": 0.03298900366544485,
+      "strata": 16
+    },
+    {
+      "feature": "centerline_foreground_128",
+      "n": 640,
+      "errors": 180,
+      "error_minus_correct_z": 0.13423611095551896,
+      "p": 0.07197600799733422,
+      "q": 0.1583472175941353,
+      "strata": 16
+    }
+  ],
+  "targeted_unadjusted_q_significant": [
+    {
+      "writer": 41,
+      "true_class": "D",
+      "feature": "cx",
+      "n": 40,
+      "n_wrong": 22,
+      "n_correct": 18,
+      "wrong_minus_correct_raw": 0.621851423290634,
+      "effect_wrong_minus_correct_z": 0.8901721609692835,
+      "p_unadjusted": 0.001999000499750125,
+      "q_5_groups_all_features": 0.035982008995502246
+    },
+    {
+      "writer": 41,
+      "true_class": "D",
+      "feature": "left_mass_fraction",
+      "n": 40,
+      "n_wrong": 22,
+      "n_correct": 18,
+      "wrong_minus_correct_raw": -0.10102668022088457,
+      "effect_wrong_minus_correct_z": -0.9145663038009111,
+      "p_unadjusted": 0.0024987506246876563,
+      "q_5_groups_all_features": 0.037481259370314844
+    },
+    {
+      "writer": 43,
+      "true_class": "8",
+      "feature": "width",
+      "n": 40,
+      "n_wrong": 23,
+      "n_correct": 17,
+      "wrong_minus_correct_raw": 2.5294117647058822,
+      "effect_wrong_minus_correct_z": 1.0865380318036046,
+      "p_unadjusted": 0.0009995002498750624,
+      "q_5_groups_all_features": 0.03373313343328336
+    },
+    {
+      "writer": 43,
+      "true_class": "8",
+      "feature": "ink_ratio",
+      "n": 40,
+      "n_wrong": 23,
+      "n_correct": 17,
+      "wrong_minus_correct_raw": 0.04611409781303827,
+      "effect_wrong_minus_correct_z": 1.1076215445879822,
+      "p_unadjusted": 0.0014992503748125937,
+      "q_5_groups_all_features": 0.03373313343328336
+    },
+    {
+      "writer": 43,
+      "true_class": "8",
+      "feature": "gray_mean",
+      "n": 40,
+      "n_wrong": 23,
+      "n_correct": 17,
+      "wrong_minus_correct_raw": 11.025999530246857,
+      "effect_wrong_minus_correct_z": 1.0824267382539254,
+      "p_unadjusted": 0.0014992503748125937,
+      "q_5_groups_all_features": 0.03373313343328336
+    },
+    {
+      "writer": 43,
+      "true_class": "8",
+      "feature": "middle_mass_fraction",
+      "n": 40,
+      "n_wrong": 23,
+      "n_correct": 17,
+      "wrong_minus_correct_raw": -0.09297315318506322,
+      "effect_wrong_minus_correct_z": -1.1703665315257021,
+      "p_unadjusted": 0.0004997501249375312,
+      "q_5_groups_all_features": 0.03373313343328336
+    }
+  ],
+  "targeted_five_groups": [
+    [
+      43,
+      "0"
+    ],
+    [
+      41,
+      "D"
+    ],
+    [
+      42,
+      "D"
+    ],
+    [
+      43,
+      "8"
+    ],
+    [
+      41,
+      "B"
+    ]
+  ],
+  "topology_selected_images": 62,
+  "topology_valid_images": 61,
+  "topology_contrasts": [
+    {
+      "group": "all",
+      "n_independent_original_images": 61,
+      "mean_excess_abs_margin": 0.0762670005212947,
+      "bootstrap95_low": -0.08993305387931519,
+      "bootstrap95_high": 0.24562628059816607,
+      "fraction_per_image_positive": 0.4918032786885246,
+      "mean_edges_selected": -11.237704918032787,
+      "mean_edges_control": -8.71311475409836,
+      "mean_move_selected": 2.7289959016393444,
+      "mean_move_control": 2.7295081967213113,
+      "n_candidates_per_image": 54,
+      "n_each_condition": 8
+    },
+    {
+      "group": "0D",
+      "n_independent_original_images": 29,
+      "mean_excess_abs_margin": 0.1046690032719754,
+      "bootstrap95_low": -0.12542655575636508,
+      "bootstrap95_high": 0.33563000093068573,
+      "fraction_per_image_positive": 0.5172413793103449,
+      "mean_edges_selected": -11.668103448275861,
+      "mean_edges_control": -9.262931034482758,
+      "mean_move_selected": 2.7607758620689653,
+      "mean_move_control": 2.759698275862069,
+      "n_candidates_per_image": 54,
+      "n_each_condition": 8
+    },
+    {
+      "group": "8B",
+      "n_independent_original_images": 32,
+      "mean_excess_abs_margin": 0.05052768552849027,
+      "bootstrap95_low": -0.18399164110655994,
+      "bootstrap95_high": 0.28759328940063683,
+      "fraction_per_image_positive": 0.46875,
+      "mean_edges_selected": -10.84765625,
+      "mean_edges_control": -8.21484375,
+      "mean_move_selected": 2.7001953125,
+      "mean_move_control": 2.7021484375,
+      "n_candidates_per_image": 54,
+      "n_each_condition": 8
+    }
+  ],
+  "caveats": [
+    "OOF repeatedly investigated as development data; not independent validation.",
+    "Morphology descriptors overlap global geometry and do not isolate human semantic strokes.",
+    "Pixel swaps preserve full intensity histogram, bbox and >=128 foreground count, with pixel-shift CoM <=0.3, but exact continuous CoM and all local geometry cannot be held fixed.",
+    "An adjacency-edge count is a topology proxy, not a human visual recognition score.",
+    "Targeted five strata were chosen after observing original OOF failure patterns; report them as exploratory and control FDR.",
+    "The models were never retrained or tuned."
+  ],
+  "official_original_test_used": false,
+  "professor_test_used": false
+}
