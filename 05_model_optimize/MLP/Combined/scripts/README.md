@@ -52,7 +52,7 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 
 ## 후속 분석·가설별 코드 배치
 
-[초기분석 로그](../logs/초기분석/README.md)의 **EXP유002 Error Analysis**와 **EXP유003 Input Sensitivity**는 현재 계획 단계다. 실행 코드는 새 실험 ID로 생성하며, 완료된 [EXP-CMB-001 실행 코드](combined_mlp_writer_cv.py)를 덮어쓰지 않는다. [가설 A](../logs/가설A/README.md)·[가설 B](../logs/가설B/README.md)도 동일한 `scripts/`에서 독립 코드로 관리한다.
+[초기분석 로그](../logs/초기분석/README.md)의 **EXP유002 Error Analysis**와 **EXP유003 Input Sensitivity**는 현재 완료됐다. 실행 코드는 새 실험 ID로 생성하며, 완료된 [EXP-CMB-001 실행 코드](combined_mlp_writer_cv.py)를 덮어쓰지 않는다. [가설 A](../logs/가설A/README.md)·[가설 B](../logs/가설B/README.md)도 동일한 `scripts/`에서 독립 코드로 관리한다.
 
 각 코드에는 모델/입력 SHA 확인, 작성자 보류 Fold 검증, 공식 Original Test 및 교수님 Test 미사용, 출력 경로와 실행 버전을 기록한다. 변경이 필요 없는 분석은 저장된 OOF·모델에서 수행해 Baseline 학습을 반복하지 않는다.
 
@@ -71,3 +71,12 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 - [exp_cmb003_input_sensitivity.py](exp_cmb003_input_sensitivity.py): Normal 1개 + Combined 4개 원본 체크포인트/OOF 해시 확인, 10개 입력 변형의 Accuracy·Macro F1·교정/신규 오답·Logit Margin·공식 개발 Validation 통제 비교. **새 학습 없음**.
 - [EXP유003 완성 실험일지](../logs/초기분석/EXP유003_Input_Sensitivity.md) · [실측 CSV/이미지](../results/Input_Sensitivity/README.md) · [최종 성공 Actions #43745629093](https://github.com/ryu980920/Machine_Learning/actions/runs/43745629093).
 - 기존 EXP-CMB-001 Baseline 훈련·모델 및 EXP-CMB-002 분석은 변경하지 않는다. 입력 단일 변형은 연구용 진단이며, 공식 Original Test·교수님 Test는 사용하지 않는다.
+
+
+## EXP-CMB-004 — BBox Size vs CoM 정렬 재학습·설명 대조
+
+- [exp_cmb004_geometry_normalization.py](exp_cmb004_geometry_normalization.py): 원본 SHA/분할 검증, 공식 Training만 사용한 목표 BBox long-side 20px, BBox Center·Size·CoM·Size+CoM에 대한 **방법별 작성자 보류 4-Fold 독립 MLP 학습 16회**, Training/Val/OOF 동일 전처리.
+- [exp_cmb004_compare.py](exp_cmb004_compare.py): 방법별 OOF, 공식 Validation, 작성자·클래스, 핵심 혼동 방향, 기하 특징, 학습/추론 비용과 Viridis CM 비교.
+- [exp_cmb004_cross_diagnostic.py](exp_cmb004_cross_diagnostic.py): **기존 모델+원본 / 기존 모델+변형 / 재학습 모델+변형 / 재학습 모델+원본** 대조로 입력/가중치 효과 구분(새 학습 없음).
+- [사전등록 기준](../logs/가설B/EXP유001_Geometry_Normalization.md) · [실험 완료 보고](../logs/가설B/EXP유001_Geometry_Normalization_Results.md) · [CSV/이미지/모델](../results/Geometry_Normalization/README.md).
+- [재학습 성공 Actions #43747924168](https://github.com/ryu980920/Machine_Learning/actions/runs/43747924168) · [4-way 대조 성공 #43748490480](https://github.com/ryu980920/Machine_Learning/actions/runs/43748490480). 공식 Original Test·교수님 Final Test 미사용. 숫자 합격선을 두지 않았으며 **기전별 설명 가능성**을 기준으로 판정했다.
