@@ -186,6 +186,29 @@ def plot_tradeoff(rows,out):
     fig.savefig(out/"corrections_vs_induced.png",dpi=180)
     plt.close(fig)
 
+
+def plot_examples(raw,labels,models,figdir):
+    """Representative *actual* held-out images, never used for condition selection."""
+    examples=((43,32,"0"),(43,8,"8"),(41,13,"D"))
+    choices=(VARIANTS[0],VARIANTS[5],VARIANTS[7],VARIANTS[1])
+    fig,axes=plt.subplots(len(examples),len(choices),figsize=(10.8,8.3))
+    for i,(writer,index,text) in enumerate(examples):
+        assert LABELS[int(labels[writer][index])]==text
+        original=raw[writer][index].reshape(1,784).astype(np.float32)
+        model=models["combined_heldout_"+str(writer)+"_mlp.joblib"]
+        for j,v in enumerate(choices):
+            z=transform(original,v)
+            pred=LABELS[int(model.predict(z)[0])]
+            ax=axes[i,j]
+            ax.imshow(z.reshape(28,28),vmin=0,vmax=255,cmap="gray",interpolation="nearest")
+            ax.set_title(f"{writer}/{index} actual {text}, pred {pred}\n{v.name}",fontsize=8)
+            ax.axis("off")
+    fig.suptitle("EXP-CMB-003: real held-out handwriting, frozen writer-specific MLP",fontsize=11)
+    fig.tight_layout()
+    fig.savefig(figdir/"transform_examples.png",dpi=180)
+    plt.close(fig)
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--out",type=Path,required=True)
@@ -381,6 +404,7 @@ def main():
         wr.writerow(["variant","model","writer","index_in_writer","actual","original_prediction",
                      "transformed_prediction","original_correct","transformed_correct"])
         wr.writerows(predrows)
+    plot_examples(raw,labels,models,figdir)
     plot_tradeoff(rows_oof,figdir)
     report={"experiment_id":"EXP-CMB-003","status":"completed_input_diagnostic",
        "baseline_reproduced":{"normal_correct":1602,"combined_correct":2080,"n":2560},
