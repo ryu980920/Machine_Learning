@@ -65,3 +65,9 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 - [성공 실행 #43743082289](https://github.com/ryu980920/Machine_Learning/actions/runs/43743082289). 기존 **Normal 1개 + Combined 4개 저장 가중치만 사용**, 신규 MLP 학습 없음.
 
 이번 분석의 작성자·클래스별 통계는 연구용이며, 실제 추론에서는 작성자 ID·정답을 이용해 전처리를 변경하지 않는다. 원본 EXP-CMB-001 실행·결과는 그대로 유지한다.
+
+## EXP-CMB-003 — 모델 고정 입력 민감도 연구
+
+- [exp_cmb003_input_sensitivity.py](exp_cmb003_input_sensitivity.py): Normal 1개 + Combined 4개 원본 체크포인트/OOF 해시 확인, 10개 입력 변형의 Accuracy·Macro F1·교정/신규 오답·Logit Margin·공식 개발 Validation 통제 비교. **새 학습 없음**.
+- [EXP유003 완성 실험일지](../logs/초기분석/EXP유003_Input_Sensitivity.md) · [실측 CSV/이미지](../results/Input_Sensitivity/README.md) · [최종 성공 Actions #43745629093](https://github.com/ryu980920/Machine_Learning/actions/runs/43745629093).
+- 기존 EXP-CMB-001 Baseline 훈련·모델 및 EXP-CMB-002 분석은 변경하지 않는다. 입력 단일 변형은 연구용 진단이며, 공식 Original Test·교수님 Test는 사용하지 않는다.
