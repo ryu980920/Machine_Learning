@@ -278,6 +278,7 @@ def main():
     for w in WRITERS:
         assert np.array_equal(yref[w],
             np.array([LABELS.index(oldtab[w,i]["true_label"]) for i in range(640)]))
+    old_models=evidence.load_models(old_manifest)
     preds={}
     official_rows=[];writer_rows=[];class_rows=[];paired=[];explanation=[]
     fit_rows=[];loss_rows=[];geoms=[];costs=[]
@@ -344,6 +345,7 @@ def main():
                 "correct":int(pred[i]==yref[held][i])})
         # record margins for focus 0/D/8/B, not class-conditioned decisions
         g=evidence.logits(m,authors[held])
+        baseline_logits=evidence.logits(old_models["combined_heldout_"+str(held)+"_mlp.joblib"], writerdata[held]["X"])
         for j,cl in enumerate(yref[held]):
             actual=LABELS[int(cl)]
             if actual in ("0","D","8","B"):
@@ -352,6 +354,8 @@ def main():
                            if explanation[i]["writer"]==held and
                               explanation[i]["index_in_writer"]==j)
                 explanation[index]["actual_vs_rival_logit"]=float(g[j,int(cl)]-g[j,LABELS.index(rival)])
+                explanation[index]["baseline_margin"]=float(baseline_logits[j,int(cl)]-baseline_logits[j,LABELS.index(rival)])
+                explanation[index]["margin_change"]=explanation[index]["actual_vs_rival_logit"]-explanation[index]["baseline_margin"]
                 explanation[index]["predicted_rival"]=int(pred[j]==LABELS.index(rival))
         mem=io.BytesIO()
         dump(m,mem,compress=3)
