@@ -35,7 +35,7 @@ import exp_cmb002_evidence as core
 
 WRITERS=core.WRITERS
 LABELS=core.LABELS
-FOCUS=tuple(("0","D"),("D","0"),("8","B"),("B","8"))
+FOCUS=(("0","D"),("D","0"),("8","B"),("B","8"))
 PRIMARY=(("41","D","0"),("43","8","B"),("43","0","D"),("41","B","8"))
 
 @dataclass(frozen=True)
