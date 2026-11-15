@@ -55,3 +55,13 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 [초기분석 로그](../logs/초기분석/README.md)의 **EXP유002 Error Analysis**와 **EXP유003 Input Sensitivity**는 현재 계획 단계다. 실행 코드는 새 실험 ID로 생성하며, 완료된 [EXP-CMB-001 실행 코드](combined_mlp_writer_cv.py)를 덮어쓰지 않는다. [가설 A](../logs/가설A/README.md)·[가설 B](../logs/가설B/README.md)도 동일한 `scripts/`에서 독립 코드로 관리한다.
 
 각 코드에는 모델/입력 SHA 확인, 작성자 보류 Fold 검증, 공식 Original Test 및 교수님 Test 미사용, 출력 경로와 실행 버전을 기록한다. 변경이 필요 없는 분석은 저장된 OOF·모델에서 수행해 Baseline 학습을 반복하지 않는다.
+
+
+## EXP-CMB-002 — 오류 원인 검증 (기존 모델 고정)
+
+- [exp_cmb002_evidence.py](exp_cmb002_evidence.py): EXP-CMB-001 OOF/모델/이미지 해시 및 2,560장 예측 재검증, 7개 공간 특징, IG, 실제 이미지 Grid와 기존 오류 전환표.
+- [exp_cmb002_followup.py](exp_cmb002_followup.py): 형태/공간 질량 11개 지표, 작성자별 대조, 밝기·Bounding Box 보존 픽셀 교환 및 오류쌍 임계값 안정성.
+- [EXP유002 정식 실험일지](../logs/초기분석/EXP유002_Error_Analysis.md) · [실측 원본](../results/Error_Analysis/README.md).
+- [성공 실행 #43743082289](https://github.com/ryu980920/Machine_Learning/actions/runs/43743082289). 기존 **Normal 1개 + Combined 4개 저장 가중치만 사용**, 신규 MLP 학습 없음.
+
+이번 분석의 작성자·클래스별 통계는 연구용이며, 실제 추론에서는 작성자 ID·정답을 이용해 전처리를 변경하지 않는다. 원본 EXP-CMB-001 실행·결과는 그대로 유지한다.
