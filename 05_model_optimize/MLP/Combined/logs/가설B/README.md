@@ -14,11 +14,14 @@
 
 **따라서 가설 B 우선 진행**. 그러나 이 관찰 결과는 **입력 변환이 정답률을 높인다는 인과적 증명은 아니다**.
 
-## 실행 순서
+## EXP유003 실제 결과와 후속 판단
 
-1. [EXP유003 — Input Sensitivity](../초기분석/EXP유003_Input_Sensitivity.md) (**계획 / 미실시**)에서 원본 모델 가중치를 고정하고 **라벨을 사용하지 않는** 위치·Size·굵기·밝기 단일 변형을 적용.
-2. 같은 이미지의 정오답 교정·신규 오류·클래스별 Logit Margin·작성자별 Macro F1 및 공식 Validation을 비교.
-3. 유효한 단일 변형만 동일 규칙의 Train/Validation/OOF **4-Fold 재학습 후보**로 상정.
-4. Hand-made Training 비중·Augmentation은 원인 분석과 별도 통제 실험으로 취급.
+[EXP유003 — Input Sensitivity](../초기분석/EXP유003_Input_Sensitivity.md)는 Normal 1개 + Combined 4개 저장 모델을 고정하고 위치·Size·획·밝기 10개 단일 변형을 2,560장 및 공식 개발 Validation에 실제 적용해 완료했다.
+
+- **크기 95%:** Combined OOF 81.2500%→83.8672%(+2.6172%p), 하지만 순개선 67장 모두 43번에서만 발생. 공식 Validation 네 Fold 모두 하락, 문자 Accuracy도 하락. **일률적 Size 보정 채택 불가**.
+- **획 얇게25%:** 82.3047%(+1.0547%p), 50장 교정/23장 신규 오류, 작성자 3/4 비악화, 공식 Validation 하락폭 −0.0521~−0.2031%p. **사전 후속 후보 선별 기준 통과**.
+- **센터 ±1px 일괄 이동:** 네 방향 모두 OOF 전체 Accuracy 하락. 한 작성자·오류쌍의 교정이 다른 클래스의 오답을 증가시킨다.
+
+**후속 단계의 우선 후보:** 동일한 획 얇게25%를 Training과 OOF 입력에 적용해 **새로운 MLP 4-Fold**로 효과를 별도 확인하는 통제 실험. Size 95%는 작성자 의존성이 커서 별도 진단 후보로만 유지한다. 현재는 **후속 재학습 미실시**다.
 
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.

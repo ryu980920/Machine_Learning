@@ -1,0 +1,64 @@
+name: EXP-CMB-003 MLP Combined Frozen Input Sensitivity
+
+on:
+  push:
+    branches:
+      - exp/cmb003-input-sensitivity-20261116
+    paths:
+      - '.github/workflows/exp-cmb-003-input-sensitivity.yml'
+      - '05_model_optimize/MLP/Combined/scripts/exp_cmb003_input_sensitivity.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  input-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - name: Checkout current experimental branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install same pinned baseline environment
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Verify existing EXP-CMB-001 code using synthetic cases
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Run EXP-CMB-003 frozen-model study on original OOF and official development validation
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb003_input_sensitivity.py \
+            --out 05_model_optimize/MLP/Combined/results/Input_Sensitivity
+      - name: Upload diagnostics for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-003-frozen-sensitivity-evidence
+          path: 05_model_optimize/MLP/Combined/results/Input_Sensitivity/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Commit results only to experiment review branch
+        if: success() && github.ref == 'refs/heads/exp/cmb003-input-sensitivity-20261116'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Input_Sensitivity/
+          if git diff --staged --quiet; then
+            echo 'No changes'
+          else
+            git commit -m 'research: record EXP-CMB-003 frozen-model diagnostics [skip ci]'
+            git push
+          fi

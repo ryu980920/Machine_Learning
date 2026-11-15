@@ -6,7 +6,7 @@
 |---|---|---|---|
 | Baseline | [EXP유001 — Combined 4-Fold CV](EXP유001_Combined_MLP_4Fold_CV_Baseline.md) | Normal 대조 및 4명 작성자 보류 OOF | **완료** |
 | [초기분석](초기분석/README.md) | [EXP유002 — Error Analysis](초기분석/EXP유002_Error_Analysis.md) | 0/D·8/B 오류, 공간·형태 특징, A/B 연구 우선순위 결정 | **완료: B 우선, A 보류** |
-| [초기분석](초기분석/README.md) | [EXP유003 — Input Sensitivity](초기분석/EXP유003_Input_Sensitivity.md) | 모델 고정 단일 입력 변형 비교 | **계획 / 미실시** |
+| [초기분석](초기분석/README.md) | [EXP유003 — Input Sensitivity](초기분석/EXP유003_Input_Sensitivity.md) | 모델 고정 10개 입력 변형, 작성자·클래스·공식 Validation 비교 | **완료: 얇게25% 후속 후보, 95% 축소는 작성자 편중** |
 | [가설 B](가설B/README.md) | 후속 재학습 실험 미등록 | Size/Center·증강 효과 검증 | **후속 후보** |
 | [가설 A](가설A/README.md) | 독립 후속 실험 미등록 | 의미 있는 획 형태·연결성의 기여 | **조건부 보류** |
 
