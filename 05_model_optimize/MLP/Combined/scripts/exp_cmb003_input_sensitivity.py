@@ -124,8 +124,8 @@ def load_official(manifest):
     assert X.shape==(19200,784) and np.bincount(y,minlength=16).tolist()==manifest["official_split"]["validation_class_counts_0_to_15"]
     return X,y
 
-def metrics(y,p):
-    scores=precision_recall_fscore_support(y,p,labels=np.arange(16),zero_division=0)
+def metrics(y,p,classes=None):
+    scores=precision_recall_fscore_support(y,p,labels=(np.arange(16) if classes is None else classes),zero_division=0)
     prec,rec,f1,_=scores
     return {"n":len(y),"accuracy":float(np.mean(y==p)),
             "macro_precision":float(prec.mean()),"macro_recall":float(rec.mean()),
@@ -276,7 +276,7 @@ def main():
                   **mm,"delta_acc_pp":100*(mm["accuracy"]-np.mean(before[z]==y[z])),
                   **pp})
             for name,group_mask in (("digit",y<10),("letter",y>=10)):
-                mm=metrics(y[group_mask],p[group_mask])
+                mm=metrics(y[group_mask],p[group_mask],classes=(np.arange(10) if name=="digit" else np.arange(10,16)))
                 pp=paired_counts(y[group_mask],before[group_mask],p[group_mask])
                 rows_group.append({"variant":cond.name,"model":m,"group":name,
                   **mm,"delta_acc_pp":100*(mm["accuracy"]-np.mean(before[group_mask]==y[group_mask])),
