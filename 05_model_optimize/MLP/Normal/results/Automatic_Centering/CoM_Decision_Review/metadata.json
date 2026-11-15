@@ -1,0 +1,26 @@
+{
+  "study": "EXP유004 CoM pixel decision diagnostic",
+  "mode": "review-only",
+  "handmade_n": 2560,
+  "official_test_read": false,
+  "professor_test_read": false,
+  "model_fit_performed": false,
+  "new_preprocessing_parameter_search": false,
+  "models_sha256": {
+    "Normal": "9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a",
+    "CoM": "3c1aac362d75ff5c4d9652188c1c4fd97524525f5409ec00d5a6c56fa3ad27ef"
+  },
+  "fixed_target_comparisons": [
+    "5_minus_F",
+    "B_minus_8"
+  ],
+  "ig_reference": "all-zero input",
+  "ig_approximation": "128 midpoint",
+  "ig_count": 21,
+  "selected_examples": 7,
+  "versions": {
+    "python": "3.13.18",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  }
+}
