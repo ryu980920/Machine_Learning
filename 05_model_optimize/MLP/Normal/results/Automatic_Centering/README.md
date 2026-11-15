@@ -1,31 +1,37 @@
-# EXP유004 — Automatic Centering: 실제 실행 산출물
+# EXP유004 — Automatic Centering: 전체 결과와 검증 근거
 
-**상태: 2026-11-15 KST 실행·검증 완료, 연구 결과 보존용으로 사용자 승인 후 정식 배포.** 원래 실험은 `review-only`로 실행했으므로 `SUMMARY.md`와 `exp004_run_metadata.json`에는 원본 생성 당시의 `review-only` 상태가 그대로 남아 있다. 원본 수정 없이 ZIP에서 복사·검증했으며, **최종 Pipeline 채택은 별개**다.
+**연구 원본 19개 파일을 이 폴더 한 곳에 보관한다.** Center of Mass/Bounding Box 정렬 학습·평가(1단계), CoM 이동 자체와 재학습 효과의 분리·픽셀 기여도(2단계)는 **모두 하나의 실험 EXP유004**에 속한다.
 
-- [연구 실험 로그 — EXP유004_Automatic_Centering.md](../../logs/EXP유004_Automatic_Centering.md)
-- [학습·평가 코드](../../scripts/Automatic_Centering_Experiment.py) · [stateless 정렬 Transformer](../../scripts/Automatic_Centering_Transformer.py)
-- [GitHub Actions 원본 성공 실행 #43638979287](https://github.com/ryu980920/Machine_Learning/actions/runs/43638979287), Artifact **14131562043** (`normal-mlp-exp004-automatic-centering-review`)
+[**단일 통합 실험 로그**](../../logs/EXP유004_Automatic_Centering.md) · [중심 정렬 실험 코드](../../scripts/Automatic_Centering_Experiment.py) · [CoM 픽셀 판단 분석 코드](../../scripts/CoM_Decision_Diagnostic.py) · [정렬 Transformer](../../scripts/Automatic_Centering_Transformer.py)
 
-## 성능 요약
+## 1. 실측 결과의 핵심
 
-| 모델 | 공식 Validation | Hand-made | Hand-made 기존 대비 |
+| Hand-made 2,560장 | 숫자 0–9 | 문자 A–F | 전체 |
 |---|---:|---:|---:|
-| Frozen Normal MLP | **97.3177%** | 62.8516% | 기준 |
-| **Center of Mass** | 96.9167% | **77.1094%** | **+14.2578%p** |
-| Bounding Box Center | 97.3073% | 61.6016% | −1.2500%p |
+| Normal MLP + 원본 | 56.31% | **73.75%** | 62.85% |
+| Normal MLP + CoM 정렬만 (가중치 고정) | 82.00% | 52.40% | 70.90% |
+| CoM MLP + CoM 정렬 (재학습) | **83.19%** | 66.98% | **77.11%** |
 
-**중요한 상충 결과:** Hand-made 숫자는 **56.31% → 83.19%**, 문자는 **73.75% → 66.98%** (Normal→Center of Mass). 4명의 작성자 데이터를 이미 여러 차례 분석했으므로 독립 Test 개선을 주장하거나 후보를 곧바로 채택하지 않는다.
+- 정렬 모델 학습·평가에서 공식 Validation 정확도: Normal **97.3177%**, CoM MLP **96.9167%**, Bounding Box MLP **97.3073%**.
+- 기존 MLP를 고정한 CoM 이동만의 효과는 숫자 **+25.69%p**, 문자 **−21.35%p**였어. 같은 CoM 입력에서 신규 MLP로 변경하면 문자 정확도가 **+14.58%p** 회복돼.
+- CoM 정렬이 모든 클래스의 오차를 해결하지는 못했으며 **추론 Pipeline 자동 적용·최종 채택은 보류**. 공식 Test, 교수님 Test 미사용. Hand-made 네 작성자는 반복 검토한 개발용 데이터다.
 
-## 사용자 승인 후 추가 배포: CoM 판단근거 후속 분석
+## 2. 원본 연구 실행 및 재현 증빙
 
-EXP유004의 기존 결과 10개를 유지한 채, **같은 Normal MLP를 고정하고 이미지만 CoM 이동한 조건**, **같은 CoM 입력에서 CoM 재학습 모델로 변경한 조건**을 분리한 후속 분석을 추가했다.
+**1단계 — 정렬 학습 및 성능 측정**
 
-- [후속 연구 로그](../../logs/EXP유004_CoM_판단근거_후속분석.md)
-- [후속 실측 원본 9개, 그래프 및 해시](CoM_Decision_Review/README.md)
-- [후속 실행 기록 #43686466736](https://github.com/ryu980920/Machine_Learning/actions/runs/43686466736)
-- CoM 이동만으로도 숫자 **+25.69%p**, 문자 **−21.35%p**로 달라졌다. **결과 배포는 신규 전처리 채택과 무관**하다.
+- [GitHub Actions #43638979287](https://github.com/ryu980920/Machine_Learning/actions/runs/43638979287), 원본 Artifact **14131562043**.
+- 공식 Training **76,800장**, 공식 Validation **19,200장**, Hand-made **2,560장**; 정렬 모델 둘을 각각 다시 학습, 기존 Normal 모델을 기준으로 사용.
+- 동일 `MLPClassifier(random_state=42)`, 좌표 (13.5,13.5), threshold 32, 정수 이동, zero-fill, no interpolation.
+- 기존 Normal MLP SHA-256: `9b54ba9c60e389575200d88ad0b93c47ec47f9c673eebeb755ff47e3ebe23b0a`. CoM 모델 SHA-256: `3c1aac362d75ff5c4d9652188c1c4fd97524525f5409ec00d5a6c56fa3ad27ef`.
 
-## 원본 파일 10개
+**2단계 — CoM 위치 변화와 재학습된 모델 판단 분리**
+
+- [GitHub Actions #43686466736](https://github.com/ryu980920/Machine_Learning/actions/runs/43686466736), 원본 Artifact **14150383005**, 원본 ZIP SHA-256 `2b72fb6b643c37d6dd233699c027ef5d9e6c156d352a99278420d082ee2e8869`.
+- 공식/교수님 Test 미사용, 모델 **재학습 0회**, 원본 및 정렬된 Hand-made **2,560장** 전체의 기존/CoM 모델 예측 비교 및 **2,560장 기존 산출물 재검증**.
+- 기존 CoM 분석 산출물의 `SUMMARY.md`와 `metadata.json`은 1단계 결과와 이름이 겹치므로 각각 **`CoM_Decision_SUMMARY.md`**, **`CoM_Decision_metadata.json`**으로 **파일 이름만 변경**했다. 원본 파일 bytes와 SHA-256은 보존했다. 원본 내부의 `review-only`는 실험 당시 상태를 나타낸다.
+
+## 3. 1단계 정렬·학습 결과 원본 10개
 
 | 파일 | 내용 | 검증 SHA-256 앞 12자 |
 |---|---|---|
@@ -40,6 +46,27 @@ EXP유004의 기존 결과 10개를 유지한 채, **같은 Normal MLP를 고정
 | [exp004_mass.joblib](exp004_mass.joblib) | Center of Mass **학습 완료 후보 Pipeline** | `3c1aac362d75` |
 | [exp004_bbox.joblib](exp004_bbox.joblib) | Bounding Box **학습 완료 후보 Pipeline** | `09976f913cf4` |
 
-**재현/주의사항:** Python 3.13.18, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, matplotlib 3.10.7. 모델을 불러올 때 `Automatic_Centering_Transformer.py`와 기존 `pixel_transform.PixelScaler255`가 import 가능한 환경이 필요하다. **신뢰하지 않는 joblib 파일을 역직렬화하면 안 된다.** 원본 Test, 교수님 Test는 읽지 않았고 Hand-made를 학습에 사용하지 않았다.
+## 4. 2단계 CoM 판정 변화·IG 결과 원본 9개
 
-실험 실행과 원본 결과 검증은 성공한 GitHub Actions에 남겨 두었으며, 기존 EXP유001·002·003과 baseline은 변경하지 않았다.
+| 파일 | 용도 | SHA-256 |
+|---|---|---|
+| [CoM_Decision_SUMMARY.md](CoM_Decision_SUMMARY.md) | 원본 실행 당시 review-only 요약 | `bfb44d9f73a97caaee3d3827ed43368dcd881c4e337707742cb0524288fe5598` |
+| [four_way_summary.csv](four_way_summary.csv) | 원본·CoM 이미지 및 2개 MLP의 집단별 Accuracy 28행 | `d91c241d1d543dfd7891958e50138f878888c21558a27f54a775260223ae6952` |
+| [contrasts.csv](contrasts.csv) | 동일 모델/동일 입력 통제 비교, 교정·신규 오류 28행 | `22b67fd77ba45d6e097c6c8600141989a2ad8ca7468d57afaff0455c3840aff4` |
+| [four_way_predictions.csv](four_way_predictions.csv) | Hand-made 2,560장별 4조건 예측 및 정답 여부 | `723ce660eeba09ff70af8d4de001e0e54d42bfac8fe02a8c01a758582e17c1af` |
+| [pairwise_margins.csv](pairwise_margins.csv) | 5/F와 B/8 상대 클래스 logit margin 8행 | `0c885c59bc8383691a6fedbf59786a6e0c4a4298967a6029c41da4690a5102e0` |
+| [selected_ig_diagnostics.csv](selected_ig_diagnostics.csv) | 7개 대표 이미지 × 3조건 Signed IG 21행 | `7f14a8f077301f31469f392c97f56c475c82e1e6b9d2662c078e44f966a51e92` |
+| [IG_5_wrong_F_to_5.png](IG_5_wrong_F_to_5.png) | 실제 5→F 오류가 CoM 후 교정된 사례의 원본/정렬/IG | `84d6bfffc5d42cda41088dd5b1323bd88ca0b2dc0951f0555cfdab3434f6464f` |
+| [IG_B_correct_to_wrong_8.png](IG_B_correct_to_wrong_8.png) | 실제 B→8 오류가 CoM 후 새로 발생한 사례의 원본/정렬/IG | `9f7e905af3cce09fa50b709fc18f483de4de36fb1aa01729e3794ad352068e50` |
+| [CoM_Decision_metadata.json](CoM_Decision_metadata.json) | 원본 모델 SHA, IG 설정, 미학습·Test 미사용 증빙 | `e7f99ebdd99d5c5ecfa562801c610e462e6ebb62acfaf0a54eb453867dc71775` |
+
+![숫자 5/F의 정렬 전후와 픽셀 기여도](IG_5_wrong_F_to_5.png)
+
+![문자 B/8의 정렬 전후와 픽셀 기여도](IG_B_correct_to_wrong_8.png)
+
+## 5. 결론 및 사용 주의
+
+- **확인된 사실:** 동일한 기존 MLP에서 글자의 절대 픽셀 위치를 바꾸면 숫자·문자의 예측 정확도에 서로 반대 방향의 큰 변화가 생긴다. 따라서 MLP의 위치 의존성을 가설 B의 주요 원인으로 판단한다.
+- **해석 제한:** IG가 모델이 형태를 전혀 학습하지 않았다는 증거는 아니다. 동일한 네 명 Hand-made에서 최적화·분석한 성능을 새 작성자에게 일반화하지 않는다.
+- **데이터 보존:** 기존 원본과 재학습 모델 파일, CSV, 이미지, 실제 실행/데이터 해시는 유지하고 상대 경로만 단일 폴더 구조로 통합했다.
+- **안전:** 신뢰할 수 없는 joblib 파일을 역직렬화하지 않는다. Python 3.13.18, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, matplotlib 3.10.7의 검증 환경을 따른다.
