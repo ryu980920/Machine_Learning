@@ -1,0 +1,50 @@
+name: EXP005 Normal MLP CoM Translation Augmentation (review only)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mlp_exp005_com_translation_augmentation_review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exp005:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout original Official train/validation and Handmade developer data
+        uses: actions/checkout@v4
+
+      - name: Setup same Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install exact scientific stack from verified EXP004
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scipy==1.17.0" "scikit-learn==1.8.0" "matplotlib==3.10.7"
+
+      - name: Train balanced repeat-five control and ±1px augmented CoM MLPs (NO Test)
+        env:
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          NUMEXPR_NUM_THREADS: "2"
+          MPLBACKEND: "Agg"
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/CoM_Translation_Augmentation_Experiment.py \
+            --out "$RUNNER_TEMP/exp005_com_translation_augmentation_review"
+
+      - name: Store measured metrics, paired predictions and two checkpoints (NO commit)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-mlp-exp005-com-translation-augmentation-review
+          path: ${{ runner.temp }}/exp005_com_translation_augmentation_review/
+          retention-days: 30
+          compression-level: 6
+          if-no-files-found: warn
