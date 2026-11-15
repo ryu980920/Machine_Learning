@@ -6,7 +6,7 @@
 |---|---|---|
 | [초기분석](초기분석/README.md) | [EXP유001](초기분석/EXP유001_Pixcel_Attribution.md) · [EXP유002](초기분석/EXP유002_Input_Sensitivity.md) | 가설 A/B를 설정하고 픽셀 기여도·입력 민감도를 탐색 |
 | [가설 B](가설B/README.md) | [EXP유003](가설B/EXP유003_Spatial_Response.md) · [EXP유004](가설B/EXP유004_Automatic_Centering.md) · [EXP유005](가설B/EXP유005_CoM_Translation_Augmentation.md) | 위치·공간 분포 의존성과 CoM 정렬·±1px 위치 증강 |
-| [가설 A](가설A/README.md) | [EXP유001](가설A/EXP유001_픽셀판단근거_분석.md) · [EXP유002](가설A/EXP유002_형태대좌표_분리검증.md) | 모델의 픽셀 판단 기준과 획의 형태·좌표 반응 분리 분석 |
+| [가설 A](가설A/README.md) | [EXP유001](가설A/EXP유001_픽셀판단근거_분석.md) · [EXP유002](가설A/EXP유002_형태대좌표_분리검증.md) · [EXP유003](가설A/EXP유003_형태위치_혼동원인_통합진단.md) | 모델의 픽셀 판단 기준과 획의 형태·좌표 반응 분리 분석 |
 
 **번호 규칙:** 초기분석·가설 B의 EXP유001~005는 기존 번호를 유지한다. 가설 A는 **독립적인 실험 번호 EXP유001부터 시작한다.** 같은 번호를 언급할 때는 가설명을 명시한다.
 
