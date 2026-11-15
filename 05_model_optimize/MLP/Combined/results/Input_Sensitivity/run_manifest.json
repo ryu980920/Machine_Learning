@@ -1,0 +1,120 @@
+{
+  "experiment_id": "EXP-CMB-003",
+  "status": "completed_input_diagnostic",
+  "baseline_reproduced": {
+    "normal_correct": 1602,
+    "combined_correct": 2080,
+    "n": 2560
+  },
+  "hypothesis": "B spatial and ink differences impact held-out writer errors",
+  "conditions": [
+    {
+      "name": "original",
+      "family": "original",
+      "value": null
+    },
+    {
+      "name": "shift_L1",
+      "family": "shift",
+      "value": [
+        -1,
+        0
+      ]
+    },
+    {
+      "name": "shift_R1",
+      "family": "shift",
+      "value": [
+        1,
+        0
+      ]
+    },
+    {
+      "name": "shift_U1",
+      "family": "shift",
+      "value": [
+        0,
+        -1
+      ]
+    },
+    {
+      "name": "shift_D1",
+      "family": "shift",
+      "value": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "scale_095",
+      "family": "scale",
+      "value": 0.95
+    },
+    {
+      "name": "scale_105",
+      "family": "scale",
+      "value": 1.05
+    },
+    {
+      "name": "stroke_thin_25",
+      "family": "stroke",
+      "value": [
+        "thin",
+        0.25
+      ]
+    },
+    {
+      "name": "stroke_thick_25",
+      "family": "stroke",
+      "value": [
+        "thick",
+        0.25
+      ]
+    },
+    {
+      "name": "brightness_090",
+      "family": "brightness",
+      "value": 0.9
+    },
+    {
+      "name": "brightness_110",
+      "family": "brightness",
+      "value": 1.1
+    }
+  ],
+  "predefined_candidate_gate": {
+    "accuracy_gain_min_pp": 0.5,
+    "paired_BH_q_lt": 0.05,
+    "writer_nonworsening_min": 3,
+    "per_fold_official_delta_acc_min_pp": -0.3
+  },
+  "screening_candidates_for_retraining": [
+    {
+      "variant": "stroke_thin_25",
+      "oof_delta_pp": 1.0546874999999956,
+      "BH_q": 0.0026477159330007905,
+      "min_official_delta_pp": -0.203125000000004,
+      "writers_not_worse": 3
+    }
+  ],
+  "decision": "SCREEN_RETRAIN_CANDIDATES",
+  "note": "Transform of validation alone is a fixed-model diagnostic; no inference accuracy gain proves retrained model improvement.",
+  "normal_comparison": true,
+  "normal_and_combined_frozen_model_count": 5,
+  "new_training_runs": 0,
+  "official_original_test_used": false,
+  "professor_final_test_used": false,
+  "versions": {
+    "sklearn": "1.8.0",
+    "numpy": "2.3.5",
+    "scipy": "1.18.1"
+  },
+  "models_zip_members_sha256": {
+    "combined_heldout_41_mlp.joblib": "10b2cc695f7597258ccab3e9c350248cec8f74af1d77e63676cf05d0e78a8538",
+    "combined_heldout_42_mlp.joblib": "c3c16d1d8c9d4232ec78a8c1cdd52c31543c034d8df2cf7a1cad8beec82c76f0",
+    "combined_heldout_43_mlp.joblib": "bd0377ff690ce529ee88e4d747c2942511efb6077ab82e5a94ac963135336ea0",
+    "combined_heldout_44_mlp.joblib": "a8ff1f3601faf4c752af44ced67712b226a94759a8af36be90f560b7d17a78c3",
+    "normal_mlp.joblib": "1b4284ce996c2e25c59a2b89bac02aae923d6c0ccdfd1e204d308c59c8cc3315"
+  },
+  "elapsed_seconds": 11.060191123000003
+}
