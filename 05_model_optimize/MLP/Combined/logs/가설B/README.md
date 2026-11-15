@@ -1,23 +1,24 @@
-# Combined — 가설 B: 공간 분포·중심 정렬·데이터 증강
+# Combined — 가설 B: 공간·중심·크기·명암
 
 ## 검증 목적
 
-작성자별 중심·크기·밝기·획 굵기의 차이가 Combined MLP의 잔존 오분류와 관련되는지 확인하고, 전처리·학습 증강의 개별 효과를 4-Fold OOF로 검증한다.
+이미지 중심·Bounding Box·잉크 비율과 공간적 밝기 분포가 Combined 작성자 보류 OOF 오류에 미치는 영향을 **단일 입력 조작 및 이후 필요 시 4-Fold 재학습**으로 검증한다.
 
-- 위치 ±1px와 Size 변화만으로 예측이 뒤집히는가?
-- Size 정규화와 Center 정렬을 **각각** 적용하면 작성자 보류 OOF가 달라지는가?
-- 동일한 전처리를 Training과 Validation에 적용하여 재학습할 때 효과가 바뀌는가?
-- 학습용 Hand-made 비중 또는 Training-only Augmentation을 바꿀 경우 성능과 공식 Validation을 함께 유지하는가?
+## 현재 판정 — 후속 검증 우선
 
-## 연구 흐름 (모두 계획)
+[초기분석 EXP유002](../초기분석/EXP유002_Error_Analysis.md)에서 전체 0/D/8/B 640장에 동일한 하나의 크기·중심 방향이 유효하다는 결과는 없었으나, **특정 작성자·클래스 내부의 오류-특징 연관성**을 발견했다.
 
-1. [초기분석 EXP유002 — Error Analysis](../초기분석/EXP유002_Error_Analysis.md) — 오류 특징 비교 (**미실시**).
-2. [초기분석 EXP유003 — Input Sensitivity](../초기분석/EXP유003_Input_Sensitivity.md) — 기존 모델 고정 단일 변수 실험 (**미실시**).
-3. 추후 Size-only, Center-only, Size+Center 재학습 비교 — 동일 4-Fold·공식 Train 76,800장+Hand-made 1,920장, Baseline 원본 유지 (**미실시**).
-4. 추후 Hand-made Training 비중·증강 및 Forward/Reverse Verification — 별도 통제 실험으로 구분 (**미실시**).
+- 작성자 **43번 8→B**: 잘못 분류된 8은 정답 8보다 더 넓고 Ink Ratio가 높음. 32/64/128 threshold 방향 유지.
+- 작성자 **41번 D→0**: 잘못 분류된 D의 x 중심 위치가 정답 D보다 오른쪽.
+- 작성자 **43번 0→D**: 잘못 분류된 0의 y 중심 위치가 더 위쪽. 단, 정답은 7장으로 표본이 작고 분석이 사후 지정됨.
 
-참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). CoM의 Normal 결과를 Combined의 개선 성능으로 간주하지 않는다.
+**따라서 가설 B 우선 진행**. 그러나 이 관찰 결과는 **입력 변환이 정답률을 높인다는 인과적 증명은 아니다**.
 
-## 평가 원칙
+## 실행 순서
 
-전체 Accuracy만 보지 않고 Macro F1, 숫자/문자, 작성자별 성능, `0↔D`·`8↔B`, 공식 개발 Validation, 학습/추론 시간, Iteration을 비교한다. 보류 작성자와 공식 Test는 학습·조정에 사용하지 않는다.
+1. [EXP유003 — Input Sensitivity](../초기분석/EXP유003_Input_Sensitivity.md) (**계획 / 미실시**)에서 원본 모델 가중치를 고정하고 **라벨을 사용하지 않는** 위치·Size·굵기·밝기 단일 변형을 적용.
+2. 같은 이미지의 정오답 교정·신규 오류·클래스별 Logit Margin·작성자별 Macro F1 및 공식 Validation을 비교.
+3. 유효한 단일 변형만 동일 규칙의 Train/Validation/OOF **4-Fold 재학습 후보**로 상정.
+4. Hand-made Training 비중·Augmentation은 원인 분석과 별도 통제 실험으로 취급.
+
+참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
