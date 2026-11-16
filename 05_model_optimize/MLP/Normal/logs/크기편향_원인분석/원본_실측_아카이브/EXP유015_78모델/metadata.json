@@ -1,0 +1,65 @@
+{
+  "experiment": "EXP015",
+  "three_seeds": [
+    42,
+    43,
+    44
+  ],
+  "total_grid_conditions": 26,
+  "all_conditions_fit_on_original_train_only": true,
+  "gate": {
+    "digit_1p2_flip_mean_max": 0.1,
+    "letter_0p8_flip_mean_max": 0.1,
+    "digit_1p2_probability_drift_mean_max": 0.12,
+    "letter_0p8_probability_drift_mean_max": 0.12,
+    "each_seed_critical_flip_max": 0.15,
+    "all_scale_family_flip_mean_max": 0.12,
+    "handmade_digits_mean_min": 0.85,
+    "handmade_letters_mean_min": 0.8
+  },
+  "eligible_count": 9,
+  "selected_best": "size30_stroke28",
+  "fixed_original_exp006_com_accuracy": {
+    "OfficialVal": {
+      "all": {
+        "mean": 0.9705208333333334,
+        "stdev": 0.001380945164954485
+      },
+      "digits": {
+        "mean": 0.970361111111111,
+        "stdev": 0.0008388704928078276
+      },
+      "letters": {
+        "mean": 0.9707870370370371,
+        "stdev": 0.0022920173693493887
+      }
+    },
+    "Handmade": {
+      "all": {
+        "mean": 0.776953125,
+        "stdev": 0.005674155877474209
+      },
+      "digits": {
+        "mean": 0.8441666666666667,
+        "stdev": 0.013583269427252522
+      },
+      "letters": {
+        "mean": 0.6649305555555555,
+        "stdev": 0.008419691425682076
+      }
+    }
+  },
+  "fixed_original_exp006_com_scale": {
+    "digits_1.2": {
+      "mean_family_flip": 0.7160416666666668,
+      "mean_abs_delta_p_letter": 0.7143157323201498
+    },
+    "letters_0.8": {
+      "mean_family_flip": 0.4607638888888889,
+      "mean_abs_delta_p_letter": 0.45446011424064636
+    }
+  },
+  "original_test_used": false,
+  "professor_test_used": false,
+  "main_or_final_checkpoint_changed": false
+}

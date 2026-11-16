@@ -1,0 +1,29 @@
+{
+  "experiment": "EXP-CMB-007",
+  "reference": "EXP-CMB-005/006",
+  "old_condition_count": 16,
+  "new_condition_count": 15,
+  "total_condition_count": 31,
+  "reference_arms": [
+    "scale30_stroke00",
+    "scale30_stroke28",
+    "scale50_stroke00",
+    "scale50_stroke28"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "writers": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "expected_new_fits": 180,
+  "hyperparameters_changed": false,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "status": "numeric comparison complete; explanatory audit pending"
+}

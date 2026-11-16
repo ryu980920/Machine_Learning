@@ -1,0 +1,17 @@
+﻿arm,direction,mean_error_count,mean_error_rate_by_actual_family
+com_only,digit_to_letter,92.66666666666667,0.057916666666666665
+com_only,letter_to_digit,169.33333333333334,0.1763888888888889
+com_only,digit_to_digit,103.33333333333333,0.06458333333333334
+com_only,letter_to_letter,21.666666666666668,0.022569444444444448
+scale10_stroke00,digit_to_letter,50.0,0.03125000000000001
+scale10_stroke00,letter_to_digit,99.0,0.10312500000000001
+scale10_stroke00,digit_to_digit,88.0,0.055
+scale10_stroke00,letter_to_letter,20.666666666666668,0.021527777777777774
+scale10_stroke14,digit_to_letter,49.0,0.030625
+scale10_stroke14,letter_to_digit,106.33333333333333,0.11076388888888888
+scale10_stroke14,digit_to_digit,101.66666666666667,0.06354166666666668
+scale10_stroke14,letter_to_letter,25.333333333333332,0.02638888888888889
+scale10_stroke28,digit_to_letter,44.0,0.027499999999999997
+scale10_stroke28,letter_to_digit,102.66666666666667,0.10694444444444444
+scale10_stroke28,digit_to_digit,91.0,0.056875
+scale10_stroke28,letter_to_letter,27.0,0.028125000000000008

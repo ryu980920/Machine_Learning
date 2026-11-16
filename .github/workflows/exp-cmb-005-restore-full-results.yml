@@ -1,0 +1,76 @@
+name: EXP-CMB-005 Restore Completed 20-30% Results (no training)
+
+on:
+  push:
+    branches: [exp/cmb005-normal-shortcut-augmentation-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-005-restore-full-results.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  restore-results:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current experiment branch
+        uses: actions/checkout@v4
+        with:
+          ref: exp/cmb005-normal-shortcut-augmentation-20261116
+          persist-credentials: true
+      - name: Restore completed stage2 and full results artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: EXP-CMB-005-full-10-arm-3seed-4writer-audit
+          run-id: 43871619789
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke
+      - name: Verify precomputed results and checksums in source manifests
+        run: |
+          set -euo pipefail
+          base="05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke"
+          for stage in stage_low20to30 full_comparison; do
+            test -s "$base/$stage/SUMMARY.md"
+            test -s "$base/$stage/comparison.csv"
+            test -s "$base/$stage/all_240_direction_changes.csv"
+            test -s "$base/$stage/all_16_class_error_changes.csv"
+            test -s "$base/$stage/manifest.json"
+          done
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke")
+          for stage,arms in (("stage_low20to30",6),("full_comparison",10)):
+              q=p/stage
+              with (q/"comparison.csv").open(encoding="utf-8-sig") as f:
+                  rows=list(csv.DictReader(f))
+              with (q/"per_seed_overall.csv").open(encoding="utf-8-sig") as f:
+                  seeds=list(csv.DictReader(f))
+              with (q/"all_240_direction_changes.csv").open(encoding="utf-8-sig") as f:
+                  pairs=list(csv.DictReader(f))
+              with (q/"all_16_class_error_changes.csv").open(encoding="utf-8-sig") as f:
+                  classes=list(csv.DictReader(f))
+              assert (len(rows),len(seeds),len(pairs),len(classes))==(arms,arms*3,arms*240,arms*16)
+              m=json.loads((q/"manifest.json").read_text(encoding="utf-8"))
+              assert m["expected_fits"]==arms*3*4
+              assert m["no_hp_search"] and m["no_test_used"]
+              print(stage,"conditions",arms,"fits",m["expected_fits"],"directed_pairs",len(pairs),"all_classes",len(classes))
+          PY
+      - name: Commit results after updating onto remote branch head (no force push)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low20to30/
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/full_comparison/
+          if git diff --staged --quiet; then
+            echo "Stage-two and full results already recorded"
+            exit 0
+          fi
+          git commit -m 'research: restore completed EXP-CMB-005 stage2 and full 10-arm results [skip ci]'
+          git fetch origin exp/cmb005-normal-shortcut-augmentation-20261116
+          git rebase origin/exp/cmb005-normal-shortcut-augmentation-20261116
+          git push origin HEAD:exp/cmb005-normal-shortcut-augmentation-20261116

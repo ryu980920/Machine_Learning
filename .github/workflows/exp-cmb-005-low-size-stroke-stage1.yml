@@ -1,0 +1,99 @@
+name: EXP-CMB-005 Low Size Stroke Stage 1 (0-10%)
+
+on:
+  push:
+    branches: [exp/cmb005-normal-shortcut-augmentation-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-005-low-size-stroke-stage1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  low-size-experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        arm: [com_only, scale10_stroke00, scale10_stroke14, scale10_stroke28]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Normal experiment dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Verify existing Combined baseline
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Run four writer-held-out fits and five-scale probes
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb005_balanced_scale_stroke.py \
+            --arm "${{ matrix.arm }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/cmb005/${{ matrix.arm }}/seed_${{ matrix.seed }}"
+      - name: Store all per-condition models and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb005-${{ matrix.arm }}-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/cmb005/${{ matrix.arm }}/seed_${{ matrix.seed }}/
+          if-no-files-found: warn
+          retention-days: 30
+
+  aggregate-low:
+    needs: low-size-experiment
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download all 12 individual outputs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb005-*
+          path: ${{ runner.temp }}/cmb005-incoming
+          merge-multiple: false
+      - name: Aggregate 16-class and 240-direction error rates and 5-scale responses
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb005_aggregate.py \
+            --stage low10 \
+            --incoming "${{ runner.temp }}/cmb005-incoming" \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low10
+      - name: Upload combined evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-005-low10-all-classes-review
+          path: 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low10/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit experimental evidence only on review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low10/
+          if ! git diff --staged --quiet; then
+            git commit -m 'research: save first-stage 16-class combined augmentation evidence [skip ci]'
+            git push
+          fi
