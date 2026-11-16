@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EXP-CMB-007: compare frozen EXP-CMB-005/006/006 0-50% against new 40-50%.
+"""EXP-CMB-007: compare frozen EXP-CMB-005/006 frozen 0-50% against EXP-CMB-007 new 60-100%.
 
 All original OOF predictions come from previously merged main results; no
 retraining, renormalization, or test-set inspection takes place here.
