@@ -1,6 +1,10 @@
 name: Normal EXP017 80-14 MLP HP Fine and Final OfficialVal Ranking
 
 on:
+  push:
+    branches: [exp/normal-exp017-80-14-mlp-hparam-20261116]
+    paths:
+      - '.github/workflows/normal-exp017-hparam-fine.yml'
   workflow_dispatch:
 
 permissions:
