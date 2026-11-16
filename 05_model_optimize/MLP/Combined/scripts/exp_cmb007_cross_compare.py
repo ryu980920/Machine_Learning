@@ -158,7 +158,7 @@ def main():
                            "max_fold_seed_family_flip":float(max(v)),
                            "min_fold_seed_family_flip":float(min(v))})
     assert len(class_flip)==31*2*16*5
-    class_flip.sort(key=lambda x:(ORIG_ARMS+NEW_ARMS).index(x["arm"]),
+    class_flip.sort(key=lambda x:((ORIG_ARMS+NEW_ARMS).index(x["arm"]),
                               x["dataset"],x["actual"],x["scale"]))
     csvout(out/"all_31_condition_16class_five_scale_flip.csv",class_flip)
     worst=[]
