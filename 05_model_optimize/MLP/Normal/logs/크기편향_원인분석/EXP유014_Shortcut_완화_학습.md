@@ -7,15 +7,15 @@
 EXP유006에서 Size-only 숫자 정확도가 36.46%로 저하되고 Size→CoM으로 84.06%까지 회복했지만, EXP유012에서 크기 개입에 따른 숫자/문자 판단 방향이 크게 달라지는 현상을 확인했다. 새로운 해결 실험은 Size→CoM의 재적용만 반복하지 않고 **학습 입력의 크기–레이블 상관관계 자체를 약화**시키는 것이다.
 
 ## 실험군
-모든 새 MLP는 **동일 Official Train 76,800장에 대해 1회씩 학습**한다. 각 클래스의 50% 이미지는 원본 표현을 사용하고 나머지 50%는 클래스와 무관하게 목표 Bounding Box 긴 변 16·18·20·22·24px을 **동일 개수씩** 부여한다. 선택한 이미지와 목표 크기 할당은 시드 20261116으로 고정하여 모델 학습 Seed 간 동일한 입력을 제공한다.
+모든 새 MLP는 **동일 Official Train 76,800장에 대해 1회씩 학습**한다. 각 클래스의 약 50% 이미지는 원본 표현을 사용하고 나머지 약 50%는 클래스와 무관하게 목표 Bounding Box 긴 변 16·18·20·22·24px을 **동일 개수씩** 부여한다. 실제 공식 Train의 클래스별 건수가 홀수일 수 있으므로, 각 클래스에서 변형 대상을 약 절반(5의 배수로 내림)으로 선택하고 5개 목표 크기를 동일 빈도로 배정한다. 선택한 이미지와 목표 크기 할당은 시드 20261116으로 고정하여 모델 학습 Seed 간 동일한 입력을 제공한다.
 
 | 비교 | 새 학습에 사용하는 입력 | 평가 전처리 | 목적 |
 |---|---|---|---|
 | Baseline CoM (원본) | EXP유006 archived MLP 재사용 | CoM | 크기 학습 Shortcut 대조 |
-| **A balanced_scale** | 50% CoM-only + 50% class-balanced Scale→CoM | CoM | 클래스별 크기 상관관계 억제 |
+| **A balanced_scale** | 약 50% CoM-only + 약 50% class-balanced Scale→CoM | CoM | 클래스별 크기 상관관계 억제 |
 | **B balanced_scale_stroke** | A + 증강 이미지에 한해 위상 검사를 통과한 약한 획 굵기 변형 | CoM | 크기 단서가 획 굵기/질량으로 대체되는 현상 완화 |
 | Baseline Size→CoM (원본) | EXP유006 archived MLP 재사용 | Size→CoM | 기존 최고 수준의 문자 정확도 대조 |
-| **C sizecom_balanced_scale** | 50% Size→CoM + 50% class-balanced Scale→Size→CoM | Size→CoM | 기존 정규화에 크기 변화 학습을 추가 |
+| **C sizecom_balanced_scale** | 약 50% Size→CoM + 약 50% class-balanced Scale→Size→CoM | Size→CoM | 기존 정규화에 크기 변화 학습을 추가 |
 
 - Seed **42·43·44**, `MLPClassifier(random_state=seed)` 및 EXP유006 기본 Hyperparameters 유지.
 - C는 이미 목표 크기 20px로 재정규화하므로 증강 효과는 주로 리샘플링·획 변화의 강건성으로 나타날 수 있음.
