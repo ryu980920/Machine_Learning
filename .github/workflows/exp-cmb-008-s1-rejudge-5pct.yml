@@ -1,0 +1,91 @@
+name: EXP-CMB-008 S1 Revised 5pct Gate Reassessment
+
+on:
+  workflow_run:
+    workflows: ["EXP-CMB-008 S1 30-28 CoM MLP width and directed-error gate"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: cmb008-reassess-five-percent
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Reassess all nine S1 training artifacts without refitting
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Checkout newest main with amended criteria
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Compile revised evaluator
+        run: python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_aggregate.py
+      - name: Download S1 training artifacts from the completed original run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 43914675988
+          pattern: cmb008-w*-s*
+          path: ${{ runner.temp }}/cmb008-incoming
+          merge-multiple: false
+      - name: Verify exactly 9 seed/width artifact folders
+        env:
+          SOURCE_DIR: ${{ runner.temp }}/cmb008-incoming
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          base=Path(os.environ["SOURCE_DIR"])
+          expected={f"cmb008-w{w}-s{s}" for w in (64,128,256) for s in (42,43,44)}
+          found={p.name for p in base.iterdir() if p.is_dir()}
+          assert found==expected,(found,expected)
+          for p in base.iterdir():
+              for f in ("manifest.json","oof_predictions.csv","fold_metrics.csv","per_class_and_scale.csv","training_time.csv"):
+                  assert (p/f).is_file(),p/f
+          print("Verified all 9 original S1 model artifact sets")
+          PY
+      - name: Recompute accuracy and all four directional error rates using 5pct gate
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_aggregate.py \
+            --repo . \
+            --incoming '${{ runner.temp }}/cmb008-incoming' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/S1_Stage_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+      - name: Archive independently reproducible result
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s1-revised-5pct-accuracy-overfit-review
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Publish revised S1 metrics and decisions on main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+          if git diff --staged --quiet; then
+            echo 'S1 revised results already committed'
+            exit 0
+          fi
+          git commit -m 'research: rejudge CMB008 S1 with 5pct directional targets and accuracy safeguards [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
