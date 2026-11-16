@@ -82,3 +82,9 @@ Training에만 Class-balanced Scale(10~50%, 중간 25/35% 포함) 및 Stroke(0~4
 [실험일지](logs/크기편향_원인분석/EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [학습·평가 코드](scripts/README.md) · [실험 브랜치 Draft PR](https://github.com/ryu980920/Machine_Learning/pull/15).
 
 학습의 크기 증강 80% 및 획 증강 강도 14%·CoM은 변경하지 않는다. 은닉층·정규화·학습률·조기 종료를 Official Train/Val로 최적화하고, **팀원이 모은 손글씨 Validation은 최종 하이퍼파라미터 동결 이후** 실행한다. Final/Original Test/교수님 Test 미수정.
+
+### EXP유017 최적화 및 OfficialVal 5배율 검증 완료 (2026-11-16)
+
+[최종 실험 로그](logs/크기편향_원인분석/EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [5배율 3-Seed 비교 CSV](results/크기편향_원인분석/EXP유017_OfficialVal_5배율_3Seed_요약.csv) · [모델 SHA Manifest](results/크기편향_원인분석/EXP유017_동결모델_SHA256_Manifest.json) · [검증 성공 GitHub Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43846851354).
+
+80-14 Training 증강/CoM 고정, HP 46조건×3 Seed **138개 모델** 완료, 사전 Shortcut Gate **10조건 합격**. 최종 `(256,128), alpha=0.03, LR=0.001, early_stopping=False`의 OfficialVal 1.0 정확도 **96.5365%**(기존 94.8108% 대비 +1.7257%p), 0.8~1.2배 최악 B·8·D Family flip **16.67%**. **97.30% 목표는 미달**, 팀원 손글씨 독립 Validation은 아직 미실시. Seed별 가중치는 SHA 검증 후 후속 평가용 동결, 현재 `main` 및 최종 배포 모델에는 반영하지 않음.
