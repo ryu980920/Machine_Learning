@@ -41,3 +41,10 @@ Hand-made는 이미 여러 차례 확인한 4명 작성자의 개발용 데이�
 - [가설 A EXP유009 — 원본+C9 Data Augmentation 통합 실험일지](../가설A/EXP유009_C9_DataAugmentation.md) · [실제 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43796627489).
 
 > EXP유008·009는 원래 실행 당시 가설 B로 명명됐으므로 Actions·스크립트·Manifest의 당시 식별자는 재현성을 위해 보존했다. **연구 기록의 최종 분류는 가설 A**다.
+
+## 정확도 역전 메커니즘 검증 — EXP유010·011 (2026-11-16)
+
+- **[EXP유010 — 공식 Train vs Hand-made 크기 분포 차이](EXP유010_크기분포_분석.md)**: 76,800 공식 Train·19,200 공식 Val·2,560 Hand-made의 BBox 분포 계측. 문자 B/D/F의 원본 긴 변 중앙값은 공식 Train 24px, Hand-made 20px; Size 정규화 후 두 집합의 긴 변 중앙값 모두 20px. B의 Raw W1 3.632→Size 후 0.019px. 가로폭 차이는 일부 남으므로 단일 원인 확정은 금지.
+- **[EXP유011 — Size-only 숫자 정확도 하락의 CoM·학습 분리](EXP유011_Size_CoM_교차분석.md)**: 과거 원본 체크포인트 9개 해시와 결과 정답 수를 검증하고 모델 가중치를 고정한 교차평가. 동일 Size-only 모델에서 입력만 Size→CoM으로 바꾸자 Hand-made 숫자 36.4583→73.8125%, 문자 94.2014→69.7222%. CoM 입력 효과와 재학습 효과가 함께 관찰됨.
+- **[가설 A EXP유012 — B↔8·D↔0 크기 분류 단서 개입](../가설A/EXP유012_크기분류단서.md)**: 5개 크기 배율에서 고정된 CoM 모델 vs Size→CoM 모델의 클래스 확률 반응이 반대라는 것을 확인.
+- [GitHub Actions 실측 근거](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796). 기존 학습 모델 그대로 사용, 새 학습·Original Test·교수님 Test 미사용. 실험은 브랜치에서만 분석되며 최종 Pipeline은 변경하지 않는다.
