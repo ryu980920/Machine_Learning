@@ -93,7 +93,7 @@ CoM 전후 Hand-made 전체 중심 오프셋 평균은 **1.347px → 0.380px**�
 
 ## 추가 결과 요약 (기존 RESULTS.md 내용 보존)
 
-**원본:** [통합 실험일지](EXP유011_Size_CoM_교차분석.md) · [12개 교차조건 실측 CSV](EXP유011_summary.csv) · [성공한 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)
+**원본:** [통합 실험일지](EXP유011_Size_CoM_교차분석.md) · [12개 교차조건 실측 CSV](../../results/크기편향_원인분석/EXP유011_summary.csv) · [성공한 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)
 
 고정된 기존 모델을 사용하여 모델 학습과 평가 입력 전처리를 분리했다.
 

@@ -1,0 +1,109 @@
+name: Normal EXP015 Fixed-Model OfficialVal Size Shortcut Audit
+
+on:
+  push:
+    branches: [exp/normal-exp015-scale-stroke-ratio-20261116]
+    paths:
+      - '.github/workflows/normal-exp015-officialval-scale-audit.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp015_officialval_scale_audit.py'
+      - '05_model_optimize/MLP/Normal/scripts/exp015_officialval_audit_aggregate.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned scientific runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Read historical original CoM checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43785390739
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: normal-exp006-com-${{ matrix.seed }}
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp006-controls
+      - name: Download all coarse model artifacts for the seed
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43814205670
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp015-s${{ matrix.seed }}-r*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-coarse
+      - name: Download all fine model artifacts for the seed
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43815571141
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp015fine-s${{ matrix.seed }}-r*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-fine
+      - name: Frozen-model 0.8x-1.2x OfficialVal stress test for all nine gated candidates
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp015_officialval_scale_audit.py \
+            --seed '${{ matrix.seed }}' \
+            --coarse-models-root '${{ runner.temp }}/exp015-coarse' \
+            --fine-models-root '${{ runner.temp }}/exp015-fine' \
+            --controls-root '${{ runner.temp }}/exp006-controls' \
+            --out '${{ runner.temp }}/exp015-audit-s${{ matrix.seed }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp015-audit-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/exp015-audit-s${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate_audit:
+    needs: [audit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp015-audit-s*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-audit-all
+      - name: Aggregate three seeds without refitting
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp015_officialval_audit_aggregate.py \
+            --inputs '${{ runner.temp }}/exp015-audit-all' \
+            --out '${{ runner.temp }}/exp015-audit-review'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-EXP015-OfficialVal-size-stress-review
+          path: ${{ runner.temp }}/exp015-audit-review/
+          retention-days: 30
+          if-no-files-found: error

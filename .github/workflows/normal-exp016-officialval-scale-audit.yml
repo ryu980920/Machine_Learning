@@ -1,0 +1,108 @@
+name: Normal EXP016 Frozen OfficialVal Scale Source-Transfer Audit
+
+on:
+  push:
+    branches: [exp/normal-exp016-high-fraction-shortcut-20261116]
+    paths:
+      - '.github/workflows/normal-exp016-officialval-scale-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned scientific runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Verify frozen EXP006 baseline control
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43785390739
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: normal-exp006-com-${{ matrix.seed }}
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp006-controls
+      - name: Download EXP016 70/80/90 percent candidates, frozen
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s${{ matrix.seed }}-r[789]0
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-new-models
+      - name: Download historical EXP015 30/40/50 percent controls, frozen
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43814205670
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp015-s${{ matrix.seed }}-r[345]0
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-old-models
+      - name: Run fixed-model OfficialVal 0.8–1.2 scale probes, no new fitting
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp016_officialval_scale_audit.py \
+            --seed '${{ matrix.seed }}' \
+            --new-models-root '${{ runner.temp }}/exp016-new-models' \
+            --old-models-root '${{ runner.temp }}/exp015-old-models' \
+            --controls-root '${{ runner.temp }}/exp006-controls' \
+            --out '${{ runner.temp }}/exp016-audit-s${{ matrix.seed }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp016-audit-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/exp016-audit-s${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [audit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned scientific runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp016-audit-s*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-audit-all
+      - name: Aggregate three-seed 16-class OfficialVal size sensitivity
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp016_officialval_audit_aggregate.py \
+            --inputs '${{ runner.temp }}/exp016-audit-all' \
+            --out '${{ runner.temp }}/exp016-officialval-reviewed'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-EXP016-OfficialVal-frozen-3seed-review
+          path: ${{ runner.temp }}/exp016-officialval-reviewed/
+          retention-days: 30
+          if-no-files-found: error

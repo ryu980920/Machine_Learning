@@ -12,3 +12,8 @@
 
 
 - **[Automatic_Centering/](Automatic_Centering/README.md)**: **EXP유004 전체 단일 결과 폴더**. 공식 Val **19,200장·Hand-made 2,560장** 3개 모델 정확도/CM/정렬 오차, CoM·Bounding Box 후보 모델 2개, 고정 MLP의 **원본 대 CoM 이동** 및 동일 CoM 입력의 재학습 효과, Hand-made **2,560장 × 4조건** 전수 예측, 5/F·B/8 IG. 본 실험과 픽셀 판단 분석을 **19개 원본 파일**로 통합. *최종 Pipeline 채택은 보류.*
+
+
+## EXP유010~016 크기 편향 실측 결과
+
+[요약 CSV 및 전체 3-Seed 측정 자료](크기편향_원인분석/README.md) · [실험일지](../logs/크기편향_원인분석/README.md) · [원본 Python 코드](../scripts/README.md).
