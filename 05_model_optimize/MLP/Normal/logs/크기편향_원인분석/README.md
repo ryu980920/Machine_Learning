@@ -90,6 +90,12 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 
 ### EXP유017 — 80-14 고정 MLP 하이퍼파라미터 최적화
 
-[사전등록·진행 실험일지](EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [기존 80-14와 70-0 동결 기록](EXP유016_80-14_70-0_두_후보_병행보존.md) · [EXP유017 Draft PR](https://github.com/ryu980920/Machine_Learning/pull/15).
+[사전등록·완료 실험일지](EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [기존 80-14와 70-0 동결 기록](EXP유016_80-14_70-0_두_후보_병행보존.md) · [EXP유017 Draft PR](https://github.com/ryu980920/Machine_Learning/pull/15).
 
 **80-14 전처리 고정** 후 MLP의 은닉층·규제·학습률을 최적화한다. 선택에는 OfficialVal만 사용하고 **팀원의 손글씨는 최종 모델 동결 뒤 별도 Validation 전용**으로 남긴다. Original Test와 교수님 Test는 사용하지 않는다.
+
+#### EXP유017 최종 검증 완료 (2026-11-16)
+
+- [사전등록·전체 138모델·5배율 검증 통합 일지](EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [5배율/3-Seed 모델 비교 CSV](../../results/크기편향_원인분석/EXP유017_OfficialVal_5배율_3Seed_요약.csv) · [선택 모델 SHA-256](../../results/크기편향_원인분석/EXP유017_동결모델_SHA256_Manifest.json).
+- 1차 78개 + 2차 60개 = **138개 MLP, 46개 조합**. 사전 Shortcut Gate **10/46 통과**. **(256,128), alpha=0.03, LR=0.001, Early Stopping=False**가 공식 Validation **96.5365%**, B·8·D 최악 Family flip **16.67%**로 최종 5배율 Gate 통과.
+- [동결 모델 OfficialVal 5배율 실제 성공 Run #43846851354](https://github.com/ryu980920/Machine_Learning/actions/runs/43846851354). 목표 97.30% 미달, 1.2배 정확도 92.4549%. **팀 손글씨 검증 전용 가중치 동결**, 팀 손글씨 아직 미사용, 본 Draft PR·`main`/배포 모델 미변경.
