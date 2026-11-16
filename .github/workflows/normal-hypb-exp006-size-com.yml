@@ -1,0 +1,89 @@
+name: Normal HypB EXP006 Size and CoM (review only)
+
+on:
+  push:
+    branches: [exp/normal-b-exp006-size-com]
+    paths:
+      - '.github/workflows/normal-hypb-exp006-size-com.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp006_size_com_comparison.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        method: [com, size, size_com]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install verified scientific runtime
+        run: |
+          python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+          python -m pip install "scipy==1.17.0"
+      - name: Train official-only MLP and evaluate development validation
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp006_size_com_comparison.py \
+            --method "${{ matrix.method }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/normal-exp006-${{ matrix.method }}-${{ matrix.seed }}"
+      - name: Archive genuine measurements and model
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-exp006-${{ matrix.method }}-${{ matrix.seed }}
+          path: ${{ runner.temp }}/normal-exp006-${{ matrix.method }}-${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  summarize:
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact evaluation runtime
+        run: |
+          python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+          python -m pip install "scipy==1.17.0"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: normal-exp006-*
+          path: ${{ runner.temp }}/normal-exp006-inputs
+          merge-multiple: false
+      - name: Check all nine runs and compare matched predictions
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp006_size_com_comparison.py \
+            --aggregate \
+            --inputs "${{ runner.temp }}/normal-exp006-inputs" \
+            --out "${{ runner.temp }}/normal-exp006-review"
+      - name: Preserve full comparison (NO commit, NO main modification)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypB-EXP006-complete-review
+          path: ${{ runner.temp }}/normal-exp006-review/
+          retention-days: 30
+          if-no-files-found: error

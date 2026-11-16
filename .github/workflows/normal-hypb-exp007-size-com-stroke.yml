@@ -1,0 +1,86 @@
+name: Normal HypB EXP007 Stroke after Size CoM (review only)
+
+on:
+  push:
+    branches: [exp/normal-b-exp006-size-com]
+    paths:
+      - '.github/workflows/normal-hypb-exp007-size-com-stroke.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp007_size_com_stroke_followup.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [size_com, size_com_stroke030, size_com_stroke060]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned official-training scientific stack
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Train and evaluate one controlled MLP condition
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp007_size_com_stroke_followup.py \
+            --condition "${{ matrix.condition }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/normal-exp007-${{ matrix.condition }}-${{ matrix.seed }}"
+      - name: Preserve model, per-image predictions and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-exp007-${{ matrix.condition }}-${{ matrix.seed }}
+          path: ${{ runner.temp }}/normal-exp007-${{ matrix.condition }}-${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  summarize:
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install scientific runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: normal-exp007-*
+          path: ${{ runner.temp }}/normal-exp007-inputs
+          merge-multiple: false
+      - name: Aggregate all 9 models and paired error transitions
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp007_size_com_stroke_followup.py \
+            --aggregate \
+            --inputs "${{ runner.temp }}/normal-exp007-inputs" \
+            --out "${{ runner.temp }}/normal-exp007-review"
+      - name: Archive review-only comparison (NO commit)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypB-EXP007-complete-review
+          path: ${{ runner.temp }}/normal-exp007-review/
+          retention-days: 30
+          if-no-files-found: error
