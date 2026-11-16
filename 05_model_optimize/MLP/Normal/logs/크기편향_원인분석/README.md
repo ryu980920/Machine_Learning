@@ -75,6 +75,6 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 
 ### EXP유016 — 두 모델 모두 별도로 보존
 
-[80-14 · 70-0 병행 보존 결정](EXP유016_80-14_70-0_두_후보_병행보존.md) · [두 조건 × 3 Seed 실제 체크포인트 및 SHA-256](../../results/EXP유016_동결_후보모델/README.md).
+[80-14 · 70-0 병행 보존 결정](EXP유016_80-14_70-0_두_후보_병행보존.md) · [두 조건 × 3 Seed 실제 체크포인트 및 SHA-256](https://github.com/ryu980920/Machine_Learning/blob/exp/normal-exp016-high-fraction-shortcut-20261116/05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/README.md).
 
 사용자 요청에 따라 80-14와 70-0 어느 쪽도 최종 모델로 승격하지 않고 **6개 동결 학습모델**을 EXP유016 실험 브랜치에 영구 저장했다. `main`에는 이 문서 및 결과 CSV만 반영하고 실험 코드·체크포인트·final은 건드리지 않는다.
