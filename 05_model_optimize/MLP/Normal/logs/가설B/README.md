@@ -24,3 +24,15 @@ CoM 정렬은 Hand-made **숫자 56.31→83.19%**를 개선했으나 **문자 73
 따라서 **입력 위치 민감도는 확인**했지만, 문자를 숫자로 잘못 구별하는 구체적 판단 근거는 확인하지 못했다. 이 문제는 [가설 A](../가설A/README.md)에서 다룬다.
 
 Hand-made는 이미 여러 차례 확인한 4명 작성자의 개발용 데이터이며 신규 작성자 독립 검증은 하지 않았다.
+
+
+## 후속 실험 — EXP유006·007 (2026-11-16, 실험 브랜치)
+
+기존 EXP유003~005의 연구 결과·파일은 변경하지 않는다. 다음 실험은 별도 가설 B 하위 로그로 관리하며 최종 모델 채택이 아니라 개발용 비교다.
+
+- **[EXP유006 Size/CoM 사전계획](EXP유006_Size_CoM_Comparison_PLAN.md)** · **[실측 결과](EXP유006_Size_CoM_Comparison_Results.md)**: CoM-only, BBox Size-only, Size→CoM을 동일 공식 Train으로 3 Seed씩 총 9개 MLP 학습 비교. Hand-made 전체 3-seed 평균 CoM-only 77.6953%, Size-only 58.1120%, **Size→CoM 86.9531%**. 공식 Validation에서 Size→CoM은 96.0608%로 하락.
+- **[EXP유007 Stroke 결합 사전계획](EXP유007_Size_CoM_Stroke_PLAN.md)** · **[실측 결과](EXP유007_Size_CoM_Stroke_Results.md)**: Size→CoM 대조와 Size→CoM→Stroke(0.30/0.60)→CoM을 3 Seed씩 총 9개 MLP 학습. **Stroke 0.30 결합**이 Hand-made 평균 **87.9688%** 및 공식 Val **96.2656%**로 세 조건 중 최상위.
+- **연구 판정:** Size 효과와 추가 Stroke 0.30 효과는 개발 데이터에서 확인. 그러나 공식 Val이 목표 97.30% 미만이고 새 작성자 일반화 검증이 없으므로 **추론 Pipeline 및 main 모델은 그대로 유지**.
+- **실행 기록:** [EXP006](https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739) / [EXP007](https://github.com/ryu980920/Machine_Learning/actions/runs/43786098005). 상세 예측·모델·원본 수치는 각각의 GitHub Actions Artifact에 보관(30일).
+
+**주의:** 이 후속 로그·코드·결과 목록은 실험 브랜치 exp/normal-b-exp006-size-com에서 먼저 검토한다. 사용자 승인 전 main에 병합하지 않는다.
