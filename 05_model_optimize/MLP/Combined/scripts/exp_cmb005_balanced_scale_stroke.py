@@ -217,7 +217,7 @@ def run(arm,seed,out):
     features+=geom_rows("official_val",xval,off["y_val"],arm,seed)
     for w in WRITERS:features+=geom_rows("writer_"+str(w),xwriters[w],writers[w]["y"],arm,seed)
     savecsv(out/"geometry_distributions.csv",features)
-    foldrows=[];pairs=[];scale_rows=[];class_rows=[];pred_rows=[];loss=[];fit=[]
+    foldrows=[];pairs=[];scale_rows=[];class_rows=[];scale_class_rows=[];pred_rows=[];loss=[];fit=[]
     pooled=[]
     for held in WRITERS:
         trwriters=[w for w in WRITERS if w!=held]
@@ -254,10 +254,10 @@ def run(arm,seed,out):
             for g,z,classes in maskset:
                 foldrows.append({"arm":arm,"seed":seed,"heldout":held,"dataset":ds,
                       "group":g,**metrics(ytrue[z],pred[z],classes)})
+        prec,rec,f1,_=precision_recall_fscore_support(handwritten_y,outcome,
+              labels=CLASSES,zero_division=0)
         for ci in CLASSES:
             z=handwritten_y==ci
-            prec,rec,f1,_=precision_recall_fscore_support(handwritten_y,outcome,
-                  labels=CLASSES,zero_division=0)
             class_rows.append({"arm":arm,"seed":seed,"writer":held,
                "class":LABELS[ci],"n":int(z.sum()),"correct":int(np.sum(outcome[z]==ci)),
                "precision":float(prec[ci]),"recall":float(rec[ci]),"f1":float(f1[ci])})
@@ -270,7 +270,7 @@ def run(arm,seed,out):
         for ds,ytrue,wid in (("OOF",handwritten_y,held),
                              ("OfficialVal",off["y_val"],held)):
             z,p2,c,base=eval_scales(mlp,scale_map,ytrue,ds,wid,arm,seed)
-            scale_rows+=z;pairs+=p2;class_rows+=c
+            scale_rows+=z;pairs+=p2;scale_class_rows+=c
             if ds=="OOF":assert np.array_equal(base,outcome)
             else:assert np.array_equal(base,pp)
         print("FOLD_COMPLETED",arm,seed,held,
@@ -283,7 +283,8 @@ def run(arm,seed,out):
     assert len(hand_y)==2560
     output_plots(hand_y,pooled_p,out,arm,seed)
     savecsv(out/"fold_metrics.csv",foldrows)
-    savecsv(out/"per_class_and_scale.csv",class_rows)
+    savecsv(out/"oof_per_class.csv",class_rows)
+    savecsv(out/"per_class_and_scale.csv",scale_class_rows)
     savecsv(out/"pair_confusions.csv",pairs)
     savecsv(out/"scale_sensitivity.csv",scale_rows)
     savecsv(out/"oof_predictions.csv",pred_rows)
