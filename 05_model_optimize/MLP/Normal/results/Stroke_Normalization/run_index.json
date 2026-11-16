@@ -1,0 +1,84 @@
+{
+  "conditions": [
+    "C0_CoM",
+    "C1_Stroke015",
+    "C2_Stroke030",
+    "C3_GlyphWidth015",
+    "C4_Stroke015_GlyphWidth015"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "trained_models": 15,
+  "official_original_test_used": false,
+  "professor_test_used": false,
+  "gate": {
+    "Handmade/letters": 0.8,
+    "Handmade/digits": 0.85,
+    "OfficialVal/all": 0.973
+  },
+  "results": [
+    {
+      "condition": "C0_CoM",
+      "letters": 0.6868055555555556,
+      "digits": 0.841875,
+      "official_val": 0.9696354166666666,
+      "six_directional_errors": 220.33333333333334,
+      "letters_sd": 0.0025983731852596724,
+      "digits_sd": 0.00996086090656828,
+      "official_val_sd": 0.0008960755486502803,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C1_Stroke015",
+      "letters": 0.7083333333333334,
+      "digits": 0.8545833333333334,
+      "official_val": 0.9718402777777778,
+      "six_directional_errors": 197.33333333333334,
+      "letters_sd": 0.012870661800590693,
+      "digits_sd": 0.004458528033131805,
+      "official_val_sd": 0.001408712692715325,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C2_Stroke030",
+      "letters": 0.7361111111111112,
+      "digits": 0.878125,
+      "official_val": 0.9704340277777778,
+      "six_directional_errors": 182,
+      "letters_sd": 0.012098091243183593,
+      "digits_sd": 0.004360093653428403,
+      "official_val_sd": 0.0011381794029919111,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C3_GlyphWidth015",
+      "letters": 0.6847222222222222,
+      "digits": 0.8447916666666667,
+      "official_val": 0.9715451388888888,
+      "six_directional_errors": 217.66666666666666,
+      "letters_sd": 0.0017704928866641623,
+      "digits_sd": 0.004573853833354152,
+      "official_val_sd": 0.0006078868541670703,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C4_Stroke015_GlyphWidth015",
+      "letters": 0.7104166666666667,
+      "digits": 0.8583333333333334,
+      "official_val": 0.9718402777777778,
+      "six_directional_errors": 206.66666666666666,
+      "letters_sd": 0.00664275224642675,
+      "digits_sd": 0.004956407188904282,
+      "official_val_sd": 0.0006108545863111098,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    }
+  ]
+}

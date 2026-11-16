@@ -1,0 +1,84 @@
+{
+  "conditions": [
+    "C10_Size020",
+    "C11_Size035",
+    "C12_Size050",
+    "C13_Size065",
+    "C14_Size080"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "trained_models": 15,
+  "official_original_test_used": false,
+  "professor_test_used": false,
+  "gate": {
+    "Handmade/letters": 0.8,
+    "Handmade/digits": 0.85,
+    "OfficialVal/all": 0.973
+  },
+  "results": [
+    {
+      "condition": "C10_Size020",
+      "letters": 0.7013888888888888,
+      "digits": 0.8502083333333333,
+      "official_val": 0.9708680555555556,
+      "six_directional_errors": 216,
+      "letters_sd": 0.006821834272357092,
+      "digits_sd": 0.008784653600961694,
+      "official_val_sd": 0.001327415614834394,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C11_Size035",
+      "letters": 0.7215277777777778,
+      "digits": 0.8585416666666666,
+      "official_val": 0.9702604166666666,
+      "six_directional_errors": 208.66666666666666,
+      "letters_sd": 0.026274422794989767,
+      "digits_sd": 0.0017921510973005564,
+      "official_val_sd": 0.0007967217989989029,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C12_Size050",
+      "letters": 0.7923611111111111,
+      "digits": 0.8495833333333334,
+      "official_val": 0.9696006944444444,
+      "six_directional_errors": 187,
+      "letters_sd": 0.005973836991001851,
+      "digits_sd": 0.0002946278254943885,
+      "official_val_sd": 0.0010048469533672012,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C13_Size065",
+      "letters": 0.8479166666666667,
+      "digits": 0.8566666666666667,
+      "official_val": 0.9673784722222222,
+      "six_directional_errors": 149,
+      "letters_sd": 0.013258252147247745,
+      "digits_sd": 0.004850186136176207,
+      "official_val_sd": 0.00036167824055553864,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    },
+    {
+      "condition": "C14_Size080",
+      "letters": 0.8934027777777778,
+      "digits": 0.855,
+      "official_val": 0.9652083333333333,
+      "six_directional_errors": 115.33333333333333,
+      "letters_sd": 0.004684283876122261,
+      "digits_sd": 0.002841287853538749,
+      "official_val_sd": 0.0016041892134057649,
+      "seeds_individual_pass": 0,
+      "development_pass": false
+    }
+  ]
+}
