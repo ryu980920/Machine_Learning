@@ -1,4 +1,4 @@
-name: EXP018 official standardized 2560 hand-made source snapshot
+name: EXP019 exact official 76800 training source snapshot
 on:
   push:
     branches: [audit/exp018-official2560-dataset-20261117]
@@ -23,6 +23,22 @@ jobs:
               sha=hashlib.sha256(p.read_bytes()).hexdigest()
               print(f'OFFICIAL_SOURCE writer={writer} byte_count={size} sha256={sha}',flush=True)
           PY
+      - name: Verify final v3 official dataset exact bytes
+        run: |
+          python - <<'PY'
+          import hashlib,pathlib
+          p=pathlib.Path('02_data/datasets/MNIST_EMNIST_official_split_112000.npz')
+          digest=hashlib.sha256(p.read_bytes()).hexdigest()
+          expected='0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879'
+          assert digest==expected,(digest,expected)
+          print('VERIFIED_OFFICIAL_V3_SHA',digest,flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EXP019-ExactOfficialV3-SourceNPZ
+          path: 02_data/datasets/MNIST_EMNIST_official_split_112000.npz
+          if-no-files-found: error
+          retention-days: 5
       - uses: actions/upload-artifact@v4
         with:
           name: EXP018-OfficialHandmade2560-GitHubMainNPZ
