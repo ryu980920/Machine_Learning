@@ -43,4 +43,6 @@ Combined의 0~50% 전체 16조건에서는 Hand-made OOF Accuracy는 Size30% Str
 
 ## 실제 결과
 
-현재 실행 전. 학습 성공/실패·정확도·전체 31조건의 최적점은 실제 GitHub Actions 종료와 CSV 검증 뒤 기록한다.
+**사전등록 당시:** 실행 전이었으므로 학습 성공/실패·정확도·31조건 최적점 미확정.
+
+**실행 후 연결:** 45개 조건×Seed 학습 성공 및 31조건 CSV 검증·실험 브랜치 보존을 완료했다. 최종 관측, 정확도/크기 안정성/8↔B·0↔D의 양방향 오류와 작성자 반례 및 연구 목적 판정은 [EXP유004 최종 실험일지](EXP유004_Size60_100_Final_Results.md)에서 확인. 원본 데이터와 사전 질문은 위 내용을 그대로 보존했다. [GitHub Actions 검증 결과 저장 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43899673392).
