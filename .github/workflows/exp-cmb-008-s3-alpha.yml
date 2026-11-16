@@ -1,0 +1,139 @@
+name: EXP-CMB-008 S3 Fixed (256,) L2 Alpha Comparison
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s3-alpha.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  train:
+    name: alpha ${{ matrix.alpha }} seed ${{ matrix.seed }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        alpha: ["1e-5", "1e-3", "1e-2"]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact CMB005/S1 dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Validate data split, SHA and S3 source
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s3_alpha.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s3_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Train four Writer folds with fixed (256,) and selected alpha
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s3_alpha.py \
+            --alpha '${{ matrix.alpha }}' \
+            --seed '${{ matrix.seed }}' \
+            --out '${{ runner.temp }}/cmb008-s3/cmb008-s3-a${{ matrix.alpha }}-s${{ matrix.seed }}'
+      - name: Preserve SHA, loss, 16-class/240-direction error matrices and all checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s3-a${{ matrix.alpha }}-s${{ matrix.seed }}
+          path: '${{ runner.temp }}/cmb008-s3/cmb008-s3-a${{ matrix.alpha }}-s${{ matrix.seed }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  compare:
+    name: Compare alpha 1e-4 baseline to 1e-5,1e-3,1e-2
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical frozen-HP evaluation dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download nine new alpha model archives
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s3-a*-s*
+          path: ${{ runner.temp }}/cmb008-s3-incoming
+          merge-multiple: false
+      - name: Download exact archived S1 256-wide references from finished S1 run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 43914675988
+          pattern: cmb008-w256-s*
+          path: ${{ runner.temp }}/cmb008-s1-reference
+          merge-multiple: false
+      - name: Validate nine new jobs and three held-out S1 original references
+        env:
+          NEW_DIR: ${{ runner.temp }}/cmb008-s3-incoming
+          OLD_DIR: ${{ runner.temp }}/cmb008-s1-reference
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          new=Path(os.environ["NEW_DIR"])
+          old=Path(os.environ["OLD_DIR"])
+          assert {p.name for p in new.iterdir() if p.is_dir()}=={
+            f"cmb008-s3-a{alpha}-s{seed}" for alpha in ('1e-5','1e-3','1e-2') for seed in (42,43,44)}
+          assert {p.name for p in old.iterdir() if p.is_dir()}=={
+            f"cmb008-w256-s{seed}" for seed in (42,43,44)}
+          for p in list(new.iterdir())+list(old.iterdir()):
+              for x in ["manifest.json","oof_predictions.csv","fold_metrics.csv","per_class_and_scale.csv","training_time.csv"]:
+                  assert (p/x).is_file(),(p,x)
+          print("Validated 9 new S3 alpha packages and 3 S1 reference packages")
+          PY
+      - name: Reassess OOF accuracy and four directional confusion targets with overfit guards
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s3_aggregate.py \
+            --new '${{ runner.temp }}/cmb008-s3-incoming' \
+            --s1-reference '${{ runner.temp }}/cmb008-s1-reference' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S3_Alpha
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S3_Alpha/S3_Stage_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md
+      - name: Preserve S3 alpha result log and audit CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-S3-all-alpha-decision
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S3_Alpha/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Publish verified S3 result to main without touching deployed model
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S3_Alpha/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md
+          if git diff --staged --quiet; then
+            echo 'S3 identical results already on main'
+            exit 0
+          fi
+          git commit -m 'research: EXP-CMB-008 S3 L2 alpha evaluation and four-direction class-error decision [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
