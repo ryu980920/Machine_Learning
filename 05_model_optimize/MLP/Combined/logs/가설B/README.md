@@ -31,4 +31,12 @@
 - **[실측 자료](../../results/Geometry_Normalization/README.md):** 16개 학습 모델·실제 CM/이미지·CSV·Loss·manifest.
 - **결론:** Size는 문자에 유리하지만 숫자 악화, CoM은 숫자에 유리하지만 문자 악화, 두 방법 결합은 각 집단의 상충을 완화. 공식 개발 Validation 하락으로 최종 Pipeline 채택은 보류.
 
+## EXP유002 / EXP-CMB-005 — 저비율 Size×Stroke 전처리 연구 (진행 중)
+
+- [1차·2차 사전등록 계획](EXP유002_Balanced_Scale_Stroke_Augmentation.md): MLP 하이퍼파라미터 고정, Size 0/10/20/30% × Stroke 0/14/28%, 3 Seeds·4-Fold, 16개 클래스 전체와 240개 혼동 방향을 **설명 중심 기준**으로 평가.
+- **[1차 실제 실험일지](EXP유002_Balanced_Scale_Stroke_Stage1_Results.md)**: 0/10% 4조건×3Seeds×4-Fold = 48개 MLP 학습 성공, CoM-only OOF 84.883%, Size10+Stroke0 89.935%, +Stroke14 88.971%, +Stroke28 89.661%. 공식 Validation 하락·개별 클래스 반례 공개.
+- **[1차 원본 실측](../../results/Balanced_Scale_Stroke/stage_low10/SUMMARY.md)**: 16클래스 오분류율, 240개 방향 오분류, 모든 작성자·Seed·5배율 변형.
+- **[2차(20/30%) 실제 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43871619789)**: 결과 취합 전이며 EXP-CMB-005를 최종 완료·모델 채택으로 표기하지 않음.
+- 이 실험은 [Draft PR #16](https://github.com/ryu980920/Machine_Learning/pull/16) 전용 브랜치에서만 관리. **main 반영 전 사용자 검토**.
+
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
