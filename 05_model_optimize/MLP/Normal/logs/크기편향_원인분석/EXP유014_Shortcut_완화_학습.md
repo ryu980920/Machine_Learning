@@ -76,3 +76,16 @@ EXP유006에서 Size-only 숫자 정확도가 36.46%로 저하되고 Size→CoM�
 4. **후속 개선안(미실행):** 크기 균형 증강 비율 20~30%와 50%를 동일 Train 기준으로 비교하여 공식 Val 하락 폭을 줄일 여지 점검. Width/Height 잔존 단서와 Stroke/InkMass 대체 단서를 별도 대조하여 Scale+Stroke 강도를 조절. 최종 모델 채택/배포 전에는 공식 Val·Hand-made 균형과 독립 신규 Writer 평가 조건을 추가 검토.
 
 **최종 판정:** Shortcut 완화 및 Hand-made 숫자/문자 동시 개선은 **실측으로 확인**했다. 그러나 공식 Val 목표 미달이므로 어느 모델도 최종 Pipeline으로 교체하지 않았다. 3개 Seed 모두 같은 평가 프로토콜이고 기존 체크포인트 SHA256과 원본 정답 수를 일치 검증했다.
+
+### 학습 데이터 편향 감소 폭 확인
+
+원본 `exp014-seed42/training_geometry.csv` (세 Seed에서 같은 학습 이미지 구성 확인)에서, 실제 Training 입력의 BBox 긴 변 평균은 다음과 같다.
+
+- 원본 Raw Official Train: **숫자 20.000px / 문자 23.913px** (EXP유013).
+- A Class-balanced Scale+CoM Training: **숫자 19.98px / 문자 21.91px**.
+- B Scale+Stroke+CoM Training: **숫자 20.41px / 문자 22.12px**.
+- C Size→CoM+Balanced Scale Training: **숫자 20.00px / 문자 20.02px**.
+
+**해석:** A·B는 크기–라벨 편향을 완전히 동일하게 만든 것이 아니라, Training 약 절반의 Scale을 계열에 무관하게 배정하여 기존 3.913px 평균 차이를 줄인 방식이다. 실제 최종 입력 분포에 잔여 크기 차이가 남고 이것이 성능에 미치는 영향은 추가 실험 대상이다. C는 긴 변 분포를 거의 같게 하지만 Hands-made의 숫자·문자 동시 개선이 나타나지는 않았다.
+
+B의 topology 보존 Stroke 변형은 증강 대상 이미지 중 **33,359장**이 적용되었으며 **5,016장**은 topology 변화 우려로 원래 증강 표현을 유지했다. 학습 소스 이미지 수는 모든 실험군 **76,800장**으로 동일하다.
