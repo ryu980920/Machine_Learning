@@ -47,3 +47,8 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 - **중요한 잔존 문제:** Hand-made B·8·D는 개별 크기 변경에서 여전히 20%대 Family flip이 나타남. 크기 Shortcut **완전 제거 증명 아님**, 목표 OfficialVal 97.30%도 미달.
 - 실측 원본: [1차 45모델](https://github.com/ryu980920/Machine_Learning/actions/runs/43814205670) · [2차 33모델 및 통합 Gate](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141) · [OfficialVal 동결모델 9개 교차 진단](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445).
 - 전체 실행은 [Draft PR #13](https://github.com/ryu980920/Machine_Learning/pull/13)에 보존하고 기존 `main`/최종 모델은 그대로 유지.
+
+
+### EXP유016 전 로그 동기화 확인 (2026-11-16)
+
+EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했다. EXP유015는 전체 26개 조건의 **[합격/탈락 전체 CSV](EXP유015_26조건_전체판정.csv)**와 **[B·8·D 여섯 크기 개입 세부 CSV](EXP유015_26조건_B8D_전환율_전체.csv)**를 추가 영구 보존했다. 3-Seed 상세 CSV/NPZ·체크포인트는 [1차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43814205670), [2차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141), [OfficialVal Audit](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) Artifact에 보존한다. 아직 `main`에 병합하지 않았으며 새로운 실험은 별도 브랜치로 진행한다.
