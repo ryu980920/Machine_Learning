@@ -35,7 +35,11 @@
 
 > **실행 명칭에 관한 참고:** 실험 당시의 코드·워크플로·Artifact 명칭(일부 Normal-HypB)은 원래 성공 실행과의 재현성 연결을 위해 유지했다. 통합 실험일지의 최종 소속은 **가설 A**다.
 
-## 분류 크기 단서 직접 검증 — EXP유012 (2026-11-16)
+## Normal 최상위 독립 원인 분석으로 분리 — EXP유010·011·012
 
-- **[EXP유012 — 크기 조작에 따른 MLP 숫자·문자 판단 방향 검증](EXP유012_크기분류단서.md)**: 기존 EXP유006 모델 9개를 가중치 고정으로 재사용, 원본 손글씨를 0.8·0.9·1.0·1.1·1.2배로 변형한 뒤 매번 CoM을 맞추어 분류 점수를 분석했다. CoM MLP는 큰 B/D를 문자로, 큰 8/0을 B/D로 오분류하는 방향으로 반응한 반면, Size→CoM MLP의 방향은 반대였다. 위상 보존 이미지에서도 동일한 반응 방향 확인. 스케일 변화에는 획 굵기·픽셀 질량 변화가 함께 발생했으므로 순수한 크기 단서의 단독 인과성은 추가 확인 필요.
-- **[성공 실행·원본 Artifact](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)** · 연관 분포/CoM 원인 분석은 [가설 B EXP유010](../가설B/EXP유010_크기분포_분석.md), [EXP유011](../가설B/EXP유011_Size_CoM_교차분석.md) 참조.
+크기 관련 Shortcut 검증 EXP유012는 가설 A 하위가 아닌 **[Normal 독립 폴더](../../EXP012_Size_Shortcut/README.md)**로 분리했다. 사전 가설·통제 조건·정량 결과·변형 교란요인·재현 방법을 한 폴더에서 확인할 수 있다.
+
+- [EXP유012 — 크기에 따른 숫자/문자 판단 방향 변화](../../EXP012_Size_Shortcut/README.md)
+- [EXP유010 — 공식 Training/Hand-made 크기 분포](../../EXP010_Geometry_Distribution/README.md)
+- [EXP유011 — 입력 CoM 정렬·학습 가중치 효과 분리](../../EXP011_CoM_Effect/README.md)
+- [GitHub Actions 완료 기록](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796). 기존 가설 A EXP유001~003 및 EXP유008·009 파일은 변경하지 않는다.
