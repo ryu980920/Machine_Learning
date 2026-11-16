@@ -12,6 +12,9 @@
 | EXP유015 | [26조건 전체 판정](EXP유015_26조건_전체판정.csv), [B·D·8 개입](EXP유015_26조건_B8D_전환율_전체.csv), [9개 Gate 합격](EXP유015_shortcut_gate_통과9조건_요약.csv), [OfficialVal 요약](EXP유015_OfficialVal_크기변형_요약.csv) | [78개 MLP 최적화](../../logs/크기편향_원인분석/EXP유015_증강비율_획강도_최적화.md) |
 | EXP유016 | [23조건 결과](원본_실측_아카이브/EXP유016_60모델/all_23_conditions_ranked_gates.csv), [16개 클래스 배율별](원본_실측_아카이브/EXP유016_60모델/all_16class_size_flip_3seed.csv), [OfficialVal](원본_실측_아카이브/EXP유016_OfficialVal/officialval_scale_3seed_summary.csv) | [60~100% 실험일지](../../logs/크기편향_원인분석/EXP유016_고비율_크기증강_한계확인.md), [80-14/70-0 보존 결정](../../logs/크기편향_원인분석/EXP유016_80-14_70-0_두_후보_병행보존.md) |
 
+
+| EXP유018 | [455/480장·3-Seed 그룹별](EXP유018_3Seed_그룹별성능.csv), [16클래스 Precision·Recall·F1](EXP유018_16클래스_3Seed_지표.csv), [3개 혼동쌍 이전/신규 비교](EXP유018_이전CM_신규CM_주요쌍비교.csv), [원본 그룹별](EXP유018_주요쌍_원본그룹별.csv), [판독 제외 25장 인덱스/사유](EXP유018_제외25장_목록.csv) | [신규 손글씨 분석 실험일지](../../logs/크기편향_원인분석/EXP유018_신규손글씨480_판독필터_혼동쌍_진단.md) |
+
 ## 원본 실측 아카이브
 
 - [EXP유015 78모델 3-Seed 전체 기록](원본_실측_아카이브/EXP유015_78모델/SUMMARY.md)
