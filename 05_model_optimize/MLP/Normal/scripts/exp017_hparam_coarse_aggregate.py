@@ -129,7 +129,7 @@ def run(inputs,out):
           " | ".join(f"{r[k]*100:.2f}%" for k in 
               ("officialval_acc_mean","digits12_flip","letters08_flip","B8D_max_flip","max16class_flip"))+" |")
     summary+=["","## 다음 단계 후보(서로 다른 4개 구조)"]+[
-       f"- {s['variant']} — {'Gate 통과' if s['pass_all_gates'] else 'Gate 미달·대체 후보'}"
+       f"- {s['variant']} — {'Gate 통과' if s['passes_all_gates'] else 'Gate 미달·대체 후보'}"
        for s in metadata["selected_4_architectures"]]
     (out/"SUMMARY.md").write_text("\n".join(summary)+"\n",encoding="utf-8")
     print("EXP017_COARSE_AGGREGATE_OK",len(eligible),"stage2",metadata["selected_4_architectures"],flush=True)
