@@ -22,3 +22,10 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 - **안전 경계:** 기존 체크포인트를 고정해 평가했으며 새 학습, 공식 Original Test·교수님 Test 접근, 최종 Pipeline 변경은 없다.
 
 [Normal 메인 안내](../../README.md) · [가설 A](../가설A/README.md) · [가설 B](../가설B/README.md)
+
+## Shortcut 직접검증과 해결 학습 — 후속 실험
+
+- [EXP유013 — 기하학적 특징만으로 숫자·문자 이진분류](EXP유013_기하특징_이진분류.md): 원본/CoM/Size/Size→CoM에서 4개 Geometry Features만 사용한 별도 이진분류기로 Shortcut 단서의 존재 측정. [완료·원본 실측](https://github.com/ryu980920/Machine_Learning/actions/runs/43809791116).
+- [EXP유014 — 크기 편향 완화를 위한 Class-balanced 학습](EXP유014_Shortcut_완화_학습.md): Training 전용 Scale 및 Stroke 다양화 3조건 × 3 Seed MLP를 기존 EXP유006 CoM / Size→CoM과 비교. [재실행 실측 확인](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307).
+
+기존 코드는 `Normal/scripts/` 아래 유지하며 이 연구는 브랜치에서만 실행하고 최종 모델 또는 main을 변경하지 않는다.
