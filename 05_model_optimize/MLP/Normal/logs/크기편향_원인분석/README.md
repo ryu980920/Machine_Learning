@@ -62,3 +62,12 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 - EXP유015의 50% 기존 이미지와 BBox 목표는 그대로 유지하고 증강 대상만 추가. CoM 및 OfficialVal/Hand-made 평가 규칙 유지.
 - **숫자·문자 전체 평균뿐 아니라 16개 클래스×배율** 및 B·8·D의 최악 판단 전환율로 사전등록 Gate 적용. 정확도가 좋더라도 Shortcut Gate 실패 모델은 채택하지 않음.
 - Original Test/교수님 Test 미사용, Final Pipeline 변경 없음.
+
+
+### EXP유016 최종 실측 판정 (2026-11-16)
+
+- **완료:** [60개 새 MLP·3 Seed 학습 전체 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43820298886), [OfficialVal 동결모델 5배율 교차 검증 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43822594798).
+- **영구 보존 원본:** [EXP유015 78모델 상세 CSV](원본_실측_아카이브/EXP유015_78모델/SUMMARY.md) · [EXP유015 OfficialVal 변형 CSV](원본_실측_아카이브/EXP유015_OfficialVal/SUMMARY.md) · [EXP유016 60모델 전체 16클래스 CSV](원본_실측_아카이브/EXP유016_60모델/SUMMARY.md) · [EXP유016 OfficialVal 5배율·16클래스 CSV](원본_실측_아카이브/EXP유016_OfficialVal/SUMMARY.md).
+- **사전등록한 Hand-made 개별 클래스 Gate** 통과 최상위는 **70-14 / 80-14** (B·8·D 최악 각 17.50%), 단 OfficialVal에서는 D×1.2와 B×1.2에 25~28% 전환 잔존.
+- **후속 검증 후보:** **70-0 = Training 중 약 70%에 크기 증강, 획 증강 없음, CoM**. Hand-made B·8·D 최악 **18.54%**, OfficialVal 최악 **17.03%**, 정규 OfficialVal **95.28%**. 2개 재사용 개발 데이터에서 class-flip 안정성을 동시에 보여 후속 평가 1순위이나 **최종 채택 보류**.
+- OfficialVal 97.30% 목표 미달 및 새 Writer Test 미수행. Main/final/checkpoint/Test 미수정.
