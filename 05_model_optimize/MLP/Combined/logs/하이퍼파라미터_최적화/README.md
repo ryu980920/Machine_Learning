@@ -1,28 +1,32 @@
-# Combined MLP — EXP-CMB-008 하이퍼파라미터 최적화
+# Combined MLP — EXP-CMB-008 하이퍼파라미터 최적화 연구 흐름
 
-[전체 연구 흐름](../README.md) · [전처리 연구 CMB-007](../가설B/EXP-CMB-007_03_Final_Size60_100.md)
+[전체 Combined 연구 순서](../README.md) · [전처리 연구 CMB-007](../가설B/EXP-CMB-007_03_Final_Size60_100.md)
 
-## 현재 동결된 조건 및 성과
+## 0. 확정된 변경 조건과 현재 단계
 
-- **증강/입력 동결:** Official Train Size 30% / Stroke 강도 28% / CoM. Original·교수님 Test 미사용
-- **S1(은닉층 너비) 완료:** 36개 신규 MLP와 기존 기준선 12개 모델 비교. (100,) OOF 90.716% / OfficialVal 96.117% → **(256,) OOF 92.214% / OfficialVal 97.044%**
-- **4방향 오분류 <5% 목표는 아직 미달:** D→0 13.96%, B→8 8.96%, 8→B 7.92%, 0→D 2.92%. 기존 모델보다 네 방향 모두 감소하고 0·8·B·D 전체 클래스 오류 및 Writer 가드레일 통과. **256은 S2의 잠정 기준이며 최종 모델 아님**
-- **S2(깊이) 준비:** (256,) 대비 (256,128) / (256,256)을 비교. 첫 번째 은닉층을 고정하고 두 번째 은닉층의 정확도/오류/과적합 효과를 검증
+- **훈련 증강 고정:** Size30% / Stroke 강도28%, CoM. Original Test·교수님 Test·신규 손글씨 480장 접근 금지.
+- **S1 너비(실측 완료):** (64,), (100,), (128,), (256,) 비교. **(256,) OOF 92.214%, OfficialVal 97.044%** 선정.
+- **S2 깊이(실측 완료):** (256,128)/(256,256)은 8→B 등 일부 핵심 오분류 악화. 첫 층 256을 고정하고 **단층 (256,) 유지**.
+- **S3 L2 alpha(신규 실험 설계 완료):** (256,)의 alpha=1e-4 기준과 alpha=1e-5/1e-3/1e-2 비교. **학습·판정 전** 후보 이유와 안전 기준 사전등록.
+- **S4~S5:** S3에서 alpha를 실제 결정한 뒤 Learning Rate → Early Stopping 검증. 아직 후보 미선정.
 
-## 실험 문서 (연구 흐름대로 읽기)
+## 1. 읽는 순서
 
-| 단계 | 문서 | 왜 필요한가? | 현재 상태 |
+| 번호 | 단계 | 검증 이유 및 결과 | 상태 |
 |---|---|---|---|
-| 사전등록 | [01 전체 HP 탐색 계획 및 사용자 수정 기준](EXP-CMB-008_01_Plan_30_28_Frozen_HP.md) | 너비 → 깊이 → alpha → LR → Early Stopping 순서 및 모든 검증 기준 | **완료** |
-| S1 너비 | [02 64/100/128/256 실측·의사결정](EXP-CMB-008_02_Stage1_Width_Results.md) | 256을 선정한 수치, 다른 후보의 오류 악화, Writer/Seed/과적합 지표 | **검증 완료** |
-| S2 깊이 | [03 다음 후보와 가설 사전등록](EXP-CMB-008_03_Plan_S2_Depth.md) | 왜 (256,128)/(256,256)인지, 변수를 왜 고정했는지, 탈락 기준 | **사전등록 완료** |
-| S2 결과 | [04 깊이별 실측·다음 선택](EXP-CMB-008_04_Stage2_Depth_Results.md) | 24개 신규 MLP의 정확도, 네 방향 혼동과 과적합, S3 구조 동결 판단 | **학습 성공 후 생성 예정** |
-| S3~S5 | L2 규제 → 학습률 → Early Stopping | 이전 단계에서 선택된 값만 고정하고 하나의 변수씩 변경 | **미실행** |
+| [01](EXP-CMB-008_01_Plan_30_28_Frozen_HP.md) | HP 전체 계획 | 데이터·평가 기준과 4방향 5% 미만 목표의 수정 이력 보존 | 완료 |
+| [02](EXP-CMB-008_02_Stage1_Width_Results.md) | S1 은닉층 너비 | 100→256, OOF 90.716→92.214%. 네 혼동 방향 비악화, Writer 전체 개선 | 검증·선정 완료 |
+| [03](EXP-CMB-008_03_Plan_S2_Depth.md) | S2 가설 | 단층 vs 추가 층 128/256, 용량 증가의 이득·위험 비교 | 사전등록 완료 |
+| [04](EXP-CMB-008_04_Stage2_Depth_Results.md) | S2 결과 | 24개 신규 MLP 실측, 추가 깊이는 핵심 오류 악화 → **단층 유지** | 검증·선정 완료 |
+| [05](EXP-CMB-008_05_Plan_S3_Alpha.md) | S3 L2 계획 | 규제를 약하게·강하게 했을 때 D→0 및 과적합 위험 변화 검증 | 사전등록 완료 |
+| [06](EXP-CMB-008_06_Stage3_Alpha_Results.md) | S3 L2 결과 | 신규 36개 MLP, OOF·4방향 오류·Writer/Seed·과적합 수렴 비교 | **학습 성공 후 생성 예정** |
 
-## 고정된 통과 및 대안 판단 규칙
+## 2. 실제 채택 규칙
 
-**목표:** D→0 / B→8 / 8→B / 0→D 각각 실제 클래스 기준 오분류율 **5% 미만**(480회 예측 중 23건 이하). 목표 충족 후보 중 OOF Accuracy 최우선. 미달 시에는 **기존 OOF 정확도 비하락, 네 방향 및 클래스 0·8·B·D 전체 오분류율 비증가**, Writer/OfficialVal/Family Flip 안전 기준을 만족하는 최고 정확도 모델을 대안으로 선정. 신규 후보가 통과하지 못하면 직전 구조 유지.
+**1차 목표:** D→0, B→8, 8→B, 0→D 각각 실제 클래스 내 OOF 오분류율 **5% 미만**. 3 Seed에 실제 클래스당 160장×3=480회 예측이므로 최대 23건.
 
-**과적합 관리:** 3 Seeds·4 Writer별 분산, OfficialVal, train Loss·수렴 경고·반복횟수, 동일 이미지 교정/신규 오답을 함께 비교한다. 개발용 OOF는 반복 탐색된 4명이라 독립 Test로 간주하지 않는다.
+**불가능한 경우:** 비교 기준선보다 Hand-made OOF 정확도가 떨어지지 않고 **네 방향 오분류 건수가 하나도 증가하지 않으며**, 실제 0/8/B/D 클래스 전체 오류율, Writer별 정확도, OfficialVal, Family Flip이 사전 가드레일을 만족하는 모델 중 최고 정확도 선택. 새 후보가 모두 탈락하면 기존 선택값을 유지한다.
 
-[재현 코드](../../scripts/) · [S1 실측 CSV](../../results/Hyperparameter_Optimization/S1_Width/) · [S2 실행 워크플로](../../../../../.github/workflows/exp-cmb-008-s2-depth.yml).
+**과적합 감시:** OfficialVal, Seed 분산·Writer별 OOF, 수렴 경고와 Loss, 학습 반복횟수, 동일 이미지 오류 교정/신규 오류를 기록한다. 같은 4 Writer의 OOF를 반복 탐색한 선택 편향은 남아 있으며 아직 최종 Test에 접근하지 않는다.
+
+[원본 S1 CSV/JSON](../../results/Hyperparameter_Optimization/S1_Width/) · [S2 CSV/JSON](../../results/Hyperparameter_Optimization/S2_Depth/) · [S3 재현 코드](../../scripts/exp_cmb008_s3_alpha.py) · [S3 집계 코드](../../scripts/exp_cmb008_s3_aggregate.py).
