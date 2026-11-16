@@ -1,6 +1,6 @@
 # MLPClassifier — Combined 모델 최적화
 
-**현재 상태:** [EXP-CMB-001 Baseline](logs/EXP유001_Combined_MLP_4Fold_CV_Baseline.md) 완료, [EXP-CMB-002 오분류 원인 분석](logs/초기분석/EXP유002_Error_Analysis.md) **실행·검증 완료**, [EXP-CMB-003 입력 민감도](logs/초기분석/EXP유003_Input_Sensitivity.md) **실행·검증 완료**; [EXP-CMB-004 Size/CoM 재학습 비교](logs/가설B/EXP유001_Geometry_Normalization_Results.md)는 **16개 신규 MLP 학습·비교 및 기전 대조 완료**, 최종 Pipeline 채택은 보류.
+**현재 상태:** [EXP-CMB-001 Baseline](logs/EXP유001_Combined_MLP_4Fold_CV_Baseline.md), [EXP-CMB-002 오분류 분석](logs/초기분석/EXP유002_Error_Analysis.md), [EXP-CMB-003 입력 민감도](logs/초기분석/EXP유003_Input_Sensitivity.md), [EXP-CMB-004 Size/CoM 정규화](logs/가설B/EXP유001_Geometry_Normalization_Results.md) **완료**. 이어 **[EXP-CMB-005~007 Size × Stroke 증강의 총 31조건 비교](logs/가설B/EXP유004_Size60_100_Final_Results.md)**와 **[상위 3개 오분류율 검토](logs/가설B/EXP유004_Size60_100_Top3_OOF_Misclassification_Review.md)**까지 실측·기록·`main` 병합 완료. **최종 학습 Pipeline/모델 선정은 보류.**
 
 Normal과 같은 **초기분석 → 가설 B / 가설 A** 연구 구조를 사용한다. 현재 EXP-CMB-002의 연구적 결론은 **가설 B(공간·크기·중심·명암) 우선 검증**, **가설 A의 독립 획 연결 구조 실험은 조건부 보류**다. 이는 다음 개선 실험을 선택할 근거이며, 새로운 개선 모델이 완성되었다는 의미가 아니다.
 
@@ -12,6 +12,9 @@ Normal과 같은 **초기분석 → 가설 B / 가설 A** 연구 구조를 사�
 | 초기분석 | [EXP유002 — Error Analysis](logs/초기분석/EXP유002_Error_Analysis.md) | **완료** | [실측 결과·실제 이미지](results/Error_Analysis/README.md) |
 | 초기분석 | [EXP유003 — Input Sensitivity](logs/초기분석/EXP유003_Input_Sensitivity.md) | **실행 완료** | [원본 실측](results/Input_Sensitivity/README.md) |
 | 가설 B | [EXP유001 — Geometry Normalization](logs/가설B/EXP유001_Geometry_Normalization_Results.md) | **실험·설명 대조 완료** | [사전등록 기준](logs/가설B/EXP유001_Geometry_Normalization.md) · [실측 결과](results/Geometry_Normalization/README.md) |
+| 가설 B | [EXP유002 / CMB-005 — Size 0~30% × Stroke](logs/가설B/EXP유002_Balanced_Scale_Stroke_Final_Results.md) | **120모델·10조건 완료** | [원본 10조건](results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md) |
+| 가설 B | [EXP유003 / CMB-006 — Size 40~50% × Stroke](logs/가설B/EXP유003_Size40_50_Stroke_Extension.md) | **72모델·6조건 완료** | [원본 16조건](results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md) |
+| 가설 B | [EXP유004 / CMB-007 — Size 60~100% × Stroke](logs/가설B/EXP유004_Size60_100_Final_Results.md) | **180모델·15조건 완료, 총 31조건 비교** | [31조건 실측](results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/SUMMARY.md) · [상위 3개 오분류율](logs/가설B/EXP유004_Size60_100_Top3_OOF_Misclassification_Review.md) |
 
 ## Baseline 결과 — Hand-made OOF 2,560장
 
@@ -31,6 +34,13 @@ EXP-CMB-002에서 **원본 2,560장 예측을 재현**하고, 오류와 정답�
 - **CoM-only OOF 85.8594%:** 숫자 **89.3125%**, 문자 **80.1042%**. CoM 위치 정렬의 효과는 **정렬된 데이터로 모델을 새로 학습할 때** 크게 나타났다.
 - **Size+CoM OOF 88.9453%:** 숫자 **86.6875%**, 문자 **92.7083%**로 각 단일 방법의 상충이 완화되었다. 하지만 공식 Validation은 **네 Fold 모두 감소**했다.
 - **통과 기준은 숫자 점수 이상이 아닌 연구 설명 가능성**으로 사전등록했으며, 원인 관련 지표·오답 교정/신규·기존 MLP 입력만 변경 vs 재학습을 근거로 판단했다. 결과를 최종 모델이라고 표시하지 않는다.
+
+## EXP-CMB-005~007 — Size × Stroke 증강 후속 연구
+
+- **기본 MLP 하이퍼파라미터 고정**, Seed 42/43/44 및 4-Writer Held-out OOF 검증. CMB-005/006 기존 16조건과 CMB-007 신규 15조건을 합친 **총 31조건**의 실측 비교.
+- OOF 정확도 상위 조합은 **30%-28% 90.716% / 30%-14% 90.690% / 30%-0% 90.573%**이며, 각각의 **오분류율은 9.284% / 9.310% / 9.427%**.
+- [전체 31조건·16클래스·240방향 원본 분석](logs/가설B/EXP유004_Size60_100_Final_Results.md)에서 고비율 증강의 오류 재분배와 안정성 한계를 기록했다. [후속 오분류율 분석](logs/가설B/EXP유004_Size60_100_Top3_OOF_Misclassification_Review.md)에서 8/B/D 오류와 입력 크기별 평균 계열 확률을 분리해 검토했다.
+- Original Test·교수님 Test·Normal 신규 손글씨 480장을 이 Combined 실험의 모델 선택에 사용하지 않았다. **로그/코드/실측은 `main`에 반영했으나 최종 모델 교체는 하지 않음.**
 
 ## 연구 경로 및 원칙
 
