@@ -1,0 +1,35 @@
+name: EXP018 official standardized 2560 hand-made source snapshot
+on:
+  push:
+    branches: [audit/exp018-official2560-dataset-20261117]
+    paths: ['.github/workflows/exp018-export-official-handmade.yml']
+permissions:
+  contents: read
+jobs:
+  exact-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact standardized NPZ bytes from repository
+        run: |
+          python - <<'PY'
+          import hashlib, pathlib, zipfile
+          expected={41:165418,42:133574,43:124939,44:123303}
+          for writer,size in expected.items():
+              p=pathlib.Path(f'02_data/Hand_made/ml26_{writer}.npz')
+              assert p.exists() and p.stat().st_size==size,(writer,p.exists(),p.stat().st_size if p.exists() else None)
+              assert zipfile.is_zipfile(p)
+              sha=hashlib.sha256(p.read_bytes()).hexdigest()
+              print(f'OFFICIAL_SOURCE writer={writer} byte_count={size} sha256={sha}',flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EXP018-OfficialHandmade2560-GitHubMainNPZ
+          path: |
+            02_data/Hand_made/ml26_41.npz
+            02_data/Hand_made/ml26_42.npz
+            02_data/Hand_made/ml26_43.npz
+            02_data/Hand_made/ml26_44.npz
+          if-no-files-found: error
+          retention-days: 5
