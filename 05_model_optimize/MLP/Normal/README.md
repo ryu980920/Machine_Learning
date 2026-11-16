@@ -74,3 +74,11 @@ Training에만 Class-balanced Scale(10~50%, 중간 25/35% 포함) 및 Stroke(0~4
 ### EXP유010~016 코드·로그·결과 위치
 
 [logs — 실험일지](logs/크기편향_원인분석/README.md) · [scripts — 학습/평가 Python](scripts/README.md) · [results — CSV·검증 원본](results/크기편향_원인분석/README.md). 재현용 코드만 추가하며 기존 최종 모델은 변경하지 않는다.
+
+
+
+## EXP유017 — 80-14 기반 MLP 하이퍼파라미터 최적화
+
+[실험일지](logs/크기편향_원인분석/EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [학습·평가 코드](scripts/README.md) · [실험 브랜치 Draft PR](https://github.com/ryu980920/Machine_Learning/pull/15).
+
+학습의 크기 증강 80% 및 획 증강 강도 14%·CoM은 변경하지 않는다. 은닉층·정규화·학습률·조기 종료를 Official Train/Val로 최적화하고, **팀원이 모은 손글씨 Validation은 최종 하이퍼파라미터 동결 이후** 실행한다. Final/Original Test/교수님 Test 미수정.
