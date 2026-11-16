@@ -40,7 +40,7 @@ jobs:
           MKL_NUM_THREADS: '2'
           PYTHONUNBUFFERED: '1'
         run: |
-          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_scale40_50_stroke.py \
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_scale60_100_stroke.py \
             --arm "${{ matrix.arm }}" \
             --seed "${{ matrix.seed }}" \
             --out "${{ runner.temp }}/cmb007/${{ matrix.arm }}/seed_${{ matrix.seed }}"
@@ -84,7 +84,7 @@ jobs:
           MKL_NUM_THREADS: '2'
           PYTHONUNBUFFERED: '1'
         run: |
-          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_scale40_50_stroke.py \
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_scale60_100_stroke.py \
             --arm "${{ matrix.arm }}" \
             --seed "${{ matrix.seed }}" \
             --out "${{ runner.temp }}/cmb007/${{ matrix.arm }}/seed_${{ matrix.seed }}"
