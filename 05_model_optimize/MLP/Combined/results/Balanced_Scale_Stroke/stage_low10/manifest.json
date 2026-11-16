@@ -1,0 +1,26 @@
+{
+  "experiment": "EXP-CMB-005",
+  "stage": "low10",
+  "arms": [
+    "com_only",
+    "scale10_stroke00",
+    "scale10_stroke14",
+    "scale10_stroke28"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "folds": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "expected_fits": 48,
+  "no_hp_search": true,
+  "no_test_used": true,
+  "research_gate": "explanation not absolute accuracy",
+  "status": "numeric comparison complete, explanatory decision pending"
+}

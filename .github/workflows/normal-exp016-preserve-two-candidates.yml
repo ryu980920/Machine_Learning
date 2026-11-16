@@ -1,0 +1,99 @@
+name: Normal EXP016 Preserve Both 70-0 and 80-14 Frozen Candidates
+
+on:
+  push:
+    branches: [exp/normal-exp016-high-fraction-shortcut-20261116]
+    paths:
+      - '.github/workflows/normal-exp016-preserve-two-candidates.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: exp/normal-exp016-high-fraction-shortcut-20261116
+          persist-credentials: true
+      - name: Retrieve 70%-ratio models for all three seeds
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s*-r70
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-src
+      - name: Retrieve 80%-ratio models for all three seeds
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s*-r80
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-src
+      - name: Verify and preserve only two specified immutable candidate sets
+        env:
+          SRC: ${{ runner.temp }}/exp016-src
+          DST: 05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os,shutil
+          from pathlib import Path
+          src=Path(os.environ['SRC']);dst=Path(os.environ['DST'])
+          rows=[]
+          for label,ratio,stroke in [('80-14',80,14),('70-0',70,0)]:
+              model=f'size{ratio}_stroke{stroke:02d}'
+              dest=dst/label
+              dest.mkdir(parents=True,exist_ok=True)
+              for seed in [42,43,44]:
+                  source=src/f'exp016-s{seed}-r{ratio}'
+                  manifest=json.loads((source/'manifest.json').read_text(encoding='utf-8'))
+                  assert manifest['experiment']=='EXP016' and manifest['seed']==seed
+                  assert abs(manifest['ratio_requested']-ratio/100)<1e-9
+                  assert manifest['actual_training_rows_per_variant']==76800
+                  assert manifest['original_predictions_verified']
+                  assert not any(manifest[k] for k in ('official_test_used','professor_test_used','handmade_used_in_fit','official_val_used_in_fit'))
+                  f=source/(model+'.joblib')
+                  assert f.is_file() and f.stat().st_size>1000, f
+                  target=dest/(f'seed{seed}.joblib')
+                  shutil.copyfile(f,target)
+                  digest=hashlib.sha256(target.read_bytes()).hexdigest()
+                  rows.append({'candidate':label,'seed':seed,'source_workflow':43820298886,
+                    'source_artifact':f'exp016-s{seed}-r{ratio}',
+                    'original_variant':model,'size_augmentation_fraction':ratio/100,
+                    'stroke_blend_strength':stroke/100,'checkpoint':str(target),
+                    'checkpoint_size_bytes':target.stat().st_size,
+                    'sha256':digest,'status':'FROZEN_CANDIDATE_NOT_FINAL'})
+          (dst/'MANIFEST.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          lines=['# EXP유016 — 후보 두 조건 모두 보존 (최종 모델 교체 아님)',
+           '', '사용자 선택: **80-14**와 **70-0**을 병행 후보로 유지.',
+           '', '- 80-14: Training 데이터 80% Size Augmentation + 획 혼합 강도 14% + CoM',
+           '- 70-0: Training 데이터 70% Size Augmentation + 획 혼합 강도 0% + CoM',
+           '', '각 조건 Seed42/43/44 원본 joblib 3개씩 총 6개 보존.',
+           'MANIFEST.json에 각 파일의 SHA-256과 원본 GitHub Actions 실행 정보를 기록.',
+           'Original Test/교수님 Test 미사용, main/final 경로 및 배포 체크포인트 미수정.',
+           '새 작성자 데이터 검증 전 두 후보 모두 최종 채택하지 않음.', '']
+          (dst/'README.md').write_text('\n'.join(lines),encoding='utf-8')
+          print('EXP016_SAVED_CANDIDATES',len(rows))
+          for row in rows: print(row['candidate'],row['seed'],row['checkpoint_size_bytes'],row['sha256'])
+          PY
+      - name: Commit only both candidate artifacts on isolated EXP016 branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add '05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/'
+          if git diff --cached --quiet; then
+            echo 'Two candidate checkpoint sets already saved'
+          else
+            git commit -m 'models: freeze both EXP016 80-14 and 70-0 with 3-seed hashes'
+            git push origin HEAD:exp/normal-exp016-high-fraction-shortcut-20261116
+          fi

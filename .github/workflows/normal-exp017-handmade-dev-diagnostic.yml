@@ -1,0 +1,198 @@
+name: EXP017 frozen 80-14 Handmade 2560 diagnostic (no training)
+on:
+  push:
+    branches: [exp/normal-exp017-80-14-mlp-hparam-20261116]
+    paths: ['.github/workflows/normal-exp017-handmade-dev-diagnostic.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical pinned environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download frozen EXP017 winning model 3 seeds, no refit
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43836257716
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp017-fine-s*-slot0
+          merge-multiple: false
+          path: ${{ runner.temp }}/source-final
+      - name: Download frozen EXP016 80-14 comparison 3 seeds
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s*-r80
+          merge-multiple: false
+          path: ${{ runner.temp }}/source-80-14
+      - name: Download frozen EXP016 70-0 comparison 3 seeds
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s*-r70
+          merge-multiple: false
+          path: ${{ runner.temp }}/source-70-0
+      - name: Hash-verify 2560 existing Hand-made images and frozen model weights
+        env:
+          PYTHONPATH: '05_model_optimize/MLP/Normal/scripts:05_model_optimize/MLP/Combined/scripts'
+          EVAL_TMP: ${{ runner.temp }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,os,shutil,json
+          import numpy as np
+          from exp006_size_com_comparison import ROOT,load_writers,WRITERS,LABELS
+          root=Path(os.environ['EVAL_TMP'])
+          hm=load_writers(ROOT/'02_data'/'Hand_made')   # Enforces original 4 SHA-256s and class labels
+          assert tuple(WRITERS)==(41,42,43,44)
+          X=np.concatenate([hm[w]['X'] for w in WRITERS],axis=0)
+          y=np.concatenate([hm[w]['y'] for w in WRITERS],axis=0)
+          writer=np.repeat(np.asarray(WRITERS),640)
+          assert X.shape==(2560,784) and y.shape==(2560,)
+          assert np.array_equal(np.bincount(y,minlength=16),np.full(16,160))
+          np.savez_compressed(root/'handmade_2560_verified.npz',X=X,y=y,writer_id=writer)
+          expected={42:'e08eab163cc2db86b03338185f1b0b4f1416a074572597f2b692adec85a0d190',
+            43:'f47e4cc2a97af98e18e5bfdca9b2621acac0f9c303bcd1458fe270fb58e9f931',
+            44:'120cdf9f48691d3e75016379fb62a3cbf3f66d57ffcb7c4c59902a9639795413'}
+          groups={'final_exp017':('source-final','exp017-fine-s{seed}-slot0','slot1_alpha_up.joblib'),
+            'incumbent_80_14':('source-80-14','exp016-s{seed}-r80','size80_stroke14.joblib'),
+            'reference_70_0':('source-70-0','exp016-s{seed}-r70','size70_stroke00.joblib')}
+          frozen={}
+          for model,(source,pattern,fn) in groups.items():
+            dst=root/model;dst.mkdir()
+            frozen[model]=[]
+            for seed in (42,43,44):
+              src=root/source/pattern.format(seed=seed)/fn
+              assert src.is_file(),src
+              sha=hashlib.sha256(src.read_bytes()).hexdigest()
+              if model=='final_exp017':assert sha==expected[seed],(seed,sha)
+              target=dst/f'seed{seed}.joblib'
+              shutil.copy2(src,target)
+              assert hashlib.sha256(target.read_bytes()).hexdigest()==sha
+              frozen[model].append({'seed':seed,'sha256':sha,'bytes':target.stat().st_size})
+          (root/'input_verification.json').write_text(json.dumps({
+            'dataset':'reused 4-writer development Hand-made (NOT independent holdout)',
+            'input_npz_sha256':hashlib.sha256((root/'handmade_2560_verified.npz').read_bytes()).hexdigest(),
+            'source_writer_sha256':{str(w):hm[w]['sha256'] for w in WRITERS},
+            'rows':len(y),'per_class_count':160,'model_checkpoints':frozen,
+            'model_training':False,'tuning_on_handmade':False,
+            'official_test_used':False,'professor_test_used':False},indent=2)+'\n')
+          print('EXP017_HANDMADE_INPUT_HASH_VERIFIED',len(y),len(WRITERS),flush=True)
+          PY
+      - name: Evaluate all frozen models with existing EXP017 5-scale code
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+        run: |
+          for MODEL in final_exp017 incumbent_80_14 reference_70_0; do
+            python 05_model_optimize/MLP/Normal/scripts/exp017_locked_team_validation.py \
+              --npz '${{ runner.temp }}/handmade_2560_verified.npz' \
+              --frozen-models "${{ runner.temp }}/$MODEL" \
+              --out "${{ runner.temp }}/eval/$MODEL"
+          done
+      - name: Extract per-class precision, F1, confusion matrices and paired changes
+        env:
+          EVAL_TMP: ${{ runner.temp }}
+          PYTHONPATH: '05_model_optimize/MLP/Normal/scripts:05_model_optimize/MLP/Combined/scripts'
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,json,os,hashlib
+          import joblib
+          import numpy as np
+          from sklearn.metrics import accuracy_score,f1_score,precision_recall_fscore_support,confusion_matrix
+          from exp006_size_com_comparison import process,LABELS
+          root=Path(os.environ['EVAL_TMP'])
+          with np.load(root/'handmade_2560_verified.npz',allow_pickle=False) as a:
+            X=a['X'];y=a['y'].astype(int); writers=a['writer_id'].astype(int)
+          X=process(X,'com',20)
+          pred={}
+          summary=[]; classes=[];cms=[];pairs=[];paired=[]
+          names=('final_exp017','incumbent_80_14','reference_70_0')
+          for name in names:
+            for seed in (42,43,44):
+              mdl=joblib.load(root/name/f'seed{seed}.joblib')
+              p=np.asarray(mdl.predict(X),dtype=int)
+              pred[name,seed]=p
+              summary.append({'model':name,'seed':seed,'group':'all','n':len(y),
+                 'accuracy':float(accuracy_score(y,p)),
+                 'macro_f1':float(f1_score(y,p,labels=np.arange(16),average='macro',zero_division=0))})
+              for group,mask in [('digits',y<10),('letters',y>=10)]+[('writer_'+str(w),writers==w) for w in (41,42,43,44)]:
+                summary.append({'model':name,'seed':seed,'group':group,'n':int(mask.sum()),
+                  'accuracy':float(accuracy_score(y[mask],p[mask])),
+                  'macro_f1':float(f1_score(y[mask],p[mask],labels=np.arange(16) if group.startswith('writer') else (np.arange(10) if group=='digits' else np.arange(10,16)),average='macro',zero_division=0))})
+              prec,rec,f1,sup=precision_recall_fscore_support(y,p,labels=np.arange(16),zero_division=0)
+              cm=confusion_matrix(y,p,labels=np.arange(16))
+              for i,cl in enumerate(LABELS):
+                classes.append({'model':name,'seed':seed,'class':cl,'n':int(sup[i]),
+                   'precision':float(prec[i]),'recall':float(rec[i]),'f1':float(f1[i])})
+                for j,cl2 in enumerate(LABELS):
+                  cms.append({'model':name,'seed':seed,'actual':cl,'predicted':cl2,'count':int(cm[i,j])})
+          for name in names:
+            for seed in (42,43,44):
+              p=pred[name,seed];cm=confusion_matrix(y,p,labels=np.arange(16))
+              for a,b in [('B','8'),('8','B'),('D','0'),('0','D'),('F','5'),('5','F')]:
+                pairs.append({'model':name,'seed':seed,'actual':a,'predicted':b,
+                              'count':int(cm[LABELS.index(a),LABELS.index(b)])})
+          for other in ('incumbent_80_14','reference_70_0'):
+            for seed in (42,43,44):
+              current=pred['final_exp017',seed];prior=pred[other,seed]
+              for group,mask in [('all',np.ones(len(y),bool)),('digits',y<10),('letters',y>=10)]:
+                a=(current[mask]==y[mask]);b=(prior[mask]==y[mask])
+                paired.append({'baseline':other,'seed':seed,'group':group,'n':int(mask.sum()),
+                   'corrected_by_exp017':int(np.count_nonzero(a&~b)),
+                   'new_errors_exp017':int(np.count_nonzero(~a&b)),
+                   'net_gain_correct':int(np.count_nonzero(a)-np.count_nonzero(b))})
+          out=root/'eval';out.mkdir(exist_ok=True)
+          def save(fn,rows):
+            with (out/fn).open('w',newline='',encoding='utf-8') as f:
+              wr=csv.DictWriter(f,fieldnames=list(rows[0]));wr.writeheader();wr.writerows(rows)
+          for fn,rows in [('accuracy_macroF1_by_seed_group.csv',summary),
+              ('per_class_by_seed.csv',classes),('confusion_matrix_long.csv',cms),
+              ('confusion_focus_pairs.csv',pairs),('paired_new_vs_old.csv',paired)]:
+              save(fn,rows)
+          def groupavg(name,group,field='accuracy'):
+            v=[r[field] for r in summary if r['model']==name and r['group']==group]
+            assert len(v)==3
+            return float(np.mean(v))
+          report=['# EXP017 — 기존 4명 Hand-made 2,560장 동결 MLP 진단 평가',
+            '','**독립 Test/새 작성자 평가 아님**. EXP015/016에서 반복 활용한 개발 데이터이며 해당 데이터를 보고 모델을 재튜닝하지 않음.',
+            '','## Three-seed performance',
+            '| Model | Accuracy | Digits | Letters | Macro-F1 |','|---|---:|---:|---:|---:|']
+          for name in names:
+            report.append('| '+name+' | '+' | '.join(f"{groupavg(name,g)*100:.3f}%" for g in ('all','digits','letters'))+' | '+f"{groupavg(name,'all','macro_f1'):.4f}"+' |')
+          report.extend(['','## Each seed'])
+          for name in names:
+            for seed in (42,43,44):
+              v=next(r for r in summary if r['model']==name and r['seed']==seed and r['group']=='all')
+              report.append(f"- {name}, Seed {seed}: {v['accuracy']*100:.3f}%")
+          report.extend(['','## Frozen weights; no refit','- All 3 seeds and original writer NPZs verified by SHA-256.',
+            '- Official Test and professor Test not accessed. No Hand-made fitting or parameter changes.',
+            '- Detailed 5-scale scores, writer-wise, class-wise, focused pairs, paired improvements are in CSV.',
+            '- This diagnostic alone must not decide changes to already frozen hyperparameters.'])
+          (out/'SUMMARY.md').write_text('\n'.join(report)+'\n',encoding='utf-8')
+          print('EXP017_HANDMADE_DIAGNOSTIC_COMPLETE')
+          for name in names:print(name,'all',groupavg(name,'all'),'digits',groupavg(name,'digits'),'letters',groupavg(name,'letters'),'f1',groupavg(name,'all','macro_f1'))
+          PY
+      - name: Upload report and all measured CSV (not model weights or original images)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP017-ExistingHandmade2560-Diagnostic-3Seed
+          path: |
+            ${{ runner.temp }}/input_verification.json
+            ${{ runner.temp }}/eval/
+          retention-days: 30
+          if-no-files-found: warn

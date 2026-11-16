@@ -1,0 +1,12 @@
+{
+  "experiment": "EXP016_OFFICIALVAL_AUDIT_AGGREGATE",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "n_fixed_models": 10,
+  "model_fitting_performed": false,
+  "test_used": false,
+  "original_preregistered_criteria_modified": false
+}

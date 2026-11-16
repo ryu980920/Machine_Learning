@@ -1,0 +1,4 @@
+actual,predicted,old_n,old_seed42,old_seed43,old_seed44,old_mean_count,old_mean_error_rate,new_n,new_seed42,new_seed43,new_seed44,new_mean_count,new_mean_error_rate,rate_delta_percentage_points
+7,9,160,14,5,8,9,0.05625,29,10,9,8,9,0.3103448275862069,25.409482758620687
+7,A,160,0,0,0,0,0,29,7,8,8,7.666666666666667,0.26436781609195403,26.436781609195403
+4,F,160,2,3,4,3,0.01875,30,1,2,8,3.6666666666666665,0.12222222222222222,10.347222222222221

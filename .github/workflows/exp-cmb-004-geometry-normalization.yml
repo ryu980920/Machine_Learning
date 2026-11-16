@@ -1,0 +1,108 @@
+name: EXP-CMB-004 Geometry Normalization 4-Fold Comparison
+
+on:
+  push:
+    branches: [exp/cmb004-geometry-normalization-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-004-geometry-normalization.yml'
+      - '05_model_optimize/MLP/Combined/scripts/exp_cmb004_geometry_normalization.py'
+      - '05_model_optimize/MLP/Combined/scripts/exp_cmb004_compare.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  method:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        method: [bbox_center, bbox_size, com_center, size_then_com]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install EXP-CMB-001 runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Verify existing Baseline code
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Execute 4 author-held-out MLP fits for one transform
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb004_geometry_normalization.py \
+            --method "${{ matrix.method }}" \
+            --out "05_model_optimize/MLP/Combined/results/Geometry_Normalization/${{ matrix.method }}"
+      - name: Upload method-specific evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exp-cmb004-${{ matrix.method }}
+          path: 05_model_optimize/MLP/Combined/results/Geometry_Normalization/${{ matrix.method }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  compare:
+    needs: method
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install EXP-CMB-001 runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Combined/scripts/EXP_CMB_001_requirements.txt
+      - name: Download method results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: exp-cmb004-*
+          path: 05_model_optimize/MLP/Combined/results/Geometry_Normalization/
+          merge-multiple: false
+      - name: Restore original method folder names
+        run: |
+          cd 05_model_optimize/MLP/Combined/results/Geometry_Normalization/
+          for method in bbox_center bbox_size com_center size_then_com; do
+            test -e "exp-cmb004-$method/metrics.csv"
+            mv "exp-cmb004-$method" "$method"
+            test -e "$method/trained_models.zip"
+          done
+      - name: Aggregate mechanism and counterexamples
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb004_compare.py \
+            --out 05_model_optimize/MLP/Combined/results/Geometry_Normalization
+      - name: Upload complete review evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-004-complete-comparison-review
+          path: 05_model_optimize/MLP/Combined/results/Geometry_Normalization/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Store evidence on experiment branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Geometry_Normalization/
+          if git diff --staged --quiet; then
+            echo 'Review evidence unchanged'
+          else
+            git commit -m 'research: save full EXP-CMB-004 4-method evidence [skip ci]'
+            git push
+          fi

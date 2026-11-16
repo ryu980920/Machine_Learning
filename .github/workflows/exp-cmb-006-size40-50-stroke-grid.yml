@@ -1,0 +1,142 @@
+name: EXP-CMB-006 Size 40-50% x Stroke 0-14-28
+
+on:
+  push:
+    branches: [exp/cmb006-size40-50-stroke-grid-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-006-size40-50-stroke-grid.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        arm: [scale40_stroke00, scale40_stroke14, scale40_stroke28, scale50_stroke00, scale50_stroke14, scale50_stroke28]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact prior experiment dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Check original SHA, labels, splits, and Combined baseline
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit four fixed-HP writer-held-out models and all 16-class probes
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb006_scale40_50_stroke.py \
+            --arm "${{ matrix.arm }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/cmb006/${{ matrix.arm }}/seed_${{ matrix.seed }}"
+      - name: Preserve job metrics, confusions, and 4 model checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb006-${{ matrix.arm }}-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/cmb006/${{ matrix.arm }}/seed_${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical analysis package versions
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download all 18 newly completed condition and Seed artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb006-*
+          path: ${{ runner.temp }}/cmb006-incoming
+          merge-multiple: false
+      - name: Aggregate 6 new conditions and all 16 classes, 240 directions, five sizes
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb006_aggregate.py \
+            --stage extended \
+            --incoming "${{ runner.temp }}/cmb006-incoming" \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/stage_extended
+      - name: Compare original 10 conditions and new 6 with paired predictions
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb006_cross_compare.py \
+            --old 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/full_comparison \
+            --new 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/stage_extended \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/full_0to50_comparison
+      - name: Verify preregistered number of models, all classes and all directed pairs
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          root=Path("05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension")
+          ext=root/"stage_extended"
+          across=root/"full_0to50_comparison"
+          with (ext/"manifest.json").open(encoding="utf-8") as f:m=json.load(f)
+          assert (m["experiment"],m["expected_fits"])==("EXP-CMB-006",72)
+          assert m["no_hp_search"] and m["no_test_used"]
+          with (across/"manifest.json").open(encoding="utf-8") as f:n=json.load(f)
+          assert (n["total_condition_count"],n["expected_new_fits"])==(16,72)
+          assert not n["hyperparameters_changed"] and not n["original_test_used"]
+          for p,nrows in ((ext/"comparison.csv",6),
+                          (ext/"all_240_direction_changes.csv",6*240),
+                          (ext/"all_16_class_error_changes.csv",6*16),
+                          (across/"all_16_preprocessing_conditions.csv",16),
+                          (across/"all_240_directed_errors_across_16_conditions.csv",16*240),
+                          (across/"all_16_class_error_rates_across_16_conditions.csv",16*16),
+                          (across/"all_240_pair_changes_vs_30percent.csv",2*6*240),
+                          (across/"paired_30percent_to_40_50_corrections.csv",2*6*3)):
+            with p.open(encoding="utf-8-sig",newline="") as f:
+              k=sum(1 for _ in csv.DictReader(f))
+            assert k==nrows,(p,k,nrows)
+            print(p, k)
+          PY
+      - name: Upload new and combined results even if the branch moves
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-006-all-40-50-results-vs-CMB005
+          path: 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit recorded results on review branch (safely rebase and push)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/
+          if git diff --staged --quiet; then
+            echo "Results already committed"
+            exit 0
+          fi
+          git commit -m 'research: record EXP-CMB-006 40-50% six-arm models and all-class paired diagnostics [skip ci]'
+          git fetch origin exp/cmb006-size40-50-stroke-grid-20261116
+          git rebase origin/exp/cmb006-size40-50-stroke-grid-20261116
+          git push origin HEAD:exp/cmb006-size40-50-stroke-grid-20261116

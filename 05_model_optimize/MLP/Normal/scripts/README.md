@@ -17,3 +17,17 @@
 - **[Automatic_Centering_Experiment.py](Automatic_Centering_Experiment.py)**: 기준 MLP 체크포인트와 두 후보 MLP의 학습·공식 Val/Hand-made 평가를 수행하며, 원본 결과를 GitHub Actions 아티팩트로 보관한다. [EXP유004 정식 로그](../logs/가설B/EXP유004_Automatic_Centering.md) · [배포된 실제 결과](../results/Automatic_Centering/README.md) · [실행 워크플로](../../../../.github/workflows/mlp_exp004_automatic_centering_review.yml). 코드의 `review-only` 설명은 **원래 실행의 배포 전 상태**를 뜻하며, 이후 사용자 승인으로 실험 결과가 배포되었다.
 
 - **[CoM_Translation_Augmentation_Experiment.py](CoM_Translation_Augmentation_Experiment.py)**: [가설 B 실험 5](../logs/가설B/EXP유005_CoM_Translation_Augmentation.md)에 사용한 CoM 이후 ±1px 학습 증강 및 반복 대조 실험 코드.
+
+
+## EXP유013~016 재현 코드 전체 목록
+
+| 실험 | 학습·평가·집계 코드 |
+|---|---|
+| **EXP유013** | [기하 특징 이진분류](exp013_geometry_shortcut_binary.py), [3-Seed 통합 집계](exp013_014_aggregate.py) |
+| **EXP유014** | [크기·획 증강 학습](exp014_balanced_augmentation.py), [통합 집계](exp013_014_aggregate.py) |
+| **EXP유015** | [1차 격자 학습](exp015_scale_stroke_grid.py), [1차 집계](exp015_aggregate_and_rank.py), [미세 탐색](exp015_fine_search.py), [78개 모델 집계·순위](exp015_joint_rank.py), [OfficialVal 크기 개입](exp015_officialval_scale_audit.py), [OfficialVal 집계](exp015_officialval_audit_aggregate.py) |
+| **EXP유016** | [60~100% 비율 학습](exp016_high_fraction_grid.py), [16클래스·60모델 평가](exp016_aggregate_shortcut_risks.py), [OfficialVal 5배율 검증](exp016_officialval_scale_audit.py), [OfficialVal 집계](exp016_officialval_audit_aggregate.py) |
+
+**GitHub Actions 실행·보존 코드:** [013·014](../../../../.github/workflows/normal-exp013-014-shortcut-remedy.yml) · [015 1차](../../../../.github/workflows/normal-exp015-shortcut-safe-grid.yml) · [015 미세 탐색](../../../../.github/workflows/normal-exp015-fine-tuning.yml) · [015 검증](../../../../.github/workflows/normal-exp015-officialval-scale-audit.yml) · [016 학습](../../../../.github/workflows/normal-exp016-high-fraction-shortcut.yml) · [016 검증](../../../../.github/workflows/normal-exp016-officialval-scale-audit.yml) · [실측 아카이브](../../../../.github/workflows/normal-exp016-persist-reviewed-logs.yml) · [두 모델 보존](../../../../.github/workflows/normal-exp016-preserve-two-candidates.yml).
+
+[관련 실험일지](../logs/크기편향_원인분석/README.md) · [CSV 및 원본 측정 자료](../results/크기편향_원인분석/README.md). `main`의 최종 모델·배포 코드는 변경하지 않았다.

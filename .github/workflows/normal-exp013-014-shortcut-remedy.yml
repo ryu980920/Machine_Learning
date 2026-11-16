@@ -1,0 +1,123 @@
+name: Normal EXP013-014 Geometry Shortcut and Balanced-Scale Training
+
+on:
+  push:
+    branches: [exp/normal-exp013-014-shortcut-intervention-20261116]
+    paths:
+      - '.github/workflows/normal-exp013-014-shortcut-remedy.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp013_geometry_shortcut_binary.py'
+      - '05_model_optimize/MLP/Normal/scripts/exp014_balanced_augmentation.py'
+      - '05_model_optimize/MLP/Normal/scripts/exp013_014_aggregate.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  exp013_binary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned EXP006 scientific environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Run actual official-Train-only geometry-only digit-vs-letter binary classification
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp013_geometry_shortcut_binary.py \
+            --out "${{ runner.temp }}/exp013-binary"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp013-binary
+          path: ${{ runner.temp }}/exp013-binary/
+          retention-days: 30
+          if-no-files-found: warn
+
+  exp014_augmentation:
+    needs: [exp013_binary]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install same exact scientific dependencies as EXP006
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download original EXP006 model joblibs for the SAME seed
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43785390739
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: normal-exp006-*-${{ matrix.seed }}
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp006-original-models
+      - name: Verify old controls then train 3 class-independent augmentation arms
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp014_balanced_augmentation.py \
+            --seed "${{ matrix.seed }}" \
+            --models-root "${{ runner.temp }}/exp006-original-models" \
+            --out "${{ runner.temp }}/exp014-seed${{ matrix.seed }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp014-seed${{ matrix.seed }}
+          path: ${{ runner.temp }}/exp014-seed${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [exp013_binary, exp014_augmentation]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install original pinned environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp01*-*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp013-014-inputs
+      - name: Validate and aggregate experiment 013 binary probes and 014 3-seed training
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp013_014_aggregate.py \
+            --inputs "${{ runner.temp }}/exp013-014-inputs" \
+            --out "${{ runner.temp }}/exp013-014-review"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-EXP013-014-measured-shortcut-review
+          path: ${{ runner.temp }}/exp013-014-review/
+          retention-days: 30
+          if-no-files-found: error
