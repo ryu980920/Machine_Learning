@@ -31,3 +31,11 @@
 **GitHub Actions 실행·보존 코드:** [013·014](../../../../.github/workflows/normal-exp013-014-shortcut-remedy.yml) · [015 1차](../../../../.github/workflows/normal-exp015-shortcut-safe-grid.yml) · [015 미세 탐색](../../../../.github/workflows/normal-exp015-fine-tuning.yml) · [015 검증](../../../../.github/workflows/normal-exp015-officialval-scale-audit.yml) · [016 학습](../../../../.github/workflows/normal-exp016-high-fraction-shortcut.yml) · [016 검증](../../../../.github/workflows/normal-exp016-officialval-scale-audit.yml) · [실측 아카이브](../../../../.github/workflows/normal-exp016-persist-reviewed-logs.yml) · [두 모델 보존](../../../../.github/workflows/normal-exp016-preserve-two-candidates.yml).
 
 [관련 실험일지](../logs/크기편향_원인분석/README.md) · [CSV 및 원본 측정 자료](../results/크기편향_원인분석/README.md). `main`의 최종 모델·배포 코드는 변경하지 않았다.
+
+
+
+### EXP유017 — 80-14 고정 하이퍼파라미터 조정
+
+[26구성 1차 Train](exp017_hparam_coarse.py) · [3-Seed 1차 Gate 집계](exp017_hparam_coarse_aggregate.py) · [2차 4개 구조 미세조정](exp017_hparam_fine.py) · [전체 46구성 3-Seed 집계](exp017_hparam_final_aggregate.py) · [동결 모델 OfficialVal 5배율](exp017_frozen_officialval_five_scale_audit.py).
+
+전처리 80-14와 Official Train 76,800은 고정. 하이퍼파라미터 선택에는 OfficialVal 19,200만 사용하고, 기존/추가 팀 손글씨는 모델 확정까지 불러오지 않는다.
