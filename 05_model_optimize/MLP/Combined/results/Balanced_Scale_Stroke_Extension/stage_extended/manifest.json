@@ -1,0 +1,31 @@
+{
+  "experiment": "EXP-CMB-006",
+  "stage": "extended",
+  "arms": [
+    "scale40_stroke00",
+    "scale40_stroke14",
+    "scale40_stroke28",
+    "scale50_stroke00",
+    "scale50_stroke14",
+    "scale50_stroke28"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "folds": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "expected_fits": 72,
+  "no_hp_search": true,
+  "no_test_used": true,
+  "research_gate": "explanation not absolute accuracy",
+  "status": "numeric comparison complete, explanatory decision pending",
+  "reference_experiment": "EXP-CMB-005",
+  "frozen_mlp_parameters": true,
+  "original_0_to_30_not_retrained": true
+}

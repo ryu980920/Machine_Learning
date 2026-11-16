@@ -1,0 +1,75 @@
+{
+  "experiment": "EXP-CMB-005",
+  "status": "arm completed, aggregation pending",
+  "arm": "scale10_stroke28",
+  "seed": 44,
+  "handmade_cv": "Leave-One-Writer-Out 4-Fold",
+  "official_n": 76800,
+  "official_val_n": 19200,
+  "training_handmade_each_fold": 1920,
+  "oof_n": 2560,
+  "scale_interventions": [
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2
+  ],
+  "class_balanced_targets": [
+    16,
+    18,
+    20,
+    22,
+    24
+  ],
+  "official_train_only_augmentation": true,
+  "handmade_train_preprocess": "CoM-only",
+  "heldout_and_official_val_preprocess": "CoM-only",
+  "augmentation_seed": 20261116,
+  "augmentation": {
+    "method": "scale10_stroke28",
+    "requested_ratio": 0.1,
+    "actual_ratio": 0.1,
+    "n_aug": 7680,
+    "n_stroke_changed": 6699,
+    "n_stroke_rejected": 981,
+    "official_train_rows": 76800
+  },
+  "preregistration": "low ratio 0,10,20,30 x stroke 0,14,28 (no stroke for 0)",
+  "no_mlp_hyperparameter_search": true,
+  "official_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_train_size_binary_probe": {
+    "bal_acc": 0.9889583333333334,
+    "auc": 0.9971533680555557
+  },
+  "oof_metrics": {
+    "n": 2560,
+    "correct": 2291,
+    "accuracy": 0.894921875,
+    "macro_f1": 0.8949457560274063,
+    "macro_precision": 0.8984468710200559,
+    "macro_recall": 0.894921875
+  },
+  "fit_total_seconds": 94.695364851,
+  "preprocessing_seconds": 4.670838706000005,
+  "wall_seconds": 111.11904318799999,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "new_handmade_480_used": false,
+  "versions": {
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  },
+  "model_sha256": {
+    "41": "a1f68fa15ceb6252bf30c2ee8794a025bf0b48aab5e3faa8be8a6af5ce61f512",
+    "42": "b194cdf42be55d46a82ea69db9617fb7363262c832d975ad1fa073ee3dbd340a",
+    "43": "73f0e6cd6bca61b4d67d75d3d2fe1819b3b78f3e0aabfde4c6fa15425609f773",
+    "44": "5b8ef13a651d197b718db1d682bc385fe21e8d76e98863b55fc7697ca3d1b6c2"
+  }
+}

@@ -1,0 +1,11 @@
+# input: final frozen EXP017 MLP seed42/43/44; X->CoM then shift dy=-1,0,+1 without re-CoM; zero-fill
+original_index_0based,true_label,source_image,shift_up_1px_pred_seed42,shift_up_1px_pred_seed43,shift_up_1px_pred_seed44,baseline_pred_seed42,baseline_pred_seed43,baseline_pred_seed44,shift_down_1px_pred_seed42,shift_down_1px_pred_seed43,shift_down_1px_pred_seed44
+167,7,2,9,9,9,9,9,9,9,9,9
+183,7,2,9,9,9,9,9,9,9,9,9
+215,7,2,9,7,9,7,7,7,7,7,7
+231,7,2,9,9,9,9,D,9,B,B,A
+247,7,2,9,9,9,9,9,9,9,A,A
+263,7,2,9,9,9,9,9,9,7,9,9
+279,7,2,7,7,7,7,7,7,7,7,7
+295,7,2,9,9,9,9,9,9,9,9,9
+311,7,2,9,7,7,9,9,7,9,9,C

@@ -1,0 +1,14 @@
+# data_source: older archived MNIST_EMNIST_official_split_112000.npz sha256 b52ce7873abb21182627841fb22b5c87fd6f54ac5cb925242deab44499271ec1
+# NOT the github final v3 npz (sha256 0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879); DO NOT claim final Official Train exact membership
+# MNIST original digit samples from source X_train; frozen v3-trained MLP seeds 42,43,44; 7/9 prediction percentages are seed event averages
+subset,n,width_median,mass_median,seed_event_pred7_rate,seed_event_pred9_rate,n_images_any_9,n_images_all_9,n_images_all_correct
+all_mnist7,6265,16,22280,0.987656291566906,0.0019154030327214,31,1,6114
+mnist7_width_le_10,253,10,15083,0.9565217391304348,0.0131752305665349,9,0,230
+mnist7_width_le_8,16,8,12468.5,0.875,0,0,0,12
+mnist7_width_le10_mass_le12020,28,10,11091,0.9642857142857144,0.0238095238095238,2,0,25
+mnist7_hogsim_any_query_ge_0p65,26,10,16038,0.935897435897436,0.0256410256410256,2,0,23
+mnist7_hogsim_any_query_ge_0p70,8,10,15507,0.9583333333333334,0.0416666666666666,1,0,7
+mnist7_both_hog70_and_narrow,8,10,15507,0.9583333333333334,0.0416666666666666,1,0,7
+mnist7_both_hog65_and_narrow,22,10,15298,0.9242424242424242,0.0303030303030303,2,0,19
+all_mnist9,5949,14,23821,0.006107469042416,0.976466633047571,5896,5689,5689
+mnist9_width_le10,637,10,17291,0.0026164311878597,0.9691261119832548,631,600,600

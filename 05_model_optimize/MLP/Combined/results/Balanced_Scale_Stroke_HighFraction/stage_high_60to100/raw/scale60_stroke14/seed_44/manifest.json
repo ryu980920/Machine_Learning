@@ -1,0 +1,158 @@
+{
+  "experiment": "EXP-CMB-007",
+  "status": "arm completed, aggregation pending",
+  "arm": "scale60_stroke14",
+  "seed": 44,
+  "handmade_cv": "Leave-One-Writer-Out 4-Fold",
+  "official_n": 76800,
+  "official_val_n": 19200,
+  "training_handmade_each_fold": 1920,
+  "oof_n": 2560,
+  "scale_interventions": [
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2
+  ],
+  "class_balanced_targets": [
+    16,
+    18,
+    20,
+    22,
+    24
+  ],
+  "official_train_only_augmentation": true,
+  "handmade_train_preprocess": "CoM-only",
+  "heldout_and_official_val_preprocess": "CoM-only",
+  "augmentation_seed": 20261116,
+  "augmentation": {
+    "method": "scale60_stroke14",
+    "requested_ratio": 0.6,
+    "actual_ratio": 0.5999869791666667,
+    "n_aug": 46079,
+    "n_stroke_changed": 43192,
+    "n_stroke_rejected": 2887,
+    "official_train_rows": 76800
+  },
+  "preregistration": "low ratio 0,10,20,30 x stroke 0,14,28 (no stroke for 0)",
+  "no_mlp_hyperparameter_search": true,
+  "official_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_train_size_binary_probe": {
+    "bal_acc": 0.9975694444444445,
+    "auc": 0.9971533680555557
+  },
+  "oof_metrics": {
+    "n": 2560,
+    "correct": 2309,
+    "accuracy": 0.901953125,
+    "macro_f1": 0.9025696339420073,
+    "macro_precision": 0.9056551526348886,
+    "macro_recall": 0.9019531249999999
+  },
+  "fit_total_seconds": 202.80098326100003,
+  "preprocessing_seconds": 14.391689471000007,
+  "wall_seconds": 233.137126206,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "new_handmade_480_used": false,
+  "versions": {
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  },
+  "model_sha256": {
+    "41": "a2df3efe40900b10c80c3597d8a4c376f88ec89173d2dd7bb88ad54ab43d1818",
+    "42": "c82fbda3ba581714397cae508209c1a424eedf0df12fa6d1046ac39c01114ad6",
+    "43": "b78e0e13b55cea8257d7ceae4b3179833c5768e1caf4d39d597fd9e68f6c9146",
+    "44": "4228a43d939074f8b6cc5c95694efa9e11fb3f05b2eaefb147219b1bc01503d4"
+  },
+  "reference_experiment": "EXP-CMB-005",
+  "reference_script": "exp_cmb005_balanced_scale_stroke.py",
+  "pre_registered_arm_set": {
+    "scale60_stroke00": [
+      0.6,
+      0.0
+    ],
+    "scale60_stroke14": [
+      0.6,
+      0.14
+    ],
+    "scale60_stroke28": [
+      0.6,
+      0.28
+    ],
+    "scale70_stroke00": [
+      0.7,
+      0.0
+    ],
+    "scale70_stroke14": [
+      0.7,
+      0.14
+    ],
+    "scale70_stroke28": [
+      0.7,
+      0.28
+    ],
+    "scale80_stroke00": [
+      0.8,
+      0.0
+    ],
+    "scale80_stroke14": [
+      0.8,
+      0.14
+    ],
+    "scale80_stroke28": [
+      0.8,
+      0.28
+    ],
+    "scale90_stroke00": [
+      0.9,
+      0.0
+    ],
+    "scale90_stroke14": [
+      0.9,
+      0.14
+    ],
+    "scale90_stroke28": [
+      0.9,
+      0.28
+    ],
+    "scale100_stroke00": [
+      1.0,
+      0.0
+    ],
+    "scale100_stroke14": [
+      1.0,
+      0.14
+    ],
+    "scale100_stroke28": [
+      1.0,
+      0.28
+    ]
+  },
+  "fixed_model_hyperparameters": true,
+  "independent_new_models": 4,
+  "total_planned_fits": 180,
+  "pre_registered_size_rates": [
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "training_source_selection": "EXP016 high_fraction_grid nested_subset",
+  "historical_first_50_percent_ids_retained": true,
+  "pre_registered_stroke_strengths": [
+    0.0,
+    0.14,
+    0.28
+  ],
+  "controls": "Compare paired seeds/writers/images with previously frozen CMB005",
+  "model_selection": "none; metrics explanatory only"
+}

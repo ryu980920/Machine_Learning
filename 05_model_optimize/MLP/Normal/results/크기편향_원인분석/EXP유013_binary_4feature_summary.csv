@@ -1,0 +1,5 @@
+preprocessing,size_only_balanced_accuracy,all_four_balanced_accuracy,all_four_roc_auc
+raw,0.997639,0.997639,0.998460
+com,0.997569,0.997500,0.998438
+size,0.510931,0.643847,0.702490
+size_com,0.510931,0.643972,0.702640

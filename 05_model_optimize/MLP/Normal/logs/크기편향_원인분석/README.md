@@ -6,9 +6,9 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 
 | 실험 | 검증 가설 | 원본 실측의 핵심 | 연구 기록 / 수치 |
 |---|---|---|---|
-| **EXP유010** | Training과 Hand-made의 크기 분포 차이 | 공식 B/D/F 긴 변 24px, 손글씨 20px 확인 | [실험일지](EXP유010_크기분포_분석.md) · [summary.csv](EXP유010_summary.csv) |
-| **EXP유011** | Size-only의 숫자 붕괴는 CoM 및 재학습과 관련되는가 | 같은 Size 모델에서 평가 입력을 CoM으로 바꾸자 숫자 36.46%→73.81% | [실험일지](EXP유011_Size_CoM_교차분석.md) · [summary.csv](EXP유011_summary.csv) |
-| **EXP유012** | MLP가 크기 관련 특징을 숫자·문자 구분 단서로 쓰는가 | 동일 이미지 0.8~1.2배 개입 시 숫자/문자 판단 경향 역전 | [실험일지](EXP유012_크기분류단서.md) · [summary.csv](EXP유012_summary.csv) |
+| **EXP유010** | Training과 Hand-made의 크기 분포 차이 | 공식 B/D/F 긴 변 24px, 손글씨 20px 확인 | [실험일지](EXP유010_크기분포_분석.md) · [summary.csv](../../results/크기편향_원인분석/EXP유010_summary.csv) |
+| **EXP유011** | Size-only의 숫자 붕괴는 CoM 및 재학습과 관련되는가 | 같은 Size 모델에서 평가 입력을 CoM으로 바꾸자 숫자 36.46%→73.81% | [실험일지](EXP유011_Size_CoM_교차분석.md) · [summary.csv](../../results/크기편향_원인분석/EXP유011_summary.csv) |
+| **EXP유012** | MLP가 크기 관련 특징을 숫자·문자 구분 단서로 쓰는가 | 동일 이미지 0.8~1.2배 개입 시 숫자/문자 판단 경향 역전 | [실험일지](EXP유012_크기분류단서.md) · [summary.csv](../../results/크기편향_원인분석/EXP유012_summary.csv) |
 
 각 실험일지는 **사전 계획, 실험 절차, 실제 결과, 해석 및 한계, 재현 방법**을 한 문서에 통합한다. 각 CSV는 이전 GitHub 실험 폴더의 파일 내용을 **변경 없이 옮긴 핵심 지표 요약**이다.
 
@@ -28,7 +28,7 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 - [EXP유013 — 기하학적 특징만으로 숫자·문자 이진분류](EXP유013_기하특징_이진분류.md): 원본/CoM/Size/Size→CoM에서 4개 Geometry Features만 사용한 별도 이진분류기로 Shortcut 단서의 존재 측정. [완료·원본 실측](https://github.com/ryu980920/Machine_Learning/actions/runs/43809791116).
 - [EXP유014 — 크기 편향 완화를 위한 Class-balanced 학습](EXP유014_Shortcut_완화_학습.md): Training 전용 Scale 및 Stroke 다양화 3조건 × 3 Seed MLP를 기존 EXP유006 CoM / Size→CoM과 비교. [재실행 실측 확인](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307).
 
-기존 코드는 `Normal/scripts/` 아래 유지하며 이 연구는 브랜치에서만 실행하고 최종 모델 또는 main을 변경하지 않는다.
+재현용 실행 코드는 `Normal/scripts/`, 결과 CSV는 `Normal/results/`에서 관리한다. 실험 실행·모델 동결은 별도 브랜치에서 수행하며 최종 모델은 변경하지 않는다.
 
 ### EXP유013~014 완료 판정 (2026-11-16)
 
@@ -40,7 +40,7 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 
 ## EXP유015 — 크기 Shortcut 재발 방지 우선 증강 최적화 (완료)
 
-[실측 실험일지](EXP유015_증강비율_획강도_최적화.md) · [Gate 합격 9개 후보 요약 CSV](EXP유015_shortcut_gate_통과9조건_요약.csv) · [OfficialVal 크기 변형 진단 CSV](EXP유015_OfficialVal_크기변형_요약.csv).
+[실측 실험일지](EXP유015_증강비율_획강도_최적화.md) · [Gate 합격 9개 후보 요약 CSV](../../results/크기편향_원인분석/EXP유015_shortcut_gate_통과9조건_요약.csv) · [OfficialVal 크기 변형 진단 CSV](../../results/크기편향_원인분석/EXP유015_OfficialVal_크기변형_요약.csv).
 
 - **78개 새 MLP, 26개 크기 비율×획 강도 조합, 3 Seed**. 사전 고정 Shortcut Gate를 통과한 9개 후보 중 OfficialVal이 가장 높은 조건은 **30% 크기 증강 / 획 강도 28% / 전체 CoM**, OfficialVal **96.1806%**, Hand-made 숫자 **88.8125%**, 문자 **87.7778%**.
 - Hand-made 숫자1.2배·문자0.8배 Family flip: **9.44% / 9.93%**. OfficialVal 같은 개입: **5.00% / 5.23%** (기존 CoM은 **75.67% / 49.42%**).
@@ -51,7 +51,7 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 
 ### EXP유016 전 로그 동기화 확인 (2026-11-16)
 
-EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했다. EXP유015는 전체 26개 조건의 **[합격/탈락 전체 CSV](EXP유015_26조건_전체판정.csv)**와 **[B·8·D 여섯 크기 개입 세부 CSV](EXP유015_26조건_B8D_전환율_전체.csv)**를 추가 영구 보존했다. 3-Seed 상세 CSV/NPZ·체크포인트는 [1차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43814205670), [2차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141), [OfficialVal Audit](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) Artifact에 보존한다. 아직 `main`에 병합하지 않았으며 새로운 실험은 별도 브랜치로 진행한다.
+EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했다. EXP유015는 전체 26개 조건의 **[합격/탈락 전체 CSV](../../results/크기편향_원인분석/EXP유015_26조건_전체판정.csv)**와 **[B·8·D 여섯 크기 개입 세부 CSV](../../results/크기편향_원인분석/EXP유015_26조건_B8D_전환율_전체.csv)**를 추가 영구 보존했다. 3-Seed 상세 CSV/NPZ·체크포인트는 [1차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43814205670), [2차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141), [OfficialVal Audit](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) Artifact에 보존한다. 아직 `main`에 병합하지 않았으며 새로운 실험은 별도 브랜치로 진행한다.
 
 
 ## EXP유016 — 60~100% 크기 증강 / 개별 클래스 Shortcut 상한 실험
@@ -67,7 +67,7 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 ### EXP유016 최종 실측 판정 (2026-11-16)
 
 - **완료:** [60개 새 MLP·3 Seed 학습 전체 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43820298886), [OfficialVal 동결모델 5배율 교차 검증 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43822594798).
-- **영구 보존 원본:** [EXP유015 78모델 상세 CSV](원본_실측_아카이브/EXP유015_78모델/SUMMARY.md) · [EXP유015 OfficialVal 변형 CSV](원본_실측_아카이브/EXP유015_OfficialVal/SUMMARY.md) · [EXP유016 60모델 전체 16클래스 CSV](원본_실측_아카이브/EXP유016_60모델/SUMMARY.md) · [EXP유016 OfficialVal 5배율·16클래스 CSV](원본_실측_아카이브/EXP유016_OfficialVal/SUMMARY.md).
+- **영구 보존 원본:** [EXP유015 78모델 상세 CSV](../../results/크기편향_원인분석/원본_실측_아카이브/EXP유015_78모델/SUMMARY.md) · [EXP유015 OfficialVal 변형 CSV](../../results/크기편향_원인분석/원본_실측_아카이브/EXP유015_OfficialVal/SUMMARY.md) · [EXP유016 60모델 전체 16클래스 CSV](../../results/크기편향_원인분석/원본_실측_아카이브/EXP유016_60모델/SUMMARY.md) · [EXP유016 OfficialVal 5배율·16클래스 CSV](../../results/크기편향_원인분석/원본_실측_아카이브/EXP유016_OfficialVal/SUMMARY.md).
 - **사전등록한 Hand-made 개별 클래스 Gate** 통과 최상위는 **70-14 / 80-14** (B·8·D 최악 각 17.50%), 단 OfficialVal에서는 D×1.2와 B×1.2에 25~28% 전환 잔존.
 - **후속 검증 후보:** **70-0 = Training 중 약 70%에 크기 증강, 획 증강 없음, CoM**. Hand-made B·8·D 최악 **18.54%**, OfficialVal 최악 **17.03%**, 정규 OfficialVal **95.28%**. 2개 재사용 개발 데이터에서 class-flip 안정성을 동시에 보여 후속 평가 1순위이나 **최종 채택 보류**.
 - OfficialVal 97.30% 목표 미달 및 새 Writer Test 미수행. Main/final/checkpoint/Test 미수정.
@@ -78,3 +78,46 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 [80-14 · 70-0 병행 보존 결정](EXP유016_80-14_70-0_두_후보_병행보존.md) · [두 조건 × 3 Seed 실제 체크포인트 및 SHA-256](https://github.com/ryu980920/Machine_Learning/blob/exp/normal-exp016-high-fraction-shortcut-20261116/05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/README.md).
 
 사용자 요청에 따라 80-14와 70-0 어느 쪽도 최종 모델로 승격하지 않고 **6개 동결 학습모델**을 EXP유016 실험 브랜치에 영구 저장했다. `main`에는 이 문서 및 결과 CSV만 반영하고 실험 코드·체크포인트·final은 건드리지 않는다.
+
+
+### EXP유010~016 실제 파일 위치
+
+- [CSV와 3-Seed 실측 원본](../../results/크기편향_원인분석/README.md)
+- [EXP유013~016 코드와 GitHub Actions 실행 설정](../../scripts/README.md)
+- [두 후보 80-14 / 70-0 보존 기록](EXP유016_80-14_70-0_두_후보_병행보존.md)
+
+
+## EXP유017 — 80-14 MLP 하이퍼파라미터 선정과 5배율 검증 완료 (2026-11-16)
+
+[실험 기준·탐색 과정·최종 채택 근거 통합 로그](EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [OfficialVal 5배율 3-Seed 비교 CSV](../../results/크기편향_원인분석/EXP유017_OfficialVal_5배율_3Seed_요약.csv) · [동결 모델 SHA-256](../../results/크기편향_원인분석/EXP유017_동결모델_SHA256_Manifest.json).
+
+- 기존 전처리 80-14+CoM 고정, **1차 26조건×3 Seed + 2차 20조건×3 Seed = 총 138모델**. 사전 Shortcut 안전 Gate **10/46조건 통과**.
+- 최종 모델 `(256,128), alpha=0.03, LR=0.001, Early Stopping=False`: **OfficialVal 96.5365%**, B·8·D 최악 Family Flip **16.67%**. 최고 정확도 후보 `LR=0.0014`는 Flip 21.69%로 Gate 탈락. **97.30% 목표는 미달**.
+- [원본 5배율 감사 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43846851354). 이후 Hand-made 평가 결과는 해당 EXP유017 로그의 동결 후 이력 및 EXP유018에 분리 기재; 모델은 재튜닝하지 않음.
+
+## EXP유018 — 최종 EXP유017 모델 신규 수집 손글씨 480장 평가 (2026-11-16)
+
+[실험일지](EXP유018_신규손글씨480_판독필터_혼동쌍_진단.md) · [3-Seed 그룹별 성능](../../results/크기편향_원인분석/EXP유018_3Seed_그룹별성능.csv) · [16클래스 지표](../../results/크기편향_원인분석/EXP유018_16클래스_3Seed_지표.csv) · [이전/신규 CM 오류 비교](../../results/크기편향_원인분석/EXP유018_이전CM_신규CM_주요쌍비교.csv).
+
+사용자 신규 손글씨 **480장 → 판독 곤란 25장 제외 → 455장**에서 동결 EXP유017 MLP 3-Seed 평균 정확도 **85.5678%**(제외 전 **83.0556%**). 7→9 **31.03%**, 7→A **26.44%**, 4→F **12.22%**(각 클래스 기준). 이전 Hand-made 2,560장 CM과 비교했으며 오류는 원본 이미지 그룹별로 집중됨. **원인 규명은 후속 분석; 새 모델 학습/테스트 사용 없음.** 원본 NPZ·이미지·가중치 GitHub 미업로드.
+
+
+### EXP유018 후속 판독 및 7→9 원인 분석 (2026-11-16)
+
+[전체 로그 §8·§9](EXP유018_신규손글씨480_판독필터_혼동쌍_진단.md) · [438장 CM](../../results/크기편향_원인분석/EXP유018_438장_CM_3Seed평균.csv) · [그룹2 실제 7의 모델별 예측](../../results/크기편향_원인분석/EXP유018_438장_그룹2_7_개별예측.csv).
+
+후속 판독 품질검사로 **480장 중 42장 제외·438장 유지**, 동결 EXP유017 정확도 **87.8995%**. 7→9는 **9/29(31.03%)→9/22(40.91%)**로 분모 축소 때문에 비율이 상승. 그룹2의 7은 최종 모델 **19/27회(70.37%)** 9로 오인, 최적화 이전 80-14는 **14/27회(51.85%)**. 형태적 유사성과 획 연결성 가설은 아직 미확정이며 후속 검증 필요. 사후 필터링이므로 독립 Test 성능 아님.
+
+
+### EXP유018 후속 조사 — 7→9 가로 폭·고리 가설 검증 및 MNIST 원본 필체 대조 (2026-11-17)
+
+[실험일지 §10~§11](EXP유018_신규손글씨480_판독필터_혼동쌍_진단.md) · [가로 폭 개입 수치](../../results/크기편향_원인분석/EXP유018_7to9_가로폭_개입대조.csv) · [MNIST 원본 숫자 7 조사](../../results/크기편향_원인분석/EXP유018_7to9_MNIST원본_학습필체조사.csv).
+
+**가로 1.5배 확대(원래 픽셀 강도 합계 보정) 시 그룹2 7→9 19/27→9/27**이나 9→7 부작용 1/30. 상단 고리 연결 시 수정 가능한 7 8장 기준 7→9 16/24→20/24; 원래 픽셀에 밝기만 더한 대조에서는 18/24. MNIST 7 원본 6,265장에서는 가로 폭 ≤10px 253장의 7 정답률 95.65%, 폭·강도 동시 제한 28장은 96.43%로 **폭 단독 원인 설명은 약화**. 이 조사는 기존 EXP유018 사후 연구, 새 모델·학습 없음. 구버전 보관 NPZ는 최종 v3 SHA가 다르므로 최종 Official Train 편입 수는 미확정.
+
+
+### EXP유018 최신 후속 조사 — 픽셀 유사도·수직 1px 민감도와 7→9 Shortcut 검증 계획 (2026-11-17)
+
+[EXP유018 실험일지 §12~§13](EXP유018_신규손글씨480_판독필터_혼동쌍_진단.md) · [픽셀 최근접 7/9 비교](../../results/크기편향_원인분석/EXP유018_그룹2_7_픽셀최근접7_9.csv) · [수직 ±1px 동결 MLP 예측](../../results/크기편향_원인분석/EXP유018_그룹2_7_수직1px_Seed별예측.csv).
+
+그룹2 실제 7 **9장 중 5장**은 CoM 픽셀 코사인 기준 최근접 MNIST 9가 최근접 7보다 유사. 위/아래로 1px 이동 시 7→9 **19/27→21/27·14/27**이지만 아래 이동 후 정답 7 **7/27 그대로**, 다른 오분류 증가. **픽셀 위치 의존성 관측과 Shortcut 메커니즘 확정은 구분**하며 EXP유012 크기 Shortcut 검증 절차에 준한 통제·대조 분석 설계만 기록(미실행).

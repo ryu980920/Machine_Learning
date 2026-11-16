@@ -1,0 +1,12 @@
+# reference: archived MNIST_EMNIST_official_split_112000.npz, not current GitHub v3; MNIST original 7 n=6265, 9 n=5949
+# metric: cosine similarity after exact threshold32 integer CoM, flattened 28x28 L2 normalized
+original_index_0based,nearest7_cos,mnist7_ix,nearest9_cos,mnist9_ix,nearest_class
+167,0.82101,52166,0.83263,18917,9
+183,0.83324,19284,0.83091,31798,7
+215,0.79967,2492,0.78203,18917,7
+231,0.76276,43898,0.78769,14208,9
+247,0.77725,43802,0.82715,13728,9
+263,0.83154,43802,0.79912,56317,7
+279,0.77811,35863,0.75004,27191,7
+295,0.70653,52166,0.76074,8238,9
+311,0.66902,212,0.66939,46569,9

@@ -1,0 +1,198 @@
+name: EXP-CMB-007 Size 60-100% x Stroke Fixed-HP MLP
+
+on:
+  push:
+    branches: [exp/cmb007-size60to100-shortcut-audit-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-007-size60to100-frozen-hp.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stage1_60_70_80:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        arm: [scale60_stroke00, scale60_stroke14, scale60_stroke28, scale70_stroke00, scale70_stroke14, scale70_stroke28, scale80_stroke00, scale80_stroke14, scale80_stroke28]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact prior experiment dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Check original SHA, labels, splits, and Combined baseline
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit four fixed-HP writer-held-out models and all 16-class probes
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_scale60_100_stroke.py \
+            --arm "${{ matrix.arm }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/cmb007/${{ matrix.arm }}/seed_${{ matrix.seed }}"
+      - name: Preserve job metrics, confusions, and 4 model checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb007-${{ matrix.arm }}-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/cmb007/${{ matrix.arm }}/seed_${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+
+  stage2_90_100:
+    needs: stage1_60_70_80
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        arm: [scale90_stroke00, scale90_stroke14, scale90_stroke28, scale100_stroke00, scale100_stroke14, scale100_stroke28]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact prior experiment dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Check original SHA, labels, splits, and Combined baseline
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit four fixed-HP writer-held-out models and all 16-class probes
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_scale60_100_stroke.py \
+            --arm "${{ matrix.arm }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/cmb007/${{ matrix.arm }}/seed_${{ matrix.seed }}"
+      - name: Preserve job metrics, confusions, and 4 model checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb007-${{ matrix.arm }}-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/cmb007/${{ matrix.arm }}/seed_${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+
+  aggregate:
+    needs: stage2_90_100
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical analysis package versions
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download 45 condition/seed artifacts from two completed stages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb007-*
+          path: ${{ runner.temp }}/cmb007-incoming
+          merge-multiple: false
+      - name: Aggregate 15 new conditions, all classes, pairs and five-scale responses
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_aggregate.py \
+            --stage extended \
+            --incoming "${{ runner.temp }}/cmb007-incoming" \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_HighFraction/stage_high_60to100
+      - name: Compare 16 frozen conditions with new 15 and paired writer/seed images
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb007_cross_compare.py \
+            --old 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/full_0to50_comparison \
+            --old-low 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/full_comparison \
+            --old-high 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_Extension/stage_extended \
+            --new 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_HighFraction/stage_high_60to100 \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison
+      - name: Verify 180 new fits and all 31 conditions with 16 class / 240 pair rates
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path("05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_HighFraction")
+          new=root/"stage_high_60to100"
+          allc=root/"full_0to100_comparison"
+          m=json.loads((new/"manifest.json").read_text(encoding="utf-8"))
+          n=json.loads((allc/"manifest.json").read_text(encoding="utf-8"))
+          assert m["experiment"]=="EXP-CMB-007" and m["expected_fits"]==180
+          assert m["no_hp_search"] and m["no_test_used"] and m["frozen_mlp_parameters"]
+          assert (n["old_condition_count"],n["new_condition_count"],n["total_condition_count"],n["expected_new_fits"])==(16,15,31,180)
+          assert not n["hyperparameters_changed"] and not n["original_test_used"]
+          expected={
+            new/"comparison.csv":15,
+            new/"per_seed_overall.csv":45,
+            new/"all_240_direction_changes.csv":15*240,
+            new/"all_16_class_error_changes.csv":15*16,
+            allc/"all_31_preprocessing_conditions.csv":31,
+            allc/"all_240_directed_errors_across_31_conditions.csv":31*240,
+            allc/"all_16_class_error_rates_across_31_conditions.csv":31*16,
+            allc/"all_31_condition_16class_five_scale_flip.csv":31*2*16*5,
+            allc/"all_31_condition_16class_worst_flip.csv":31*2,
+            allc/"all_240_pair_changes_vs_30_50.csv":4*15*240,
+            allc/"paired_30_50_vs_60_100_corrections.csv":4*15*3,
+            allc/"paired_30_50_vs_60_100_per_class.csv":4*15*3*16,
+            allc/"paired_30_50_vs_60_100_per_writer.csv":4*15*3*4
+          }
+          for filename,count in expected.items():
+            assert filename.is_file(),filename
+            with filename.open(encoding="utf-8-sig",newline="") as f:
+              actual=sum(1 for _ in csv.DictReader(f))
+            assert actual==count,(filename,actual,count)
+            print(filename.name,actual)
+          PY
+      - name: Upload new and combined results even if the branch moves
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-007-all-60to100-results-vs-31-arm-history
+          path: 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_HighFraction/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit recorded results on review branch (safely rebase and push)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke_HighFraction/
+          if git diff --staged --quiet; then
+            echo "Results already committed"
+            exit 0
+          fi
+          git commit -m 'research: record EXP-CMB-007 60-100% fifteen-arm models and full 31-arm class/direction audit [skip ci]'
+          git fetch origin exp/cmb007-size40-50-stroke-grid-20261116
+          git rebase origin/exp/cmb007-size40-50-stroke-grid-20261116
+          git push origin HEAD:exp/cmb007-size40-50-stroke-grid-20261116
