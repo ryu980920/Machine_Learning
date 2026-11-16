@@ -1,0 +1,105 @@
+name: Normal EXP017 80-14 MLP HP Fine and Final OfficialVal Ranking
+
+on:
+  push:
+    branches: [exp/normal-exp017-80-14-mlp-hparam-20261116]
+    paths:
+      - '.github/workflows/normal-exp017-hparam-fine.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  fine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        seed: [42, 43, 44]
+        slot: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical pinned environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Retrieve coarse OfficialVal-only architecture shortlist
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43836060651
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: EXP017-OfficialVal-26config-coarse-3seed-review
+          path: ${{ runner.temp }}/exp017-coarse-ranked
+      - name: Train five fine variations on one selected architecture, no handwriting
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp017_hparam_fine.py \
+            --seed '${{ matrix.seed }}' \
+            --slot '${{ matrix.slot }}' \
+            --coarse-json '${{ runner.temp }}/exp017-coarse-ranked/metadata.json' \
+            --out '${{ runner.temp }}/exp017-fine-s${{ matrix.seed }}-slot${{ matrix.slot }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp017-fine-s${{ matrix.seed }}-slot${{ matrix.slot }}
+          path: ${{ runner.temp }}/exp017-fine-s${{ matrix.seed }}-slot${{ matrix.slot }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [fine]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp017-fine-s*-slot*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp017-fine-all
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 43833188106
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp017-coarse-s*-p*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp017-coarse-all
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 43836060651
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: EXP017-OfficialVal-26config-coarse-3seed-review
+          path: ${{ runner.temp }}/exp017-coarse-ranked
+      - name: Preregistered final 46-config x 3-seed OfficialVal-only ranking
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp017_hparam_final_aggregate.py \
+            --coarse-inputs '${{ runner.temp }}/exp017-coarse-all' \
+            --fine-inputs '${{ runner.temp }}/exp017-fine-all' \
+            --coarse-json '${{ runner.temp }}/exp017-coarse-ranked/metadata.json' \
+            --out '${{ runner.temp }}/exp017-final-ranked'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EXP017-OfficialVal-46config-final-3seed-review
+          path: ${{ runner.temp }}/exp017-final-ranked/
+          retention-days: 30
+          if-no-files-found: error

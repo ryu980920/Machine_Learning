@@ -1,0 +1,106 @@
+name: EXP017 official 5-scale verification replay (no retraining)
+on:
+  push:
+    branches: [exp/normal-exp017-80-14-mlp-hparam-20261116]
+    paths: ['.github/workflows/normal-exp017-audit-replay-only.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned Python runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download original EXP016 baseline models
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s*-r80
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-models
+      - name: Download original EXP017 coarse models
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43833188106
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp017-coarse-s*-p*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp017-coarse
+      - name: Download original EXP017 fine models
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43836257716
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp017-fine-s*-slot*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp017-fine
+      - name: Download Stage1 saved shortlist
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43836060651
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: EXP017-OfficialVal-26config-coarse-3seed-review
+          path: ${{ runner.temp }}/exp017-stage1-ranked
+      - name: Fix mismatched manifest key locally (no repo source mutation)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("05_model_optimize/MLP/Normal/scripts/exp017_hparam_final_aggregate.py")
+          s=p.read_text(encoding="utf-8")
+          old='assert not any(man[k] for k in ("team_handwriting_loaded","handmade_used","original_test_used","professor_test_used"))'
+          new='assert not any(man.get(k,False) for k in ("team_handwriting_loaded","handmade_used","original_test_used","official_test_used","professor_test_used"))'
+          assert s.count(old)==1
+          p.write_text(s.replace(old,new),encoding="utf-8")
+          PY
+      - name: Replay 46-setting 3-seed OfficialVal aggregation (no training)
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp017_hparam_final_aggregate.py \
+            --coarse-inputs '${{ runner.temp }}/exp017-coarse' \
+            --fine-inputs '${{ runner.temp }}/exp017-fine' \
+            --coarse-json '${{ runner.temp }}/exp017-stage1-ranked/metadata.json' \
+            --out '${{ runner.temp }}/exp017-replay-ranked'
+      - name: Confirm stage ranking before independent validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('${{ runner.temp }}/exp017-replay-ranked/metadata.json').read_text())
+          assert j["n_models"]==138 and j["all_gates_passing"]==10
+          assert j["selected_frozen_candidate"]["variant"]=="slot1_alpha_up"
+          assert abs(j["selected_frozen_candidate"]["OfficialVal_mean"]-0.9653645833333333)<1e-8
+          assert j["team_handwriting_evaluated"] is False
+          print("STAGE1_STAGE2_RANKING_REPLAY_VERIFIED")
+          PY
+      - name: Run official 5-scale frozen models audit
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp017_frozen_officialval_five_scale_audit.py \
+            --metadata '${{ runner.temp }}/exp017-replay-ranked/metadata.json' \
+            --coarse-models '${{ runner.temp }}/exp017-coarse' \
+            --fine-models '${{ runner.temp }}/exp017-fine' \
+            --old-models '${{ runner.temp }}/exp016-models' \
+            --out '${{ runner.temp }}/exp017-five-scale'
+      - name: Preserve independent validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP017-FiveScale-OfficialVal-Replay-NoTrain
+          path: |
+            ${{ runner.temp }}/exp017-replay-ranked/
+            ${{ runner.temp }}/exp017-five-scale/
+          retention-days: 30
+          if-no-files-found: warn
