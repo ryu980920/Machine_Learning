@@ -44,3 +44,11 @@ Hand-made는 이미 여러 차례 확인한 4명 작성자의 개발용 데이�
 - Seed 평균 Hand-made 전체 **88.6328% / 88.9844% / 89.1146%**, 공식 Val **95.9757% / 95.8976% / 95.8628%**. Stroke를 추가하면 Hand-made는 소폭 개선되지만 공식 Validation은 하락. 일부 Seed와 작성자에서는 악화.
 - 원본 C9 구현은 동일하지만 과거 C9 정답 건수를 모든 Seed에서 재현하지 못했으므로, **동일 실행 내 새 C9 대조군**으로만 추가 Stroke 효과를 판단한다.
 - [실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43790407107) 성공. 실험 Artifact에 CSV·모델·실제 그림 저장. 최종 모델·main 변경 없음.
+
+
+## EXP유009 — 원본 + C9 Data Augmentation (공식 Train 기반)
+
+- [**EXP유009 사전계획**](EXP유009_C9_DataAugmentation_PLAN.md) / [**15개 MLP 실측 결과**](EXP유009_C9_DataAugmentation_Results.md): C9-only vs Raw-only vs Raw/C9 50:50 vs Raw+C9 153,600장 vs Raw×2. 3 seeds × 5조건. 153,600장군의 epoch를 절반으로 하여 명목상 minibatch 업데이트 예산 일치.
+- C9 평가 3-seed 평균: **C9-only** Official Val 95.5694%, Handmade 숫자 85.3542%, 문자 90.9722% → **Raw+C9 증강** Official Val 96.0712%, Handmade 숫자 86.8333%, 문자 91.4236%. 공식 Val +0.5018%p, 숫자 +1.4791%p, 문자 +0.4514%p.
+- Raw 입력으로만 평가하면 다른 결과가 나오므로 두 추론 모드를 분리해 기록. 추가 작성자·독립 Test 미사용, 최종 Pipeline은 미채택.
+- GitHub Actions 실제 성공: https://github.com/ryu980920/Machine_Learning/actions/runs/43796627489; 15개 모델/예측 및 종합 CSV는 Artifact로 30일 보존.
