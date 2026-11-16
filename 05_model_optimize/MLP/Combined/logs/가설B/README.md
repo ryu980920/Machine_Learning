@@ -31,4 +31,12 @@
 - **[실측 자료](../../results/Geometry_Normalization/README.md):** 16개 학습 모델·실제 CM/이미지·CSV·Loss·manifest.
 - **결론:** Size는 문자에 유리하지만 숫자 악화, CoM은 숫자에 유리하지만 문자 악화, 두 방법 결합은 각 집단의 상충을 완화. 공식 개발 Validation 하락으로 최종 Pipeline 채택은 보류.
 
+## EXP유002 / EXP-CMB-005 — 저비율 Size × Stroke 전처리 설명 검증 완료
+
+- [실험 전 사전등록과 통제](EXP유002_Balanced_Scale_Stroke_Augmentation.md): 기존 MLP HP 고정, Size 0/10/20/30% × Stroke 0/14/28%, 3Seeds·4 Writer-held-out CV(10조건×3×4=120모델), 설명 중심 목표(정확도 절대 합격선 없음).
+- [Stage1(0/10%) 결과](EXP유002_Balanced_Scale_Stroke_Stage1_Results.md) · **[전체 Stage2(20/30%) 및 최종 기전 분석](EXP유002_Balanced_Scale_Stroke_Final_Results.md)**.
+- [전체 10조건×3Seed OOF·OfficialVal·Family Flip CSV/16클래스 전체/240오류 방향 원본](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md). 최고 탐색 OOF **30%-28% 90.716%**, 공식 Val **96.117%**. CoM-only 84.883%/96.733%. 30%-28% 숫자×1.2 Family Flip **69.77→9.19%**지만 특정 클래스·작성자 반례 잔존.
+- [Stage2 실제 학습·집계](https://github.com/ryu980920/Machine_Learning/actions/runs/43871619789)는 마지막 git push 충돌로 run 결론 'failure'였으나, **[아티팩트 복원·검증 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43876627107)**으로 원본 학습을 다시 하지 않고 전 조건 결과를 실험 브랜치에 보존.
+- **원인 설명 중심 연구 목적 달성 / 최종 모델 채택 보류** (공식 Validation 감소 및 독립 Writer 검증 부재). [Draft PR #16](https://github.com/ryu980920/Machine_Learning/pull/16)에서만 진행, 사용자 승인 전 `main`·배포 모델 변경 없음.
+
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
