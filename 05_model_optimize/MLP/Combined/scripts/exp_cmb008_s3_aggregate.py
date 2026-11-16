@@ -94,7 +94,7 @@ def main():
         "selection_reason":"OOF accuracy first under <5% target; if not achievable, no-increase in four directions and protected classes plus Writer/Val/Flip safeguards"}
     a.out.mkdir(parents=True,exist_ok=True)
     (a.out/"S3_details.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    cols=["alpha_key","oof_accuracy","oof_error_rate","official_val_accuracy","seed_std",
+    cols=["alpha","oof_accuracy","oof_error_rate","official_val_accuracy","seed_std",
           "D_to_0","D_to_0_rate","B_to_8","B_to_8_rate",
           "8_to_B","8_to_B_rate","0_to_D","0_to_D_rate",
           "class_0_error","class_8_error","class_B_error","class_D_error",
