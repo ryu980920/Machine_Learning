@@ -52,3 +52,13 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 ### EXP유016 전 로그 동기화 확인 (2026-11-16)
 
 EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했다. EXP유015는 전체 26개 조건의 **[합격/탈락 전체 CSV](EXP유015_26조건_전체판정.csv)**와 **[B·8·D 여섯 크기 개입 세부 CSV](EXP유015_26조건_B8D_전환율_전체.csv)**를 추가 영구 보존했다. 3-Seed 상세 CSV/NPZ·체크포인트는 [1차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43814205670), [2차 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141), [OfficialVal Audit](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) Artifact에 보존한다. 아직 `main`에 병합하지 않았으며 새로운 실험은 별도 브랜치로 진행한다.
+
+
+## EXP유016 — 60~100% 크기 증강 / 개별 클래스 Shortcut 상한 실험
+
+[사전등록·통합 실험일지](EXP유016_고비율_크기증강_한계확인.md) · [60개 신규 MLP 학습 및 집계 GitHub Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43820298886) · [Draft PR #14](https://github.com/ryu980920/Machine_Learning/pull/14).
+
+- 전체 76,800 Official Train 기준 **크기 증강 대상 비율** 60/70/80/90/100%, **획 팽창·침식 혼합 강도** 0/14/28/42%, 3개 독립 MLP Seed.
+- EXP유015의 50% 기존 이미지와 BBox 목표는 그대로 유지하고 증강 대상만 추가. CoM 및 OfficialVal/Hand-made 평가 규칙 유지.
+- **숫자·문자 전체 평균뿐 아니라 16개 클래스×배율** 및 B·8·D의 최악 판단 전환율로 사전등록 Gate 적용. 정확도가 좋더라도 Shortcut Gate 실패 모델은 채택하지 않음.
+- Original Test/교수님 Test 미사용, Final Pipeline 변경 없음.
