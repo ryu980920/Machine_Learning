@@ -1,5 +1,7 @@
 # EXP-CMB-006 · 01 계획 — Size 40~50% × Stroke
 
+> **아카이브 안내:** 이 문서는 당시 계획·중간 진행 상태를 그대로 기록한 자료다. 본문에 남은 ‘미실시/진행 중’ 표기는 **작성 당시 상태**이며, 이후 완료된 실측은 [누적 16조건 최종 결과](../../results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md)를 참조한다.
+
 > **상태: 사전등록 / 40·50% 실측 결과는 아직 없음.** [직전 EXP-CMB-005 실제 결과](EXP-CMB-005_03_Final_Size00_30.md)와 [원본 10조건 집계](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md)를 기준으로 한다.
 
 ## 연구 질문
