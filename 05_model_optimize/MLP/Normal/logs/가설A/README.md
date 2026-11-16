@@ -24,3 +24,13 @@
 선택한 획 영역의 픽셀값을 바꾸면 클래스 점수와 일부 예측이 바뀐다는 점을 확인했다. **그러나 중요한 픽셀이 획 위에 있다고 해서 모델이 사람처럼 획 구조를 인식했다는 뜻은 아니다.** EXP유002에서 구조 연결을 크게 훼손한 변화가 무작위 픽셀 재배치보다 반드시 더 큰 효과를 보이지 않았고, 작은 픽셀 교환에 대한 국소 좌표별 민감도 설명력이 높았다. **아직 사람과 같은 획 형태 인식 여부는 검증되지 않았다.** EXP유003에서 전체 2,560장 예측 비교와 실제 픽셀의 무손실 이동·위상 구조 변경까지 확대했지만, 여전히 사람의 형태 판독 평가와 새 MLP 학습이 필요하다.
 
 번호는 가설 A 안에서 독립적으로 관리한다.
+
+## 형태·획 굵기 정규화 후속 실험 — EXP유008·009
+
+가설 A EXP유004의 C9 크기 정규화·획 굵기 정규화를 기반으로 작성한 후속 결과다. **EXP유008·009를 가설 B에서 가설 A로 재분류**했으며, 각 실험의 기존 사전계획과 실제 결과를 한 문서로 통합했다. 원래 가설 A EXP유004의 코드·결과는 [당시 실험 브랜치](https://github.com/ryu980920/Machine_Learning/tree/exp/normal-a-exp004-stroke-normalization-20261116)에 보존되어 있다.
+
+- **[EXP유008 — 원본 C9 Size·CoM + Stroke 통합 실험일지](EXP유008_C9_Stroke.md)**: 가설 A C9 원본과 C9→Stroke 0.30/0.60→CoM, 3 Seed × 3조건 = 실제 9개 MLP. Stroke 강도 0.60의 Hand-made 숫자 86.8542%, 문자 92.8819%, 전체 89.1146%; 공식 Val 95.8628%. 동일 실행 내 대조군 기준으로 해석. [Actions 결과](https://github.com/ryu980920/Machine_Learning/actions/runs/43790407107).
+- **[EXP유009 — C9 vs 원본+C9 Data Augmentation 통합 실험일지](EXP유009_C9_DataAugmentation.md)**: C9-only, Raw-only, 50:50, Raw+C9, Raw×2의 3 Seed × 5조건 = 실제 15개 MLP. C9 평가 입력에서 Raw+C9 학습의 공식 Val 96.0712%, Hand-made 숫자 86.8333%, 문자 91.4236%; C9-only 대비 일부 개선했으나 공식 Val 97.30% 목표에 미달. [Actions 결과](https://github.com/ryu980920/Machine_Learning/actions/runs/43796627489).
+- **공통 판정:** Hand-made는 반복 사용한 4명 작성자의 개발 데이터이며 공식 Original Test·교수님 Test는 미사용. 최종 모델·추론 Pipeline 변경 없음.
+
+> **실행 명칭에 관한 참고:** 실험 당시의 코드·워크플로·Artifact 명칭(일부 Normal-HypB)은 원래 성공 실행과의 재현성 연결을 위해 유지했다. 통합 실험일지의 최종 소속은 **가설 A**다.
