@@ -31,3 +31,11 @@
 **GitHub Actions 실행·보존 코드:** [013·014](../../../../.github/workflows/normal-exp013-014-shortcut-remedy.yml) · [015 1차](../../../../.github/workflows/normal-exp015-shortcut-safe-grid.yml) · [015 미세 탐색](../../../../.github/workflows/normal-exp015-fine-tuning.yml) · [015 검증](../../../../.github/workflows/normal-exp015-officialval-scale-audit.yml) · [016 학습](../../../../.github/workflows/normal-exp016-high-fraction-shortcut.yml) · [016 검증](../../../../.github/workflows/normal-exp016-officialval-scale-audit.yml) · [실측 아카이브](../../../../.github/workflows/normal-exp016-persist-reviewed-logs.yml) · [두 모델 보존](../../../../.github/workflows/normal-exp016-preserve-two-candidates.yml).
 
 [관련 실험일지](../logs/크기편향_원인분석/README.md) · [CSV 및 원본 측정 자료](../results/크기편향_원인분석/README.md). `main`의 최종 모델·배포 코드는 변경하지 않았다.
+
+## EXP유019 — 상단/하단 국소 획 ±1px 증강 재현용 원본 코드 (2026-11-17)
+
+- [국소 위치 증강 학습·평가 원본](exp019_train_local_warp.py): 기존 EXP유017의 80%-Size·14%-Stroke+CoM 재현 후 B1(top)/B2(bottom) 각각 Train 20% 변형, MLP 3 Seed 학습.
+- [최종 3 Seed 집계 및 Gate 검사](exp019_summarize_training.py): OfficialVal, 기존 2,560장, 신규 438장 성능과 7↔9, 0.8·1.2배 크기 Family Flip 비교.
+- [통합 보고서](../logs/크기편향_원인분석/EXP유019_국소획위치증강_실측보고서.md) · [실측 CSV](../results/크기편향_원인분석/EXP유019_국소획위치증강/EXP019_Decision_Matrix.csv) · [모델 해시](../results/크기편향_원인분석/EXP유019_국소획위치증강/EXP019_model_sha256_manifest.json).
+
+주의: **이 두 코드는 원래 로컬 환경에서 실행된 정확한 파일을 보존**하며 경로 상수가 `/mnt/data`를 가리킨다. GitHub Checkout만으로 즉시 실행되는 스크립트로 수정·검증한 것이 아니고, 6개 신규 joblib 가중치도 GitHub에는 없음. 신규 모델은 연구 목적 B1/B2 학습본이며 **둘 다 불채택**. 배포 모델·추론 파이프라인 변경 없음.

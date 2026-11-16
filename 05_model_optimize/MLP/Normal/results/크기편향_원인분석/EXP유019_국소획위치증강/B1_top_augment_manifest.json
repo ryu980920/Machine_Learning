@@ -1,0 +1,296 @@
+{
+  "mode": "B1_top",
+  "records": [
+    {
+      "method": "B1_top",
+      "label": 0,
+      "direction": -1,
+      "wanted": 474,
+      "accepted": 474,
+      "attempted": 483,
+      "accept_rate": 0.9813664596273292
+    },
+    {
+      "method": "B1_top",
+      "label": 0,
+      "direction": 1,
+      "wanted": 474,
+      "accepted": 474,
+      "attempted": 504,
+      "accept_rate": 0.9404761904761905
+    },
+    {
+      "method": "B1_top",
+      "label": 1,
+      "direction": -1,
+      "wanted": 539,
+      "accepted": 539,
+      "attempted": 540,
+      "accept_rate": 0.9981481481481481
+    },
+    {
+      "method": "B1_top",
+      "label": 1,
+      "direction": 1,
+      "wanted": 539,
+      "accepted": 539,
+      "attempted": 545,
+      "accept_rate": 0.9889908256880734
+    },
+    {
+      "method": "B1_top",
+      "label": 2,
+      "direction": -1,
+      "wanted": 477,
+      "accepted": 477,
+      "attempted": 486,
+      "accept_rate": 0.9814814814814815
+    },
+    {
+      "method": "B1_top",
+      "label": 2,
+      "direction": 1,
+      "wanted": 477,
+      "accepted": 477,
+      "attempted": 500,
+      "accept_rate": 0.954
+    },
+    {
+      "method": "B1_top",
+      "label": 3,
+      "direction": -1,
+      "wanted": 490,
+      "accepted": 490,
+      "attempted": 498,
+      "accept_rate": 0.9839357429718876
+    },
+    {
+      "method": "B1_top",
+      "label": 3,
+      "direction": 1,
+      "wanted": 490,
+      "accepted": 490,
+      "attempted": 510,
+      "accept_rate": 0.9607843137254902
+    },
+    {
+      "method": "B1_top",
+      "label": 4,
+      "direction": -1,
+      "wanted": 467,
+      "accepted": 467,
+      "attempted": 493,
+      "accept_rate": 0.947261663286004
+    },
+    {
+      "method": "B1_top",
+      "label": 4,
+      "direction": 1,
+      "wanted": 467,
+      "accepted": 467,
+      "attempted": 512,
+      "accept_rate": 0.912109375
+    },
+    {
+      "method": "B1_top",
+      "label": 5,
+      "direction": -1,
+      "wanted": 434,
+      "accepted": 434,
+      "attempted": 449,
+      "accept_rate": 0.9665924276169265
+    },
+    {
+      "method": "B1_top",
+      "label": 5,
+      "direction": 1,
+      "wanted": 434,
+      "accepted": 434,
+      "attempted": 461,
+      "accept_rate": 0.9414316702819957
+    },
+    {
+      "method": "B1_top",
+      "label": 6,
+      "direction": -1,
+      "wanted": 473,
+      "accepted": 473,
+      "attempted": 495,
+      "accept_rate": 0.9555555555555556
+    },
+    {
+      "method": "B1_top",
+      "label": 6,
+      "direction": 1,
+      "wanted": 473,
+      "accepted": 473,
+      "attempted": 522,
+      "accept_rate": 0.9061302681992337
+    },
+    {
+      "method": "B1_top",
+      "label": 7,
+      "direction": -1,
+      "wanted": 501,
+      "accepted": 501,
+      "attempted": 508,
+      "accept_rate": 0.9862204724409449
+    },
+    {
+      "method": "B1_top",
+      "label": 7,
+      "direction": 1,
+      "wanted": 501,
+      "accepted": 501,
+      "attempted": 515,
+      "accept_rate": 0.9728155339805825
+    },
+    {
+      "method": "B1_top",
+      "label": 8,
+      "direction": -1,
+      "wanted": 468,
+      "accepted": 468,
+      "attempted": 493,
+      "accept_rate": 0.949290060851927
+    },
+    {
+      "method": "B1_top",
+      "label": 8,
+      "direction": 1,
+      "wanted": 468,
+      "accepted": 468,
+      "attempted": 514,
+      "accept_rate": 0.9105058365758755
+    },
+    {
+      "method": "B1_top",
+      "label": 9,
+      "direction": -1,
+      "wanted": 476,
+      "accepted": 476,
+      "attempted": 535,
+      "accept_rate": 0.8897196261682243
+    },
+    {
+      "method": "B1_top",
+      "label": 9,
+      "direction": 1,
+      "wanted": 476,
+      "accepted": 476,
+      "attempted": 573,
+      "accept_rate": 0.8307155322862129
+    },
+    {
+      "method": "B1_top",
+      "label": 10,
+      "direction": -1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 531,
+      "accept_rate": 0.903954802259887
+    },
+    {
+      "method": "B1_top",
+      "label": 10,
+      "direction": 1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 608,
+      "accept_rate": 0.7894736842105263
+    },
+    {
+      "method": "B1_top",
+      "label": 11,
+      "direction": -1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 578,
+      "accept_rate": 0.8304498269896193
+    },
+    {
+      "method": "B1_top",
+      "label": 11,
+      "direction": 1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 666,
+      "accept_rate": 0.7207207207207207
+    },
+    {
+      "method": "B1_top",
+      "label": 12,
+      "direction": -1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 498,
+      "accept_rate": 0.963855421686747
+    },
+    {
+      "method": "B1_top",
+      "label": 12,
+      "direction": 1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 521,
+      "accept_rate": 0.9213051823416507
+    },
+    {
+      "method": "B1_top",
+      "label": 13,
+      "direction": -1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 526,
+      "accept_rate": 0.9125475285171103
+    },
+    {
+      "method": "B1_top",
+      "label": 13,
+      "direction": 1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 535,
+      "accept_rate": 0.897196261682243
+    },
+    {
+      "method": "B1_top",
+      "label": 14,
+      "direction": -1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 501,
+      "accept_rate": 0.9580838323353293
+    },
+    {
+      "method": "B1_top",
+      "label": 14,
+      "direction": 1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 522,
+      "accept_rate": 0.9195402298850575
+    },
+    {
+      "method": "B1_top",
+      "label": 15,
+      "direction": -1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 516,
+      "accept_rate": 0.9302325581395349
+    },
+    {
+      "method": "B1_top",
+      "label": 15,
+      "direction": 1,
+      "wanted": 480,
+      "accepted": 480,
+      "attempted": 558,
+      "accept_rate": 0.8602150537634409
+    }
+  ],
+  "accepted_count": 15358,
+  "accepted_index_sha": "680d284ff3dfcebdbd14eedba886052142b7e610f518e2beecb3fddad8d3081f",
+  "actual_applied_fraction": 0.19997395833333334
+}

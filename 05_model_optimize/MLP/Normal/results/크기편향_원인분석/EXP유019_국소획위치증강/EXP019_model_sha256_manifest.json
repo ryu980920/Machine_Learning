@@ -1,0 +1,45 @@
+{
+  "experiment": "EXP019",
+  "status": "trained_and_measured_B1_B2_not_adopted",
+  "model_checkpoints": [
+    {
+      "model": "models/B1_top/seed42.joblib",
+      "size_bytes": 3489798,
+      "sha256": "14206edc74dea9f24ded7ded22e6b95fb18e8046fe6c8730ba10d0b5f96c3eb7",
+      "included_in_git": false
+    },
+    {
+      "model": "models/B1_top/seed43.joblib",
+      "size_bytes": 3455415,
+      "sha256": "622a831cc1327719033e62ce5bd4a894233f480020a191b3cfeafb0184d3006f",
+      "included_in_git": false
+    },
+    {
+      "model": "models/B1_top/seed44.joblib",
+      "size_bytes": 3464061,
+      "sha256": "506d4b50307aa3002216f4fc4f090255132afdf2635485c2b98d6f68df28c030",
+      "included_in_git": false
+    },
+    {
+      "model": "models/B2_bottom/seed42.joblib",
+      "size_bytes": 3542467,
+      "sha256": "6cea868b97c36143d0c4f3b85978d29894dced7122583e78f492fae90e73fb95",
+      "included_in_git": false
+    },
+    {
+      "model": "models/B2_bottom/seed43.joblib",
+      "size_bytes": 3440727,
+      "sha256": "e5adb0807c3a9a289ebe39efa4f75bf51b1df017e2b50cb6c8ccaf97115563f3",
+      "included_in_git": false
+    },
+    {
+      "model": "models/B2_bottom/seed44.joblib",
+      "size_bytes": 3484193,
+      "sha256": "b2d5829fb9b2e24c441e53aed44adb9f02dca1a682e240b27bd0a405004071aa",
+      "included_in_git": false
+    }
+  ],
+  "official_v3_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "existing_EXP017_checkpoints_unchanged": true,
+  "note": "Original six joblib in locally delivered 21MB full-study ZIP, NOT committed to GitHub. Source scripts use local absolute paths."
+}

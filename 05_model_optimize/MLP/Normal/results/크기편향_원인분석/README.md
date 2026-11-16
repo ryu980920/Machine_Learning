@@ -1,4 +1,4 @@
-# EXP유010~018 — 크기 Shortcut 분석 결과 CSV
+# EXP유010~019 — 크기 Shortcut 분석 결과 CSV
 
 이 폴더에는 **실측 CSV·요약 파일·3-Seed 집계 결과**를 보관합니다. [실험일지](../../logs/크기편향_원인분석/README.md)와 [원본 실행 코드](../../scripts/README.md)는 별도 위치에 있으며 여기서 링크로 연결합니다.
 
@@ -69,3 +69,15 @@ CSV는 **동결 모델의 사후 원인 진단**이고 ZIP 내부의 개별 CSV�
 - [EXP유016 OfficialVal 독립 데이터 출처 확인](원본_실측_아카이브/EXP유016_OfficialVal/SUMMARY.md)
 
 실측 값·원본 Git blob SHA는 수정하지 않고 이동합니다. **80-14와 70-0 모델 가중치(joblib)는 EXP유016 실험 브랜치에 별도 보관하며 최종 모델에 적용하지 않았습니다.**
+
+### EXP유019 — 국소 획 ±1px 증강 학습 B1·B2 실패 분석 (2026-11-17)
+
+- [3 Seed 최종 판정표](EXP유019_국소획위치증강/EXP019_Decision_Matrix.csv)
+- [전체·숫자·문자·7·9 정확도](EXP유019_국소획위치증강/all_3seeds_dataset_group_metrics.csv)
+- [7→9·9→7 오류](EXP유019_국소획위치증강/all_3seeds_7to9_9to7_pairs.csv), [Seed별 짝지은 정확도 변동](EXP유019_국소획위치증강/all_3seeds_paired_transitions.csv)
+- [16클래스 정확도](EXP유019_국소획위치증강/all_3seeds_classwise_metrics.csv), [OfficialVal 배율별 크기 Shortcut Gate](EXP유019_국소획위치증강/officialval_08_12_scale_family_flip_gate.csv)
+- [B1 증강 선택·거부 통계](EXP유019_국소획위치증강/B1_top_augment_manifest.json), [B2 증강 통계](EXP유019_국소획위치증강/B2_bottom_augment_manifest.json)
+- [6개 새 MLP 체크포인트 SHA256/크기](EXP유019_국소획위치증강/EXP019_model_sha256_manifest.json), [공식 Train 7·9 증강 예시](EXP유019_국소획위치증강/OfficialTrain_7_9_LocalStroke_Augmentation_Examples.png)
+- [동결 재현·학습·통과 판정 상세 보고서](../../logs/크기편향_원인분석/EXP유019_국소획위치증강_실측보고서.md) 및 [학습 코드](../../scripts/exp019_train_local_warp.py)
+
+**결과:** B1(상단 ±1px)과 B2(하단 ±1px) 모두 7→9 오류 개선 기준 미달. B2의 전체 정확도 향상은 유효한 관찰 결과이지만 7→9의 성공으로 간주하지 않음. **모델 바이너리 6개는 이 저장소에 포함되지 않고 SHA만 보존**; 기존 EXP유017 동결 체크포인트·원본 v3·Hand-made 데이터를 덮어쓰지 않음. 다음 단계의 7/9 형상 분포 구간 분석 및 타깃 증강은 **아직 미실행**.
