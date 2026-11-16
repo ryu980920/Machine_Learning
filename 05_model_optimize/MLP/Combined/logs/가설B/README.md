@@ -39,4 +39,11 @@
 - [Stage2 실제 학습·집계](https://github.com/ryu980920/Machine_Learning/actions/runs/43871619789)는 마지막 git push 충돌로 run 결론 'failure'였으나, **[아티팩트 복원·검증 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43876627107)**으로 원본 학습을 다시 하지 않고 전 조건 결과를 실험 브랜치에 보존.
 - **원인 설명 중심 연구 목적 달성 / 최종 모델 채택 보류** (공식 Validation 감소 및 독립 Writer 검증 부재). [Draft PR #16](https://github.com/ryu980920/Machine_Learning/pull/16)에서만 진행, 사용자 승인 전 `main`·배포 모델 변경 없음.
 
+## EXP유003 / EXP-CMB-006 — 40~50% Size × Stroke 후속 실험
+
+- **[실험 전 동결한 연구 질문·6조건·원인 설명 중심 판정](EXP유003_Size40_50_Stroke_Extension.md)**: 40/50% Size × Stroke 0/14/28%, 기본 MLP 하이퍼파라미터·3 Seeds·Writer-held-out 4-Fold 고정 (**72개 신규 모델**).
+- 기존 [EXP-CMB-005 0~30% 원본](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md)을 재학습하지 않고 읽어 전체 **16조건·16클래스·240오분류 방향**과 30%-0/30%-28 대비 같은 이미지에서 새 오답·교정을 비교한다.
+- [GitHub Actions EXP-CMB-006 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43881769100) / [검토용 Draft PR #18](https://github.com/ryu980920/Machine_Learning/pull/18).
+- 실측 미완료 단계에서는 성능·성공 판정을 기재하지 않는다. 전체 결과는 실험 브랜치만 기록하고 사용자 승인 전 main/최종 모델 병합하지 않음.
+
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.

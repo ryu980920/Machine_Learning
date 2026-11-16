@@ -1,0 +1,117 @@
+{
+  "experiment": "EXP-CMB-006",
+  "status": "arm completed, aggregation pending",
+  "arm": "scale40_stroke14",
+  "seed": 43,
+  "handmade_cv": "Leave-One-Writer-Out 4-Fold",
+  "official_n": 76800,
+  "official_val_n": 19200,
+  "training_handmade_each_fold": 1920,
+  "oof_n": 2560,
+  "scale_interventions": [
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2
+  ],
+  "class_balanced_targets": [
+    16,
+    18,
+    20,
+    22,
+    24
+  ],
+  "official_train_only_augmentation": true,
+  "handmade_train_preprocess": "CoM-only",
+  "heldout_and_official_val_preprocess": "CoM-only",
+  "augmentation_seed": 20261116,
+  "augmentation": {
+    "method": "scale40_stroke14",
+    "requested_ratio": 0.4,
+    "actual_ratio": 0.39967447916666665,
+    "n_aug": 30695,
+    "n_stroke_changed": 28752,
+    "n_stroke_rejected": 1943,
+    "official_train_rows": 76800
+  },
+  "preregistration": "low ratio 0,10,20,30 x stroke 0,14,28 (no stroke for 0)",
+  "no_mlp_hyperparameter_search": true,
+  "official_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_train_size_binary_probe": {
+    "bal_acc": 0.9889583333333334,
+    "auc": 0.9971533680555557
+  },
+  "oof_metrics": {
+    "n": 2560,
+    "correct": 2312,
+    "accuracy": 0.903125,
+    "macro_f1": 0.9034354068565047,
+    "macro_precision": 0.9054627887692348,
+    "macro_recall": 0.903125
+  },
+  "fit_total_seconds": 207.44855600300005,
+  "preprocessing_seconds": 11.238488114000006,
+  "wall_seconds": 232.831151872,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "new_handmade_480_used": false,
+  "versions": {
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  },
+  "model_sha256": {
+    "41": "8df3385e56db613ec41e282e3c6d42835c135e7d3012863d128d35878b4222dc",
+    "42": "dde006a56f0bb3d03470e06649141d303a1622ff965016f87cb5e5edd74ae3be",
+    "43": "bf3ab62aec2c541947ba210637043276f5b611407fa86a5a904754b65b80382b",
+    "44": "63d734d7b68916c889d59e1257d6bdee0f7af96edafa2c237682adfd8eb98eba"
+  },
+  "reference_experiment": "EXP-CMB-005",
+  "reference_script": "exp_cmb005_balanced_scale_stroke.py",
+  "pre_registered_arm_set": {
+    "scale40_stroke00": [
+      0.4,
+      0.0
+    ],
+    "scale40_stroke14": [
+      0.4,
+      0.14
+    ],
+    "scale40_stroke28": [
+      0.4,
+      0.28
+    ],
+    "scale50_stroke00": [
+      0.5,
+      0.0
+    ],
+    "scale50_stroke14": [
+      0.5,
+      0.14
+    ],
+    "scale50_stroke28": [
+      0.5,
+      0.28
+    ]
+  },
+  "fixed_model_hyperparameters": true,
+  "independent_new_models": 4,
+  "total_planned_fits": 72,
+  "pre_registered_size_rates": [
+    0.4,
+    0.5
+  ],
+  "pre_registered_stroke_strengths": [
+    0.0,
+    0.14,
+    0.28
+  ],
+  "controls": "Compare paired seeds/writers/images with previously frozen CMB005",
+  "model_selection": "none; metrics explanatory only"
+}
