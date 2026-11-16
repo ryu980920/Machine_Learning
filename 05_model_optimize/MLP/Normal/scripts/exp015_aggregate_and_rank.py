@@ -173,7 +173,7 @@ def run(inp,out):
     control={}
     for group,scale in (("digits",1.2),("letters",.8)):
         control[group+"_"+str(scale)]={
-          "mean_family_flip":mean(qv for qv in
+          "mean_family_flip":mean(
                [float(lookup_robust["baseline_com",s,group,scale]["family_flip_rate"])
                 for s in SEEDS]),
           "mean_abs_delta_p_letter":mean(
