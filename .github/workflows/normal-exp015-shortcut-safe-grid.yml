@@ -1,0 +1,95 @@
+name: Normal EXP015 Shortcut-safe Scale-Stroke Augmentation Grid
+
+on:
+  push:
+    branches: [exp/normal-exp015-scale-stroke-ratio-20261116]
+    paths:
+      - '.github/workflows/normal-exp015-shortcut-safe-grid.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp015_scale_stroke_grid.py'
+      - '05_model_optimize/MLP/Normal/scripts/exp015_aggregate_and_rank.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 9
+      matrix:
+        seed: [42, 43, 44]
+        ratio: [10, 20, 30, 40, 50]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned EXP006 and EXP014 exact scientific dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download and verify historical EXP006 CoM checkpoint for this seed
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43785390739
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: normal-exp006-com-${{ matrix.seed }}
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp006-controls
+      - name: Train three stroke variants for this scale fraction and assess counterfactual stability
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp015_scale_stroke_grid.py \
+            --seed '${{ matrix.seed }}' \
+            --ratio-percent '${{ matrix.ratio }}' \
+            --models-root '${{ runner.temp }}/exp006-controls' \
+            --out '${{ runner.temp }}/exp015-s${{ matrix.seed }}-r${{ matrix.ratio }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp015-s${{ matrix.seed }}-r${{ matrix.ratio }}
+          path: ${{ runner.temp }}/exp015-s${{ matrix.seed }}-r${{ matrix.ratio }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [grid]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp015-s*-r*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-all
+      - name: Verify all 15 runs and rank ONLY models passing preregistered shortcut gates
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp015_aggregate_and_rank.py \
+            --inputs '${{ runner.temp }}/exp015-all' \
+            --out '${{ runner.temp }}/exp015-reviewed'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-EXP015-shortcut-safe-grid-review
+          path: ${{ runner.temp }}/exp015-reviewed/
+          retention-days: 30
+          if-no-files-found: error

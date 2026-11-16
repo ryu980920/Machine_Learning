@@ -1,0 +1,104 @@
+name: Normal EXP015 Targeted Fine Grid and Joint Shortcut-First Selection
+
+on:
+  push:
+    branches: [exp/normal-exp015-scale-stroke-ratio-20261116]
+    paths:
+      - '.github/workflows/normal-exp015-fine-tuning.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp015_fine_search.py'
+      - '05_model_optimize/MLP/Normal/scripts/exp015_joint_rank.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  fine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 9
+      matrix:
+        seed: [42, 43, 44]
+        ratio: [25, 30, 35]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned EXP006 scientific runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download historical fixed EXP006 CoM checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43785390739
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: normal-exp006-com-${{ matrix.seed }}
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp006-controls
+      - name: Train fine-tuned Scale/Stroke mixtures, preserve original data boundaries
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp015_fine_search.py \
+            --seed '${{ matrix.seed }}' \
+            --ratio-percent '${{ matrix.ratio }}' \
+            --models-root '${{ runner.temp }}/exp006-controls' \
+            --out '${{ runner.temp }}/exp015fine-s${{ matrix.seed }}-r${{ matrix.ratio }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp015fine-s${{ matrix.seed }}-r${{ matrix.ratio }}
+          path: ${{ runner.temp }}/exp015fine-s${{ matrix.seed }}-r${{ matrix.ratio }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  joint_aggregate:
+    needs: [fine]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical pinned scientific dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download all 15 successful coarse jobs (frozen source run)
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43814205670
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp015-s*-r*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-all
+      - name: Download all 9 fine jobs from current run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: exp015fine-s*-r*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-all
+      - name: Strictly rank all 26 3-seed combinations by unchanged Shortcut Gate
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp015_joint_rank.py \
+            --inputs '${{ runner.temp }}/exp015-all' \
+            --out '${{ runner.temp }}/exp015-joint-review'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-EXP015-joint-78-model-shortcut-safe-review
+          path: ${{ runner.temp }}/exp015-joint-review/
+          retention-days: 30
+          if-no-files-found: error

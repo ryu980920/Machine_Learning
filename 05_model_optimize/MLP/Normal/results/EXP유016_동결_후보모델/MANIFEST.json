@@ -1,0 +1,80 @@
+[
+  {
+    "candidate": "80-14",
+    "seed": 42,
+    "source_workflow": 43820298886,
+    "source_artifact": "exp016-s42-r80",
+    "original_variant": "size80_stroke14",
+    "size_augmentation_fraction": 0.8,
+    "stroke_blend_strength": 0.14,
+    "checkpoint": "05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/80-14/seed42.joblib",
+    "checkpoint_size_bytes": 1208083,
+    "sha256": "fc86b9d43f58643b9613a269fe454fc8e32d493e26fc958f850f8fb42b9467be",
+    "status": "FROZEN_CANDIDATE_NOT_FINAL"
+  },
+  {
+    "candidate": "80-14",
+    "seed": 43,
+    "source_workflow": 43820298886,
+    "source_artifact": "exp016-s43-r80",
+    "original_variant": "size80_stroke14",
+    "size_augmentation_fraction": 0.8,
+    "stroke_blend_strength": 0.14,
+    "checkpoint": "05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/80-14/seed43.joblib",
+    "checkpoint_size_bytes": 1207617,
+    "sha256": "d099771b14d13fe390900f9068bb35ad48a3f7ffcf31586df9411f6afb657eb2",
+    "status": "FROZEN_CANDIDATE_NOT_FINAL"
+  },
+  {
+    "candidate": "80-14",
+    "seed": 44,
+    "source_workflow": 43820298886,
+    "source_artifact": "exp016-s44-r80",
+    "original_variant": "size80_stroke14",
+    "size_augmentation_fraction": 0.8,
+    "stroke_blend_strength": 0.14,
+    "checkpoint": "05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/80-14/seed44.joblib",
+    "checkpoint_size_bytes": 1207978,
+    "sha256": "b9329c4abc1bf9c6532315c70ec402cb1aa3d39b318ecbb0ce923d8619f3f108",
+    "status": "FROZEN_CANDIDATE_NOT_FINAL"
+  },
+  {
+    "candidate": "70-0",
+    "seed": 42,
+    "source_workflow": 43820298886,
+    "source_artifact": "exp016-s42-r70",
+    "original_variant": "size70_stroke00",
+    "size_augmentation_fraction": 0.7,
+    "stroke_blend_strength": 0.0,
+    "checkpoint": "05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/70-0/seed42.joblib",
+    "checkpoint_size_bytes": 1208476,
+    "sha256": "712324006d82768f233d89c94c4e0081ea507c25a0a4b87acb94be032d72819b",
+    "status": "FROZEN_CANDIDATE_NOT_FINAL"
+  },
+  {
+    "candidate": "70-0",
+    "seed": 43,
+    "source_workflow": 43820298886,
+    "source_artifact": "exp016-s43-r70",
+    "original_variant": "size70_stroke00",
+    "size_augmentation_fraction": 0.7,
+    "stroke_blend_strength": 0.0,
+    "checkpoint": "05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/70-0/seed43.joblib",
+    "checkpoint_size_bytes": 1206679,
+    "sha256": "8a84a2598af6a7bc52047edc7380b05c0553f8af9fff0eae1ed1cdc848c1d01a",
+    "status": "FROZEN_CANDIDATE_NOT_FINAL"
+  },
+  {
+    "candidate": "70-0",
+    "seed": 44,
+    "source_workflow": 43820298886,
+    "source_artifact": "exp016-s44-r70",
+    "original_variant": "size70_stroke00",
+    "size_augmentation_fraction": 0.7,
+    "stroke_blend_strength": 0.0,
+    "checkpoint": "05_model_optimize/MLP/Normal/results/EXP유016_동결_후보모델/70-0/seed44.joblib",
+    "checkpoint_size_bytes": 1207201,
+    "sha256": "ec962ac4f8425e2b799d91c31112095f4085c1be2cf700a746630365d258a6c0",
+    "status": "FROZEN_CANDIDATE_NOT_FINAL"
+  }
+]
