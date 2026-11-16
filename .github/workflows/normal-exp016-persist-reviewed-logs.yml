@@ -1,0 +1,61 @@
+name: Normal EXP016 Persist EXP015 and EXP016 Full Measured Logs
+
+on:
+  push:
+    branches: [exp/normal-exp016-high-fraction-shortcut-20261116]
+    paths:
+      - '.github/workflows/normal-exp016-persist-reviewed-logs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: exp/normal-exp016-high-fraction-shortcut-20261116
+          persist-credentials: true
+      - name: Download completed EXP015 78-model cross-seed review
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43815571141
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: Normal-EXP015-joint-78-model-shortcut-safe-review
+          path: ${{ runner.temp }}/exp015-reviewed
+      - name: Download completed EXP015 OfficialVal rescaling audit
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43817096445
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: Normal-EXP015-OfficialVal-size-stress-review
+          path: ${{ runner.temp }}/exp015-officialval
+      - name: Download completed EXP016 60-model 16-class review
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: Normal-EXP016-60-model-shortcut-class-review
+          path: ${{ runner.temp }}/exp016-reviewed
+      - name: Permanently commit measured summaries and 3-seed CSVs to EXP016 branch only
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='05_model_optimize/MLP/Normal/logs/크기편향_원인분석/원본_실측_아카이브'
+          mkdir -p "$base/EXP유015_78모델" "$base/EXP유015_OfficialVal" "$base/EXP유016_60모델"
+          cp -v '${{ runner.temp }}/exp015-reviewed/'* "$base/EXP유015_78모델/"
+          cp -v '${{ runner.temp }}/exp015-officialval/'* "$base/EXP유015_OfficialVal/"
+          cp -v '${{ runner.temp }}/exp016-reviewed/'* "$base/EXP유016_60모델/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$base/"
+          if git diff --cached --quiet; then
+            echo 'No outstanding measured logs to archive'
+          else
+            git commit -m 'logs: permanently archive complete EXP015 and EXP016 three-seed evidence'
+            git push origin HEAD:exp/normal-exp016-high-fraction-shortcut-20261116
+          fi
