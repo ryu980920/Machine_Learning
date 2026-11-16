@@ -29,3 +29,10 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 - [EXP유014 — 크기 편향 완화를 위한 Class-balanced 학습](EXP유014_Shortcut_완화_학습.md): Training 전용 Scale 및 Stroke 다양화 3조건 × 3 Seed MLP를 기존 EXP유006 CoM / Size→CoM과 비교. [재실행 실측 확인](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307).
 
 기존 코드는 `Normal/scripts/` 아래 유지하며 이 연구는 브랜치에서만 실행하고 최종 모델 또는 main을 변경하지 않는다.
+
+### EXP유013~014 완료 판정 (2026-11-16)
+
+- **EXP유013:** 원본 공식 Validation에서 Size 하나만의 숫자/문자 이진분류 Balanced Accuracy **99.7639%**; Size→CoM 이후 **51.0931%**. 다만 Width/Height/Mass 포함 4변수에서는 정규화 후 **64.3972%**로 잔존 구별력 확인.
+- **EXP유014:** 기존 CoM MLP의 1.2배 숫자 family flip **71.60%** → Class-balanced Scale **8.96%**, Scale+Stroke **6.83%**. Hand-made 숫자/문자 동시 개선 확인.
+- **채택 보류:** 신규 A/B의 공식 Validation 각각 **95.6962% / 95.6007%**, 기존 CoM **97.0521%**보다 낮아 기준 **97.30%**에 미달. 재학습 모델은 실험 브랜치 Artifact에만 보존하고 `main` 또는 최종 학습 Pipeline을 변경하지 않음.
+- **원본 실측 및 3-Seed 집계:** [GitHub Actions #43810141307](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307) · `Normal-EXP013-014-measured-shortcut-review`.
