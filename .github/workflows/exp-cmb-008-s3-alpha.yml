@@ -103,7 +103,7 @@ jobs:
           for p in list(new.iterdir())+list(old.iterdir()):
               for x in ["manifest.json","oof_predictions.csv","fold_metrics.csv","per_class_and_scale.csv","training_time.csv"]:
                   assert (p/x).is_file(),(p,x)
-          print("Validated all 9 alpha comparison source packages")
+          print("Validated 9 new S3 alpha packages and 3 S1 reference packages")
           PY
       - name: Reassess OOF accuracy and four directional confusion targets with overfit guards
         run: |
@@ -134,6 +134,6 @@ jobs:
             echo 'S3 identical results already on main'
             exit 0
           fi
-          git commit -m 'research: EXP-CMB-008 S3 depth evaluation and class-error decision [skip ci]'
+          git commit -m 'research: EXP-CMB-008 S3 L2 alpha evaluation and four-direction class-error decision [skip ci]'
           git pull --rebase origin main
           git push origin HEAD:main
