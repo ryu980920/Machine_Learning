@@ -46,6 +46,21 @@ CSV는 사후 진단 집계이며 새 모델 또는 독립 테스트 지표가 �
 
 가로 폭·곡선·위치 의존성의 사후 탐색 결과는 **7→9 Shortcut을 식별한 확정적 인과 검증이 아님**. 원본 MNIST 보관 데이터와 GitHub 최종 v3의 파일 버전 차이도 별도 기록함.
 
+### EXP유018 — 7→9 Shortcut 원인 단계별 검증 (2026-11-17)
+
+- [순차 검증 원본 ZIP — 분석 Python 코드·모든 CSV·시각화 포함](EXP유018_7to9_Shortcut_Sequential_Study/EXP018_7to9_Shortcut_Sequential_Study.zip)
+- [원본 획 기하 분포](EXP유018_7to9_Shortcut_Sequential_Study/phase1_7vs9_geometry.csv), [동결 MLP 비교](EXP유018_7to9_Shortcut_Sequential_Study/phase1_model7vs9_baselines.csv)
+- [기여도(Integrated Gradients)](EXP유018_7to9_Shortcut_Sequential_Study/phase2_attributions_per_image.csv)
+- [상·하단 donor 교체 결과](EXP유018_7to9_Shortcut_Sequential_Study/phase3_region_swap_summary.csv)
+- [국소 ±1px 위치 개입 결과](EXP유018_7to9_Shortcut_Sequential_Study/phase4_small_shift_summary.csv)
+- [전역 shear 비교](EXP유018_7to9_Shortcut_Sequential_Study/phase5_relative_shear_accuracy.csv)
+- [강도 총량 보정 대조](EXP유018_7to9_Shortcut_Sequential_Study/phase6_massmatched_summary.csv)
+- [고리 부재 규칙의 부작용](EXP유018_7to9_Shortcut_Sequential_Study/phase7_open_loop_heuristic_sanity.csv)
+- [이전 80-14 vs 최종 모델 비교](EXP유018_7to9_Shortcut_Sequential_Study/phase8_old_vs_new_model_per_image.csv)
+- [전체 판정 및 미실행 개선안](../../logs/크기편향_원인분석/EXP유018_7to9_Shortcut_Sequential_Causal_Study.md)
+
+CSV는 **동결 모델의 사후 원인 진단**이고 ZIP 내부의 개별 CSV와 원본 분석 코드가 전체 근거임. 신규 438장 반복 사용에 따른 독립 Test 제한, 의미 보존/Shortcut 미확정, 향후 학습 개선안 **미실행**을 준수한다.
+
 ## 원본 실측 아카이브
 
 - [EXP유015 78모델 3-Seed 전체 기록](원본_실측_아카이브/EXP유015_78모델/SUMMARY.md)
