@@ -1,0 +1,92 @@
+name: Normal HypB EXP008 Original C9 then Stroke (review only)
+
+on:
+  push:
+    branches: [exp/normal-b-exp008-c9-stroke]
+    paths:
+      - '.github/workflows/normal-hypb-exp008-c9-stroke.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp008_c9_exact_stroke.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [C9_Original, C9_Stroke030, C9_Stroke060]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact HypA C9 scientific stack
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP008_requirements.txt
+      - name: Verify original C9 source and combined preprocessor behavior on synthetic input
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: python 05_model_optimize/MLP/Normal/scripts/exp008_c9_exact_stroke.py --self-test
+      - name: Fit official-only 3-seed original C9 or C9 plus Stroke
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp008_c9_exact_stroke.py \
+            --condition "${{ matrix.condition }}" \
+            --repo-root . \
+            --out "${{ runner.temp }}/normal-exp008-${{ matrix.condition }}"
+      - name: Upload genuine per-seed results and checkpoints (NO git commit)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-exp008-${{ matrix.condition }}
+          path: ${{ runner.temp }}/normal-exp008-${{ matrix.condition }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install scientific stack
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP008_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: normal-exp008-*
+          path: ${{ runner.temp }}/normal-exp008-inputs
+          merge-multiple: false
+      - name: Verify C9 reference reproduction and paired corrections
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp008_c9_exact_stroke.py \
+            --aggregate \
+            --input-root "${{ runner.temp }}/normal-exp008-inputs" \
+            --out "${{ runner.temp }}/normal-exp008-review"
+      - name: Upload exact C9 versus C9+Stroke research review (NO git commit)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypB-EXP008-complete-review
+          path: ${{ runner.temp }}/normal-exp008-review/
+          retention-days: 30
+          if-no-files-found: error

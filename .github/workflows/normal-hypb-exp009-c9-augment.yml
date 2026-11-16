@@ -1,0 +1,84 @@
+name: Normal HypB EXP009 C9 Data Augmentation controlled comparison
+
+on:
+  push:
+    branches: [exp/normal-b-exp009-c9-data-augmentation]
+    paths:
+      - '.github/workflows/normal-hypb-exp009-c9-augment.yml'
+      - '05_model_optimize/MLP/Normal/scripts/exp009_c9_augmentation.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        condition: [c9_only, raw_only, mix_50_50, raw_plus_c9, raw_twice]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install fixed original HypA C9 packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP008_requirements.txt
+      - name: Fit original+C9 augmentation comparison (3 seeds)
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp009_c9_augmentation.py \
+            --repo-root . \
+            --condition "${{ matrix.condition }}" \
+            --output "${{ runner.temp }}/exp009-${{ matrix.condition }}"
+      - name: Upload genuine 3-seed results and checkpoints (no GitHub push)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exp009-${{ matrix.condition }}
+          path: ${{ runner.temp }}/exp009-${{ matrix.condition }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install fixed original HypA C9 packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP008_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp009-*
+          path: ${{ runner.temp }}/exp009-inputs
+          merge-multiple: false
+      - name: Aggregate official and handmade, raw and C9, matched budgets
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp009_c9_augmentation.py \
+            --aggregate \
+            --input-root "${{ runner.temp }}/exp009-inputs" \
+            --output "${{ runner.temp }}/exp009-review"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-HypB-EXP009-augmentation-review
+          path: ${{ runner.temp }}/exp009-review/
+          retention-days: 30
+          if-no-files-found: error
