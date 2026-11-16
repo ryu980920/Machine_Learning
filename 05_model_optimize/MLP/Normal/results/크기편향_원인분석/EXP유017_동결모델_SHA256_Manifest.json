@@ -1,0 +1,57 @@
+{
+  "experiment": "EXP017",
+  "status": "FROZEN_FOR_TEAM_HANDWRITING_VALIDATION_NOT_DEPLOYED",
+  "source_action_run": "https://github.com/ryu980920/Machine_Learning/actions/runs/43846851354",
+  "official_val_source_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "official_val_rows": 19200,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "selected_variant": "slot1_alpha_up",
+  "hyperparameters": {
+    "hidden_layer_sizes": [
+      256,
+      128
+    ],
+    "activation": "relu",
+    "solver": "adam",
+    "alpha": 0.03,
+    "learning_rate_init": 0.001,
+    "early_stopping": false,
+    "max_iter": 200
+  },
+  "augmentation": "Official Train 76800; 80% BBox target 16/18/20/22/24px + Stroke 14% + all CoM",
+  "inference": "CoM",
+  "gate_pass": true,
+  "official_val_goal_97p3_met": false,
+  "official_val_acc": 0.9653645833333333,
+  "B8D_worst_family_flip": {
+    "value": 0.16666666666666666,
+    "cls": "D",
+    "scale": 1.2
+  },
+  "checkpoints": [
+    {
+      "seed": 42,
+      "sha256": "e08eab163cc2db86b03338185f1b0b4f1416a074572597f2b692adec85a0d190",
+      "bytes": 3497704
+    },
+    {
+      "seed": 43,
+      "sha256": "f47e4cc2a97af98e18e5bfdca9b2621acac0f9c303bcd1458fe270fb58e9f931",
+      "bytes": 3444078
+    },
+    {
+      "seed": 44,
+      "sha256": "120cdf9f48691d3e75016379fb62a3cbf3f66d57ffcb7c4c59902a9639795413",
+      "bytes": 3534286
+    }
+  ],
+  "team_handwriting_evaluated": false,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "main_modified": false,
+  "model_weights_uploaded_in_this_logging_commit": false
+}
