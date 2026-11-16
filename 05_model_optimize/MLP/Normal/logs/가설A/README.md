@@ -34,3 +34,12 @@
 - **공통 판정:** Hand-made는 반복 사용한 4명 작성자의 개발 데이터이며 공식 Original Test·교수님 Test는 미사용. 최종 모델·추론 Pipeline 변경 없음.
 
 > **실행 명칭에 관한 참고:** 실험 당시의 코드·워크플로·Artifact 명칭(일부 Normal-HypB)은 원래 성공 실행과의 재현성 연결을 위해 유지했다. 통합 실험일지의 최종 소속은 **가설 A**다.
+
+## Normal 최상위 독립 원인 분석으로 분리 — EXP유010·011·012
+
+크기 관련 Shortcut 검증 EXP유012는 가설 A 하위가 아닌 **[Normal 독립 폴더](../../EXP012_Size_Shortcut/README.md)**로 분리했다. 사전 가설·통제 조건·정량 결과·변형 교란요인·재현 방법을 한 폴더에서 확인할 수 있다.
+
+- [EXP유012 — 크기에 따른 숫자/문자 판단 방향 변화](../../EXP012_Size_Shortcut/README.md)
+- [EXP유010 — 공식 Training/Hand-made 크기 분포](../../EXP010_Geometry_Distribution/README.md)
+- [EXP유011 — 입력 CoM 정렬·학습 가중치 효과 분리](../../EXP011_CoM_Effect/README.md)
+- [GitHub Actions 완료 기록](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796). 기존 가설 A EXP유001~003 및 EXP유008·009 파일은 변경하지 않는다.

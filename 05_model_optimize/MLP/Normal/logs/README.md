@@ -13,3 +13,13 @@
 - [05 최적화 공통 양식](../../../EXPERIMENT_TEMPLATE.md) · [기존 상세 양식](../../../../03_experiments/EXPERIMENT_TEMPLATE.md)
 - 기록 순서: **문제 발견 → 가설 → 통제 조건 → 실측 결과 → 한계 → 후속 연구**.
 - 기존 `scripts/`, `results/`, 모델 체크포인트는 변경하지 않는다. 이번에는 로그 파일과 관련 README를 정리한다.
+
+## Normal 최상위 독립 원인 규명 실험 (2026-11-16)
+
+가설 A/B 일반 연구 로그와 분리하여 Normal 루트에서 관리한다.
+
+- [EXP유010 — 글자 크기 분포](../EXP010_Geometry_Distribution/README.md)
+- [EXP유011 — CoM·재학습의 분리](../EXP011_CoM_Effect/README.md)
+- [EXP유012 — 크기 관련 Shortcut 민감도](../EXP012_Size_Shortcut/README.md)
+
+각 실험 폴더에 계획·결과 통합 `README.md`, 실측 `summary.csv`, `RESULTS.md`, 재현용 `RUN.md`가 있다. 기존 코드는 Normal `scripts/`에 보존한다.

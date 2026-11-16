@@ -1,6 +1,6 @@
 # MLPClassifier — Normal 모델 최적화
 
-**현재 상태: 초기분석 EXP유001~002, 가설 B EXP유003~005, 가설 A EXP유001의 실험 로그를 구분하여 기록.** 모델·결과 원본의 위치는 유지하며 최종 Pipeline 반영은 별도로 결정한다.
+**현재 상태:** 초기분석·가설 A/B 실험을 구분해 기록하며, EXP유010·011·012의 원인 분석은 Normal 바로 아래 **세 독립 폴더**에서 관리한다. 모델·결과 원본의 위치는 유지하며 최종 Pipeline 반영은 별도로 결정한다.
 
 ## 등록한 실험
 
@@ -24,6 +24,21 @@
 3. **개선 조건 설정·실행** — 전처리, Training 증강, 데이터 구성, Hyperparameter의 변경 변수 분리.
 4. **동일 개발 Validation으로 재평가** — Accuracy·Precision·Recall·F1, Confusion Matrix 및 Iteration에 따른 Training Loss 및 가능하면 Validation 점수, 학습·추론 시간.
 5. **결론 및 후속 실험** — 성공과 실패 모두 실험일지·CSV·그림에 연결.
+
+## 독립 원인 분석 실험 — EXP유010·011·012 (2026-11-16)
+
+Size·CoM 정규화 이후 **숫자·문자 정확도가 역전되는 원인**을 각각 독립적인 실험 폴더에서 검증한다. 아래 세 폴더는 일반 가설 로그의 하위가 아니라 **Normal 최상위 폴더와 나란히** 배치되어 있다.
+
+| 독립 실험 폴더 | 연구 질문 | 검증 결과 | 폴더 구성 |
+|---|---|---|---|
+| [EXP010_Geometry_Distribution](EXP010_Geometry_Distribution/README.md) | 공식 Training과 Hand-made의 글자 크기 분포 차이가 있는가? | B/D/F 긴 변 24px vs 20px 확인 | README·RESULTS·RUN·summary.csv |
+| [EXP011_CoM_Effect](EXP011_CoM_Effect/README.md) | Size-only 숫자 정확도 급락은 CoM 보정·재학습 중 무엇 때문인가? | 기존 Size 모델의 숫자 36.46→73.81% (평가 CoM만 변경) | README·RESULTS·RUN·summary.csv |
+| [EXP012_Size_Shortcut](EXP012_Size_Shortcut/README.md) | MLP가 글자 크기 관련 특징을 숫자/문자 구분 단서로 쓰는가? | 같은 CoM 모델에서 확대·축소만으로 숫자/문자 판단 반전 | README·RESULTS·RUN·summary.csv |
+
+- **실측 및 증빙:** [원본 Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796) · 재사용한 [EXP유006 체크포인트 #43785390739](https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739).
+- **공통 코드:** [exp010_geometry_distribution.py](scripts/exp010_geometry_distribution.py), [exp011_012_causal_probes.py](scripts/exp011_012_causal_probes.py), [exp010_012_aggregate.py](scripts/exp010_012_aggregate.py). EXP유011·012는 원래 한 실행에서 산출했지만 독립 실험 폴더로 문서·요약 결과를 나눠 관리한다.
+- **데이터 보존:** 각 `summary.csv`는 선택한 핵심 지표의 축약본. 모든 이미지별 전수 CSV 및 학습 모델 원본은 Actions Artifact에 보존되며 보존 기간 제한이 있다.
+- **경계:** 기존 학습 모델 9개를 고정해 분석함. 새 학습, 공식 Original Test·교수님 Test 사용, 최종 모델 교체 없음.
 
 ## 저장 경로
 
