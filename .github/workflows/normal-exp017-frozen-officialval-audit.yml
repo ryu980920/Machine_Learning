@@ -1,0 +1,70 @@
+name: Normal EXP017 Final Frozen Model OfficialVal Five Scale Audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical pinned runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Retrieve frozen original EXP016 80-14 checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43820298886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp016-s*-r80
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-80-14
+      - name: Retrieve EXP017 exact 26-configuration coarse model weights
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43833188106
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp017-coarse-s*-p*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp017-coarse-all
+      - name: Retrieve EXP017 exact 20-configuration fine model weights
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43836257716
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp017-fine-s*-slot*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp017-fine-all
+      - name: Retrieve preregistered 46-configuration winner decision
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43836257716
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: EXP017-OfficialVal-46config-final-3seed-review
+          path: ${{ runner.temp }}/exp017-ranked
+      - name: Evaluate frozen winner, runner-up and original 80-14 at all five scales
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp017_frozen_officialval_five_scale_audit.py \
+            --metadata '${{ runner.temp }}/exp017-ranked/metadata.json' \
+            --coarse-models '${{ runner.temp }}/exp017-coarse-all' \
+            --fine-models '${{ runner.temp }}/exp017-fine-all' \
+            --old-models '${{ runner.temp }}/exp016-80-14' \
+            --out '${{ runner.temp }}/exp017-frozen-audit'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EXP017-Final-Frozen-OfficialVal-FiveScale-Review
+          path: ${{ runner.temp }}/exp017-frozen-audit/
+          retention-days: 30
+          if-no-files-found: error
