@@ -20,7 +20,7 @@ concurrency:
 jobs:
   audit:
     name: Reassess all nine S1 training artifacts without refitting
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.head_branch == 'main'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 70
     steps:
