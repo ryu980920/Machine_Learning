@@ -1,8 +1,8 @@
-# EXP유001 (가설 B) — Geometry Normalization 실측 결과 및 연구 판정
+# EXP-CMB-004 · 02 최종 결과 — Geometry Normalization
 
 > **실험 ID: EXP-CMB-004 · 상태: 실험·보강 대조 완료 / main 배포 검토 대기**
 >
-> **사전등록 기준:** [실험 전 고정한 설명 중심 통과 기준](EXP유001_Geometry_Normalization.md). Accuracy·Macro F1의 절대 숫자가 아닌 **Bounding Box Size와 CoM Center 중 어느 방법이 어떤 오류에 왜 유리한지 실제 기하 변화·정오답 전환·재학습 대조·부작용까지 설명 가능해야 완료**한다.
+> **사전등록 기준:** [실험 전 고정한 설명 중심 통과 기준](EXP-CMB-004_01_Plan_Geometry_Normalization.md). Accuracy·Macro F1의 절대 숫자가 아닌 **Bounding Box Size와 CoM Center 중 어느 방법이 어떤 오류에 왜 유리한지 실제 기하 변화·정오답 전환·재학습 대조·부작용까지 설명 가능해야 완료**한다.
 >
 > **최종 연구 판단:** 목적 달성. **CoM-only는 Size-only보다 전체 Hand-made OOF 일반화에 유리했고, Size+CoM은 두 방법의 숫자/문자 상충을 상당 부분 완화해 가장 높은 OOF 성능을 보였다.** 단, **공식 개발 Validation이 모두 하락**했고 기존 개발용 작성자 4명을 반복 평가한 결과이므로 **최종 모델 선정·배포는 보류**한다. Normal에서 얻은 정렬 효과가 Combined에서도 동일하게 나타난다고 가정하지 않았으며 **새 4-Fold CV에서 독립적으로 검증**했다.
 

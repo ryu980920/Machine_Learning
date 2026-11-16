@@ -1,8 +1,8 @@
-# Combined 가설 B — EXP유004 / EXP-CMB-007 최종 실측 및 원인 분석
+# EXP-CMB-007 · 03 최종 결과 — Size 60~100% × Stroke
 
 > **판정:** 사전등록 연구 질문(50% 초과 비율의 크기 편향 감소와 정확도·클래스 위험 상충 설명) **정량 분석 완료 / 최종 모델 채택 보류**. 이전 0~50% 결과와 본 실험 60~100%의 총 31조건 비교는 완료했다. 절대 Accuracy/F1 점수를 합격선으로 사용하지 않았으며, 이 문서의 순위는 탐색 관측이지 독립 데이터 일반화의 증명이 아니다.
 >
-> 실험 전 계획: [EXP유004 Size60–100 사전등록](EXP유004_Size60_100_Stroke_Extension.md) · 1차: [108개 MLP 중간 실험일지](EXP유004_Stage1_60_80_Interim.md)
+> 실험 전 계획: [EXP유004 Size60–100 사전등록](EXP-CMB-007_01_Plan_Size60_100.md) · 1차: [108개 MLP 중간 실험일지](EXP-CMB-007_02_Interim_Size60_80.md)
 >
 > 결과 원본: [31조건 전체 SUMMARY](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/SUMMARY.md) · [31조건 OOF/OfficialVal CSV](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/all_31_preprocessing_conditions.csv) · [31조건별 16클래스/5배율 Family Flip](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/all_31_condition_16class_five_scale_flip.csv) · [31조건 클래스별 최악 Flip](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/all_31_condition_16class_worst_flip.csv) · [16클래스 정상 크기 오류](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/all_16_class_error_rates_across_31_conditions.csv) · [240개 방향별 혼동](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/all_240_directed_errors_across_31_conditions.csv) · [30/50% 대조, 동일 이미지 교정/신규 오류](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/paired_30_50_vs_60_100_corrections.csv) · [작성자 대응 변화](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/paired_30_50_vs_60_100_per_writer.csv).
 

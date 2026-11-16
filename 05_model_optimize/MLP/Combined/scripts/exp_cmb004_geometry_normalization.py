@@ -4,7 +4,7 @@
 This is a new 4-Fold (Leave-One-Writer-Out) training comparison. No model/seed/
 training-size tuning, and no accuracy threshold determines whether the study
 answers its research question. The historical EXP-CMB-001 is a frozen baseline.
-See logs/가설B/EXP유001_Geometry_Normalization.md for pre-run criteria.
+See logs/가설B/EXP-CMB-004_01_Plan_Geometry_Normalization.md for pre-run criteria.
 
 All images are 28x28 grayscale 0..255. Only original official X_train keys
 are read. NEVER access the original Test or professor Test datasets.

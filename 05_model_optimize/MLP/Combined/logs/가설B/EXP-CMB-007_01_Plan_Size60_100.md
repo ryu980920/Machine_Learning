@@ -1,6 +1,8 @@
-# Combined 가설 B — EXP유004 / EXP-CMB-007: Size 60~100% × Stroke 실험 사전등록
+# EXP-CMB-007 · 01 계획 — Size 60~100% × Stroke
 
-> 상태: **실행 전 사전등록**, 새 성능은 아직 미측정. [EXP-CMB-005 0~30%](EXP유002_Balanced_Scale_Stroke_Final_Results.md), [EXP-CMB-006 40~50%](EXP유003_Size40_50_Stroke_Extension.md)의 병합된 결과를 동결된 역사적 대조로 사용한다.
+> **아카이브 안내:** 이 문서는 당시 계획·중간 진행 상태를 그대로 기록한 자료다. 본문에 남은 ‘미실시/진행 중’ 표기는 **작성 당시 상태**이며, 이후 완료된 실측은 [최종 보고](EXP-CMB-007_03_Final_Size60_100.md)를 참조한다.
+
+> 상태: **실행 전 사전등록**, 새 성능은 아직 미측정. [EXP-CMB-005 0~30%](EXP-CMB-005_03_Final_Size00_30.md), [EXP-CMB-006 40~50%](EXP-CMB-006_01_Plan_Size40_50.md)의 병합된 결과를 동결된 역사적 대조로 사용한다.
 
 ## 연구 문제
 
@@ -45,4 +47,4 @@ Combined의 0~50% 전체 16조건에서는 Hand-made OOF Accuracy는 Size30% Str
 
 **사전등록 당시:** 실행 전이었으므로 학습 성공/실패·정확도·31조건 최적점 미확정.
 
-**실행 후 연결:** 45개 조건×Seed 학습 성공 및 31조건 CSV 검증·실험 브랜치 보존을 완료했다. 최종 관측, 정확도/크기 안정성/8↔B·0↔D의 양방향 오류와 작성자 반례 및 연구 목적 판정은 [EXP유004 최종 실험일지](EXP유004_Size60_100_Final_Results.md)에서 확인. 원본 데이터와 사전 질문은 위 내용을 그대로 보존했다. [GitHub Actions 검증 결과 저장 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43899673392).
+**실행 후 연결:** 45개 조건×Seed 학습 성공 및 31조건 CSV 검증·실험 브랜치 보존을 완료했다. 최종 관측, 정확도/크기 안정성/8↔B·0↔D의 양방향 오류와 작성자 반례 및 연구 목적 판정은 [EXP유004 최종 실험일지](EXP-CMB-007_03_Final_Size60_100.md)에서 확인. 원본 데이터와 사전 질문은 위 내용을 그대로 보존했다. [GitHub Actions 검증 결과 저장 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43899673392).

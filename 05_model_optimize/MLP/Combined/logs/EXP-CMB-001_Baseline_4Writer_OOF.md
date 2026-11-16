@@ -1,4 +1,4 @@
-# EXP유001 | Combined MLP Baseline 및 작성자별 4-Fold Cross-Validation
+# EXP-CMB-001 — Combined MLP Baseline · 4-Writer OOF
 
 > **실험 ID:** EXP-CMB-001 · **2026-11-15** (KST) · **담당자:** 유용성 · **상태:** 완료
 >

@@ -2,8 +2,8 @@
 
 **상태: 4개 전처리×4-Fold 재학습 16개 모델, 추가 4-way 통제, 결과 집계 완료.** 현재는 **실험 브랜치 검토 자료**이며 사용자 승인 전까지 main에 병합하지 않는다.
 
-- **[실험 전 고정한 사전등록 기준](../../logs/가설B/EXP유001_Geometry_Normalization.md)**: Accuracy 하한 없음. Size와 CoM의 **효과 차이와 이유를 설명할 수 있는가**로 판단.
-- **[최종 실험일지와 증거 판정](../../logs/가설B/EXP유001_Geometry_Normalization_Results.md)**: Size와 CoM의 기하 변화, 0/D·8/B 방향별 오류, 재학습 효과와 공식 Validation 손실까지 설명.
+- **[실험 전 고정한 사전등록 기준](../../logs/가설B/EXP-CMB-004_01_Plan_Geometry_Normalization.md)**: Accuracy 하한 없음. Size와 CoM의 **효과 차이와 이유를 설명할 수 있는가**로 판단.
+- **[최종 실험일지와 증거 판정](../../logs/가설B/EXP-CMB-004_02_Final_Geometry_Normalization.md)**: Size와 CoM의 기하 변화, 0/D·8/B 방향별 오류, 재학습 효과와 공식 Validation 손실까지 설명.
 
 ## 재현 조건 및 실제 수치
 
