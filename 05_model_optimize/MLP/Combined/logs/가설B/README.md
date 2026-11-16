@@ -53,6 +53,14 @@
 - **Hand-made OOF 정확도 1위 30%-28% 90.716%**. 양 데이터 출처의 개별 클래스 평균 최대 Family Flip 최소는 **50%-14% 21.66%**이나 B 정상 오류가 22.71%로 악화. 50%-0%는 Flip 최대 22.29%, OOF 89.987%, OfficialVal 95.696%의 균형 후보. 80%-0%는 숫자×1.2 Flip 5.63%, 문자×0.8 Flip 5.45%로 평균 안정성이 개선되나 OfficialVal 저하와 8↔B 비대칭 오류.
 - 고비율 100%-0%의 공식 Val **B ×1.2 Family Flip 49.59%**는 계열 변경 비율이며 오류 *방향*을 뜻하지 않음. 가설 해석과 추가 고정 모델 확률 분석 제안은 최종 실험일지 참고.
 - [45개 모델 Job 학습 성공, 마지막 교차 스크립트 문법 오류](https://github.com/ryu980920/Machine_Learning/actions/runs/43891689090) → [45개 Artifact 복원·31조건 비교/검증 성공, 마지막 git 브랜치명 오류](https://github.com/ryu980920/Machine_Learning/actions/runs/43898638558) → **[원본 검증 후 브랜치 저장 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43899673392)**. 실패 단계는 재학습 없이 복구.
-- [검토용 Draft PR #19](https://github.com/ryu980920/Machine_Learning/pull/19) **main 미병합**. Original Test/교수님 Test/Normal 신규 480장 미사용, 외부 검증과 최종 모델 선정 보류.
+- [PR #19](https://github.com/ryu980920/Machine_Learning/pull/19)은 **2026-11-17 기준 `main` 병합 확인**. Original Test/교수님 Test/Normal 신규 480장 미사용, 외부 검증과 최종 모델 선정 보류.
+
+### EXP-CMB-007 후속 — 31조건 OOF 상위 3개와 오분류율
+
+- **[OOF 상위 3개 및 이미지 크기별 평균 확률·오류 방향 분석 보고서](EXP유004_Size60_100_Top3_OOF_Misclassification_Review.md)**.
+- 31조건 중 Hand-made 4-Writer OOF 정확도 순위: **Size30%-Stroke28% 90.716% (오분류율 9.284%)**, **30%-14% 90.690% (9.310%)**, **30%-0% 90.573% (9.427%)**.
+- OfficialVal 오분류율은 각각 **3.883% / 3.866% / 3.819%**. 개발용 Validation 수치이며 독립 Test 성능이 아님.
+- 30%-28%의 OOF 실제 8/B/D 오분류율은 **13.75% / 17.92% / 17.71%**. 확대된 B/D의 `P(letter)` 하락과 8↔B 혼동 방향은 별도 후속 분석에 기록.
+- 위 연구는 **모델 선택 및 최종 배포 변경 없이** 기존 파일의 실측을 재검토한 결과. EXP-CMB-005~007 데이터와 보고서는 `main`에 병합됨.
 
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
