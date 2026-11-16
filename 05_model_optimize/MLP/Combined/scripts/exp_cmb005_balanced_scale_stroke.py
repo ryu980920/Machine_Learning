@@ -197,7 +197,7 @@ def make_scaled(official,writers):
     return ref
 
 def eval_scales(model,raw_map,y,dataset,writer,arm,seed):
-    rows=[]; pair_rows=[]; focus=[]
+    rows=[]; pair_rows=[]; focus=[]; class_errors=[]; family_errors=[]
     probs={}
     for sc in SCALES:
         xx=raw_map[(writer if dataset=="OOF" else "official",sc)]
@@ -229,9 +229,11 @@ def eval_scales(model,raw_map,y,dataset,writer,arm,seed):
                 "family_flip":float(np.mean((ll>=.5)!=(bb>=.5))),
                 "mean_abs_delta_p_letter":float(np.mean(np.abs(ll-bb))),
                 "mean_p_letter":float(ll.mean())})
-        if dataset=="OOF":
-            pair_rows+=confusion_pairs(y,p,writer,arm,seed,"OOF_scale_"+str(sc))
-    return rows,pair_rows,focus,probs[1.][0]
+        sc_name=dataset+"_scale_"+str(sc)
+        pair_rows+=confusion_pairs(y,p,writer,arm,seed,sc_name)
+        class_errors+=total_errors_by_class(y,p,writer,arm,seed,sc_name)
+        family_errors+=family_error_breakdown(y,p,writer,arm,seed,sc_name)
+    return rows,pair_rows,focus,probs[1.][0],class_errors,family_errors
 
 def output_plots(y,p,out,arm,seed):
     cm=confusion_matrix(y,p,labels=CLASSES)
@@ -329,13 +331,9 @@ def run(arm,seed,out):
         family_errors+=family_error_breakdown(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
         for ds,ytrue,wid in (("OOF",handwritten_y,held),
                              ("OfficialVal",off["y_val"],held)):
-            z,p2,c,base=eval_scales(mlp,scale_map,ytrue,ds,wid,arm,seed)
+            z,p2,c,base,ce,fe=eval_scales(mlp,scale_map,ytrue,ds,wid,arm,seed)
             scale_rows+=z;pairs+=p2;scale_class_rows+=c
-            if ds=="OOF":
-                for sc in SCALES:
-                    p_sc=mlp.predict(scale_map[(held,sc)]).astype(int)
-                    class_errors+=total_errors_by_class(ytrue,p_sc,held,arm,seed,"OOF_scale_"+str(sc))
-                    family_errors+=family_error_breakdown(ytrue,p_sc,held,arm,seed,"OOF_scale_"+str(sc))
+            class_errors+=ce;family_errors+=fe
             if ds=="OOF":assert np.array_equal(base,outcome)
             else:assert np.array_equal(base,pp)
         print("FOLD_COMPLETED",arm,seed,held,
