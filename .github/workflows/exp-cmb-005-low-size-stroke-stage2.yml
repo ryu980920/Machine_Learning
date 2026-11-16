@@ -1,0 +1,122 @@
+name: EXP-CMB-005 Low Size Stroke Stage 2 (20-30%)
+
+on:
+  push:
+    branches: [exp/cmb005-normal-shortcut-augmentation-20261116]
+    paths:
+      - '.github/workflows/exp-cmb-005-low-size-stroke-stage2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  low-size-20to30:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        arm: [scale20_stroke00, scale20_stroke14, scale20_stroke28, scale30_stroke00, scale30_stroke14, scale30_stroke28]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install same frozen MLP and preprocessing runtime
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Verify unchanged baseline data, labels, and writer splits
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit 4 held-out-writer MLPs and record all 240 error directions
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb005_balanced_scale_stroke.py \
+            --arm "${{ matrix.arm }}" \
+            --seed "${{ matrix.seed }}" \
+            --out "${{ runner.temp }}/cmb005/${{ matrix.arm }}/seed_${{ matrix.seed }}"
+      - name: Upload full per-arm per-seed experiment evidence including frozen models
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb005-${{ matrix.arm }}-s${{ matrix.seed }}
+          path: ${{ runner.temp }}/cmb005/${{ matrix.arm }}/seed_${{ matrix.seed }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate-stage2-and-full:
+    needs: low-size-20to30
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install same analysis packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download 18 stage-two outputs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb005-*
+          path: ${{ runner.temp }}/cmb005-incoming
+          merge-multiple: false
+      - name: Aggregate stage 2 (20/30%)
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb005_aggregate.py \
+            --stage low20to30 \
+            --incoming "${{ runner.temp }}/cmb005-incoming" \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low20to30
+      - name: Restore all 12 successful stage-one runs for combined 10-arm audit
+        run: |
+          src="05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low10/raw"
+          for arm in com_only scale10_stroke00 scale10_stroke14 scale10_stroke28; do
+            for seed in 42 43 44; do
+              test -s "${src}/${arm}/seed_${seed}/manifest.json"
+              cp -a "${src}/${arm}/seed_${seed}" "${{ runner.temp }}/cmb005-incoming/cmb005-${arm}-s${seed}"
+            done
+          done
+      - name: Aggregate all 10 preregistered conditions and all-class error changes
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb005_aggregate.py \
+            --stage full \
+            --incoming "${{ runner.temp }}/cmb005-incoming" \
+            --out 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/full_comparison
+      - name: Preserve full analysis artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXP-CMB-005-full-10-arm-3seed-4writer-audit
+          path: |
+            05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low20to30/
+            05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/full_comparison/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit actual results only on EXP-CMB-005 experiment branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/stage_low20to30/
+          git add 05_model_optimize/MLP/Combined/results/Balanced_Scale_Stroke/full_comparison/
+          if ! git diff --staged --quiet; then
+            git commit -m 'research: record 10-arm 3-seed Combined size-stroke OOF and all-class audits [skip ci]'
+            git push
+          fi
