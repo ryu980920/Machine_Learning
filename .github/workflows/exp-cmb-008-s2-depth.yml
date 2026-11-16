@@ -1,0 +1,139 @@
+name: EXP-CMB-008 S2 Fixed 256 Width Depth Comparison
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s2-depth.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  train:
+    name: second-layer ${{ matrix.depth }} seed ${{ matrix.seed }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        depth: [128, 256]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact CMB005/S1 dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Validate data split, SHA and S2 source
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s2_depth.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s2_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Train four frozen 30-28 writer CV models for the proposed second layer
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s2_depth.py \
+            --depth '${{ matrix.depth }}' \
+            --seed '${{ matrix.seed }}' \
+            --out '${{ runner.temp }}/cmb008-s2/cmb008-s2-d${{ matrix.depth }}-s${{ matrix.seed }}'
+      - name: Preserve SHA, loss, 16-class/240-direction error matrices and all checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s2-d${{ matrix.depth }}-s${{ matrix.seed }}
+          path: '${{ runner.temp }}/cmb008-s2/cmb008-s2-d${{ matrix.depth }}-s${{ matrix.seed }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  compare:
+    name: Compare 256 baseline to 256-128 and 256-256, record next decision
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install identical frozen-HP evaluation dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download six new depth model archives
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s2-d*-s*
+          path: ${{ runner.temp }}/cmb008-s2-incoming
+          merge-multiple: false
+      - name: Download exact archived S1 256-wide references from finished S1 run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 43914675988
+          pattern: cmb008-w256-s*
+          path: ${{ runner.temp }}/cmb008-s1-reference
+          merge-multiple: false
+      - name: Validate six new jobs and three held-out S1 original references
+        env:
+          NEW_DIR: ${{ runner.temp }}/cmb008-s2-incoming
+          OLD_DIR: ${{ runner.temp }}/cmb008-s1-reference
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          new=Path(os.environ["NEW_DIR"])
+          old=Path(os.environ["OLD_DIR"])
+          assert {p.name for p in new.iterdir() if p.is_dir()}=={
+            f"cmb008-s2-d{depth}-s{seed}" for depth in (128,256) for seed in (42,43,44)}
+          assert {p.name for p in old.iterdir() if p.is_dir()}=={
+            f"cmb008-w256-s{seed}" for seed in (42,43,44)}
+          for p in list(new.iterdir())+list(old.iterdir()):
+              for x in ["manifest.json","oof_predictions.csv","fold_metrics.csv","per_class_and_scale.csv","training_time.csv"]:
+                  assert (p/x).is_file(),(p,x)
+          print("Validated all 9 depth comparison source packages")
+          PY
+      - name: Reassess OOF accuracy and four directional confusion targets with overfit guards
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s2_aggregate.py \
+            --new '${{ runner.temp }}/cmb008-s2-incoming' \
+            --s1-reference '${{ runner.temp }}/cmb008-s1-reference' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth/S2_Stage_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
+      - name: Preserve S2 result log and audit CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-S2-all-depth-decision
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Publish verified S2 result to main without touching deployed model
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
+          if git diff --staged --quiet; then
+            echo 'S2 identical results already on main'
+            exit 0
+          fi
+          git commit -m 'research: EXP-CMB-008 S2 depth evaluation and class-error decision [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
