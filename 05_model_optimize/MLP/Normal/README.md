@@ -25,17 +25,19 @@
 4. **동일 개발 Validation으로 재평가** — Accuracy·Precision·Recall·F1, Confusion Matrix 및 Iteration에 따른 Training Loss 및 가능하면 Validation 점수, 학습·추론 시간.
 5. **결론 및 후속 실험** — 성공과 실패 모두 실험일지·CSV·그림에 연결.
 
-## 정확도 역전 메커니즘 원인 분석 — EXP유010·011·012
+## 크기 기반 정확도 역전 원인과 완화 실험 — EXP유010~014
 
-세 가설을 **[정규화 메커니즘 통합 폴더](logs/크기편향_원인분석/README.md)**에서 함께 관리한다. 이 폴더는 `logs/가설A`, `logs/가설B`와 같은 깊이에 있다.
+기존 원인 분석 3실험과 후속 직접 검증/완화 학습 2실험을 **[통합 연구 폴더](logs/크기편향_원인분석/README.md)**에서 함께 관리한다. 이 폴더는 `logs/가설A`, `logs/가설B`와 같은 깊이에 있다.
 
 | ID | 내용 | 실험일지 / 요약 CSV |
 |---|---|---|
 | **EXP유010** | 공식 Training과 Hand-made의 글자 크기 분포 비교 | [실험일지](logs/크기편향_원인분석/EXP유010_크기분포_분석.md) · [CSV](logs/크기편향_원인분석/EXP유010_summary.csv) |
 | **EXP유011** | CoM 재정렬과 재학습 효과 분리 | [실험일지](logs/크기편향_원인분석/EXP유011_Size_CoM_교차분석.md) · [CSV](logs/크기편향_원인분석/EXP유011_summary.csv) |
 | **EXP유012** | 글자 크기 기반 Shortcut 민감도 | [실험일지](logs/크기편향_원인분석/EXP유012_크기분류단서.md) · [CSV](logs/크기편향_원인분석/EXP유012_summary.csv) |
+| **EXP유013** | 기하 특징 4개만으로 숫자·문자 이진분류, 데이터 Shortcut 확인 | [실측 실험일지](logs/크기편향_원인분석/EXP유013_기하특징_이진분류.md) · [CSV](logs/크기편향_원인분석/EXP유013_binary_4feature_summary.csv) |
+| **EXP유014** | Class-balanced Scale / Stroke Training으로 MLP Shortcut 완화 실험 | [실측 실험일지](logs/크기편향_원인분석/EXP유014_Shortcut_완화_학습.md) · [정확도 CSV](logs/크기편향_원인분석/EXP유014_accuracy_3seed_summary.csv) · [크기 민감도 CSV](logs/크기편향_원인분석/EXP유014_scale_flip_3seed_summary.csv) |
 
-공통 실행 코드는 기존 `scripts/`에, 실제 전수 결과는 [성공한 Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)에 보존한다. 최종 모델·데이터는 변경하지 않는다.
+공통 실행 코드는 기존 `scripts/`에, EXP유010~012 원본은 [Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796), EXP유013~014 원본은 [3-Seed 성공 Actions #43810141307](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307)에 보존한다. 이번 후속 실험의 공식 Validation 목표 97.30%는 미달했다. 최종 모델·데이터는 변경하지 않는다.
 
 ## 저장 경로
 
@@ -52,4 +54,4 @@
 - [초기분석](logs/초기분석/README.md)
 - [가설 B](logs/가설B/README.md)
 - [가설 A](logs/가설A/README.md)
-- [크기편향 원인분석 — EXP유010·011·012](logs/크기편향_원인분석/README.md)
+- [크기편향 원인분석 — EXP유010~014](logs/크기편향_원인분석/README.md)
