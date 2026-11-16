@@ -55,3 +55,10 @@
 - [가설 B](logs/가설B/README.md)
 - [가설 A](logs/가설A/README.md)
 - [크기편향 원인분석 — EXP유010~014](logs/크기편향_원인분석/README.md)
+
+
+## EXP유015 — 크기 Shortcut을 먼저 억제하는 전처리 최적화
+
+[실측 실험일지](logs/크기편향_원인분석/EXP유015_증강비율_획강도_최적화.md) · [78모델 중 Gate 합격 9개 결과 CSV](logs/크기편향_원인분석/EXP유015_shortcut_gate_통과9조건_요약.csv) · [OfficialVal 변형 진단 CSV](logs/크기편향_원인분석/EXP유015_OfficialVal_크기변형_요약.csv).
+
+Training에만 Class-balanced Scale(10~50%, 중간 25/35% 포함) 및 Stroke(0~42% 강도)를 적용하여 **78개 신규 MLP**를 3 Seed로 학습했다. Shortcut 재발 방지 기준을 먼저 적용해 9개 후보를 선별한 뒤 공식 Validation으로 비교했다. 최고 공식 Validation은 **30% Scale / 28% Stroke / CoM의 96.1806%**, 공식 목표 97.30%는 아직 미달. Hand-made B·8 등 잔여 크기 민감도로 최종 모델 채택 보류. 전체 원본 결과는 [Github Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141) 및 [공식 Val 배율 진단](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) 참조.
