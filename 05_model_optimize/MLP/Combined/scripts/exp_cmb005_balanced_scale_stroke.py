@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """EXP-CMB-005. Match Normal's class-balanced Scale/Stroke, retain Combined writer CV.
 
-Four pre-registered arms: com_only, scale70_stroke00, scale80_stroke00,
-scale80_stroke14. Model hyperparameters fixed and equal across arms; 3 seeds
+Ten pre-registered low-ratio arms: com_only plus 10/20/30 percent Scale
+crossed with 0/14/28 percent topology-preserving Stroke. Model hyperparameters fixed and equal across arms; 3 seeds
 42/43/44; 4 held-out writers per arm. No Original/Professor Test or new 480.
 No fitting, augmentation, or selection using held-out writers/OfficialVal.
 """
@@ -30,7 +30,8 @@ sys.path.insert(0,str(NORMAL/"scripts"))
 from combined_mlp_writer_cv import (load_official,load_writers,PixelScaler255,
                                     WRITERS,LABELS,V3_SHA,HANDMADE_SHA)
 from exp006_size_com_comparison import process,image_geometry
-from exp016_high_fraction_grid import nested_subset,scale_base,stroke_jitter
+from exp015_scale_stroke_grid import nested_subset
+from exp016_high_fraction_grid import scale_base,stroke_jitter
 from exp014_balanced_augmentation import balanced_indices
 from exp011_012_causal_probes import fixed_scale
 
@@ -38,9 +39,15 @@ SCALES=(.8,.9,1.,1.1,1.2)
 PAIRS=(("0","D"),("D","0"),("8","B"),("B","8"),("5","F"),("F","5"),
        ("7","9"),("7","A"),("4","F"))
 ARMS={"com_only":(0.,0.),
-      "scale70_stroke00":(.7,0.),
-      "scale80_stroke00":(.8,0.),
-      "scale80_stroke14":(.8,.14)}
+      "scale10_stroke00":(.1,0.),
+      "scale10_stroke14":(.1,.14),
+      "scale10_stroke28":(.1,.28),
+      "scale20_stroke00":(.2,0.),
+      "scale20_stroke14":(.2,.14),
+      "scale20_stroke28":(.2,.28),
+      "scale30_stroke00":(.3,0.),
+      "scale30_stroke14":(.3,.14),
+      "scale30_stroke28":(.3,.28)}
 TARGETS=(16,18,20,22,24)
 SEEDS=(42,43,44)
 CLASSES=np.arange(16,dtype=int)
@@ -105,7 +112,7 @@ def prepareraw(official,writers,arm):
              "official_train_rows":len(raw)}
     targets=[]
     if ratio:
-        ids,target_map=nested_subset(yy,ratio)
+        ids,target_map=nested_subset(yy,ratio)  # Normal EXP015 nested low-ratio group
         half,_=balanced_indices(yy,seed=20261116)
         augmented=scale_base(raw,ids,target_map)
         augmented,stroke_stats=stroke_jitter(augmented,stroke,ids,half)
@@ -299,6 +306,8 @@ def run(arm,seed,out):
           "handmade_train_preprocess":"CoM-only",
           "heldout_and_official_val_preprocess":"CoM-only",
           "augmentation_seed":20261116,"augmentation":info,
+          "preregistration":"low ratio 0,10,20,30 x stroke 0,14,28 (no stroke for 0)",
+          "no_mlp_hyperparameter_search":True,
           "official_sha256":off["sha256"],
           "handmade_sha256":{str(w):writers[w]["sha256"] for w in WRITERS},
           "official_train_size_binary_probe":official_probe,
