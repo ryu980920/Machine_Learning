@@ -27,15 +27,20 @@ def balanced_indices(y,seed=20261116):
     selections=[]; targets=np.zeros(len(y),np.int32)
     for cls in range(16):
         orig=np.flatnonzero(y==cls)
-        if len(orig)%2: raise AssertionError("class count not even")
-        sel=np.sort(rng.choice(orig,size=len(orig)//2,replace=False))
+        # Each official source class can have an uneven count in this split.
+        # Sample near one-half, rounded DOWN to a multiple of five, so EACH
+        # target size is assigned exactly equally within EACH true class.
+        n_aug=(len(orig)//10)*5
+        if n_aug<5: raise AssertionError("insufficient per-class training data")
+        sel=np.sort(rng.choice(orig,size=n_aug,replace=False))
         choices=np.tile(np.array([16,18,20,22,24],dtype=np.int32),
-                        (len(sel)+4)//5)[:len(sel)]
+                        len(sel)//5)
         rng.shuffle(choices)
         targets[sel]=choices
         selections.extend(sel.tolist())
     ids=np.array(sorted(selections),dtype=np.int32)
-    assert len(ids)==38400 and set(np.unique(targets[ids]))=={16,18,20,22,24}
+    assert .48 <= len(ids)/len(y) <= .50
+    assert set(np.unique(targets[ids]))=={16,18,20,22,24}
     return ids,targets
 
 def stroke_jitter(images,ids):
@@ -61,7 +66,7 @@ def make_training(raw,y,target,variant):
     for desired in (16,18,20,22,24):
         mask=targets[ids]==desired
         s=ids[mask]
-        assert len(s)==7680
+        assert len(s)>0 and len(s)==sum((np.sum(y==cl)//10) for cl in range(16))
         aug,_=apply_size(raw[s],desired)
         augmented[mask]=aug
     stroke_stats={"stroke_changed":0,"stroke_rejected_topology":0}
