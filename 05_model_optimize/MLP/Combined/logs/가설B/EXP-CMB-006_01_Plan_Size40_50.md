@@ -1,6 +1,6 @@
-# Combined 가설 B · EXP유003 / EXP-CMB-006 — 40~50% Size × Stroke 전처리 후속 실험
+# EXP-CMB-006 · 01 계획 — Size 40~50% × Stroke
 
-> **상태: 사전등록 / 40·50% 실측 결과는 아직 없음.** [직전 EXP-CMB-005 실제 결과](EXP유002_Balanced_Scale_Stroke_Final_Results.md)와 [원본 10조건 집계](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md)를 기준으로 한다.
+> **상태: 사전등록 / 40·50% 실측 결과는 아직 없음.** [직전 EXP-CMB-005 실제 결과](EXP-CMB-005_03_Final_Size00_30.md)와 [원본 10조건 집계](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md)를 기준으로 한다.
 
 ## 연구 질문
 

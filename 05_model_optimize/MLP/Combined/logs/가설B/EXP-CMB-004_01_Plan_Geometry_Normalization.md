@@ -1,4 +1,4 @@
-# EXP유001 (가설 B) — Combined Geometry Normalization 비교
+# EXP-CMB-004 · 01 계획 — Geometry Normalization
 
 > **실험 ID: EXP-CMB-004 · 상태: 사전등록 / 실측 미실시**
 >

@@ -1,8 +1,8 @@
-# EXP유002 / EXP-CMB-005 — 1차(0·10%) 실측 결과와 중간 판정
+# EXP-CMB-005 · 02 중간 결과 — Size 0~10%
 
 > **상태: 1차 완료, 2차(20·30%) 진행 중. 최종 연구 완료·모델 채택 아님.**
 >
-> 실험 전 계획 [Size×Stroke 저비율 사전등록](EXP유002_Balanced_Scale_Stroke_Augmentation.md). 기존 Combined EXP-CMB-001~004는 이미 main에 등록됐으며 이번 연구는 별도의 미병합 Draft PR #16에서 수행 중이다.
+> 실험 전 계획 [Size×Stroke 저비율 사전등록](EXP-CMB-005_01_Plan_Size00_30_Stroke.md). 기존 Combined EXP-CMB-001~004는 이미 main에 등록됐으며 이번 연구는 별도의 미병합 Draft PR #16에서 수행 중이다.
 
 ## 1. 실제 실행과 불변 통제
 

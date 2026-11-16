@@ -2,7 +2,7 @@
 
 **상태: 실험 실행 완료 · 연구 목적 판정 완료 · 새 모델 학습 없음.**
 
-[완성된 실험일지](../../logs/초기분석/EXP유003_Input_Sensitivity.md) · [실행 코드](../../scripts/exp_cmb003_input_sensitivity.py) · [성공 Actions #43745629093](https://github.com/ryu980920/Machine_Learning/actions/runs/43745629093)
+[완성된 실험일지](../../logs/초기분석/EXP-CMB-003_Input_Sensitivity.md) · [실행 코드](../../scripts/exp_cmb003_input_sensitivity.py) · [성공 Actions #43745629093](https://github.com/ryu980920/Machine_Learning/actions/runs/43745629093)
 
 ## 실험 조건과 요약
 

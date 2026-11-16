@@ -1,4 +1,4 @@
-# Combined 가설 B EXP유002 / EXP-CMB-005 — 저비율 Size × Stroke 전처리 최종 실측 및 기전 판정
+# EXP-CMB-005 · 03 최종 결과 — Size 0~30% × Stroke
 
 > **실험 목적 달성 (원인 설명 기준) / 모델 채택 보류.** 하이퍼파라미터는 실험 전체에서 고정. 기존 Normal EXP유017 HP 조합은 사용하지 않았다. 실험은 Official Original Test·교수님 Final Test·Normal 신규 480장을 사용하지 않았고, `main` 또는 배포 모델을 변경하지 않았다.
 
@@ -8,7 +8,7 @@
 - **2차 20%/30% 18개 학습·2개 집계 모두 성공:** [#43871619789](https://github.com/ryu980920/Machine_Learning/actions/runs/43871619789). 6조건×3Seed×4Fold = 72개 신규 학습. 다만 **결과 집계 후 Git push가 stale branch로 거절**, 원본 run은 failure 표시. 학습 실패로 간주하지 않는다.
 - **복구 성공:** [#43876627107](https://github.com/ryu980920/Machine_Learning/actions/runs/43876627107). 원본에서 성공적으로 업로드된 `EXP-CMB-005-full-10-arm-3seed-4writer-audit` Artifact를 **재학습 없이** 복원했다. 각 `SUMMARY.md`/집계 CSV, expected_fits=120, 10×240 오분류 방향, 10×16 클래스 오류율, no_hp_search=true, no_test_used=true를 검증하고 실험 브랜치에 push했다.
 - **전체 10조건 × 3Seed × 4Fold = 총 120개 MLP 재학습 완료**, 동일 CV·학습 데이터 원본 SHA·MLP 기본 HP·학습 개수 비교. 학습당 Official Training 76,800 + 다른 작성자 손글씨 1,920, 평가 OOF 총 2,560 및 OfficialVal 19,200. Fold가 겹치므로 독립 120회 인구추정이 아니라 seed/작성자에 대한 반복 측정이다.
-- 사전등록: [EXP유002 설계](EXP유002_Balanced_Scale_Stroke_Augmentation.md) · [1차 일지](EXP유002_Balanced_Scale_Stroke_Stage1_Results.md).
+- 사전등록: [EXP유002 설계](EXP-CMB-005_01_Plan_Size00_30_Stroke.md) · [1차 일지](EXP-CMB-005_02_Interim_Size00_10.md).
 
 ## 2. 같은 학습 설정에서 비교한 전체 결과 (3Seed 평균)
 

@@ -1,4 +1,4 @@
-# EXP-CMB-007 1차 Size 60~80% × Stroke 0·14·28% — 중간 학습 기록
+# EXP-CMB-007 · 02 중간 결과 — Size 60~80%
 
 > **상태: 1차 완료 · 전체 실험 미완료.** 성공한 GitHub Actions 개별 학습 로그에서 3 Seed × 4 heldout Writer Fold의 OOF/OfficialVal 평균을 확인했다. 아래 값은 개별 Job 로그의 6자리 반올림 값을 다시 평균 낸 **중간 집계**이므로 2차 완료 후 생성되는 `stage_high_60to100/comparison.csv`가 최종 원본 수치다.
 

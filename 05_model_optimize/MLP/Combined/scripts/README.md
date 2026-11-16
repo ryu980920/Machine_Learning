@@ -33,7 +33,7 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 
 새 학습은 매번 새 출력 디렉터리를 사용한다. 공식 Original Test 및 교수님 Test는 읽지 않는다. **추가 실험의 결과와 기존 EXP-CMB-001 결과는 혼용하지 않는다.**
 
-[실험로그](../logs/EXP유001_Combined_MLP_4Fold_CV_Baseline.md) · [원본 결과](../results/EXP_CMB_001/README.md).
+[실험로그](../logs/EXP-CMB-001_Baseline_4Writer_OOF.md) · [원본 결과](../results/EXP_CMB_001/README.md).
 
 ## 후속 Combined 실험의 GitHub Actions 재사용 절차
 
@@ -61,7 +61,7 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 
 - [exp_cmb002_evidence.py](exp_cmb002_evidence.py): EXP-CMB-001 OOF/모델/이미지 해시 및 2,560장 예측 재검증, 7개 공간 특징, IG, 실제 이미지 Grid와 기존 오류 전환표.
 - [exp_cmb002_followup.py](exp_cmb002_followup.py): 형태/공간 질량 11개 지표, 작성자별 대조, 밝기·Bounding Box 보존 픽셀 교환 및 오류쌍 임계값 안정성.
-- [EXP유002 정식 실험일지](../logs/초기분석/EXP유002_Error_Analysis.md) · [실측 원본](../results/Error_Analysis/README.md).
+- [EXP유002 정식 실험일지](../logs/초기분석/EXP-CMB-002_Error_Analysis.md) · [실측 원본](../results/Error_Analysis/README.md).
 - [성공 실행 #43743082289](https://github.com/ryu980920/Machine_Learning/actions/runs/43743082289). 기존 **Normal 1개 + Combined 4개 저장 가중치만 사용**, 신규 MLP 학습 없음.
 
 이번 분석의 작성자·클래스별 통계는 연구용이며, 실제 추론에서는 작성자 ID·정답을 이용해 전처리를 변경하지 않는다. 원본 EXP-CMB-001 실행·결과는 그대로 유지한다.
@@ -69,7 +69,7 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 ## EXP-CMB-003 — 모델 고정 입력 민감도 연구
 
 - [exp_cmb003_input_sensitivity.py](exp_cmb003_input_sensitivity.py): Normal 1개 + Combined 4개 원본 체크포인트/OOF 해시 확인, 10개 입력 변형의 Accuracy·Macro F1·교정/신규 오답·Logit Margin·공식 개발 Validation 통제 비교. **새 학습 없음**.
-- [EXP유003 완성 실험일지](../logs/초기분석/EXP유003_Input_Sensitivity.md) · [실측 CSV/이미지](../results/Input_Sensitivity/README.md) · [최종 성공 Actions #43745629093](https://github.com/ryu980920/Machine_Learning/actions/runs/43745629093).
+- [EXP유003 완성 실험일지](../logs/초기분석/EXP-CMB-003_Input_Sensitivity.md) · [실측 CSV/이미지](../results/Input_Sensitivity/README.md) · [최종 성공 Actions #43745629093](https://github.com/ryu980920/Machine_Learning/actions/runs/43745629093).
 - 기존 EXP-CMB-001 Baseline 훈련·모델 및 EXP-CMB-002 분석은 변경하지 않는다. 입력 단일 변형은 연구용 진단이며, 공식 Original Test·교수님 Test는 사용하지 않는다.
 
 
@@ -78,5 +78,5 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 - [exp_cmb004_geometry_normalization.py](exp_cmb004_geometry_normalization.py): 원본 SHA/분할 검증, 공식 Training만 사용한 목표 BBox long-side 20px, BBox Center·Size·CoM·Size+CoM에 대한 **방법별 작성자 보류 4-Fold 독립 MLP 학습 16회**, Training/Val/OOF 동일 전처리.
 - [exp_cmb004_compare.py](exp_cmb004_compare.py): 방법별 OOF, 공식 Validation, 작성자·클래스, 핵심 혼동 방향, 기하 특징, 학습/추론 비용과 Viridis CM 비교.
 - [exp_cmb004_cross_diagnostic.py](exp_cmb004_cross_diagnostic.py): **기존 모델+원본 / 기존 모델+변형 / 재학습 모델+변형 / 재학습 모델+원본** 대조로 입력/가중치 효과 구분(새 학습 없음).
-- [사전등록 기준](../logs/가설B/EXP유001_Geometry_Normalization.md) · [실험 완료 보고](../logs/가설B/EXP유001_Geometry_Normalization_Results.md) · [CSV/이미지/모델](../results/Geometry_Normalization/README.md).
+- [사전등록 기준](../logs/가설B/EXP-CMB-004_01_Plan_Geometry_Normalization.md) · [실험 완료 보고](../logs/가설B/EXP-CMB-004_02_Final_Geometry_Normalization.md) · [CSV/이미지/모델](../results/Geometry_Normalization/README.md).
 - [재학습 성공 Actions #43747924168](https://github.com/ryu980920/Machine_Learning/actions/runs/43747924168) · [4-way 대조 성공 #43748490480](https://github.com/ryu980920/Machine_Learning/actions/runs/43748490480). 공식 Original Test·교수님 Final Test 미사용. 숫자 합격선을 두지 않았으며 **기전별 설명 가능성**을 기준으로 판정했다.

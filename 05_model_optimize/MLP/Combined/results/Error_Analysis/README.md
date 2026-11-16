@@ -2,7 +2,7 @@
 
 **실험 상태:** 실행·검증 완료, **가설 B 우선 / 가설 A 별도 진행 보류**. 현재 결과는 실험 브랜치의 검토용 자료이며, 사용자 승인 전까지 main에 병합하지 않는다.
 
-[전체 실험일지와 근거 판단](../../logs/초기분석/EXP유002_Error_Analysis.md) · [실행 스크립트 1](../../scripts/exp_cmb002_evidence.py) · [실행 스크립트 2](../../scripts/exp_cmb002_followup.py)
+[전체 실험일지와 근거 판단](../../logs/초기분석/EXP-CMB-002_Error_Analysis.md) · [실행 스크립트 1](../../scripts/exp_cmb002_evidence.py) · [실행 스크립트 2](../../scripts/exp_cmb002_followup.py)
 
 **실행 성공:** [GitHub Actions #43742381093](https://github.com/ryu980920/Machine_Learning/actions/runs/43742381093), [#43742905999](https://github.com/ryu980920/Machine_Learning/actions/runs/43742905999), [#43743082289](https://github.com/ryu980920/Machine_Learning/actions/runs/43743082289).
 

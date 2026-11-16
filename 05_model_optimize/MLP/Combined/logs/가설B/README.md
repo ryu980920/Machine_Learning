@@ -1,66 +1,31 @@
-# Combined — 가설 B: 공간·중심·크기·명암
+# Combined 가설 B — CMB-004~007 기하·크기 편향 연구
 
-## 검증 목적
+[전체 연구 흐름](../README.md) · [초기분석 CMB-002~003](../초기분석/README.md)
 
-이미지 중심·Bounding Box·잉크 비율과 공간적 밝기 분포가 Combined 작성자 보류 OOF 오류에 미치는 영향을 **단일 입력 조작 및 이후 필요 시 4-Fold 재학습**으로 검증한다.
+## 연구 질문과 진행 이유
 
-## 현재 판정 — 후속 검증 우선
+Hand-made 숫자/문자의 글자 크기·위치·획 차이가 0↔D, 8↔B의 오분류에 영향을 주는지 탐색한다. **정규화의 효과를 먼저 분리(CMB-004)**한 다음, **훈련 증강 비율을 단계적으로 확장(CMB-005 → 006 → 007)**하여 크기 편향 감소와 다른 클래스 오답 증가 사이의 상충을 검증했다.
 
-[초기분석 EXP유002](../초기분석/EXP유002_Error_Analysis.md)에서 전체 0/D/8/B 640장에 동일한 하나의 크기·중심 방향이 유효하다는 결과는 없었으나, **특정 작성자·클래스 내부의 오류-특징 연관성**을 발견했다.
+| 실험 | 바꾼 조건 | 가설과 결론 | 연구 문서 |
+|---|---|---|---|
+| **CMB-004** | Size-only / CoM-only / Size+CoM, 4-Fold 비교 | Size·CoM 기여 및 부작용 확인, 최종 모델 채택 보류 | [01 계획](EXP-CMB-004_01_Plan_Geometry_Normalization.md) → [02 최종](EXP-CMB-004_02_Final_Geometry_Normalization.md) |
+| **CMB-005** | Size **0~30%** × Stroke 0/14/28%, 10조건·120모델 | 기본 MLP HP 고정, 입력 크기 편향 감소·클래스별 상충 관찰 | [01 계획](EXP-CMB-005_01_Plan_Size00_30_Stroke.md) → [02 중간](EXP-CMB-005_02_Interim_Size00_10.md) → [03 최종](EXP-CMB-005_03_Final_Size00_30.md) |
+| **CMB-006** | Size **40~50%** × Stroke 0/14/28%, 6조건·72모델 | CMB-005와 합산 16조건 비교. 30%-28% OOF 최고치 미갱신 | [01 사전 계획](EXP-CMB-006_01_Plan_Size40_50.md) → [16조건 결과](../../results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md) |
+| **CMB-007** | Size **60~100%** × Stroke 0/14/28%, 15조건·180모델 | 총 31조건·16클래스·240방향 비교, 평균 Family Flip 개선과 8/B/D의 비대칭 오류·공식 Val 악화 확인 | [01 계획](EXP-CMB-007_01_Plan_Size60_100.md) → [02 중간](EXP-CMB-007_02_Interim_Size60_80.md) → [03 최종](EXP-CMB-007_03_Final_Size60_100.md) → [04 오분류 후속](EXP-CMB-007_04_Review_Top3_OOF_Error.md) |
 
-- 작성자 **43번 8→B**: 잘못 분류된 8은 정답 8보다 더 넓고 Ink Ratio가 높음. 32/64/128 threshold 방향 유지.
-- 작성자 **41번 D→0**: 잘못 분류된 D의 x 중심 위치가 정답 D보다 오른쪽.
-- 작성자 **43번 0→D**: 잘못 분류된 0의 y 중심 위치가 더 위쪽. 단, 정답은 7장으로 표본이 작고 분석이 사후 지정됨.
+## 실측 핵심 결론
 
-**따라서 가설 B 우선 진행**. 그러나 이 관찰 결과는 **입력 변환이 정답률을 높인다는 인과적 증명은 아니다**.
+- **CMB-004:** OOF Size-only 80.7813%, CoM-only 85.8594%, Size+CoM 88.9453%. 네 Fold OfficialVal 손실로 최종 Pipeline 미채택.
+- **CMB-005:** Hand-made OOF 최고 **30%-28% = 90.716%**, OfficialVal 96.117%. 평균 크기 Family Flip은 크게 낮아졌으나 특정 클래스 오류 남음.
+- **CMB-006:** 40~50%를 확장한 **16조건** 비교. 고비율이 모든 지표를 동시에 개선하지 못함.
+- **CMB-007:** Size 60~100%에서 신규 180모델 학습 완료. 비교한 31조건의 OOF 최고치는 여전히 30%-28%이며, **8→B 증가 / B→8 감소**라는 오분류 재분배와 극단 100% 조건의 B/D 확대 취약성 확인.
+- **후속 오분류율(OOF 상위 3개):** 30%-28% **9.284%**, 30%-14% **9.310%**, 30%-0% **9.427%**. [16클래스·방향별 상세](EXP-CMB-007_04_Review_Top3_OOF_Error.md).
 
-## EXP유003 실제 결과와 후속 판단
+## 결과 원본 및 데이터 경계
 
-[EXP유003 — Input Sensitivity](../초기분석/EXP유003_Input_Sensitivity.md)는 Normal 1개 + Combined 4개 저장 모델을 고정하고 위치·Size·획·밝기 10개 단일 변형을 2,560장 및 공식 개발 Validation에 실제 적용해 완료했다.
+[CMB-004 정규화 결과](../../results/Geometry_Normalization/README.md) · [CMB-005 10조건 결과](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md) · [CMB-006 16조건 결과](../../results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md) · [CMB-007 31조건 최종 CSV](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/SUMMARY.md).
 
-- **크기 95%:** Combined OOF 81.2500%→83.8672%(+2.6172%p), 하지만 순개선 67장 모두 43번에서만 발생. 공식 Validation 네 Fold 모두 하락, 문자 Accuracy도 하락. **일률적 Size 보정 채택 불가**.
-- **획 얇게25%:** 82.3047%(+1.0547%p), 50장 교정/23장 신규 오류, 작성자 3/4 비악화, 공식 Validation 하락폭 −0.0521~−0.2031%p. **사전 후속 후보 선별 기준 통과**.
-- **센터 ±1px 일괄 이동:** 네 방향 모두 OOF 전체 Accuracy 하락. 한 작성자·오류쌍의 교정이 다른 클래스의 오답을 증가시킨다.
-
-**EXP유003 당시 연구 판단:** 획 얇게25%가 후속 재학습 후보였고, 95% 축소는 작성자 의존성이 컸다. 이후 **서로 다른 두 정규화 방법의 차이를 설명하기 위한 EXP-CMB-004를 별도로 먼저 실시**했다. EXP유003의 Accuracy를 EXP-CMB-004 재학습 수치와 직접 혼용하지 않는다.
-
-## EXP유001 — Geometry Normalization (실제 재학습 완료)
-
-- **[실험 전 사전등록](EXP유001_Geometry_Normalization.md):** Bounding Box Size 정규화 vs CoM 중심 정렬의 효과와 이유를 검증할 때, 정량 Accuracy·F1 하한 대신 작성자/클래스·입력 기하 변화·오류 전환·반례를 통해 설명 가능한지로 통과 판정.
-- **[실행 결과 및 연구 판정](EXP유001_Geometry_Normalization_Results.md):** Size-only 80.7813%, CoM-only 85.8594%, Size+CoM 88.9453% (4-Fold OOF), 입력만 변경 vs 재학습 4-way 대조와 공식 Validation 손실 보고.
-- **[실측 자료](../../results/Geometry_Normalization/README.md):** 16개 학습 모델·실제 CM/이미지·CSV·Loss·manifest.
-- **결론:** Size는 문자에 유리하지만 숫자 악화, CoM은 숫자에 유리하지만 문자 악화, 두 방법 결합은 각 집단의 상충을 완화. 공식 개발 Validation 하락으로 최종 Pipeline 채택은 보류.
-
-## EXP유002 / EXP-CMB-005 — 저비율 Size × Stroke 전처리 설명 검증 완료
-
-- [실험 전 사전등록과 통제](EXP유002_Balanced_Scale_Stroke_Augmentation.md): 기존 MLP HP 고정, Size 0/10/20/30% × Stroke 0/14/28%, 3Seeds·4 Writer-held-out CV(10조건×3×4=120모델), 설명 중심 목표(정확도 절대 합격선 없음).
-- [Stage1(0/10%) 결과](EXP유002_Balanced_Scale_Stroke_Stage1_Results.md) · **[전체 Stage2(20/30%) 및 최종 기전 분석](EXP유002_Balanced_Scale_Stroke_Final_Results.md)**.
-- [전체 10조건×3Seed OOF·OfficialVal·Family Flip CSV/16클래스 전체/240오류 방향 원본](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md). 최고 탐색 OOF **30%-28% 90.716%**, 공식 Val **96.117%**. CoM-only 84.883%/96.733%. 30%-28% 숫자×1.2 Family Flip **69.77→9.19%**지만 특정 클래스·작성자 반례 잔존.
-- [Stage2 실제 학습·집계](https://github.com/ryu980920/Machine_Learning/actions/runs/43871619789)는 마지막 git push 충돌로 run 결론 'failure'였으나, **[아티팩트 복원·검증 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43876627107)**으로 원본 학습을 다시 하지 않고 전 조건 결과를 실험 브랜치에 보존.
-- **원인 설명 중심 연구 목적 달성 / 최종 모델 채택 보류** (공식 Validation 감소 및 독립 Writer 검증 부재). [PR #16](https://github.com/ryu980920/Machine_Learning/pull/16)은 사용자 승인으로 main에 병합되었으나 배포 모델 변경 없음.
-
-## EXP유003 / EXP-CMB-006 — 40~50% Size × Stroke 후속 실험
-
-- **[실험 전 동결한 연구 질문·6조건·원인 설명 중심 판정](EXP유003_Size40_50_Stroke_Extension.md)**: 40/50% Size × Stroke 0/14/28%, 기본 MLP 하이퍼파라미터·3 Seeds·Writer-held-out 4-Fold 고정 (**72개 신규 모델**).
-- 기존 [EXP-CMB-005 0~30% 원본](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md)을 재학습하지 않고 읽어 전체 **16조건·16클래스·240오분류 방향**과 30%-0/30%-28 대비 같은 이미지에서 새 오답·교정을 비교한다.
-- [GitHub Actions EXP-CMB-006 학습/집계 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43881769100) / [사용자 승인에 따라 main 병합된 PR #18](https://github.com/ryu980920/Machine_Learning/pull/18).
-- [0~50% 총 16조건 실측 비교](../../results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md): 이후 사용자 승인에 따라 main에 병합된 연구 결과. 최종 배포 모델 변경 없음.
-
-## EXP유004 / EXP-CMB-007 — Size 60~100% × Stroke 최종 실측 및 기전 분석 완료
-
-- [실험 전 고정한 목적·15조건·180모델 설계](EXP유004_Size60_100_Stroke_Extension.md) / [1차 108모델 중간 수치](EXP유004_Stage1_60_80_Interim.md) / **[최종 31조건·전체 클래스·작성자·240방향 분석](EXP유004_Size60_100_Final_Results.md)**.
-- [31조건 전체 원본](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/SUMMARY.md): 기본 MLP HP·3 Seeds·Writer-held-out 4 Folds 고정. 새 Size60~100%×Stroke0/14/28의 15조건×12=**180모델 학습 완료**, 이전 16조건 실측 재사용(총 31조건).
-- **Hand-made OOF 정확도 1위 30%-28% 90.716%**. 양 데이터 출처의 개별 클래스 평균 최대 Family Flip 최소는 **50%-14% 21.66%**이나 B 정상 오류가 22.71%로 악화. 50%-0%는 Flip 최대 22.29%, OOF 89.987%, OfficialVal 95.696%의 균형 후보. 80%-0%는 숫자×1.2 Flip 5.63%, 문자×0.8 Flip 5.45%로 평균 안정성이 개선되나 OfficialVal 저하와 8↔B 비대칭 오류.
-- 고비율 100%-0%의 공식 Val **B ×1.2 Family Flip 49.59%**는 계열 변경 비율이며 오류 *방향*을 뜻하지 않음. 가설 해석과 추가 고정 모델 확률 분석 제안은 최종 실험일지 참고.
-- [45개 모델 Job 학습 성공, 마지막 교차 스크립트 문법 오류](https://github.com/ryu980920/Machine_Learning/actions/runs/43891689090) → [45개 Artifact 복원·31조건 비교/검증 성공, 마지막 git 브랜치명 오류](https://github.com/ryu980920/Machine_Learning/actions/runs/43898638558) → **[원본 검증 후 브랜치 저장 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43899673392)**. 실패 단계는 재학습 없이 복구.
-- [PR #19](https://github.com/ryu980920/Machine_Learning/pull/19)은 **2026-11-17 기준 `main` 병합 확인**. Original Test/교수님 Test/Normal 신규 480장 미사용, 외부 검증과 최종 모델 선정 보류.
-
-### EXP-CMB-007 후속 — 31조건 OOF 상위 3개와 오분류율
-
-- **[OOF 상위 3개 및 이미지 크기별 평균 확률·오류 방향 분석 보고서](EXP유004_Size60_100_Top3_OOF_Misclassification_Review.md)**.
-- 31조건 중 Hand-made 4-Writer OOF 정확도 순위: **Size30%-Stroke28% 90.716% (오분류율 9.284%)**, **30%-14% 90.690% (9.310%)**, **30%-0% 90.573% (9.427%)**.
-- OfficialVal 오분류율은 각각 **3.883% / 3.866% / 3.819%**. 개발용 Validation 수치이며 독립 Test 성능이 아님.
-- 30%-28%의 OOF 실제 8/B/D 오분류율은 **13.75% / 17.92% / 17.71%**. 확대된 B/D의 `P(letter)` 하락과 8↔B 혼동 방향은 별도 후속 분석에 기록.
-- 위 연구는 **모델 선택 및 최종 배포 변경 없이** 기존 파일의 실측을 재검토한 결과. EXP-CMB-005~007 데이터와 보고서는 `main`에 병합됨.
-
-참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
+- 모든 CMB-005~007 모델은 기본 MLP 하이퍼파라미터를 고정하고 Writer-held-out OOF를 비교했다.
+- OfficialVal은 개발 데이터이고, 기존 Writer 손글씨 4명도 반복 관측했으므로 **최종 독립 Test 성능으로 해석하지 않는다**.
+- Original Test·교수님 Test·Normal 신규 손글씨 480장은 CMB-007에서 사용하지 않았다.
+- **PR #19를 포함한 과거 실험 PR은 `main` 병합 완료, 최종 배포 모델은 미교체**. 파일명·목차 정리는 실험 자체와 별도 문서 정리다.
