@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   train:
-    name: width ${{ matrix.width } seed ${{ matrix.seed }
+    name: width ${{ matrix.width }} seed ${{ matrix.seed }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     strategy:
@@ -45,15 +45,15 @@ jobs:
           PYTHONUNBUFFERED: '1'
         run: |
           python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_width.py \
-            --width '${{ matrix.width }' \
-            --seed '${{ matrix.seed }' \
-            --out '${{ runner.temp }/cmb008/cmb008-w${{ matrix.width }-s${{ matrix.seed }'
+            --width '${{ matrix.width }}' \
+            --seed '${{ matrix.seed }}' \
+            --out '${{ runner.temp }}/cmb008/cmb008-w${{ matrix.width }}-s${{ matrix.seed }}'
       - name: Archive models, confusion, training loss, SHA and 5-scale checks
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cmb008-w${{ matrix.width }-s${{ matrix.seed }
-          path: '${{ runner.temp }/cmb008/cmb008-w${{ matrix.width }-s${{ matrix.seed }'
+          name: cmb008-w${{ matrix.width }}-s${{ matrix.seed }}
+          path: '${{ runner.temp }}/cmb008/cmb008-w${{ matrix.width }}-s${{ matrix.seed }}'
           if-no-files-found: warn
           retention-days: 30
 
@@ -75,13 +75,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: cmb008-w*-s*
-          path: '${{ runner.temp }/cmb008-incoming'
+          path: '${{ runner.temp }}/cmb008-incoming'
           merge-multiple: false
       - name: Compare seeded predictions and critical direction pairs, then write decision log
         run: |
           python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_aggregate.py \
             --repo . \
-            --incoming '${{ runner.temp }/cmb008-incoming' \
+            --incoming '${{ runner.temp }}/cmb008-incoming' \
             --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width
           mkdir -p 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화
           cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/S1_Stage_Results.md \
