@@ -1,0 +1,103 @@
+name: Normal EXP016 High Fraction Scale Stroke Shortcut Audit
+
+on:
+  push:
+    branches: [exp/normal-exp016-high-fraction-shortcut-20261116]
+    paths:
+      - '.github/workflows/normal-exp016-high-fraction-shortcut.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 140
+    strategy:
+      fail-fast: false
+      max-parallel: 9
+      matrix:
+        seed: [42, 43, 44]
+        fraction: [60, 70, 80, 90, 100]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install historical exact scientific environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Retrieve and verify frozen EXP006 CoM control
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43785390739
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: normal-exp006-com-${{ matrix.seed }}
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp006-controls
+      - name: Fit 4 stroke strengths on 60-100 percent augmentation, preserve 50 pct cohort
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp016_high_fraction_grid.py \
+            --seed '${{ matrix.seed }}' \
+            --ratio-percent '${{ matrix.fraction }}' \
+            --models-root '${{ runner.temp }}/exp006-controls' \
+            --out '${{ runner.temp }}/exp016-s${{ matrix.seed }}-r${{ matrix.fraction }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exp016-s${{ matrix.seed }}-r${{ matrix.fraction }}
+          path: ${{ runner.temp }}/exp016-s${{ matrix.seed }}-r${{ matrix.fraction }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [train]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install historical exact scientific environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Retrieve all 15 new EXP016 train jobs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: exp016-s*-r*
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp016-all
+      - name: Retrieve historical EXP015 30, 40, 50 percent fixed models
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 43814205670
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: exp015-s*-r[345]0
+          merge-multiple: false
+          path: ${{ runner.temp }}/exp015-historical
+      - name: Strict 16-class family-flip gates and 3-seed cross-study comparison
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          NUMEXPR_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+          MPLBACKEND: 'Agg'
+        run: |
+          python 05_model_optimize/MLP/Normal/scripts/exp016_aggregate_shortcut_risks.py \
+            --high-inputs '${{ runner.temp }}/exp016-all' \
+            --historical-inputs '${{ runner.temp }}/exp015-historical' \
+            --out '${{ runner.temp }}/exp016-reviewed'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Normal-EXP016-60-model-shortcut-class-review
+          path: ${{ runner.temp }}/exp016-reviewed/
+          retention-days: 30
+          if-no-files-found: error
