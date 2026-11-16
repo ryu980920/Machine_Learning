@@ -85,3 +85,11 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 - [CSV와 3-Seed 실측 원본](../../results/크기편향_원인분석/README.md)
 - [EXP유013~016 코드와 GitHub Actions 실행 설정](../../scripts/README.md)
 - [두 후보 80-14 / 70-0 보존 기록](EXP유016_80-14_70-0_두_후보_병행보존.md)
+
+
+
+### EXP유017 — 80-14 고정 MLP 하이퍼파라미터 최적화
+
+[사전등록·진행 실험일지](EXP유017_80-14_MLP_하이퍼파라미터_최적화.md) · [기존 80-14와 70-0 동결 기록](EXP유016_80-14_70-0_두_후보_병행보존.md) · [EXP유017 Draft PR](https://github.com/ryu980920/Machine_Learning/pull/15).
+
+**80-14 전처리 고정** 후 MLP의 은닉층·규제·학습률을 최적화한다. 선택에는 OfficialVal만 사용하고 **팀원의 손글씨는 최종 모델 동결 뒤 별도 Validation 전용**으로 남긴다. Original Test와 교수님 Test는 사용하지 않는다.
