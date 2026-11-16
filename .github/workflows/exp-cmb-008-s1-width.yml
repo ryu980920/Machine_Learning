@@ -1,0 +1,112 @@
+name: EXP-CMB-008 S1 30-28 CoM MLP width and directed-error gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s1-width.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    name: width ${{ matrix.width } seed ${{ matrix.seed }
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        width: [64, 128, 256]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned experiment dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Validate reproducibility and Python source
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_width.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit four held-out writer folds with frozen 30-28 and this width
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_width.py \
+            --width '${{ matrix.width }' \
+            --seed '${{ matrix.seed }' \
+            --out '${{ runner.temp }/cmb008/cmb008-w${{ matrix.width }-s${{ matrix.seed }'
+      - name: Archive models, confusion, training loss, SHA and 5-scale checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-w${{ matrix.width }-s${{ matrix.seed }
+          path: '${{ runner.temp }/cmb008/cmb008-w${{ matrix.width }-s${{ matrix.seed }'
+          if-no-files-found: warn
+          retention-days: 30
+
+  compare:
+    name: S1 all-36-fit audit, zero-error gate and decision log
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned analysis dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download nine seed/width archives; leave baseline 100 in original repository
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-w*-s*
+          path: '${{ runner.temp }/cmb008-incoming'
+          merge-multiple: false
+      - name: Compare seeded predictions and critical direction pairs, then write decision log
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s1_aggregate.py \
+            --repo . \
+            --incoming '${{ runner.temp }/cmb008-incoming' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width
+          mkdir -p 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/S1_Stage_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+      - name: Archive standalone verified result and decision record
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s1-width-results-and-decision
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit S1 metrics to main; never replace final models
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S1_Width/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md
+          if git diff --staged --quiet; then
+            echo 'Identical result already on main'
+            exit 0
+          fi
+          git commit -m 'research: EXP-CMB-008 S1 fit audit, zero error gate and width decision [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
