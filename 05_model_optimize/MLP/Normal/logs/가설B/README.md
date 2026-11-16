@@ -36,3 +36,11 @@ Hand-made는 이미 여러 차례 확인한 4명 작성자의 개발용 데이�
 - **실행 기록:** [EXP006](https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739) / [EXP007](https://github.com/ryu980920/Machine_Learning/actions/runs/43786098005). 상세 예측·모델·원본 수치는 각각의 GitHub Actions Artifact에 보관(30일).
 
 **주의:** 이 후속 로그·코드·결과 목록은 실험 브랜치 exp/normal-b-exp006-size-com에서 먼저 검토한다. 사용자 승인 전 main에 병합하지 않는다.
+
+
+## 신규 비교 — EXP유008 (원본 가설 A C9 + Stroke)
+
+- **[EXP유008 사전계획](EXP유008_C9_Stroke_PLAN.md)** · **[실측 결과](EXP유008_C9_Stroke_Results.md)**: 기존 가설 A EXP유004 Stage2 C9 원본 구현을 그대로 복제하고, **C9 단독 / C9→Stroke 0.30→CoM / C9→Stroke 0.60→CoM** 조건을 공식 Train 76,800장에 대해 각 Seed 42·43·44로 학습.
+- Seed 평균 Hand-made 전체 **88.6328% / 88.9844% / 89.1146%**, 공식 Val **95.9757% / 95.8976% / 95.8628%**. Stroke를 추가하면 Hand-made는 소폭 개선되지만 공식 Validation은 하락. 일부 Seed와 작성자에서는 악화.
+- 원본 C9 구현은 동일하지만 과거 C9 정답 건수를 모든 Seed에서 재현하지 못했으므로, **동일 실행 내 새 C9 대조군**으로만 추가 Stroke 효과를 판단한다.
+- [실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43790407107) 성공. 실험 Artifact에 CSV·모델·실제 그림 저장. 최종 모델·main 변경 없음.
