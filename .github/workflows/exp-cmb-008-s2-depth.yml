@@ -112,15 +112,15 @@ jobs:
             --s1-reference '${{ runner.temp }}/cmb008-s1-reference' \
             --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth
           cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth/S2_Stage_Results.md \
-            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_03_Stage2_Depth_Results.md
-          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_03_Stage2_Depth_Results.md
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
       - name: Preserve S2 result log and audit CSV
         uses: actions/upload-artifact@v4
         with:
           name: cmb008-S2-all-depth-decision
           path: |
             05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth/
-            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_03_Stage2_Depth_Results.md
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
           retention-days: 30
           if-no-files-found: error
       - name: Publish verified S2 result to main without touching deployed model
@@ -129,7 +129,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S2_Depth/
-          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_03_Stage2_Depth_Results.md
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md
           if git diff --staged --quiet; then
             echo 'S2 identical results already on main'
             exit 0
