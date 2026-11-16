@@ -62,3 +62,10 @@
 [실측 실험일지](logs/크기편향_원인분석/EXP유015_증강비율_획강도_최적화.md) · [78모델 중 Gate 합격 9개 결과 CSV](logs/크기편향_원인분석/EXP유015_shortcut_gate_통과9조건_요약.csv) · [OfficialVal 변형 진단 CSV](logs/크기편향_원인분석/EXP유015_OfficialVal_크기변형_요약.csv).
 
 Training에만 Class-balanced Scale(10~50%, 중간 25/35% 포함) 및 Stroke(0~42% 강도)를 적용하여 **78개 신규 MLP**를 3 Seed로 학습했다. Shortcut 재발 방지 기준을 먼저 적용해 9개 후보를 선별한 뒤 공식 Validation으로 비교했다. 최고 공식 Validation은 **30% Scale / 28% Stroke / CoM의 96.1806%**, 공식 목표 97.30%는 아직 미달. Hand-made B·8 등 잔여 크기 민감도로 최종 모델 채택 보류. 전체 원본 결과는 [Github Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141) 및 [공식 Val 배율 진단](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) 참조.
+
+
+## EXP유016 — 60~100% Training 전용 증강과 16클래스 Shortcut 검증
+
+[EXP유016 계획·전체 실측·교차 검증](logs/크기편향_원인분석/EXP유016_고비율_크기증강_한계확인.md) · [23개 후보별 Gate 판정 CSV](logs/크기편향_원인분석/원본_실측_아카이브/EXP유016_60모델/all_23_conditions_ranked_gates.csv) · [16클래스 5배율 전환율 CSV](logs/크기편향_원인분석/원본_실측_아카이브/EXP유016_60모델/all_16class_size_flip_3seed.csv) · [공식 Validation 3-Seed 5배율 교차 검증 CSV](logs/크기편향_원인분석/원본_실측_아카이브/EXP유016_OfficialVal/officialval_scale_3seed_summary.csv).
+
+60/70/80/90/100% 크기 증강 × 0/14/28/42% 획 혼합 × Seed42/43/44 = **60개 신규 MLP 실측 성공**. EXP유015의 기존 30-28·40-28·50-28 고정 체크포인트와 비교. 사전등록한 Hand-made 개별 B·8·D 20% Family flip Gate를 통과한 모델은 6개. 70-14와 80-14가 Hand-made 최악 17.50%로 상위이나, OfficialVal 개별 D/B에서 25~28% 전환 잔존. **70-0**은 Hand-made 최악 18.54% 및 OfficialVal 17.03%로 두 개발 집단에서 균형적이며 공식 Val 95.28%. 추가 독립 Writer 검증 전에는 final/Main 변경·모델 교체 없음. 97.30% 공식 Val 목표 미달.
