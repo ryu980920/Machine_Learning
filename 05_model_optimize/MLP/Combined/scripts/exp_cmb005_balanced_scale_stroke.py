@@ -70,13 +70,61 @@ def metrics(y,p,subset=None):
             "macro_recall":float(rec.mean())}
 
 def confusion_pairs(y,p,writer,arm,seed,source):
+    """All 240 off-diagonal directions, including zero-error pairs.
+
+    Denominator n_actual corresponds to the *actual* (row) class.
+    Both counts and conditional percentages are saved; total overall
+    accuracy does not replace per-class and per-pair error analysis.
+    """
+    cm=confusion_matrix(y,p,labels=CLASSES)
+    result=[]
+    nall=int(len(y))
+    nwrong=int(nall-np.trace(cm))
+    for actual in CLASSES:
+        nactual=int(cm[actual].sum())
+        wrong=int(nactual-cm[actual,actual])
+        for target in CLASSES:
+            if actual==target:continue
+            ct=int(cm[actual,target])
+            result.append({"arm":arm,"seed":seed,"dataset":source,"writer":writer,
+                 "actual":LABELS[actual],"predicted":LABELS[target],
+                 "n_actual":nactual,"n_actual_wrong":wrong,
+                 "n_dataset":nall,"n_dataset_wrong":nwrong,
+                 "errors":ct,"error_rate_within_actual_class":ct/nactual if nactual else 0,
+                 "share_of_actual_class_errors":ct/wrong if wrong else 0,
+                 "share_of_all_dataset_errors":ct/nwrong if nwrong else 0})
+    assert len(result)==16*15
+    assert sum(int(r["errors"]) for r in result)==nwrong
+    return result
+
+def total_errors_by_class(y,p,writer,arm,seed,source):
+    """All 16 true classes: total incorrect / n actual class, plus group switch."""
+    cm=confusion_matrix(y,p,labels=CLASSES)
     out=[]
-    for a,b in PAIRS:
-        z=y==LABELS.index(a)
+    for a in CLASSES:
+        n=int(cm[a].sum());correct=int(cm[a,a]);wrong=n-correct
+        family_swap=int(cm[a,10:].sum()) if a<10 else int(cm[a,:10].sum())
         out.append({"arm":arm,"seed":seed,"dataset":source,"writer":writer,
-             "actual":a,"predicted":b,"n_actual":int(z.sum()),
-             "errors":int(np.sum(p[z]==LABELS.index(b)))})
+           "actual":LABELS[a],"n":n,"correct":correct,"wrong":wrong,
+           "class_error_rate":wrong/n if n else 0,
+           "opposite_family_errors":family_swap,
+           "opposite_family_error_rate":family_swap/n if n else 0})
+    assert len(out)==16
     return out
+
+def family_error_breakdown(y,p,writer,arm,seed,source):
+    """Digits→letters and letters→digits alongside within-family mistakes."""
+    cm=confusion_matrix(y,p,labels=CLASSES)
+    d2l=int(cm[:10,10:].sum());l2d=int(cm[10:,:10].sum())
+    d2d=int(cm[:10,:10].sum()-np.trace(cm[:10,:10]))
+    l2l=int(cm[10:,10:].sum()-np.trace(cm[10:,10:]))
+    return [{"arm":arm,"seed":seed,"dataset":source,"writer":writer,
+      "direction":key,"errors":val,"n_actual_family":n,
+      "error_rate":val/n if n else 0}
+      for key,val,n in (("digit_to_letter",d2l,int(cm[:10].sum())),
+                        ("letter_to_digit",l2d,int(cm[10:].sum())),
+                        ("digit_to_digit",d2d,int(cm[:10].sum())),
+                        ("letter_to_letter",l2l,int(cm[10:].sum())))]
 
 def geom_rows(name,x,y,arm,seed):
     geo=image_geometry(x)
@@ -224,7 +272,7 @@ def run(arm,seed,out):
     features+=geom_rows("official_val",xval,off["y_val"],arm,seed)
     for w in WRITERS:features+=geom_rows("writer_"+str(w),xwriters[w],writers[w]["y"],arm,seed)
     savecsv(out/"geometry_distributions.csv",features)
-    foldrows=[];pairs=[];scale_rows=[];class_rows=[];scale_class_rows=[];pred_rows=[];loss=[];fit=[]
+    foldrows=[];pairs=[];class_errors=[];family_errors=[];scale_rows=[];class_rows=[];scale_class_rows=[];pred_rows=[];loss=[];fit=[]
     pooled=[]
     for held in WRITERS:
         trwriters=[w for w in WRITERS if w!=held]
@@ -274,10 +322,20 @@ def run(arm,seed,out):
                 "pred":LABELS[int(outcome[i])]})
         pooled.append(outcome)
         pairs+=confusion_pairs(handwritten_y,outcome,held,arm,seed,"OOF_original")
+        pairs+=confusion_pairs(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
+        class_errors+=total_errors_by_class(handwritten_y,outcome,held,arm,seed,"OOF_original")
+        class_errors+=total_errors_by_class(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
+        family_errors+=family_error_breakdown(handwritten_y,outcome,held,arm,seed,"OOF_original")
+        family_errors+=family_error_breakdown(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
         for ds,ytrue,wid in (("OOF",handwritten_y,held),
                              ("OfficialVal",off["y_val"],held)):
             z,p2,c,base=eval_scales(mlp,scale_map,ytrue,ds,wid,arm,seed)
             scale_rows+=z;pairs+=p2;scale_class_rows+=c
+            if ds=="OOF":
+                for sc in SCALES:
+                    p_sc=mlp.predict(scale_map[(held,sc)]).astype(int)
+                    class_errors+=total_errors_by_class(ytrue,p_sc,held,arm,seed,"OOF_scale_"+str(sc))
+                    family_errors+=family_error_breakdown(ytrue,p_sc,held,arm,seed,"OOF_scale_"+str(sc))
             if ds=="OOF":assert np.array_equal(base,outcome)
             else:assert np.array_equal(base,pp)
         print("FOLD_COMPLETED",arm,seed,held,
@@ -293,6 +351,8 @@ def run(arm,seed,out):
     savecsv(out/"oof_per_class.csv",class_rows)
     savecsv(out/"per_class_and_scale.csv",scale_class_rows)
     savecsv(out/"pair_confusions.csv",pairs)
+    savecsv(out/"per_class_error_rates.csv",class_errors)
+    savecsv(out/"family_confusion_rates.csv",family_errors)
     savecsv(out/"scale_sensitivity.csv",scale_rows)
     savecsv(out/"oof_predictions.csv",pred_rows)
     savecsv(out/"training_loss.csv",loss)
