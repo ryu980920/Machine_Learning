@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """EXP-CMB-008 S1: compare archived width100 vs new widths on identical writer OOF.
-No fit or access to Original Test; zero 0->D and 8->B is a strict final gate.
+No fitting or Test use. v2: aim four directional error rates <5%, maximize OOF accuracy, guard against overfitting.
 """
 import argparse,csv,json,statistics
 from collections import Counter,defaultdict
@@ -66,16 +66,23 @@ def summarize(width,d):
        "mean_n_iter":statistics.mean(int(x["iterations"]) for x in ts),
        "mean_fit_seconds":statistics.mean(float(x["fit_seconds"]) for x in ts),
        "warnings":sum(bool(x["warnings"]) for x in ts)}
+TARGET_PAIRS=("D->0","B->8","8->B","0->D")
+def target_under_5percent(n):
+    # Each actual class contributes 160 images/seed x 3 seeds = 480.
+    # Strict <5% means at most 23 (NOT 24) errors per direction.
+    return all(n["pairs"][p]<24 for p in TARGET_PAIRS)
 def check(b,n):
+    # Updated user criterion before comparing S1 results, archived as plan 2-B.
     return {
-      "official_validation_no_drop_over_0p5pp":n["val"]>=b["val"]-.005-1e-12,
-      "writer_no_drop_over_1pp":all(n["writers"][k]>=b["writers"][k]-.01-1e-12 for k in b["writers"]),
-      "B8D_error_no_increase_over_3pp":all(n["classerror"][k]<=b["classerror"][k]+.03+1e-12 for k in ("8","B","D")),
-      "max_class_family_flip_no_increase_over_5pp":all(n["flip"][k]<=b["flip"][k]+.05+1e-12 for k in ("OOF","OfficialVal")),
-      "zero_0_to_D":n["pairs"]["0->D"]==0,
-      "zero_8_to_B":n["pairs"]["8->B"]==0,
-      "reverse_D_to_0_no_increase":n["pairs"]["D->0"]<=b["pairs"]["D->0"],
-      "reverse_B_to_8_no_increase":n["pairs"]["B->8"]<=b["pairs"]["B->8"]}
+      "oof_accuracy_at_least_baseline":n["oof"]>=b["oof"]-1e-12,
+      "official_val_drop_le_0p5pp":n["val"]>=b["val"]-.005-1e-12,
+      "writer_drop_le_1pp":all(n["writers"][k]>=b["writers"][k]-.01-1e-12 for k in b["writers"]),
+      "class_0_8_B_D_error_no_increase":all(n["classerror"][k]<=b["classerror"][k]+1e-12 for k in ("0","8","B","D")),
+      "max_class_family_flip_increase_le_5pp":all(n["flip"][k]<=b["flip"][k]+.05+1e-12 for k in ("OOF","OfficialVal")),
+      "D_to_0_no_increase":n["pairs"]["D->0"]<=b["pairs"]["D->0"],
+      "B_to_8_no_increase":n["pairs"]["B->8"]<=b["pairs"]["B->8"],
+      "8_to_B_no_increase":n["pairs"]["8->B"]<=b["pairs"]["8->B"],
+      "0_to_D_no_increase":n["pairs"]["0->D"]<=b["pairs"]["0->D"]}
 def paired(b,n):
     fixed=induced=0
     for s in SEEDS:
@@ -102,54 +109,86 @@ def main():
     assert abs(m[100]["oof"]-.9071614583333334)<1e-9
     assert abs(m[100]["val"]-.961171875)<1e-9
     checks={w:check(m[100],m[w]) for w in WIDTHS}
-    full=[w for w in (64,128,256) if all(checks[w].values())]
-    # S1 is a provisional choice if neither critical pair reaches zero. A final pass
-    # must satisfy zero errors in BOTH directions named by the user.
-    safe=[]
-    for w in WIDTHS:
-        core=all(v for k,v in checks[w].items() if k not in ("zero_0_to_D","zero_8_to_B"))
-        nonincrease=all(m[w]["pairs"][k]<=m[100]["pairs"][k] for k in ("0->D","8->B"))
-        if w==100 or (core and nonincrease and m[w]["oof"]>=m[100]["oof"]-.002):
-            safe.append(w)
-    safe.sort(key=lambda w:(-m[w]["oof"],m[w]["pairs"]["0->D"]+m[w]["pairs"]["8->B"],w))
-    full.sort(key=lambda w:-m[w]["oof"])
-    nextwidth=full[0] if full else safe[0]
-    result={"status":"PASSED" if full else "NOT_PASSED","final_gate_passed_widths":full,
-        "provisional_next_width":nextwidth,"provisional_is_not_final":not bool(full),
+    target_meets=[w for w in WIDTHS if target_under_5percent(m[w])]
+    primary=[w for w in target_meets if all(checks[w].values())]
+    # If 5% target is not achieved, fall back to best OOF among candidates that
+    # do not worsen any protected error, Writer, OfficialVal or class stability.
+    fallback=[w for w in WIDTHS if all(checks[w].values())]
+    pool=primary if primary else fallback
+    assert 100 in fallback, "baseline must satisfy all non-regression guards"
+    top_acc=max(m[w]["oof"] for w in pool)
+    near=[w for w in pool if m[w]["oof"]>=top_acc-.002-1e-12]
+    # Differences <=0.2pp: prioritize most serious D->0 confusion, then other
+    # three directions, seed robustness, OfficialVal, and smaller width.
+    near.sort(key=lambda w:(
+        m[w]["pairs"]["D->0"],
+        sum(m[w]["pairs"][p] for p in ("B->8","8->B","0->D")),
+        -m[w]["oof"],m[w]["seed_std"],-m[w]["val"],w))
+    nextwidth=near[0]
+    status=("TARGET_MET" if primary else
+            ("FALLBACK_IMPROVED" if nextwidth!=100 else "BASELINE_RETAINED"))
+    result={"status":status,"target_directed_error_rate_strictly_below":.05,
+        "denominator_each_direction":480,"max_errors_per_direction":23,
+        "priority_direction":"D->0","v2_protocol_updated_during_S1_before_result_comparison":True,
+        "zero_error_required":False,
+        "target_met_without_guards":target_meets,
+        "target_met_and_safeguards_pass":primary,
+        "fallback_safeguards_pass":fallback,
+        "selected_width_for_S2":nextwidth,"selected_is_final_model":False,
+        "selection_reason":(
+           "All four error directions <5%, OOF nondecrease, robustness gates passed"
+           if primary else "No acceptable model met all four <5% targets; fallback uses OOF accuracy, "
+                         "non-increasing key confusion and class error rates plus robustness guards"),
+        "original_test_used":False,"professor_test_used":False,
         "baseline_archived_models":12,"new_fits":36,"metrics":m,"gate":checks,
         "paired_vs_baseline":{w:paired(d[100],d[w]) for w in WIDTHS if w!=100}}
     args.out.mkdir(parents=True,exist_ok=True)
     (args.out/"S1_details.json").write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n")
-    columns=["width","oof_accuracy","official_val_accuracy","oof_std","0_to_D","8_to_B","D_to_0","B_to_8",
-             "class_8_error","class_B_error","class_D_error","oof_worst_flip","val_worst_flip",
-             "mean_iter","fit_seconds","warnings","passed_all","failed_gates"]
+    columns=["width","oof_accuracy","oof_error_rate","official_val_accuracy","oof_std",
+             "D_to_0","D_to_0_rate","B_to_8","B_to_8_rate",
+             "8_to_B","8_to_B_rate","0_to_D","0_to_D_rate",
+             "class_0_error","class_8_error","class_B_error","class_D_error",
+             "oof_worst_flip","val_worst_flip","mean_iter","fit_seconds","warnings",
+             "target_all_4_under_5pct","passed_safeguards","failed_gates"]
     rows=[]
     for w in WIDTHS:
         x=m[w];g=checks[w]
-        rows.append(dict(zip(columns,[w,x["oof"],x["val"],x["seed_std"],
-          x["pairs"]["0->D"],x["pairs"]["8->B"],x["pairs"]["D->0"],x["pairs"]["B->8"],
-          x["classerror"]["8"],x["classerror"]["B"],x["classerror"]["D"],
+        rows.append(dict(zip(columns,[w,x["oof"],1-x["oof"],x["val"],x["seed_std"],
+          x["pairs"]["D->0"],x["pairs"]["D->0"]/480,
+          x["pairs"]["B->8"],x["pairs"]["B->8"]/480,
+          x["pairs"]["8->B"],x["pairs"]["8->B"]/480,
+          x["pairs"]["0->D"],x["pairs"]["0->D"]/480,
+          x["classerror"]["0"],x["classerror"]["8"],x["classerror"]["B"],x["classerror"]["D"],
           x["flip"]["OOF"],x["flip"]["OfficialVal"],x["mean_n_iter"],x["mean_fit_seconds"],
-          x["warnings"],all(g.values()),";".join(k for k,v in g.items() if not v)])))
+          x["warnings"],target_under_5percent(x),all(g.values()),
+          ";".join(k for k,v in g.items() if not v)])))
     with (args.out/"S1_width_comparison.csv").open("w",encoding="utf-8-sig",newline="") as f:
         writer=csv.DictWriter(f,fieldnames=columns);writer.writeheader();writer.writerows(rows)
     md=["# EXP-CMB-008 · 02 S1 은닉층 너비 실측","",
-        "> **엄격 통과 여부:** "+result["status"]+" / 완료된 신규 모델 36개, 과거 기준선 12개 재사용.","",
-        "## 변경 근거","기본 은닉층 100의 표현 용량이 부족한지 검증하기 위해 64/128/256을 시험했다. 다른 하이퍼파라미터와 Size30/Stroke28/CoM, Seeds 및 Writer 분할은 동일하다.","",
-        "| Width | Hand-made OOF | OfficialVal | 0→D 건수 | 8→B 건수 | D→0 | B→8 | Gate 위반 |",
-        "|---:|---:|---:|---:|---:|---:|---:|---|"]
+        "> **판정:** "+status+" / 신규 학습 36개, 기준선 기존 12개 재사용.",
+        "> **수정된 사용자 목표:** D→0, B→8, 8→B, 0→D 각각 실제 클래스 내 오분류율 **5% 미만**, 동시에 높은 OOF 정확도와 과적합 가드레일. 0건 강제 조건은 폐기.","",
+        "## 가설과 실험 변화",
+        "크기·획·CoM, Data SHA, Seed, writer split과 나머지 HP 고정. 표현 용량의 효과를 보기 위해 너비 64/128/256을 기준 100과 비교했다.",
+        "각 오분류율의 분모는 실제 클래스당 480회(160장/Seed × 3Seed). <5% 기준은 23건 이하.","",
+        "| Width | OOF Acc. | OOF 오분류율 | OfficialVal | D→0 건수(%) | B→8 건수(%) | 8→B 건수(%) | 0→D 건수(%) | <5% 목표 | 가드레일 위반 |",
+        "|---:|---:|---:|---:|---:|---:|---:|---:|---|---|"]
     for row in rows:
-        md.append("| "+str(row["width"])+" | "+pct(row["oof_accuracy"])+" | "+pct(row["official_val_accuracy"])+" | "+
-             str(row["0_to_D"])+" | "+str(row["8_to_B"])+" | "+str(row["D_to_0"])+" | "+str(row["B_to_8"])+" | "+
-             (row["failed_gates"] or "없음")+" |")
-    md += ["","## 결론 및 다음 실험",
-       "0→D와 8→B 두 방향을 세 Seed 전체에서 모두 **0건**으로 만들고 다른 혼동의 악화를 방지하는 것이 최종 통과 조건이다.",
-       "**S1 최종 통과 Width:** "+(str(full) if full else "없음 (최종 승인 불가)"),
-       "**S2를 위한 잠정 Width:** "+str(nextwidth),
-       "잠정 선택은 최종 통과가 아니며, S2에서도 동일한 Zero-error Gate와 각 작성자/클래스 악화 기준을 다시 적용한다.",
-       "모든 Seed/Writer/16클래스 Family Flip과 실패 근거는 S1_details.json 및 S1_width_comparison.csv에 기록했다.",
-       "Original Test·교수님 Test·신규 손글씨 480장 미사용.",""]
+        def directed(k):
+            return str(row[k])+" ("+pct(row[k+"_rate"])+")"
+        md.append("| "+str(row["width"])+" | "+pct(row["oof_accuracy"])+" | "+
+             pct(row["oof_error_rate"])+" | "+pct(row["official_val_accuracy"])+" | "+
+             directed("D_to_0")+" | "+directed("B_to_8")+" | "+directed("8_to_B")+" | "+
+             directed("0_to_D")+" | "+("충족" if row["target_all_4_under_5pct"] else "미달")+
+             " | "+(row["failed_gates"] or "없음")+" |")
+    md += ["","## 선택 결과와 다음 단계",
+        "- **목표 4방향 모두 <5% 도달 후보(가드레일 포함):** "+(str(primary) if primary else "없음"),
+        "- **선정한 S2 비교 기준 너비:** "+str(nextwidth),
+        "- **결정:** "+result["selection_reason"],
+        "- **D→0 우선 관찰:** 기존 71건/480회(14.79%)이며 다른 방향 54건/43건/19건과 함께 악화 여부를 확인했다.",
+        "- **과적합 감시:** Writer별 Accuracy, 3Seed 변동, OfficialVal 손실, OOF/Val 16클래스 Family Flip, 반복횟수, Loss와 경고를 개별 JSON/CSV로 보존한다.",
+        "- **새 모델 최종 확정 아님:** 후속 S2~S6에서 순차적으로 평가한다. 독립 Test는 아직 사용하지 않는다.",
+        "- **이력:** 초기 Zero-error 요구는 S1 학습 개시 후, 결과 비교 전 사용자가 수정했고 이 문서에는 변경된 <5% 기준을 적용했다.",""]
     (args.out/"S1_Stage_Results.md").write_text("\n".join(md),encoding="utf-8")
     print("S1_DECISION",json.dumps({"status":result["status"],"provisional":nextwidth,
-        "pass":full,"rows":rows},ensure_ascii=False),flush=True)
+        "target_pass":primary,"rows":rows},ensure_ascii=False),flush=True)
 if __name__=="__main__":main()
