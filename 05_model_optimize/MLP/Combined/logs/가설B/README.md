@@ -46,4 +46,11 @@
 - [GitHub Actions EXP-CMB-006 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43881769100) / [검토용 Draft PR #18](https://github.com/ryu980920/Machine_Learning/pull/18).
 - 실측 미완료 단계에서는 성능·성공 판정을 기재하지 않는다. 전체 결과는 실험 브랜치만 기록하고 사용자 승인 전 main/최종 모델 병합하지 않음.
 
+## EXP유004 / EXP-CMB-007 — Size 60~100% × Stroke 후속 연구 (실행 중)
+
+- [사전등록 및 15조건·180개 MLP 설계](EXP유004_Size60_100_Stroke_Extension.md). Normal EXP유016의 50% 초과 nested 증강 대상을 재현하되 Combined 기존 Writer 4-Fold·3 Seeds·기본 MLP HP/CoM을 고정.
+- [실시간 GitHub Actions #43891460569](https://github.com/ryu980920/Machine_Learning/actions/runs/43891460569): Stage1 Size60·70·80% (108 fits) → Stage2 Size90·100% (72 fits) → 역사적 16조건 포함 총 **31조건·16클래스·240 오분류 방향·B8D 최악 Flip** 비교.
+- [검토용 Draft PR #19](https://github.com/ryu980920/Machine_Learning/pull/19). 실험 숫자는 성공한 job의 실제 CSV가 나오기 전에는 기재하지 않음.
+- Original Test/교수님 Test/Normal 신규 손글씨 480 미사용. 사용자 승인 전 main 병합/배포 모델 수정 없음.
+
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
