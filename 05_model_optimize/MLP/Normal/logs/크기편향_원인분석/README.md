@@ -36,3 +36,14 @@ CoM-only, Size-only, Size→CoM에서 숫자와 문자 정확도가 역전되는
 - **EXP유014:** 기존 CoM MLP의 1.2배 숫자 family flip **71.60%** → Class-balanced Scale **8.96%**, Scale+Stroke **6.83%**. Hand-made 숫자/문자 동시 개선 확인.
 - **채택 보류:** 신규 A/B의 공식 Validation 각각 **95.6962% / 95.6007%**, 기존 CoM **97.0521%**보다 낮아 기준 **97.30%**에 미달. 재학습 모델은 실험 브랜치 Artifact에만 보존하고 `main` 또는 최종 학습 Pipeline을 변경하지 않음.
 - **원본 실측 및 3-Seed 집계:** [GitHub Actions #43810141307](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307) · `Normal-EXP013-014-measured-shortcut-review`.
+
+
+## EXP유015 — 크기 Shortcut 재발 방지 우선 증강 최적화 (완료)
+
+[실측 실험일지](EXP유015_증강비율_획강도_최적화.md) · [Gate 합격 9개 후보 요약 CSV](EXP유015_shortcut_gate_통과9조건_요약.csv) · [OfficialVal 크기 변형 진단 CSV](EXP유015_OfficialVal_크기변형_요약.csv).
+
+- **78개 새 MLP, 26개 크기 비율×획 강도 조합, 3 Seed**. 사전 고정 Shortcut Gate를 통과한 9개 후보 중 OfficialVal이 가장 높은 조건은 **30% 크기 증강 / 획 강도 28% / 전체 CoM**, OfficialVal **96.1806%**, Hand-made 숫자 **88.8125%**, 문자 **87.7778%**.
+- Hand-made 숫자1.2배·문자0.8배 Family flip: **9.44% / 9.93%**. OfficialVal 같은 개입: **5.00% / 5.23%** (기존 CoM은 **75.67% / 49.42%**).
+- **중요한 잔존 문제:** Hand-made B·8·D는 개별 크기 변경에서 여전히 20%대 Family flip이 나타남. 크기 Shortcut **완전 제거 증명 아님**, 목표 OfficialVal 97.30%도 미달.
+- 실측 원본: [1차 45모델](https://github.com/ryu980920/Machine_Learning/actions/runs/43814205670) · [2차 33모델 및 통합 Gate](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141) · [OfficialVal 동결모델 9개 교차 진단](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445).
+- 전체 실행은 [Draft PR #13](https://github.com/ryu980920/Machine_Learning/pull/13)에 보존하고 기존 `main`/최종 모델은 그대로 유지.
