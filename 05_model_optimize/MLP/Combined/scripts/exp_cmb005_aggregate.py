@@ -39,7 +39,7 @@ def main():
     }[args.stage]
     out=args.out;out.mkdir(parents=True,exist_ok=True)
     original=out/"raw"
-    allsummary=[];fold=[];pairs=[];responses=[];classes=[];geometry=[];perimage=[]
+    allsummary=[];fold=[];pairs=[];class_error_rows=[];family_error_rows=[];responses=[];classes=[];geometry=[];perimage=[]
     for arm in expected:
         for seed in SEEDS:
             folder=args.incoming/f"cmb005-{arm}-s{seed}"
@@ -73,6 +73,8 @@ def main():
             allsummary.append(summary)
             for f in loadcsv(folder/"fold_metrics.csv"):fold.append(f)
             for f in loadcsv(folder/"pair_confusions.csv"):pairs.append(f)
+            for f in loadcsv(folder/"per_class_error_rates.csv"):class_error_rows.append(f)
+            for f in loadcsv(folder/"family_confusion_rates.csv"):family_error_rows.append(f)
             for f in loadcsv(folder/"scale_sensitivity.csv"):responses.append(f)
             for f in loadcsv(folder/"per_class_and_scale.csv"):classes.append(f)
             for f in loadcsv(folder/"geometry_distributions.csv"):geometry.append(f)
@@ -83,6 +85,8 @@ def main():
     writecsv(out/"per_seed_overall.csv",allsummary)
     writecsv(out/"per_fold_group_metrics.csv",fold)
     writecsv(out/"pairwise_confusion_directions.csv",pairs)
+    writecsv(out/"all_class_error_rates_raw.csv",class_error_rows)
+    writecsv(out/"family_error_rates_raw.csv",family_error_rows)
     writecsv(out/"five_scale_group_responses.csv",responses)
     writecsv(out/"five_scale_16class_responses.csv",classes)
     writecsv(out/"trained_geometry.csv",geometry)
@@ -119,6 +123,65 @@ def main():
             "max_writer_seed_B8D_family_flip":worst,
             "max_official_fold_seed_B8D_family_flip":ov_worst})
     writecsv(out/"comparison.csv",stats)
+    # All 240 directional errors: aggregate across 4 held-out writers,
+    # then average across 3 seeds. Percentages always use the source class
+    # denominator (160 Hand-made per class per seed).
+    baselinepath=Path(__file__).resolve().parents[4]/"05_model_optimize"/"MLP"/"Combined"/"results"/"EXP_CMB_001"/"OOF_predictions.csv"
+    baseline=loadcsv(baselinepath)
+    assert len(baseline)==2560
+    baseline_cm=np.zeros((16,16),dtype=int)
+    for r in baseline:
+        aa=LABELS.index(r["true_label"]);bb=LABELS.index(r["combined_pred"])
+        baseline_cm[aa,bb]+=1
+    assert (np.trace(baseline_cm),baseline_cm.sum())==(2080,2560)
+    direction_comparisons=[]
+    class_comparisons=[]
+    for arm in expected:
+        baseline_wrong={LABELS[i]:int(baseline_cm[i].sum()-baseline_cm[i,i]) for i in range(16)}
+        arr=[r for r in pairs if r["arm"]==arm and r["dataset"]=="OOF_original"]
+        rr=[r for r in class_error_rows if r["arm"]==arm and r["dataset"]=="OOF_original"]
+        assert len(arr)==3*4*16*15,(arm,len(arr))
+        assert len(rr)==3*4*16
+        for i,letter in enumerate(LABELS):
+            cr=[r for r in rr if r["actual"]==letter]
+            assert len(cr)==12
+            current=float(np.mean([float(r["class_error_rate"]) for r in cr]))
+            base=float(baseline_wrong[letter]/160)
+            class_comparisons.append({"arm":arm,"actual":letter,"n_actual_per_seed":160,
+               "baseline_wrong":baseline_wrong[letter],
+               "baseline_error_rate":base,"mean_wrong":float(np.mean(
+                    [sum(int(z["wrong"]) for z in cr if int(z["seed"])==seed) for seed in SEEDS])),
+               "mean_class_error_rate":current,"delta_error_rate_pp":100*(current-base)})
+            for j,target in enumerate(LABELS):
+                if i==j:continue
+                group=[r for r in arr if r["actual"]==letter and r["predicted"]==target]
+                assert len(group)==12,(arm,letter,target,len(group))
+                seedtot=[sum(int(r["errors"]) for r in group if int(r["seed"])==seed) for seed in SEEDS]
+                baseline_count=int(baseline_cm[i,j])
+                avg=float(np.mean(seedtot))
+                direction_comparisons.append({"arm":arm,"actual":letter,"predicted":target,
+                    "n_actual_per_seed":160,"baseline_errors":baseline_count,
+                    "baseline_rate":baseline_count/160,
+                    "mean_errors":avg,"mean_error_rate":avg/160,
+                    "delta_errors_vs_baseline":avg-baseline_count,
+                    "delta_error_rate_pp":100*(avg-baseline_count)/160})
+    writecsv(out/"all_240_direction_changes.csv",direction_comparisons)
+    writecsv(out/"all_16_class_error_changes.csv",class_comparisons)
+    # Every direction, even absent, remains in the CSV; top20 for quick review.
+    top20=sorted(direction_comparisons,key=lambda r:(-r["mean_errors"],r["arm"],r["actual"],r["predicted"]))[:20]
+    writecsv(out/"top_20_error_directions_across_conditions.csv",top20)
+    family_summary=[]
+    for arm in expected:
+        for fam in ("digit_to_letter","letter_to_digit","digit_to_digit","letter_to_letter"):
+            x=[r for r in family_error_rows if r["arm"]==arm and r["dataset"]=="OOF_original"
+               and r["direction"]==fam]
+            assert len(x)==12
+            family_summary.append({"arm":arm,"direction":fam,
+              "mean_error_count":float(np.mean([sum(int(z["errors"]) for z in x
+                                            if int(z["seed"])==seed) for seed in SEEDS])),
+              "mean_error_rate_by_actual_family":float(np.mean([float(z["error_rate"]) for z in x]))})
+    writecsv(out/"family_error_direction_comparison.csv",family_summary)
+
     # Paired effects: retain same seed & writer & image index; 10% stage includes CoM.
     corrections=[]
     for i in range(len(expected)):
@@ -146,6 +209,27 @@ def main():
           a["arm"],a["mean_accuracy"],a["mean_digits_acc"],a["mean_letters_acc"],
           a["official_val_accuracy"],a["digits_1p2_family_flip"],
           a["letters_0p8_family_flip"]))
+    lines+=["","## 16개 전체 클래스의 오분류율 (OOF, 각 실제 클래스 160장/Seed)",
+      "","| 조건 | 실제 클래스 | Baseline 오분류율 | 새 모델 오분류율 | 변화 (pp) |",
+      "|---|---|---:|---:|---:|"]
+    for r in class_comparisons:
+        lines.append("| {} | {} | {:.2%} | {:.2%} | {:+.2f} |".format(
+            r["arm"],r["actual"],r["baseline_error_rate"],
+            r["mean_class_error_rate"],r["delta_error_rate_pp"]))
+    lines+=["","## 그 밖의 주요 오류 방향 (기존 Baseline에서 0↔D/8↔B 제외 상위 15개)",
+      "","| 실제→예측 | 기존 건수/160 | 기존 방향 오류율 |"]
+    lines+=["|---|---:|---:|"]
+    other=[]
+    for i,a in enumerate(LABELS):
+        for j,b in enumerate(LABELS):
+            if i==j or (a,b) in (("0","D"),("D","0"),("8","B"),("B","8")):
+                continue
+            other.append((int(baseline_cm[i,j]),a,b))
+    for count,a,b in sorted(other,reverse=True)[:15]:
+        lines.append("| {}→{} | {} | {:.2%} |".format(a,b,count,count/160))
+    lines+=["","**모든 방향(16×15=240개)과 전처리 전후 변화는 [all_240_direction_changes.csv](all_240_direction_changes.csv).**",
+      "**전체 클래스별 오류율과 0→D/8→B 외 새롭게 늘어난 혼동은 [all_16_class_error_changes.csv](all_16_class_error_changes.csv), [family_error_direction_comparison.csv](family_error_direction_comparison.csv)에도 기록.**",
+      ""]
     lines+=["","**주의:** 표의 숫자/문자 Family flip은 이미지는 같은데 문자계열 P(letter)≥0.5 여부가 바뀐 비율. Accuracy와 다르다. 개별 클래스/작성자에서 반대 방향의 오류와 공식 Val 하락이 존재할 수 있다.",
       "",
       "관련 원본: per_seed_overall.csv, per_fold_group_metrics.csv, five_scale_16class_responses.csv, trained_geometry.csv, pairwise_confusion_directions.csv, paired_corrected_induced.csv.",
