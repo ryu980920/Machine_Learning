@@ -25,17 +25,19 @@
 4. **동일 개발 Validation으로 재평가** — Accuracy·Precision·Recall·F1, Confusion Matrix 및 Iteration에 따른 Training Loss 및 가능하면 Validation 점수, 학습·추론 시간.
 5. **결론 및 후속 실험** — 성공과 실패 모두 실험일지·CSV·그림에 연결.
 
-## 정확도 역전 메커니즘 원인 분석 — EXP유010·011·012
+## 크기 기반 정확도 역전 원인과 완화 실험 — EXP유010~014
 
-세 가설을 **[정규화 메커니즘 통합 폴더](logs/크기편향_원인분석/README.md)**에서 함께 관리한다. 이 폴더는 `logs/가설A`, `logs/가설B`와 같은 깊이에 있다.
+기존 원인 분석 3실험과 후속 직접 검증/완화 학습 2실험을 **[통합 연구 폴더](logs/크기편향_원인분석/README.md)**에서 함께 관리한다. 이 폴더는 `logs/가설A`, `logs/가설B`와 같은 깊이에 있다.
 
 | ID | 내용 | 실험일지 / 요약 CSV |
 |---|---|---|
 | **EXP유010** | 공식 Training과 Hand-made의 글자 크기 분포 비교 | [실험일지](logs/크기편향_원인분석/EXP유010_크기분포_분석.md) · [CSV](logs/크기편향_원인분석/EXP유010_summary.csv) |
 | **EXP유011** | CoM 재정렬과 재학습 효과 분리 | [실험일지](logs/크기편향_원인분석/EXP유011_Size_CoM_교차분석.md) · [CSV](logs/크기편향_원인분석/EXP유011_summary.csv) |
 | **EXP유012** | 글자 크기 기반 Shortcut 민감도 | [실험일지](logs/크기편향_원인분석/EXP유012_크기분류단서.md) · [CSV](logs/크기편향_원인분석/EXP유012_summary.csv) |
+| **EXP유013** | 기하 특징 4개만으로 숫자·문자 이진분류, 데이터 Shortcut 확인 | [실측 실험일지](logs/크기편향_원인분석/EXP유013_기하특징_이진분류.md) · [CSV](logs/크기편향_원인분석/EXP유013_binary_4feature_summary.csv) |
+| **EXP유014** | Class-balanced Scale / Stroke Training으로 MLP Shortcut 완화 실험 | [실측 실험일지](logs/크기편향_원인분석/EXP유014_Shortcut_완화_학습.md) · [정확도 CSV](logs/크기편향_원인분석/EXP유014_accuracy_3seed_summary.csv) · [크기 민감도 CSV](logs/크기편향_원인분석/EXP유014_scale_flip_3seed_summary.csv) |
 
-공통 실행 코드는 기존 `scripts/`에, 실제 전수 결과는 [성공한 Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)에 보존한다. 최종 모델·데이터는 변경하지 않는다.
+공통 실행 코드는 기존 `scripts/`에, EXP유010~012 원본은 [Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796), EXP유013~014 원본은 [3-Seed 성공 Actions #43810141307](https://github.com/ryu980920/Machine_Learning/actions/runs/43810141307)에 보존한다. 이번 후속 실험의 공식 Validation 목표 97.30%는 미달했다. 최종 모델·데이터는 변경하지 않는다.
 
 ## 저장 경로
 
@@ -52,4 +54,18 @@
 - [초기분석](logs/초기분석/README.md)
 - [가설 B](logs/가설B/README.md)
 - [가설 A](logs/가설A/README.md)
-- [크기편향 원인분석 — EXP유010·011·012](logs/크기편향_원인분석/README.md)
+- [크기편향 원인분석 — EXP유010~014](logs/크기편향_원인분석/README.md)
+
+
+## EXP유015 — 크기 Shortcut을 먼저 억제하는 전처리 최적화
+
+[실측 실험일지](logs/크기편향_원인분석/EXP유015_증강비율_획강도_최적화.md) · [78모델 중 Gate 합격 9개 결과 CSV](logs/크기편향_원인분석/EXP유015_shortcut_gate_통과9조건_요약.csv) · [OfficialVal 변형 진단 CSV](logs/크기편향_원인분석/EXP유015_OfficialVal_크기변형_요약.csv).
+
+Training에만 Class-balanced Scale(10~50%, 중간 25/35% 포함) 및 Stroke(0~42% 강도)를 적용하여 **78개 신규 MLP**를 3 Seed로 학습했다. Shortcut 재발 방지 기준을 먼저 적용해 9개 후보를 선별한 뒤 공식 Validation으로 비교했다. 최고 공식 Validation은 **30% Scale / 28% Stroke / CoM의 96.1806%**, 공식 목표 97.30%는 아직 미달. Hand-made B·8 등 잔여 크기 민감도로 최종 모델 채택 보류. 전체 원본 결과는 [Github Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43815571141) 및 [공식 Val 배율 진단](https://github.com/ryu980920/Machine_Learning/actions/runs/43817096445) 참조.
+
+
+## EXP유016 — 60~100% Training 전용 증강과 16클래스 Shortcut 검증
+
+[EXP유016 계획·전체 실측·교차 검증](logs/크기편향_원인분석/EXP유016_고비율_크기증강_한계확인.md) · [23개 후보별 Gate 판정 CSV](logs/크기편향_원인분석/원본_실측_아카이브/EXP유016_60모델/all_23_conditions_ranked_gates.csv) · [16클래스 5배율 전환율 CSV](logs/크기편향_원인분석/원본_실측_아카이브/EXP유016_60모델/all_16class_size_flip_3seed.csv) · [공식 Validation 3-Seed 5배율 교차 검증 CSV](logs/크기편향_원인분석/원본_실측_아카이브/EXP유016_OfficialVal/officialval_scale_3seed_summary.csv).
+
+60/70/80/90/100% 크기 증강 × 0/14/28/42% 획 혼합 × Seed42/43/44 = **60개 신규 MLP 실측 성공**. EXP유015의 기존 30-28·40-28·50-28 고정 체크포인트와 비교. 사전등록한 Hand-made 개별 B·8·D 20% Family flip Gate를 통과한 모델은 6개. 70-14와 80-14가 Hand-made 최악 17.50%로 상위이나, OfficialVal 개별 D/B에서 25~28% 전환 잔존. **70-0**은 Hand-made 최악 18.54% 및 OfficialVal 17.03%로 두 개발 집단에서 균형적이며 공식 Val 95.28%. 추가 독립 Writer 검증 전에는 final/Main 변경·모델 교체 없음. 97.30% 공식 Val 목표 미달.

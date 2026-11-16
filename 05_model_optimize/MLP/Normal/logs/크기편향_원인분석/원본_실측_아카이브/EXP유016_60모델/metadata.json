@@ -1,0 +1,38 @@
+{
+  "experiment": "EXP016",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "new_MLPs": 60,
+  "new_conditions": 20,
+  "historical_frozen_controls": [
+    "size30_stroke28",
+    "size40_stroke28",
+    "size50_stroke28"
+  ],
+  "candidates": 23,
+  "legacy_gate_pass": 23,
+  "strict_all_gates_pass": 6,
+  "strict_top_candidate": "size70_stroke14",
+  "best_B8D_diagnostic": "size70_stroke14",
+  "unchanged_preregistered_gates": {
+    "digit12flip": 0.1,
+    "letter08flip": 0.1,
+    "digit12p": 0.12,
+    "letter08p": 0.12,
+    "seedgroup": 0.15,
+    "allscale": 0.12,
+    "digitsacc": 0.85,
+    "lettersacc": 0.8,
+    "focusmax": 0.2,
+    "allclassmax": 0.25,
+    "seedfocusmax": 0.3
+  },
+  "original_test_used": false,
+  "professor_test_used": false,
+  "validation_used_in_fit": false,
+  "handmade_used_in_fit": false,
+  "main_changed": false
+}
