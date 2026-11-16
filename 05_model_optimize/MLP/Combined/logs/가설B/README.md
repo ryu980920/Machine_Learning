@@ -37,13 +37,22 @@
 - [Stage1(0/10%) 결과](EXP유002_Balanced_Scale_Stroke_Stage1_Results.md) · **[전체 Stage2(20/30%) 및 최종 기전 분석](EXP유002_Balanced_Scale_Stroke_Final_Results.md)**.
 - [전체 10조건×3Seed OOF·OfficialVal·Family Flip CSV/16클래스 전체/240오류 방향 원본](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md). 최고 탐색 OOF **30%-28% 90.716%**, 공식 Val **96.117%**. CoM-only 84.883%/96.733%. 30%-28% 숫자×1.2 Family Flip **69.77→9.19%**지만 특정 클래스·작성자 반례 잔존.
 - [Stage2 실제 학습·집계](https://github.com/ryu980920/Machine_Learning/actions/runs/43871619789)는 마지막 git push 충돌로 run 결론 'failure'였으나, **[아티팩트 복원·검증 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43876627107)**으로 원본 학습을 다시 하지 않고 전 조건 결과를 실험 브랜치에 보존.
-- **원인 설명 중심 연구 목적 달성 / 최종 모델 채택 보류** (공식 Validation 감소 및 독립 Writer 검증 부재). [Draft PR #16](https://github.com/ryu980920/Machine_Learning/pull/16)에서만 진행, 사용자 승인 전 `main`·배포 모델 변경 없음.
+- **원인 설명 중심 연구 목적 달성 / 최종 모델 채택 보류** (공식 Validation 감소 및 독립 Writer 검증 부재). [PR #16](https://github.com/ryu980920/Machine_Learning/pull/16)은 사용자 승인으로 main에 병합되었으나 배포 모델 변경 없음.
 
 ## EXP유003 / EXP-CMB-006 — 40~50% Size × Stroke 후속 실험
 
 - **[실험 전 동결한 연구 질문·6조건·원인 설명 중심 판정](EXP유003_Size40_50_Stroke_Extension.md)**: 40/50% Size × Stroke 0/14/28%, 기본 MLP 하이퍼파라미터·3 Seeds·Writer-held-out 4-Fold 고정 (**72개 신규 모델**).
 - 기존 [EXP-CMB-005 0~30% 원본](../../results/Balanced_Scale_Stroke/full_comparison/SUMMARY.md)을 재학습하지 않고 읽어 전체 **16조건·16클래스·240오분류 방향**과 30%-0/30%-28 대비 같은 이미지에서 새 오답·교정을 비교한다.
-- [GitHub Actions EXP-CMB-006 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43881769100) / [검토용 Draft PR #18](https://github.com/ryu980920/Machine_Learning/pull/18).
-- 실측 미완료 단계에서는 성능·성공 판정을 기재하지 않는다. 전체 결과는 실험 브랜치만 기록하고 사용자 승인 전 main/최종 모델 병합하지 않음.
+- [GitHub Actions EXP-CMB-006 학습/집계 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43881769100) / [사용자 승인에 따라 main 병합된 PR #18](https://github.com/ryu980920/Machine_Learning/pull/18).
+- [0~50% 총 16조건 실측 비교](../../results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md): 이후 사용자 승인에 따라 main에 병합된 연구 결과. 최종 배포 모델 변경 없음.
+
+## EXP유004 / EXP-CMB-007 — Size 60~100% × Stroke 최종 실측 및 기전 분석 완료
+
+- [실험 전 고정한 목적·15조건·180모델 설계](EXP유004_Size60_100_Stroke_Extension.md) / [1차 108모델 중간 수치](EXP유004_Stage1_60_80_Interim.md) / **[최종 31조건·전체 클래스·작성자·240방향 분석](EXP유004_Size60_100_Final_Results.md)**.
+- [31조건 전체 원본](../../results/Balanced_Scale_Stroke_HighFraction/full_0to100_comparison/SUMMARY.md): 기본 MLP HP·3 Seeds·Writer-held-out 4 Folds 고정. 새 Size60~100%×Stroke0/14/28의 15조건×12=**180모델 학습 완료**, 이전 16조건 실측 재사용(총 31조건).
+- **Hand-made OOF 정확도 1위 30%-28% 90.716%**. 양 데이터 출처의 개별 클래스 평균 최대 Family Flip 최소는 **50%-14% 21.66%**이나 B 정상 오류가 22.71%로 악화. 50%-0%는 Flip 최대 22.29%, OOF 89.987%, OfficialVal 95.696%의 균형 후보. 80%-0%는 숫자×1.2 Flip 5.63%, 문자×0.8 Flip 5.45%로 평균 안정성이 개선되나 OfficialVal 저하와 8↔B 비대칭 오류.
+- 고비율 100%-0%의 공식 Val **B ×1.2 Family Flip 49.59%**는 계열 변경 비율이며 오류 *방향*을 뜻하지 않음. 가설 해석과 추가 고정 모델 확률 분석 제안은 최종 실험일지 참고.
+- [45개 모델 Job 학습 성공, 마지막 교차 스크립트 문법 오류](https://github.com/ryu980920/Machine_Learning/actions/runs/43891689090) → [45개 Artifact 복원·31조건 비교/검증 성공, 마지막 git 브랜치명 오류](https://github.com/ryu980920/Machine_Learning/actions/runs/43898638558) → **[원본 검증 후 브랜치 저장 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/43899673392)**. 실패 단계는 재학습 없이 복구.
+- [검토용 Draft PR #19](https://github.com/ryu980920/Machine_Learning/pull/19) **main 미병합**. Original Test/교수님 Test/Normal 신규 480장 미사용, 외부 검증과 최종 모델 선정 보류.
 
 참고: [Normal 가설 B](../../../Normal/logs/가설B/README.md). Normal 실험 결과를 Combined의 개선치로 간주하지 않는다.
