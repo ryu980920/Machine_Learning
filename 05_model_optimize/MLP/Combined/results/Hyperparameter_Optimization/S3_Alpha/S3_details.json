@@ -1,0 +1,271 @@
+{
+  "experiment": "EXP-CMB-008",
+  "stage": "S3_alpha",
+  "status": "BASELINE_RETAINED",
+  "target_rate_each_direction": "strictly < 5%",
+  "denominator_per_actual_class": 480,
+  "strict_target_max_count": 23,
+  "priority_confusion": "D->0",
+  "selected_alpha_for_S4": "1e-4",
+  "selected_is_final_hp": false,
+  "primary_pass": [],
+  "safe_fallback_candidates": [
+    "1e-4"
+  ],
+  "data_sha_verified_against_s1": true,
+  "new_fits": 36,
+  "s1_models_reused": 12,
+  "metrics": {
+    "1e-5": {
+      "width": "1e-5",
+      "oof": 0.9221354166666667,
+      "seed_std": 0.0001841423909339863,
+      "val": 0.9699652777777777,
+      "pairs": {
+        "0->D": 16,
+        "8->B": 40,
+        "D->0": 71,
+        "B->8": 39,
+        "5->F": 6,
+        "7->9": 28,
+        "7->A": 0,
+        "4->F": 9
+      },
+      "classerror": {
+        "0": 0.04375,
+        "1": 0.041666666666666664,
+        "2": 0.05625,
+        "3": 0.11041666666666666,
+        "4": 0.058333333333333334,
+        "5": 0.09583333333333334,
+        "6": 0.05625,
+        "7": 0.07916666666666666,
+        "8": 0.1375,
+        "9": 0.052083333333333336,
+        "A": 0.05,
+        "B": 0.14166666666666666,
+        "C": 0.05,
+        "D": 0.18125,
+        "E": 0.03958333333333333,
+        "F": 0.052083333333333336
+      },
+      "writers": {
+        "41": 0.8895833333333333,
+        "42": 0.9223958333333333,
+        "43": 0.9552083333333333,
+        "44": 0.9213541666666667
+      },
+      "flip": {
+        "OOF": 0.22916666666666666,
+        "OfficialVal": 0.14729166666666665
+      },
+      "mean_n_iter": 63.833333333333336,
+      "mean_fit_seconds": 57.26029076883334,
+      "warnings": 0
+    },
+    "1e-4": {
+      "width": "1e-4",
+      "oof": 0.9221354166666667,
+      "seed_std": 0.0027865800207074127,
+      "val": 0.9704427083333333,
+      "pairs": {
+        "0->D": 14,
+        "8->B": 38,
+        "D->0": 67,
+        "B->8": 43,
+        "5->F": 14,
+        "7->9": 26,
+        "7->A": 0,
+        "4->F": 9
+      },
+      "classerror": {
+        "0": 0.0375,
+        "1": 0.04375,
+        "2": 0.07083333333333333,
+        "3": 0.10208333333333333,
+        "4": 0.07083333333333333,
+        "5": 0.09166666666666666,
+        "6": 0.058333333333333334,
+        "7": 0.06666666666666667,
+        "8": 0.11875,
+        "9": 0.0625,
+        "A": 0.041666666666666664,
+        "B": 0.15625,
+        "C": 0.04791666666666667,
+        "D": 0.17708333333333334,
+        "E": 0.04375,
+        "F": 0.05625
+      },
+      "writers": {
+        "41": 0.8869791666666667,
+        "42": 0.9213541666666667,
+        "43": 0.953125,
+        "44": 0.9270833333333334
+      },
+      "flip": {
+        "OOF": 0.22708333333333333,
+        "OfficialVal": 0.16583333333333333
+      },
+      "mean_n_iter": 63.416666666666664,
+      "mean_fit_seconds": 65.0763968245,
+      "warnings": 0
+    },
+    "1e-3": {
+      "width": "1e-3",
+      "oof": 0.92265625,
+      "seed_std": 0.0041462717000236,
+      "val": 0.9715494791666667,
+      "pairs": {
+        "0->D": 10,
+        "8->B": 38,
+        "D->0": 80,
+        "B->8": 45,
+        "5->F": 6,
+        "7->9": 24,
+        "7->A": 0,
+        "4->F": 8
+      },
+      "classerror": {
+        "0": 0.041666666666666664,
+        "1": 0.041666666666666664,
+        "2": 0.06875,
+        "3": 0.10416666666666667,
+        "4": 0.06875,
+        "5": 0.07708333333333334,
+        "6": 0.06875,
+        "7": 0.06666666666666667,
+        "8": 0.11458333333333333,
+        "9": 0.058333333333333334,
+        "A": 0.04791666666666667,
+        "B": 0.15208333333333332,
+        "C": 0.04375,
+        "D": 0.19791666666666666,
+        "E": 0.03333333333333333,
+        "F": 0.052083333333333336
+      },
+      "writers": {
+        "41": 0.8833333333333333,
+        "42": 0.9239583333333333,
+        "43": 0.9557291666666666,
+        "44": 0.9276041666666667
+      },
+      "flip": {
+        "OOF": 0.2,
+        "OfficialVal": 0.13402777777777777
+      },
+      "mean_n_iter": 66.91666666666667,
+      "mean_fit_seconds": 72.24164846441667,
+      "warnings": 0
+    },
+    "1e-2": {
+      "width": "1e-2",
+      "oof": 0.923828125,
+      "seed_std": 0.0017758049084616887,
+      "val": 0.9712413194444445,
+      "pairs": {
+        "0->D": 10,
+        "8->B": 41,
+        "D->0": 86,
+        "B->8": 40,
+        "5->F": 9,
+        "7->9": 30,
+        "7->A": 2,
+        "4->F": 7
+      },
+      "classerror": {
+        "0": 0.03125,
+        "1": 0.03958333333333333,
+        "2": 0.04791666666666667,
+        "3": 0.10416666666666667,
+        "4": 0.07291666666666667,
+        "5": 0.075,
+        "6": 0.04583333333333333,
+        "7": 0.07916666666666666,
+        "8": 0.13333333333333333,
+        "9": 0.052083333333333336,
+        "A": 0.041666666666666664,
+        "B": 0.14791666666666667,
+        "C": 0.041666666666666664,
+        "D": 0.21041666666666667,
+        "E": 0.03958333333333333,
+        "F": 0.05625
+      },
+      "writers": {
+        "41": 0.8958333333333334,
+        "42": 0.9223958333333333,
+        "43": 0.9546875,
+        "44": 0.9223958333333333
+      },
+      "flip": {
+        "OOF": 0.20208333333333334,
+        "OfficialVal": 0.12840277777777778
+      },
+      "mean_n_iter": 84.41666666666667,
+      "mean_fit_seconds": 68.55319122925,
+      "warnings": 0
+    }
+  },
+  "checks": {
+    "1e-5": {
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": false,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": false,
+      "B_to_8_no_increase": true,
+      "8_to_B_no_increase": false,
+      "0_to_D_no_increase": false
+    },
+    "1e-4": {
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": true,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": true,
+      "B_to_8_no_increase": true,
+      "8_to_B_no_increase": true,
+      "0_to_D_no_increase": true
+    },
+    "1e-3": {
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": false,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": false,
+      "B_to_8_no_increase": false,
+      "8_to_B_no_increase": true,
+      "0_to_D_no_increase": true
+    },
+    "1e-2": {
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": false,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": false,
+      "B_to_8_no_increase": true,
+      "8_to_B_no_increase": false,
+      "0_to_D_no_increase": true
+    }
+  },
+  "paired": {
+    "1e-5": [
+      131,
+      131
+    ],
+    "1e-3": [
+      119,
+      115
+    ],
+    "1e-2": [
+      175,
+      162
+    ]
+  },
+  "original_test_used": false,
+  "professor_test_used": false,
+  "selection_reason": "OOF accuracy first under <5% target; if not achievable, no-increase in four directions and protected classes plus Writer/Val/Flip safeguards"
+}
