@@ -42,13 +42,12 @@ Hand-made는 이미 여러 차례 확인한 4명 작성자의 개발용 데이�
 
 > EXP유008·009는 원래 실행 당시 가설 B로 명명됐으므로 Actions·스크립트·Manifest의 당시 식별자는 재현성을 위해 보존했다. **연구 기록의 최종 분류는 가설 A**다.
 
-## Normal 최상위 독립 실험으로 이관 — EXP유010·011·012
+## 후속 원인 분석 — 동일 계층의 별도 연구 폴더
 
-정확도 역전 원인 분석은 가설 A/B 아래에 섞지 않고 **[Normal](../../README.md)의 3개 독립 폴더**로 이관했다. 각 폴더는 계획·실행 통합 일지, 재현 절차, 실측 요약을 제공한다.
+EXP유010·011·012는 가설 A/B 하위나 Normal 루트의 개별 폴더가 아니라 **[크기편향_원인분석](../크기편향_원인분석/README.md)** 폴더에 함께 정리했다.
 
-- [EXP유010 — 크기 분포 불일치](../../EXP010_Geometry_Distribution/README.md): Training 문자 B/D/F 24px vs Hand-made 20px 확인.
-- [EXP유011 — CoM 정렬·재학습 효과](../../EXP011_CoM_Effect/README.md): 고정 Size 모델 숫자 36.46%→73.81%.
-- [EXP유012 — 크기 관련 분류 Shortcut 진단](../../EXP012_Size_Shortcut/README.md): 동일 이미지 크기 변형에 대한 모델 반응.
-- [실제 성공 Run](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796): 9개 이전 모델의 해시·정답 수 재현 검증 포함.
+- [EXP유010 — 크기 분포](../크기편향_원인분석/EXP유010_크기분포_분석.md)
+- [EXP유011 — CoM 재정렬의 효과](../크기편향_원인분석/EXP유011_Size_CoM_교차분석.md)
+- [EXP유012 — 크기 기반 분류 Shortcut](../크기편향_원인분석/EXP유012_크기분류단서.md)
 
-기존 EXP유003~007 기록 및 모델·Data는 변경하지 않는다.
+[실제 성공한 GitHub Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)에서 원본 지표·전수 CSV를 추적할 수 있다. 기존 가설 연구 및 최종 모델은 그대로 유지한다.

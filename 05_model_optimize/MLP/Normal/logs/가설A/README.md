@@ -35,11 +35,12 @@
 
 > **실행 명칭에 관한 참고:** 실험 당시의 코드·워크플로·Artifact 명칭(일부 Normal-HypB)은 원래 성공 실행과의 재현성 연결을 위해 유지했다. 통합 실험일지의 최종 소속은 **가설 A**다.
 
-## Normal 최상위 독립 원인 분석으로 분리 — EXP유010·011·012
+## 후속 원인 분석 — 동일 계층의 별도 연구 폴더
 
-크기 관련 Shortcut 검증 EXP유012는 가설 A 하위가 아닌 **[Normal 독립 폴더](../../EXP012_Size_Shortcut/README.md)**로 분리했다. 사전 가설·통제 조건·정량 결과·변형 교란요인·재현 방법을 한 폴더에서 확인할 수 있다.
+EXP유010·011·012는 가설 A/B 하위나 Normal 루트의 개별 폴더가 아니라 **[크기편향_원인분석](../크기편향_원인분석/README.md)** 폴더에 함께 정리했다.
 
-- [EXP유012 — 크기에 따른 숫자/문자 판단 방향 변화](../../EXP012_Size_Shortcut/README.md)
-- [EXP유010 — 공식 Training/Hand-made 크기 분포](../../EXP010_Geometry_Distribution/README.md)
-- [EXP유011 — 입력 CoM 정렬·학습 가중치 효과 분리](../../EXP011_CoM_Effect/README.md)
-- [GitHub Actions 완료 기록](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796). 기존 가설 A EXP유001~003 및 EXP유008·009 파일은 변경하지 않는다.
+- [EXP유010 — 크기 분포](../크기편향_원인분석/EXP유010_크기분포_분석.md)
+- [EXP유011 — CoM 재정렬의 효과](../크기편향_원인분석/EXP유011_Size_CoM_교차분석.md)
+- [EXP유012 — 크기 기반 분류 Shortcut](../크기편향_원인분석/EXP유012_크기분류단서.md)
+
+[실제 성공한 GitHub Actions #43801194796](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)에서 원본 지표·전수 CSV를 추적할 수 있다. 기존 가설 연구 및 최종 모델은 그대로 유지한다.

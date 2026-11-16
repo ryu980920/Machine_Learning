@@ -1,4 +1,6 @@
-# Normal MLP · 가설 B · EXP유011 — Size-only 숫자 정확도 붕괴와 CoM 효과 분리 (계획·실행 통합)
+# Normal MLP · 크기편향 원인분석 · EXP유011 — Size-only 숫자 정확도 붕괴와 CoM 효과 분리 (계획·실행 통합)
+
+> **보관 분류:** EXP유010·011·012의 세 연구를 묶은 `Normal/logs/크기편향_원인분석` 프로젝트입니다. 기존 가설 A/B에서 출발한 실험이지만 한 공통 연구 시리즈로 관리하며, 원래 실험 조건과 실측 수치는 변경하지 않습니다.
 
 > **상태: 고정 체크포인트 교차평가 완료 · 가설 2의 위치 민감도 강하게 확인**
 >
@@ -83,19 +85,49 @@ CoM 전후 Hand-made 전체 중심 오프셋 평균은 **1.347px → 0.380px**�
 - 아카이브 원본 모델: https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739
 - 검증 성공한 새 실행: https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796
 - Artifact: `all_cross_metrics.csv`, `all_paired_effects.csv`, `all_pair_errors.csv`, `all_size_center_outcomes.csv`, `exp011_accuracy_matrix.csv`, `exp011_paired_summary.csv`, `exp011_center_geometry_by_outcome.csv`.
-- 관련: [EXP유010 크기 분포](../EXP010_Geometry_Distribution/README.md), [가설 A EXP유012 분류 단서](../EXP012_Size_Shortcut/README.md).
+- 관련: [EXP유010 크기 분포](EXP유010_크기분포_분석.md), [가설 A EXP유012 분류 단서](EXP유012_크기분류단서.md).
 
 **데이터 경계:** 기존 공식 Train에서 학습된 모델의 평가만, 새 Training 없음. 공식 Original Test/교수님 Test 미사용. Hand-made 4명 반복 개발 데이터.
 
+---
+
+## 추가 결과 요약 (기존 RESULTS.md 내용 보존)
+
+**원본:** [통합 실험일지](EXP유011_Size_CoM_교차분석.md) · [12개 교차조건 실측 CSV](EXP유011_summary.csv) · [성공한 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796)
+
+고정된 기존 모델을 사용하여 모델 학습과 평가 입력 전처리를 분리했다.
+
+| 학습 모델 | 평가 입력 | 숫자 | 문자 |
+|---|---|---:|---:|
+| Size | Size | 36.4583% | 94.2014% |
+| Size | Size→CoM | 73.8125% | 69.7222% |
+| Size→CoM | Size→CoM | 84.0625% | 91.7708% |
+
+Size 모델 고정 시 입력만 CoM으로 이동하면 숫자 **+37.3542%p**, 문자는 **−24.4792%p** 변화한다. 동일 Size→CoM 입력에서 학습 모델을 바꾸면 숫자는 추가로 **+10.2500%p** 높아진다. 반대 순서의 분해는 다르므로 한 효과의 보편적인 독립 기여율로 해석하지 않는다.
+
+**실행 검증:** EXP유006의 9개 체크포인트 해시 및 공식 Validation/Hand-made 정답 수가 일치했고 재학습은 수행하지 않았다.
+
+## 전수 결과 및 검증 정보
+
+원본 종합 Artifact에는 `exp011_accuracy_matrix.csv`, `exp011_paired_summary.csv`, `exp011_center_geometry_by_outcome.csv`, `all_cross_metrics.csv`, `all_paired_effects.csv`, `all_pair_errors.csv`, `all_size_center_outcomes.csv`가 있다. `summary.csv`는 **3개 학습조건×4개 평가조건의 공식 Validation 전체/Hand-made 숫자/문자 3-Seed 평균**만 추린 파일이다.
 
 ---
 
-## 독립 실험 폴더 구성
+## 재현 방법 (기존 RUN.md 내용 보존)
 
-- **실험일지:** 현재 `README.md` — 기존 계획과 실행 결과 원문 수치 보존
-- **핵심 측정 요약:** [RESULTS.md](RESULTS.md) 및 [summary.csv](summary.csv)
-- **재현 절차와 코드 위치:** [RUN.md](RUN.md)
-- **공통 분석 코드:** [exp011_012_causal_probes.py](../scripts/exp011_012_causal_probes.py)
-- **실제 완료된 GitHub Actions 실행:** https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796
+- **실제 공통 실행 코드:** [exp011_012_causal_probes.py](../../scripts/exp011_012_causal_probes.py)
+- **원래 학습한 9개 MLP:** [EXP유006 성공한 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739)
+- **EXP유011/012 성공한 Actions:** https://github.com/ryu980920/Machine_Learning/actions/runs/43801194796
 
-이 연구는 기존 EXP유006에서 학습한 모델을 고정해 분석했으며 최종 모델을 교체하지 않았다.
+기존 EXP유006의 `normal-exp006-com-42` · `normal-exp006-size-42` · `normal-exp006-size_com-42` 등 **3개 모델×3개 Seed의 Artifact**를 다운로드한다. 원본 모델·Manifest를 변경하지 않고 `--models-root`의 각 하위 폴더에 배치한다.
+
+```bash
+python 05_model_optimize/MLP/Normal/scripts/exp011_012_causal_probes.py \
+  --seed 42 \
+  --models-root /path/to/exp006-original-models \
+  --out /tmp/exp011-012-seed42
+```
+
+43,44도 같은 방법으로 각각 실행한다. 해당 스크립트는 **EXP유011과 EXP유012를 함께 계산하는 원본 공통 실행 코드**다. 두 결과는 각각 `cross_metrics.csv` / `paired_effects.csv` 및 `scale_class_response.csv` 등으로 분리 저장된다.
+
+기존 EXP유006 체크포인트 SHA256 및 대각선 예측 정답 수가 일치하지 않으면 실행을 실패 처리한다. 재학습·공식 Test 접근은 하지 않는다.
