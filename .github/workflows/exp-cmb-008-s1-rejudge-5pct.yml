@@ -1,6 +1,9 @@
 name: EXP-CMB-008 S1 Revised 5pct Gate Reassessment
 
 on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/exp-cmb-008-s1-rejudge-5pct.yml']
   workflow_run:
     workflows: ["EXP-CMB-008 S1 30-28 CoM MLP width and directed-error gate"]
     types: [completed]
