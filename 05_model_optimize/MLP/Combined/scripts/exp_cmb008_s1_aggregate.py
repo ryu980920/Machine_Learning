@@ -188,6 +188,40 @@ def main():
         "- **과적합 감시:** Writer별 Accuracy, 3Seed 변동, OfficialVal 손실, OOF/Val 16클래스 Family Flip, 반복횟수, Loss와 경고를 개별 JSON/CSV로 보존한다.",
         "- **새 모델 최종 확정 아님:** 후속 S2~S6에서 순차적으로 평가한다. 독립 Test는 아직 사용하지 않는다.",
         "- **이력:** 초기 Zero-error 요구는 S1 학습 개시 후, 결과 비교 전 사용자가 수정했고 이 문서에는 변경된 <5% 기준을 적용했다.",""]
+    # Report enough evidence to reconstruct the decision rather than only a winner.
+    md+=["", "## 작성자·클래스별 정확도와 과적합 위험",
+         "다음 표의 네 숫자는 각 실제 클래스의 **전체 오분류율**이며, 위 표의 특정 방향 오분류율과 구별한다.",
+         "| Width | 실제 0 오류 | 실제 8 오류 | 실제 B 오류 | 실제 D 오류 | Writer 최저 OOF | Seed Std | OOF 최대 클래스 Flip | OfficialVal 최대 Flip | 수렴 경고 Fold |",
+         "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for w in WIDTHS:
+        x=m[w]
+        md.append("| "+str(w)+" | "+" | ".join(pct(x["classerror"][cl]) for cl in ("0","8","B","D"))+
+          " | "+pct(min(x["writers"].values()))+" | "+pct(x["seed_std"])+
+          " | "+pct(x["flip"]["OOF"])+" | "+pct(x["flip"]["OfficialVal"])+
+          " | "+str(x["warnings"])+" |")
+    md+=["", "### Writer별 OOF Accuracy (동일 보류 Writer·Seed 집계)",
+         "| Width | Writer 41 | Writer 42 | Writer 43 | Writer 44 | 평균 학습 반복 횟수 | 평균 Fold 학습 시간(초) |",
+         "|---:|---:|---:|---:|---:|---:|---:|"]
+    for w in WIDTHS:
+        x=m[w]
+        md.append("| "+str(w)+" | "+" | ".join(pct(x["writers"][str(k)]) for k in WRITERS)+
+          " | "+f'{x["mean_n_iter"]:.2f}'+" | "+f'{x["mean_fit_seconds"]:.2f}'+" |")
+    md+=["", "## 동일 이미지 교정과 신규 오답 (100뉴런 모델 대비)",
+         "| 후보 Width | 기존 오답을 정답으로 교정 | 기존 정답을 새로 오분류 | 순개선 |",
+         "|---:|---:|---:|---:|"]
+    for w in (64,128,256):
+        fixed,created=result["paired_vs_baseline"][w]
+        md.append("| "+str(w)+" | "+str(fixed)+" | "+str(created)+" | "+
+                  ("+" if fixed-created>=0 else "")+str(fixed-created)+" |")
+    md+=["", "## 후보 탈락·선정 근거 및 다음 실험에서 검증할 가설",
+         "- **64뉴런:** 기준선 대비 OOF 정확도와 OfficialVal이 낮아지고 D→0/B→8 등 오분류가 늘면 탈락한다.",
+         "- **128뉴런:** D→0과 8→B가 줄어도 B→8 및 0→D 오류가 늘었다면 특정 클래스 개선을 전체 개선으로 오해하지 않는다.",
+         "- **256뉴런:** 정확도·4방향 오분류·Writer별 일반화·0/8/B/D 클래스 오류 가드레일을 통과하면 다음 깊이 실험의 단층 기준으로 삼는다.",
+         "- **S2 실험:** 선택한 첫 층 너비 w를 고정하고 (w,), (w, w/2), (w, w) 깊이 후보를 비교한다. 첫 층 동일 조건에서 추가 은닉층 효과를 검증하는 순서다.",
+         "- **과적합 주의:** 학습 반복 횟수가 적거나 수렴 경고가 없다는 이유만으로 과적합이 없다고 판단하지 않는다. 반복 사용한 4 Writer의 OOF에서도 탐색 과적합이 가능하며, 별도 보호한 최종 Test 전까지 일반화 성능을 확정하지 않는다.",
+         "- **프로토콜 변경 이력:** S1 실행 중 사용자가 기존 0건 규칙을 네 방향 각각 5% 미만 목표로 수정했다. 실측 결과가 확정되기 전 변경한 규칙을 우선 적용하고 과거 규칙도 사전등록 문서에서 확인 가능하다.",
+         ""]
+
     (args.out/"S1_Stage_Results.md").write_text("\n".join(md),encoding="utf-8")
     print("S1_DECISION",json.dumps({"status":result["status"],"provisional":nextwidth,
         "target_pass":primary,"rows":rows},ensure_ascii=False),flush=True)
