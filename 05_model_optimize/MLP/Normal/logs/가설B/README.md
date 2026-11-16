@@ -25,30 +25,19 @@ CoM 정렬은 Hand-made **숫자 56.31→83.19%**를 개선했으나 **문자 73
 
 Hand-made는 이미 여러 차례 확인한 4명 작성자의 개발용 데이터이며 신규 작성자 독립 검증은 하지 않았다.
 
+## 후속 비교 실험 — EXP유006·007 (계획·결과 통합)
 
-## 후속 실험 — EXP유006·007 (2026-11-16, 실험 브랜치)
+실행 전 사전계획과 학습 완료 후 실측 결과를 **실험 ID별 단일 실험일지**로 통합했다. 기존 EXP유003~005의 원문 기록은 변경하지 않는다.
 
-기존 EXP유003~005의 연구 결과·파일은 변경하지 않는다. 다음 실험은 별도 가설 B 하위 로그로 관리하며 최종 모델 채택이 아니라 개발용 비교다.
+- **[EXP유006 — Size / CoM 비교 통합 실험일지](EXP유006_Size_CoM_Comparison.md):** CoM-only, Size-only, Size→CoM의 3 Seed × 3조건 실제 학습. Hand-made 전체 CoM-only 77.6953%, Size-only 58.1120%, Size→CoM 86.9531%; Size→CoM 공식 Val 96.0608%. [성공 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739).
+- **[EXP유007 — Size→CoM→Stroke 결합 통합 실험일지](EXP유007_Size_CoM_Stroke.md):** 3 Seed × 3조건 실제 학습. Stroke 0.30 결합은 Hand-made 87.9688%, 공식 Val 96.2656%. [성공 실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43786098005).
+- 두 실험 모두 공식 Val 목표 97.30%에 미달하여 최종 Pipeline 채택을 보류했다. Hand-made는 기존 4명의 개발용 데이터다. 코드는 [main 반영 PR #8](https://github.com/ryu980920/Machine_Learning/pull/8)에서 유지하며 모델을 교체하지 않았다.
 
-- **[EXP유006 Size/CoM 사전계획](EXP유006_Size_CoM_Comparison_PLAN.md)** · **[실측 결과](EXP유006_Size_CoM_Comparison_Results.md)**: CoM-only, BBox Size-only, Size→CoM을 동일 공식 Train으로 3 Seed씩 총 9개 MLP 학습 비교. Hand-made 전체 3-seed 평균 CoM-only 77.6953%, Size-only 58.1120%, **Size→CoM 86.9531%**. 공식 Validation에서 Size→CoM은 96.0608%로 하락.
-- **[EXP유007 Stroke 결합 사전계획](EXP유007_Size_CoM_Stroke_PLAN.md)** · **[실측 결과](EXP유007_Size_CoM_Stroke_Results.md)**: Size→CoM 대조와 Size→CoM→Stroke(0.30/0.60)→CoM을 3 Seed씩 총 9개 MLP 학습. **Stroke 0.30 결합**이 Hand-made 평균 **87.9688%** 및 공식 Val **96.2656%**로 세 조건 중 최상위.
-- **연구 판정:** Size 효과와 추가 Stroke 0.30 효과는 개발 데이터에서 확인. 그러나 공식 Val이 목표 97.30% 미만이고 새 작성자 일반화 검증이 없으므로 **추론 Pipeline 및 main 모델은 그대로 유지**.
-- **실행 기록:** [EXP006](https://github.com/ryu980920/Machine_Learning/actions/runs/43785390739) / [EXP007](https://github.com/ryu980920/Machine_Learning/actions/runs/43786098005). 상세 예측·모델·원본 수치는 각각의 GitHub Actions Artifact에 보관(30일).
+## 가설 A로 이관된 형태 정규화 후속 실험
 
-**주의:** 이 후속 로그·코드·결과 목록은 실험 브랜치 exp/normal-b-exp006-size-com에서 먼저 검토한다. 사용자 승인 전 main에 병합하지 않는다.
+획 굵기·C9 크기 정규화 및 원본+C9 학습 실험은 연구 목적에 맞게 **[가설 A](../가설A/README.md)**에서 관리한다.
 
+- [가설 A EXP유008 — 기존 C9 + Stroke 통합 실험일지](../가설A/EXP유008_C9_Stroke.md) · [실제 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43790407107).
+- [가설 A EXP유009 — 원본+C9 Data Augmentation 통합 실험일지](../가설A/EXP유009_C9_DataAugmentation.md) · [실제 Actions](https://github.com/ryu980920/Machine_Learning/actions/runs/43796627489).
 
-## 신규 비교 — EXP유008 (원본 가설 A C9 + Stroke)
-
-- **[EXP유008 사전계획](EXP유008_C9_Stroke_PLAN.md)** · **[실측 결과](EXP유008_C9_Stroke_Results.md)**: 기존 가설 A EXP유004 Stage2 C9 원본 구현을 그대로 복제하고, **C9 단독 / C9→Stroke 0.30→CoM / C9→Stroke 0.60→CoM** 조건을 공식 Train 76,800장에 대해 각 Seed 42·43·44로 학습.
-- Seed 평균 Hand-made 전체 **88.6328% / 88.9844% / 89.1146%**, 공식 Val **95.9757% / 95.8976% / 95.8628%**. Stroke를 추가하면 Hand-made는 소폭 개선되지만 공식 Validation은 하락. 일부 Seed와 작성자에서는 악화.
-- 원본 C9 구현은 동일하지만 과거 C9 정답 건수를 모든 Seed에서 재현하지 못했으므로, **동일 실행 내 새 C9 대조군**으로만 추가 Stroke 효과를 판단한다.
-- [실행](https://github.com/ryu980920/Machine_Learning/actions/runs/43790407107) 성공. 실험 Artifact에 CSV·모델·실제 그림 저장. 최종 모델·main 변경 없음.
-
-
-## EXP유009 — 원본 + C9 Data Augmentation (공식 Train 기반)
-
-- [**EXP유009 사전계획**](EXP유009_C9_DataAugmentation_PLAN.md) / [**15개 MLP 실측 결과**](EXP유009_C9_DataAugmentation_Results.md): C9-only vs Raw-only vs Raw/C9 50:50 vs Raw+C9 153,600장 vs Raw×2. 3 seeds × 5조건. 153,600장군의 epoch를 절반으로 하여 명목상 minibatch 업데이트 예산 일치.
-- C9 평가 3-seed 평균: **C9-only** Official Val 95.5694%, Handmade 숫자 85.3542%, 문자 90.9722% → **Raw+C9 증강** Official Val 96.0712%, Handmade 숫자 86.8333%, 문자 91.4236%. 공식 Val +0.5018%p, 숫자 +1.4791%p, 문자 +0.4514%p.
-- Raw 입력으로만 평가하면 다른 결과가 나오므로 두 추론 모드를 분리해 기록. 추가 작성자·독립 Test 미사용, 최종 Pipeline은 미채택.
-- GitHub Actions 실제 성공: https://github.com/ryu980920/Machine_Learning/actions/runs/43796627489; 15개 모델/예측 및 종합 CSV는 Artifact로 30일 보존.
+> EXP유008·009는 원래 실행 당시 가설 B로 명명됐으므로 Actions·스크립트·Manifest의 당시 식별자는 재현성을 위해 보존했다. **연구 기록의 최종 분류는 가설 A**다.
