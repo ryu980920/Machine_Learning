@@ -66,7 +66,7 @@ def main():
         "model_selection":"none; metrics explanatory only"
     })
     mf.write_text(json.dumps(info,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("EXP_CMB_006_COMPLETED",args.arm,args.seed,info["oof_metrics"],
+    print("EXP_CMB_007_COMPLETED",args.arm,args.seed,info["oof_metrics"],
           flush=True)
 
 if __name__=="__main__":
