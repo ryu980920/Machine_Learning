@@ -6,7 +6,7 @@
 |---|---|---|
 | [초기분석](초기분석/README.md) | [EXP유001](초기분석/EXP유001_Pixcel_Attribution.md) · [EXP유002](초기분석/EXP유002_Input_Sensitivity.md) | 가설 A/B를 설정하고 픽셀 기여도·입력 민감도를 탐색 |
 | [가설 B](가설B/README.md) | [EXP유003](가설B/EXP유003_Spatial_Response.md) · [EXP유004](가설B/EXP유004_Automatic_Centering.md) · [EXP유005](가설B/EXP유005_CoM_Translation_Augmentation.md) | 위치·공간 분포 의존성과 CoM 정렬·±1px 위치 증강 |
-| [가설 A](가설A/README.md) | [EXP유001](가설A/EXP유001_픽셀판단근거_분석.md) · [EXP유002](가설A/EXP유002_형태대좌표_분리검증.md) · [EXP유003](가설A/EXP유003_형태위치_혼동원인_통합진단.md) | 모델의 픽셀 판단 기준과 획의 형태·좌표 반응 분리 분석 |
+| [가설 A](가설A/README.md) | [EXP유001](가설A/EXP유001_픽셀판단근거_분석.md) · [EXP유002](가설A/EXP유002_형태대좌표_분리검증.md) · [EXP유003](가설A/EXP유003_형태위치_혼동원인_통합진단.md) · [EXP유004](가설A/EXP유004_Training분포기반_획굵기_크기정규화_MLP_실험일지.md) | 모델의 픽셀 판단 기준과 획의 형태·좌표 반응 분리 분석 |
 
 **번호 규칙:** 초기분석·가설 B의 EXP유001~005는 기존 번호를 유지한다. 가설 A는 **독립적인 실험 번호 EXP유001부터 시작한다.** 같은 번호를 언급할 때는 가설명을 명시한다.
 
@@ -31,3 +31,9 @@
 
 
 - [EXP유016 — 크기 증강 60~100% 확장, B·8·D 클래스별 Shortcut 억제](크기편향_원인분석/EXP유016_고비율_크기증강_한계확인.md) — 신규 60개 MLP 전수 성공, 원본 전 조건 CSV 영구 보존, 후속 교차검증 후보 70-0. 최종 모델 변경 없음.
+
+## 이전 브랜치에 남아 있던 완료 실험일지 동기화
+
+- [가설 A EXP유004: 획 굵기·크기 정규화, 15조건 × 3 Seed](가설A/EXP유004_Training분포기반_획굵기_크기정규화_MLP_실험일지.md) — 실제 45개 모델 완료, 사전등록 성능 Gate 통과 0/15. [Stage1](가설A/EXP유004_BRANCH_PLAN.md) · [Stage2](가설A/EXP유004_STAGE2_PLAN.md) · [Stage3](가설A/EXP유004_STAGE3_PLAN.md)의 실행 전 계획도 보존했다. 원본 실행 코드·CSV·이미지는 [기존 PR #7](https://github.com/ryu980920/Machine_Learning/pull/7)에 남겨두며, 본 동기화로 자동 변경하지 않았다.
+- [EXP유015 78모델 아카이브 요약](크기편향_원인분석/원본_실측_아카이브/EXP유015_78모델/SUMMARY.md) · [EXP유015 OfficialVal](크기편향_원인분석/원본_실측_아카이브/EXP유015_OfficialVal/SUMMARY.md) · [EXP유016 60모델](크기편향_원인분석/원본_실측_아카이브/EXP유016_60모델/SUMMARY.md) · [EXP유016 OfficialVal](크기편향_원인분석/원본_실측_아카이브/EXP유016_OfficialVal/SUMMARY.md) — 검증된 과거 실험 요약 4건을 누락 없이 복원했다.
+- [EXP유017](크기편향_원인분석/EXP유017_80-14_MLP_하이퍼파라미터_최적화.md)과 [EXP유018](크기편향_원인분석/EXP유018_신규손글씨480_판독필터_혼동쌍_진단.md)은 이번 작업 전에 이미 main에 존재했다. 두 프로젝트의 최종 MLP 가중치·모델은 수정하지 않는다.
