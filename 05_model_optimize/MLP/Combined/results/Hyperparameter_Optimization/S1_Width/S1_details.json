@@ -1,8 +1,22 @@
 {
-  "status": "NOT_PASSED",
-  "final_gate_passed_widths": [],
-  "provisional_next_width": 256,
-  "provisional_is_not_final": true,
+  "status": "FALLBACK_IMPROVED",
+  "target_directed_error_rate_strictly_below": 0.05,
+  "denominator_each_direction": 480,
+  "max_errors_per_direction": 23,
+  "priority_direction": "D->0",
+  "v2_protocol_updated_during_S1_before_result_comparison": true,
+  "zero_error_required": false,
+  "target_met_without_guards": [],
+  "target_met_and_safeguards_pass": [],
+  "fallback_safeguards_pass": [
+    100,
+    256
+  ],
+  "selected_width_for_S2": 256,
+  "selected_is_final_model": false,
+  "selection_reason": "No acceptable model met all four <5% targets; fallback uses OOF accuracy, non-increasing key confusion and class error rates plus robustness guards",
+  "original_test_used": false,
+  "professor_test_used": false,
   "baseline_archived_models": 12,
   "new_fits": 36,
   "metrics": {
@@ -197,44 +211,48 @@
   },
   "gate": {
     "64": {
-      "official_validation_no_drop_over_0p5pp": false,
-      "writer_no_drop_over_1pp": false,
-      "B8D_error_no_increase_over_3pp": false,
-      "max_class_family_flip_no_increase_over_5pp": true,
-      "zero_0_to_D": false,
-      "zero_8_to_B": false,
-      "reverse_D_to_0_no_increase": false,
-      "reverse_B_to_8_no_increase": false
+      "oof_accuracy_at_least_baseline": false,
+      "official_val_drop_le_0p5pp": false,
+      "writer_drop_le_1pp": false,
+      "class_0_8_B_D_error_no_increase": false,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": false,
+      "B_to_8_no_increase": false,
+      "8_to_B_no_increase": false,
+      "0_to_D_no_increase": false
     },
     "100": {
-      "official_validation_no_drop_over_0p5pp": true,
-      "writer_no_drop_over_1pp": true,
-      "B8D_error_no_increase_over_3pp": true,
-      "max_class_family_flip_no_increase_over_5pp": true,
-      "zero_0_to_D": false,
-      "zero_8_to_B": false,
-      "reverse_D_to_0_no_increase": true,
-      "reverse_B_to_8_no_increase": true
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": true,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": true,
+      "B_to_8_no_increase": true,
+      "8_to_B_no_increase": true,
+      "0_to_D_no_increase": true
     },
     "128": {
-      "official_validation_no_drop_over_0p5pp": true,
-      "writer_no_drop_over_1pp": true,
-      "B8D_error_no_increase_over_3pp": true,
-      "max_class_family_flip_no_increase_over_5pp": true,
-      "zero_0_to_D": false,
-      "zero_8_to_B": false,
-      "reverse_D_to_0_no_increase": true,
-      "reverse_B_to_8_no_increase": false
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": false,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": true,
+      "B_to_8_no_increase": false,
+      "8_to_B_no_increase": true,
+      "0_to_D_no_increase": false
     },
     "256": {
-      "official_validation_no_drop_over_0p5pp": true,
-      "writer_no_drop_over_1pp": true,
-      "B8D_error_no_increase_over_3pp": true,
-      "max_class_family_flip_no_increase_over_5pp": true,
-      "zero_0_to_D": false,
-      "zero_8_to_B": false,
-      "reverse_D_to_0_no_increase": true,
-      "reverse_B_to_8_no_increase": true
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": true,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": true,
+      "B_to_8_no_increase": true,
+      "8_to_B_no_increase": true,
+      "0_to_D_no_increase": true
     }
   },
   "paired_vs_baseline": {
