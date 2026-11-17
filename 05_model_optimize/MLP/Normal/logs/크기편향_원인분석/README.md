@@ -146,3 +146,9 @@ EXP유010~015 MD·요약 CSV 반영 상태를 원본 브랜치에서 검증했�
 **후속 연구 방향(미실행):** Official Train의 숫자 7·9 상단 곡선 구조 및 하단 꼬리 상대 좌표 분포를 정량화하고, 라벨 분포가 겹치는 혼동 구간을 도출한 뒤 **해당 구간의 Train-only 학습 분포**를 보강할 것. 무작위 20% 국소 증강 비율을 바로 늘리거나 기존 모델/배포 파이프라인을 교체하지 않음.
 
 **보존 범위:** 코드·CSV·증강 채택/거부 manifest·변형 예시 이미지·6개 신규 모델 SHA256 기록. 새 joblib 바이너리는 이번 Git 커밋에 포함하지 않으며 별도 전체 산출물에 보관. Original Test·교수님 Test 접근 없음.
+
+## EXP유021 — Early Stopping ON/OFF 실제 Learning Curve 검증 (2026-11-17)
+
+[전체 실측 보고서](EXP유021_EarlyStopping_LearningCurve_검증보고서.md) · [3-Seed epoch별 CSV](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_epochwise_3seed_learning_curves.csv) · [Train/Validation Loss를 같은 그래프에 표시한 OFF 곡선](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_Mean_Learning_Curve_NOES.png) · [ON 곡선](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_Mean_Learning_Curve_ES.png).
+
+EXP유017 조건 `(256,128), alpha=0.03, LR=0.001, Size80%·Stroke14%+CoM`으로 ON/OFF 각 3 Seed 모델을 새로 학습하고 Training Loss, OfficialVal Loss/Accuracy를 매 epoch 기록했다. **기존 동결 모델** OfficialVal 96.5365%, 신규 OFF 96.5556%, ON 96.4705%. OFF의 실제 종료 epoch는 Seed42/43/44 각각 **81/61/57**, 관측 최저 Validation Loss epoch는 **51/55/26**으로 불일치. ON은 내부 검증 최고 Accuracy 시점의 가중치를 복원하며, 외부 OfficialVal Loss 기준의 최고 시점과 다를 수 있다. **두 방식은 내부 학습행 수가 달라 단일 변수 비교가 아니다.** 따라서 Early Stopping 자체의 효과는 아직 미확정. 공식 Original/교수 Test, 변경 모델 배포·학습 데이터 갱신 미수행. 다음 비교는 동일 학습/검증 분할에서 Accuracy 기반 vs Loss 기반 가중치 선택.

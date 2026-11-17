@@ -39,3 +39,11 @@
 - [통합 보고서](../logs/크기편향_원인분석/EXP유019_국소획위치증강_실측보고서.md) · [실측 CSV](../results/크기편향_원인분석/EXP유019_국소획위치증강/EXP019_Decision_Matrix.csv) · [모델 해시](../results/크기편향_원인분석/EXP유019_국소획위치증강/EXP019_model_sha256_manifest.json).
 
 주의: **이 두 코드는 원래 로컬 환경에서 실행된 정확한 파일을 보존**하며 경로 상수가 `/mnt/data`를 가리킨다. GitHub Checkout만으로 즉시 실행되는 스크립트로 수정·검증한 것이 아니고, 6개 신규 joblib 가중치도 GitHub에는 없음. 신규 모델은 연구 목적 B1/B2 학습본이며 **둘 다 불채택**. 배포 모델·추론 파이프라인 변경 없음.
+
+### EXP유021 — 3 Seed 학습 곡선 실측 코드
+
+- [epoch별 Training Loss / 외부 Validation Loss·Accuracy 실측](exp021_monitored_training.py)
+- [전처리 준비](exp021_prepare.py) · [곡선 집계 및 시각화](exp021_summarize_curves.py) · [PixelScaler](exp021_pixel_transform.py)
+- [실험일지](../logs/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve_검증보고서.md) · [실측 CSV](../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_epochwise_3seed_learning_curves.csv)
+
+원본 코드에서 `/mnt/data` 입력 경로를 사용하므로 GitHub checkout만으로 재현 가능하다고 주장하지 않는다. Original Test·교수 Test 불사용, 최종 모델 변경 없음.

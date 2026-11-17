@@ -81,3 +81,13 @@ CSV는 **동결 모델의 사후 원인 진단**이고 ZIP 내부의 개별 CSV�
 - [동결 재현·학습·통과 판정 상세 보고서](../../logs/크기편향_원인분석/EXP유019_국소획위치증강_실측보고서.md) 및 [학습 코드](../../scripts/exp019_train_local_warp.py)
 
 **결과:** B1(상단 ±1px)과 B2(하단 ±1px) 모두 7→9 오류 개선 기준 미달. B2의 전체 정확도 향상은 유효한 관찰 결과이지만 7→9의 성공으로 간주하지 않음. **모델 바이너리 6개는 이 저장소에 포함되지 않고 SHA만 보존**; 기존 EXP유017 동결 체크포인트·원본 v3·Hand-made 데이터를 덮어쓰지 않음. 다음 단계의 7/9 형상 분포 구간 분석 및 타깃 증강은 **아직 미실행**.
+
+### EXP유021 — Early Stopping Learning Curve (2026-11-17)
+
+- [Train / Validation Loss 통합 곡선 — OFF](EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_Mean_Learning_Curve_NOES.png) · [ON](EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_Mean_Learning_Curve_ES.png)
+- [Epoch별 3 Seed Training Loss·OfficialVal Log Loss·Accuracy](EXP유021_EarlyStopping_LearningCurve/EXP021_epochwise_3seed_learning_curves.csv)
+- [Seed별 ON/OFF 비교](EXP유021_EarlyStopping_LearningCurve/EXP021_comparison_by_seed.csv) · [3-Seed 집계](EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_aggregate.csv)
+- [기존 동결 모델 재현 확인](EXP유021_EarlyStopping_LearningCurve/EXP021_original_frozen_model_check.csv) · [입력 SHA 기록](EXP유021_EarlyStopping_LearningCurve/SHA256_Inputs.txt)
+- [전제·자료 제한 상세](../../logs/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve_검증보고서.md)
+
+새 모델을 동결 EXP유017 대신 배포하지 않았으며, 데이터 수 차이 때문에 ON/OFF 간의 차이를 Early Stopping 단독 효과로 단정하지 않는다. 모델 binary는 Git에 포함하지 않는다.
