@@ -1,0 +1,75 @@
+name: EXP-CMB-008 S5 Curve Audit Reanalysis
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/exp-cmb-008-s5-learning-curves-reanalyse.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  reassess:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned analysis and graphics environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download all previously completed 36 S5 diagnostic fits (no refit)
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 44036984440
+          pattern: cmb008-esdiag-*
+          path: ${{ runner.temp }}/esdiag-incoming
+          merge-multiple: false
+      - name: Download original published S5 models and predictions for replay audit
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 44020696572
+          pattern: cmb008-s5-lr0.001-s*
+          path: ${{ runner.temp }}/s5-original
+          merge-multiple: false
+      - name: Inspect artifacts and plot results with honest replay validation flags
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_learning_curve_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_learning_curve_aggregate.py \
+            --incoming '${{ runner.temp }}/esdiag-incoming' \
+            --original-s5 '${{ runner.temp }}/s5-original' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves/report.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md
+          python - <<'PY'
+          from pathlib import Path
+          path=Path('05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md')
+          s=path.read_text(encoding='utf-8')
+          path.write_text(s.replace('](figures/','](../../results/Hyperparameter_Optimization/S5_LearningCurves/figures/'),encoding='utf-8')
+          PY
+      - name: Archive figures, CSV, JSON, and reproducibility caveats
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s5-actual-curves-and-replay-audit
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit actual curves to main, preserve all original runs
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md
+          git commit -m 'research: S5 ES learning curves with reproducibility caveats [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
