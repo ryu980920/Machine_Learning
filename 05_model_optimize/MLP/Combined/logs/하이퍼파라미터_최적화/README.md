@@ -37,3 +37,11 @@
 <!-- CMB008_S4S5_FINAL_START -->
 **S1~S5 완료:** 단층 (256,), alpha=1e-4, LR **0.001**, Early Stopping **False**, OOF **92.214%**, OfficialVal **97.044%**. [S4 결과](EXP-CMB-008_08_Stage4_LearningRate_Results.md) → [S5 결과](EXP-CMB-008_10_Stage5_EarlyStopping_Results.md) → [최종 연구결정](EXP-CMB-008_11_Final_HP_Decision.md). 최종 Test·배포 미변경.
 <!-- CMB008_S4S5_FINAL_END -->
+
+## S5 보완: Early Stopping Learning Curve 원인 진단
+
+- **동기:** Early Stopping=True의 OOF가 91.771%로 떨어진 사실만으로 종료 위치 적절성을 판단할 수 없다. 기존 ES=False 결정은 진단 전까지 **잠정**이다.
+- [**12 사전등록 — Stop/Best Epoch와 90/100% Training 비교**](EXP-CMB-008_12_Plan_S5_LearningCurves.md)
+- [**13 결과 — 5개 Learning Curve PNG/CSV 및 재현성 검증**](EXP-CMB-008_13_S5_LearningCurves_Results.md) (**실험이 검증된 경우 생성**) 
+- [Epoch별 원본 S5 재현 코드](../../scripts/exp_cmb008_s5_learning_curve_trace.py) · [곡선/재현성 검증 코드](../../scripts/exp_cmb008_s5_learning_curve_aggregate.py)
+- Stop Epoch와 Validation 최고/복원 Epoch를 구분하고, Epoch별 OOF는 진단에만 사용한다. Original Test·교수님 Test는 계속 봉인한다.
