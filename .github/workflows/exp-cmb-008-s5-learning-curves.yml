@@ -1,0 +1,157 @@
+name: EXP-CMB-008 S5 Learning Curve Diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/exp-cmb-008-s5-learning-curves.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: cmb008-s5-curves
+  cancel-in-progress: false
+
+jobs:
+  epoch_trace:
+    name: trace ${{ matrix.variant }} seed${{ matrix.seed }} writer${{ matrix.writer }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        variant: [es10, internal120, full120]
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install project-pinned sklearn 1.8 experiment environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Confirm sklearn version and compile both scripts
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python - <<'PY'
+          import sklearn,inspect
+          from sklearn.neural_network import MLPClassifier
+          assert sklearn.__version__=="1.8.0",sklearn.__version__
+          assert tuple(inspect.signature(MLPClassifier._update_no_improvement_count).parameters)==(
+              "self","early_stopping","X","y","sample_weight")
+          print("sklearn ES trace hook verified")
+          PY
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_learning_curve_trace.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_learning_curve_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Trace every epoch without changing Adam optimizer state
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_learning_curve_trace.py \
+            --seed '${{ matrix.seed }}' --heldout '${{ matrix.writer }}' \
+            --variant '${{ matrix.variant }}' \
+            --out '${{ runner.temp }}/esdiag/cmb008-esdiag-s${{ matrix.seed }}-w${{ matrix.writer }}-${{ matrix.variant }}'
+      - name: Archive per-epoch raw measurements and original holdout prediction replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-esdiag-s${{ matrix.seed }}-w${{ matrix.writer }}-${{ matrix.variant }}
+          path: '${{ runner.temp }}/esdiag/cmb008-esdiag-s${{ matrix.seed }}-w${{ matrix.writer }}-${{ matrix.variant }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate_plot:
+    name: Verify all 36 curves against original S5 then plot actual learning curves
+    needs: [epoch_trace]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned plotting and analysis dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download all 36 traced epoch trajectories
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-esdiag-*
+          path: ${{ runner.temp }}/esdiag-incoming
+          merge-multiple: false
+      - name: Download exact original EXP-CMB-008 S5 ES True artifacts
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 44020696572
+          pattern: cmb008-s5-lr0.001-s*
+          path: ${{ runner.temp }}/s5-original
+          merge-multiple: false
+      - name: Assert exactly 36 trace packages and original 3 S5 packages
+        env:
+          NEW_DIR: ${{ runner.temp }}/esdiag-incoming
+          OLD_DIR: ${{ runner.temp }}/s5-original
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          a=Path(os.environ["NEW_DIR"]);b=Path(os.environ["OLD_DIR"])
+          expected={f"cmb008-esdiag-s{s}-w{w}-{v}" for s in (42,43,44)
+                    for w in (41,42,43,44) for v in ("es10","internal120","full120")}
+          found={p.name for p in a.iterdir() if p.is_dir()}
+          assert found==expected,(len(found),expected-found,found-expected)
+          assert {p.name for p in b.iterdir() if p.is_dir()}=={
+            f"cmb008-s5-lr0.001-s{s}" for s in (42,43,44)}
+          for p in a.iterdir():
+              for f in ("epoch_curve.csv","manifest.json","final_heldout_predictions.csv"):
+                  assert (p/f).is_file(),(p,f)
+          print("Verified 36 traced models + 3 original S5 run archives")
+          PY
+      - name: Verify original S5 replay, continuation consistency and render five real PNG curves
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_learning_curve_aggregate.py \
+            --incoming '${{ runner.temp }}/esdiag-incoming' \
+            --original-s5 '${{ runner.temp }}/s5-original' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves/report.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md')
+          txt=p.read_text(encoding='utf-8')
+          p.write_text(txt.replace('](figures/','](../../results/Hyperparameter_Optimization/S5_LearningCurves/figures/'),encoding='utf-8')
+          PY
+      - name: Preserve five learning curve PNGs, CSV, JSON and interpretation
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s5-learning-curves-verified
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Publish verified plots and results to main without final-model deployment
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_LearningCurves/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_13_S5_LearningCurves_Results.md
+          if git diff --staged --quiet; then
+            echo 'Identical diagnostic already published'
+            exit 0
+          fi
+          git commit -m 'research: verify and plot S5 ES learning curves with original-run replay [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
