@@ -1,0 +1,12 @@
+{
+  "128": {
+    "fixed": 193,
+    "induced": 147,
+    "net_gain": 46
+  },
+  "64": {
+    "fixed": 233,
+    "induced": 200,
+    "net_gain": 33
+  }
+}
