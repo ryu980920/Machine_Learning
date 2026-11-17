@@ -49,3 +49,10 @@
 - [**12A 원본 S5 재현성 불일치 기록**](EXP-CMB-008_12A_S5_Reproducibility_Deviation.md): 3/12 Fold만 Stop+예측 정확히 일치, 개별 원본 확인
 - [**14 Learning Curve 정량 해석·ES 최종 판단 보류 이유**](EXP-CMB-008_14_S5_LearningCurve_Interpretation.md): H1/H2/H3 가설 결과, D→0 및 4방향 오류 상충, 반복 학습 과적합 위험
 - **최종 결론:** ES=False는 개발용 잠정값 유지. 새 재측정 ES10과 기존 S5에 불일치가 있으므로 Early Stopping의 정확한 종료 효과를 인과적으로 단정하지 않는다.
+
+## Same-fit Learning Curve (최신 실측)
+
+- [15 학습 전 실험 계획](EXP-CMB-008_15_Plan_S5_SameFit_TrainVal.md) → [16 실제 Train/Validation Accuracy·Loss 그래프 6개](EXP-CMB-008_16_S5_SameFit_TrainVal_Results.md) → [17 과적합 및 실제 ES 위치 정량 해석](EXP-CMB-008_17_S5_SameFit_Overfitting_Interpretation.md)
+- **훈련 Accuracy는 실제 70,848개 전체 Train**, Validation Accuracy는 내부 7,872개를 **같은 모델·동일 Epoch**에 측정했다.
+- 학습 120 Epoch에서 Training Accuracy **99.969%**, Validation Accuracy **96.527%**. Validation Log-loss는 10 Epoch 최소 **0.140814** 이후 Epoch 120 **0.219020**으로 악화.
+- 해당 동일 실행에서 patience=10이라면 평균 **42.17 Epoch**에 멈추고 Best Validation Epoch 평균 **31.17**. **12/12 Fold에서** 중단 후 더 높은 내부 Validation Accuracy Epoch가 존재했다. 모델 채택은 아직 잠정이며 독립 Test는 사용하지 않았다.
