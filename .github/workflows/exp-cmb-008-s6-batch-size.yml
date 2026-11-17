@@ -1,0 +1,139 @@
+name: EXP-CMB-008 S6 Adam Batch Size 200 128 64
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s6-batch-size.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: cmb008-s6-batch-optimization
+  cancel-in-progress: false
+
+jobs:
+  train:
+    name: Batch ${{ matrix.batch }} Seed ${{ matrix.seed }} Writer ${{ matrix.writer }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        batch: [200, 128, 64]
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned project packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Verify sklearn, scripts, dataset
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python - <<'PY'
+          import sklearn
+          assert sklearn.__version__=="1.8.0",sklearn.__version__
+          print("sklearn",sklearn.__version__)
+          PY
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s6_batch_size.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s6_batch_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Train and audit fixed MLP, vary Adam batch size only
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s6_batch_size.py \
+            --batch-size '${{ matrix.batch }}' \
+            --seed '${{ matrix.seed }}' \
+            --heldout '${{ matrix.writer }}' \
+            --out '${{ runner.temp }}/batch/cmb008-s6-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}'
+      - name: Preserve complete per-fold provenance and held-out predictions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s6-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}
+          path: '${{ runner.temp }}/batch/cmb008-s6-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  analyze:
+    name: Compare batch sizes by OOF, D-to-0 and exact safeguards
+    needs: [train]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned project packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download all 36 paired experiments
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s6-bs*
+          path: ${{ runner.temp }}/s6-incoming
+          merge-multiple: false
+      - name: Verify exact 36 artifacts and analysis script
+        env:
+          RUN_ROOT: ${{ runner.temp }}/s6-incoming
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          p=Path(os.environ["RUN_ROOT"])
+          expected={f"cmb008-s6-bs{bs}-s{seed}-w{w}" for bs in (200,128,64)
+            for seed in (42,43,44) for w in (41,42,43,44)}
+          folders={z.name for z in p.iterdir() if z.is_dir()}
+          assert folders==expected,(len(folders),expected-folders,folders-expected)
+          for x in p.iterdir():
+              for file in ("manifest.json","oof_predictions.csv","class_family_flip.csv"):
+                  assert (x/file).is_file(),x/file
+          print("All 36 S6 fits present")
+          PY
+      - name: Compare and create nondeploying research-only report
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s6_batch_aggregate.py \
+            --incoming '${{ runner.temp }}/s6-incoming' \
+            --s5-original 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping/S5_details.json \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S6_Batch_Size
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S6_Batch_Size/S6_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md
+      - name: Archive final batch comparison, gates and research report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-S6-verified-batchsize-comparison
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S6_Batch_Size/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md
+          if-no-files-found: error
+      - name: Commit research results only (not final HP or trained model)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S6_Batch_Size/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md
+          if git diff --staged --quiet; then
+            echo 'No new results'
+            exit 0
+          fi
+          git commit -m 'research: S6 actual batch size comparison, pending approval [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
