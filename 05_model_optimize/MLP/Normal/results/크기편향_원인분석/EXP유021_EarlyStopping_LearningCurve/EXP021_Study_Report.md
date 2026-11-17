@@ -11,6 +11,26 @@
 - 외부 OfficialVal 19,200장은 두 모델의 학습/내부 ES 판단에 사용되지 않았지만 **곡선 진단에 매 epoch 조회**하므로, external validation에서 후선정한 최고 epoch는 독립 Test 점수로 사용하거나 바로 배포하지 않는다.
 - Original Test/교수님 Test/사용자 손글씨를 학습과 조기 종료 판단에 사용하지 않았다.
 
+## 학습 곡선 이미지
+
+**전체 3-Seed 실측 곡선**
+
+![3-Seed 전체 Learning Curve](EXP021_Learning_Curves_3Seeds.svg)
+
+**검증 NLL 확대 (epoch ≥ 10)**
+
+![OfficialVal NLL 구간 확대](EXP021_Validation_Plateau_Zoom_3Seeds.svg)
+
+**Early Stopping ON 내부·외부 검증 정확도**
+
+![Internal vs Official Validation Accuracy](EXP021_EarlyStopping_Internal_vs_Official_Accuracy.svg)
+
+**기존 평균 곡선 — OFF / ON**
+
+![OFF 3-Seed 평균 Learning Curve](EXP021_3Seed_Mean_Learning_Curve_NOES.png)
+
+![ON 3-Seed 평균 Learning Curve](EXP021_3Seed_Mean_Learning_Curve_ES.png)
+
 ## 관찰 결과
 
 | Seed | Mode | 실제 종료 | 복원 epoch | OfficialVal(최종) | OfficialVal loss 최저 epoch | OfficialVal accuracy 최고 epoch |
@@ -36,6 +56,8 @@
 - `EXP021_epochwise_3seed_learning_curves.csv`: 6개 실험의 매 epoch 수치
 - `EXP021_comparison_by_seed.csv`, `EXP021_3Seed_aggregate.csv`: epoch 및 정확도 비교
 - `EXP021_original_frozen_model_check.csv`: 원본 동결 모델과 버전 확인
-- `EXP021_Learning_Curves_3Seeds.png`: 3×3 학습 곡선
-- `EXP021_EarlyStopping_Internal_vs_Official_Accuracy.png`: 내부 검증 vs 외부 검증
-- `EXP021_Validation_Plateau_Zoom_3Seeds.png`: 10 epoch 이후 검증 구간 확대
+- [EXP021_Learning_Curves_3Seeds.svg](EXP021_Learning_Curves_3Seeds.svg): Seed42/43/44 × Training Loss·OfficialVal NLL·Accuracy 실측 곡선
+- [EXP021_EarlyStopping_Internal_vs_Official_Accuracy.svg](EXP021_EarlyStopping_Internal_vs_Official_Accuracy.svg): Early Stopping ON 내부 검증 Accuracy vs 외부 검증 Accuracy 및 복원 epoch
+- [EXP021_Validation_Plateau_Zoom_3Seeds.svg](EXP021_Validation_Plateau_Zoom_3Seeds.svg): 10 epoch 이후 검증 NLL 구간 확대
+- [EXP021_3Seed_Mean_Learning_Curve_NOES.png](EXP021_3Seed_Mean_Learning_Curve_NOES.png): Early Stopping OFF 3-Seed 평균 곡선
+- [EXP021_3Seed_Mean_Learning_Curve_ES.png](EXP021_3Seed_Mean_Learning_Curve_ES.png): Early Stopping ON 3-Seed 평균 곡선
