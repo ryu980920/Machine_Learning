@@ -40,3 +40,7 @@
 ## 발표용 Learning Curve 및 최종 Early Stopping 결정
 
 **EXP-CMB-008 S1~S5 개발용 HP 선정 완료:** Size30/Stroke28/CoM, (256,), alpha=1e-4, LR=.001, **Early Stopping=False**. [발표용 Accuracy·Loss Learning Curve 및 결정 이유](하이퍼파라미터_최적화/EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md). Training/Validation 간 격차와 Validation Loss 증가로 **과적합 징후는 있으나**, 기존 S5 실제 Writer OOF 및 핵심 오분류 비교에서는 False를 유지하는 것이 적절하다. 4방향 각 5% 미만 목표는 미달, 최종 Test·배포 미사용.
+
+## 09B 강의자료 후속 — Batch Size 실측
+
+- [**CMB-008 S6 Batch Size 200 / 128 / 64 비교 결과**](하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md): 36개 실제 학습, Batch 128의 OOF 정확도가 가장 높았으나 네 방향·취약 클래스 비악화 Gate를 통과하지 못함 → 기존 Batch 200 유지 추천. 원본 S5과 새 S6 기준선의 재현성 차이는 별도로 기록. 최종 HP/모델 배포 변경 없음.
