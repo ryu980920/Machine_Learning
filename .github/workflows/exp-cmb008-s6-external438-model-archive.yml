@@ -1,0 +1,136 @@
+name: EXP-CMB-008 S6 128 vs 200 model archive for external 438
+
+on:
+  push:
+    branches:
+      - exp/cmb008-s6-438-artifact-only-20261117
+    paths:
+      - .github/workflows/exp-cmb008-s6-external438-model-archive.yml
+      - 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s6_batch_size.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: cmb008-s6-external438-model-archive
+  cancel-in-progress: false
+
+jobs:
+  train:
+    name: Batch ${{ matrix.batch }} Seed ${{ matrix.seed }} Writer ${{ matrix.writer }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        batch: [200, 128]
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Check reference package and frozen datasets
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python - <<'PY'
+          import sklearn
+          assert sklearn.__version__ == "1.8.0", sklearn.__version__
+          print("SKLEARN_PIN_OK",sklearn.__version__)
+          PY
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit original S6 model and export unchanged fitted Pipeline
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s6_batch_size.py \
+            --batch-size '${{ matrix.batch }}' \
+            --seed '${{ matrix.seed }}' \
+            --heldout '${{ matrix.writer }}' \
+            --out '${{ runner.temp }}/models/cmb008-s6-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}'
+      - name: Verify saved model identity and no evaluation-set training
+        env:
+          MODEL_DIR: ${{ runner.temp }}/models/cmb008-s6-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}
+        run: |
+          python - <<'PY'
+          import os,json,hashlib,pathlib
+          p=pathlib.Path(os.environ["MODEL_DIR"])
+          m=json.loads((p/"manifest.json").read_text())
+          f=p/"trained_model.joblib"
+          assert f.is_file() and f.stat().st_size>100000
+          assert hashlib.sha256(f.read_bytes()).hexdigest()==m["exported_model_sha256"]
+          assert m["n_training"]==78720 and m["n_heldout"]==640 and m["n_official_val"]==19200
+          assert m["frozen"]["early_stopping"] is False
+          assert m["handmade_train_preprocess"]=="CoM-only"
+          assert m["new_handmade_480_used"] is False
+          assert m["independent_test_used"] is False and m["professor_test_used"] is False
+          print("FROZEN_S6_MODEL_SAVED_AND_VERIFIED",p.name,f.stat().st_size)
+          PY
+      - name: Upload single fold model and provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s6-438-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}
+          path: ${{ runner.temp }}/models/cmb008-s6-bs${{ matrix.batch }}-s${{ matrix.seed }}-w${{ matrix.writer }}/
+          compression-level: 0
+          retention-days: 30
+          if-no-files-found: error
+
+  aggregate:
+    name: Verify and archive all 24 model weights (no evaluation)
+    needs: train
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s6-438-bs*
+          path: ${{ runner.temp }}/incoming
+          merge-multiple: false
+      - name: Assert 24 complete models and identical provenance
+        env:
+          INPUT: ${{ runner.temp }}/incoming
+        run: |
+          python - <<'PY'
+          import os,json,hashlib,pathlib
+          p=pathlib.Path(os.environ["INPUT"])
+          target={f"cmb008-s6-438-bs{b}-s{s}-w{w}" for b in (200,128) for s in (42,43,44) for w in (41,42,43,44)}
+          folders={x.name for x in p.iterdir() if x.is_dir()}
+          assert folders==target,(len(folders),target-folders,folders-target)
+          official=set();writer=set()
+          for d in sorted(p.iterdir()):
+              m=json.loads((d/"manifest.json").read_text())
+              f=d/"trained_model.joblib"
+              assert f.is_file() and hashlib.sha256(f.read_bytes()).hexdigest()==m["exported_model_sha256"]
+              assert len(list(d.glob("oof_predictions.csv")))==1
+              official.add(m["official_sha256"])
+              writer.add(json.dumps(m["handmade_sha256"],sort_keys=True))
+          assert len(official)==1 and len(writer)==1
+          print("ALL_24_S6_MODEL_ARTIFACTS_VERIFIED; external 438 never sent to GitHub")
+          PY
+      - name: Pack models for local external-438 evaluation
+        env:
+          INPUT: ${{ runner.temp }}/incoming
+        run: |
+          mkdir -p combined_models
+          tar -cf combined_models/cmb008_s6_24_models.tar -C "$INPUT" .
+          ls -lh combined_models/
+      - name: Publish model archive for local evaluation (no deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s6-external438-all24-models
+          path: combined_models/cmb008_s6_24_models.tar
+          compression-level: 0
+          retention-days: 30
+          if-no-files-found: error
