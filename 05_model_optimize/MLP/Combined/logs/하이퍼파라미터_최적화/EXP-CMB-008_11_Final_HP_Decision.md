@@ -55,3 +55,7 @@
 - [S4 사전등록](EXP-CMB-008_07_Plan_S4_LearningRate.md) → [S4 실측](EXP-CMB-008_08_Stage4_LearningRate_Results.md)
 - [S5 사전등록](EXP-CMB-008_09_Plan_S5_EarlyStopping.md) → [S5 실측](EXP-CMB-008_10_Stage5_EarlyStopping_Results.md)
 - 원본 실측 CSV/JSON: ../../results/Hyperparameter_Optimization/S4_LearningRate/ 및 S5_EarlyStopping/
+
+## 5. S5 Learning Curve 보완 이후의 발표·운영 결정
+
+**현재 개발용 설정은 Early Stopping=False로 유지한다.** 기존 S5에서는 False OOF 92.214%, True 91.771%였고, D→0은 67건 vs 77건이었다. 실제 90/10 Training/Validation 곡선에서는 Training Accuracy 99.969%와 Validation Accuracy 96.527%(Epoch 120), Validation Loss 증가로 **과적합 징후가 확인**됐다. 이는 ES=False의 과적합 위험이 없다는 뜻이 아니다. 사용자 결정에 따라 별도의 patience/validation 비율 탐색은 추가하지 않는다. **[PPT용 Learning Curve와 해석](EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md)**에 발표용 그래프 3장과 정확한 캡션을 모았다.

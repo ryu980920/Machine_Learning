@@ -1,0 +1,72 @@
+name: EXP-CMB-008 S5 Presentation Learning Curves
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s5-presentation-curves.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    name: Render 16x9 Train vs Validation Accuracy and Loss slides
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install reproducible plotting environment
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Render from unchanged original CSV and S5 decision
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_presentation_curves.py \
+            --csv 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_SameFit_TrainVal/same_run_train_val_curve_aggregate.csv \
+            --summary 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_SameFit_TrainVal/diagnostic_summary.json \
+            --s5 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping/S5_details.json \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_Presentation
+      - name: Verify 3 readable 3200x1800 PNG outputs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import matplotlib.image as mpimg
+          p=Path("05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_Presentation")
+          names=["S5_presentation_LearningCurve_16x9.png",
+                 "S5_presentation_Accuracy_16x9.png",
+                 "S5_presentation_Loss_16x9.png"]
+          assert len(list(p.glob("*.png")))==3
+          for name in names:
+              f=p/name
+              assert f.exists() and f.stat().st_size>90000,(name,f.stat().st_size)
+              im=mpimg.imread(f)
+              assert im.shape[:2]==(1800,3200),(name,im.shape)
+              print(name,im.shape,f.stat().st_size)
+          PY
+      - name: Preserve editable report and 3 widescreen visuals as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-S5-presentation-LearningCurves-16x9
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_Presentation/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish figures on main with original experimental artifacts unchanged
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_Presentation/
+          if git diff --staged --quiet; then
+            echo 'Identical figures already committed'
+            exit 0
+          fi
+          git commit -m 'docs: publish S5 presentation Learning Curve PNGs from verified data [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main

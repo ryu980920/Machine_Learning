@@ -56,3 +56,11 @@
 - **훈련 Accuracy는 실제 70,848개 전체 Train**, Validation Accuracy는 내부 7,872개를 **같은 모델·동일 Epoch**에 측정했다.
 - 학습 120 Epoch에서 Training Accuracy **99.969%**, Validation Accuracy **96.527%**. Validation Log-loss는 10 Epoch 최소 **0.140814** 이후 Epoch 120 **0.219020**으로 악화.
 - 해당 동일 실행에서 patience=10이라면 평균 **42.17 Epoch**에 멈추고 Best Validation Epoch 평균 **31.17**. **12/12 Fold에서** 중단 후 더 높은 내부 Validation Accuracy Epoch가 존재했다. 모델 채택은 아직 잠정이며 독립 Test는 사용하지 않았다.
+
+## 발표용 최종 정리 — Early Stopping=False 유지
+
+- [**18 발표용 Learning Curve (16:9 고해상도 Accuracy / Loss 그림)와 ES=False 유지 결정**](EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md)
+- **최종 사용 설정(개발용):** Size30% / Stroke28% / CoM, MLP (256,), alpha=1e-4, LR=.001, **early_stopping=False**, max_iter=200.
+- **선정 근거:** 기존 S5에서 False의 Writer OOF **92.214%**가 True **91.771%**보다 높고, D→0은 **67 vs 77건**으로 적었다. 0→D는 양쪽 14건.
+- **Learning Curve 해석:** 동일 모델·Epoch의 Training Accuracy 99.969% / 내부 Validation Accuracy 96.527%(120 Epoch), 내부 Validation Loss 증가 → **과적합 징후는 존재**. 이 그림은 별도의 내부 검증 분할(90/10) 진단 실험이므로 ES=False를 학습한 곡선으로 혼동하지 않는다.
+- **결정 범위:** Early Stopping의 세부 Patience 재최적화는 진행하지 않고 사용자 요청대로 False를 유지한다. 독립 Test 및 모델 배포는 수행하지 않았다.

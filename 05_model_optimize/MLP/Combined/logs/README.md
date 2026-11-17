@@ -36,3 +36,7 @@
 <!-- CMB008_S4S5_FINAL_START -->
 **CMB-008 S1~S5 완료:** (256,), alpha=1e-4, LR **0.001**, Early Stopping **False**, OOF **92.214%**, OfficialVal **97.044%**. [S4 결과](하이퍼파라미터_최적화/EXP-CMB-008_08_Stage4_LearningRate_Results.md) → [S5 결과](하이퍼파라미터_최적화/EXP-CMB-008_10_Stage5_EarlyStopping_Results.md) → [최종 결정](하이퍼파라미터_최적화/EXP-CMB-008_11_Final_HP_Decision.md). 최종 Test·배포 미변경.
 <!-- CMB008_S4S5_FINAL_END -->
+
+## 발표용 Learning Curve 및 최종 Early Stopping 결정
+
+**EXP-CMB-008 S1~S5 개발용 HP 선정 완료:** Size30/Stroke28/CoM, (256,), alpha=1e-4, LR=.001, **Early Stopping=False**. [발표용 Accuracy·Loss Learning Curve 및 결정 이유](하이퍼파라미터_최적화/EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md). Training/Validation 간 격차와 Validation Loss 증가로 **과적합 징후는 있으나**, 기존 S5 실제 Writer OOF 및 핵심 오분류 비교에서는 False를 유지하는 것이 적절하다. 4방향 각 5% 미만 목표는 미달, 최종 Test·배포 미사용.
