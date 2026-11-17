@@ -42,6 +42,10 @@
 
 - **동기:** Early Stopping=True의 OOF가 91.771%로 떨어진 사실만으로 종료 위치 적절성을 판단할 수 없다. 기존 ES=False 결정은 진단 전까지 **잠정**이다.
 - [**12 사전등록 — Stop/Best Epoch와 90/100% Training 비교**](EXP-CMB-008_12_Plan_S5_LearningCurves.md)
-- [**13 결과 — 5개 Learning Curve PNG/CSV 및 재현성 검증**](EXP-CMB-008_13_S5_LearningCurves_Results.md) (**실험이 검증된 경우 생성**) 
+- [**13 실측 — 5개 실제 Learning Curve PNG/CSV와 Fold별 재현성 감사**](EXP-CMB-008_13_S5_LearningCurves_Results.md) (**36개 학습·그림 생성 완료, 원본 S5 완전 재현 불성립**) 
 - [Epoch별 원본 S5 재현 코드](../../scripts/exp_cmb008_s5_learning_curve_trace.py) · [곡선/재현성 검증 코드](../../scripts/exp_cmb008_s5_learning_curve_aggregate.py)
 - Stop Epoch와 Validation 최고/복원 Epoch를 구분하고, Epoch별 OOF는 진단에만 사용한다. Original Test·교수님 Test는 계속 봉인한다.
+
+- [**12A 원본 S5 재현성 불일치 기록**](EXP-CMB-008_12A_S5_Reproducibility_Deviation.md): 3/12 Fold만 Stop+예측 정확히 일치, 개별 원본 확인
+- [**14 Learning Curve 정량 해석·ES 최종 판단 보류 이유**](EXP-CMB-008_14_S5_LearningCurve_Interpretation.md): H1/H2/H3 가설 결과, D→0 및 4방향 오류 상충, 반복 학습 과적합 위험
+- **최종 결론:** ES=False는 개발용 잠정값 유지. 새 재측정 ES10과 기존 S5에 불일치가 있으므로 Early Stopping의 정확한 종료 효과를 인과적으로 단정하지 않는다.
