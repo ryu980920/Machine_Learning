@@ -64,3 +64,10 @@
 - **선정 근거:** 기존 S5에서 False의 Writer OOF **92.214%**가 True **91.771%**보다 높고, D→0은 **67 vs 77건**으로 적었다. 0→D는 양쪽 14건.
 - **Learning Curve 해석:** 동일 모델·Epoch의 Training Accuracy 99.969% / 내부 Validation Accuracy 96.527%(120 Epoch), 내부 Validation Loss 증가 → **과적합 징후는 존재**. 이 그림은 별도의 내부 검증 분할(90/10) 진단 실험이므로 ES=False를 학습한 곡선으로 혼동하지 않는다.
 - **결정 범위:** Early Stopping의 세부 Patience 재최적화는 진행하지 않고 사용자 요청대로 False를 유지한다. 독립 Test 및 모델 배포는 수행하지 않았다.
+
+## S6 — Batch Size 200/128/64 (09B 강의자료 연계)
+
+- [19 **Batch Size 실험 사전등록**](EXP-CMB-008_19_Plan_S6_Batch_Size.md) → [20 **36개 실측 비교·채택 판단**](EXP-CMB-008_20_Stage6_Batch_Size_Results.md).
+- **실측 OOF:** 200=**91.810%**, 128=**92.409%** (순수 정확도 1위), 64=**92.240%**. Batch 128과 64는 주요 혼동·취약 클래스 비악화 Gate 실패 → **기준 Batch 200 유지 추천**.
+- **재현성 주의:** 기존 S5 Batch 200 OOF 92.214%와 이번 Batch 200 재실행 OOF 91.810%는 일치하지 않음. 동일 S6 36개 재실행 내에서만 직접 비교하며, 원인 미확정·독립 Test 사용 없음.
+- 기존 최종 HP와 모델은 수정하지 않음. Batch Size 변경은 사용자 승인 전 보류.
