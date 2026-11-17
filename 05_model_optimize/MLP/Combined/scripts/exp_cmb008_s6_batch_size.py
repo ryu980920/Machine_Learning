@@ -7,7 +7,8 @@ early_stopping=False, max_iter=200, n_iter_no_change=10 (sklearn default).
 No independent test, Professor Test, or new 480 used.
 """
 from __future__ import annotations
-import argparse,csv,json,time,warnings
+import argparse,csv,json,time,warnings,hashlib
+import joblib
 from pathlib import Path
 import numpy as np
 import sklearn
@@ -65,6 +66,11 @@ def main():
         tick=time.perf_counter()
         model.fit(X,y)
         elapsed=time.perf_counter()-tick
+    # EXP-CMB-008 S6 external audit: preserve precisely this fitted Pipeline.
+    # Runs ONLY on isolated experiment branch; does not modify model parameters.
+    model_path=a.out/"trained_model.joblib"
+    joblib.dump(model,model_path,compress=3)
+    model_sha256=hashlib.sha256(model_path.read_bytes()).hexdigest()
     assert net.n_features_in_==784
     assert np.array_equal(net.classes_,np.arange(16))
     yp=np.asarray(model.predict(held_x),dtype=int)
@@ -107,6 +113,7 @@ def main():
           "learning_rate_init":.001,"solver":"adam","activation":"relu",
           "early_stopping":False,"max_iter":200,
           "tol":.0001,"n_iter_no_change":10},
+        "exported_model":"trained_model.joblib","exported_model_sha256":model_sha256,
         "n_training":len(y),"n_heldout":len(held_y),
         "n_official_val":len(val_y),
         "official_sha256":official["sha256"],
