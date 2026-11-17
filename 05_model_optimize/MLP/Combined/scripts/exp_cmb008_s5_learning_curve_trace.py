@@ -109,7 +109,7 @@ def main():
     best_epoch=int(np.argmax(score)+1) if es else None
     # sklearn restores weights from highest validation-score epoch, not the last epoch.
     best_curve=net._curve_records[best_epoch-1] if best_epoch else None
-    matches=bool(np.array_equal(restored,restored)) # replaced below with quality check
+    matches=True
     if best_curve:
         matches=(
           abs(float(np.mean(restored==yheld))-best_curve["heldout_oof_accuracy"])<1e-12
