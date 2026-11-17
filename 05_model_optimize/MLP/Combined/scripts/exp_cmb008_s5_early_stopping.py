@@ -1,0 +1,393 @@
+#!/usr/bin/env python3
+"""EXP-CMB-008 / S5. Freeze (256,), alpha=1e-4; compare early_stopping on S4-selected LR.
+
+S5 retrains ES=True only with the S4-selected LR. ES=False baseline is
+from S4 archive if LR is 0.0005 or 0.002; else S1 archive if LR is 0.001.
+3 seeds (42/43/44) and 4 writer-held-out folds per candidate.
+No Original/Professor Test or new 480. No held-out/OfficialVal training augmentation.
+"""
+from __future__ import annotations
+import argparse,csv,hashlib,json,sys,time,warnings
+from pathlib import Path
+import joblib
+import numpy as np
+import sklearn
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (accuracy_score,balanced_accuracy_score,roc_auc_score,
+                             precision_recall_fscore_support,confusion_matrix)
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+ROOT=Path(__file__).resolve().parents[4]
+CMB=ROOT/"05_model_optimize"/"MLP"/"Combined"
+NORMAL=ROOT/"05_model_optimize"/"MLP"/"Normal"
+sys.path.insert(0,str(CMB/"scripts"))
+sys.path.insert(0,str(NORMAL/"scripts"))
+from combined_mlp_writer_cv import (load_official,load_writers,PixelScaler255,
+                                    WRITERS,LABELS,V3_SHA,HANDMADE_SHA)
+from exp006_size_com_comparison import process,image_geometry
+from exp015_scale_stroke_grid import nested_subset
+from exp016_high_fraction_grid import scale_base,stroke_jitter
+from exp014_balanced_augmentation import balanced_indices
+from exp011_012_causal_probes import fixed_scale
+
+SCALES=(.8,.9,1.,1.1,1.2)
+PAIRS=(("0","D"),("D","0"),("8","B"),("B","8"),("5","F"),("F","5"),
+       ("7","9"),("7","A"),("4","F"))
+ARMS={"com_only":(0.,0.),
+      "scale10_stroke00":(.1,0.),
+      "scale10_stroke14":(.1,.14),
+      "scale10_stroke28":(.1,.28),
+      "scale20_stroke00":(.2,0.),
+      "scale20_stroke14":(.2,.14),
+      "scale20_stroke28":(.2,.28),
+      "scale30_stroke00":(.3,0.),
+      "scale30_stroke14":(.3,.14),
+      "scale30_stroke28":(.3,.28)}
+TARGETS=(16,18,20,22,24)
+SEEDS=(42,43,44)
+CLASSES=np.arange(16,dtype=int)
+
+def savecsv(p,records):
+    records=list(records)
+    if not records:raise RuntimeError("missing rows "+str(p))
+    p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open("w",newline="",encoding="utf-8-sig") as f:
+        wr=csv.DictWriter(f,fieldnames=list(records[0]))
+        wr.writeheader();wr.writerows(records)
+
+def metrics(y,p,subset=None):
+    labels=CLASSES if subset is None else np.asarray(subset)
+    prec,rec,f1,sup=precision_recall_fscore_support(y,p,labels=labels,zero_division=0)
+    return {"n":int(len(y)),"correct":int(np.sum(p==y)),
+            "accuracy":float(np.mean(p==y)),
+            "macro_f1":float(f1.mean()),
+            "macro_precision":float(prec.mean()),
+            "macro_recall":float(rec.mean())}
+
+def confusion_pairs(y,p,writer,arm,seed,source):
+    """All 240 off-diagonal directions, including zero-error pairs.
+
+    Denominator n_actual corresponds to the *actual* (row) class.
+    Both counts and conditional percentages are saved; total overall
+    accuracy does not replace per-class and per-pair error analysis.
+    """
+    cm=confusion_matrix(y,p,labels=CLASSES)
+    result=[]
+    nall=int(len(y))
+    nwrong=int(nall-np.trace(cm))
+    for actual in CLASSES:
+        nactual=int(cm[actual].sum())
+        wrong=int(nactual-cm[actual,actual])
+        for target in CLASSES:
+            if actual==target:continue
+            ct=int(cm[actual,target])
+            result.append({"arm":arm,"seed":seed,"dataset":source,"writer":writer,
+                 "actual":LABELS[actual],"predicted":LABELS[target],
+                 "n_actual":nactual,"n_actual_wrong":wrong,
+                 "n_dataset":nall,"n_dataset_wrong":nwrong,
+                 "errors":ct,"error_rate_within_actual_class":ct/nactual if nactual else 0,
+                 "share_of_actual_class_errors":ct/wrong if wrong else 0,
+                 "share_of_all_dataset_errors":ct/nwrong if nwrong else 0})
+    assert len(result)==16*15
+    assert sum(int(r["errors"]) for r in result)==nwrong
+    return result
+
+def total_errors_by_class(y,p,writer,arm,seed,source):
+    """All 16 true classes: total incorrect / n actual class, plus group switch."""
+    cm=confusion_matrix(y,p,labels=CLASSES)
+    out=[]
+    for a in CLASSES:
+        n=int(cm[a].sum());correct=int(cm[a,a]);wrong=n-correct
+        family_swap=int(cm[a,10:].sum()) if a<10 else int(cm[a,:10].sum())
+        out.append({"arm":arm,"seed":seed,"dataset":source,"writer":writer,
+           "actual":LABELS[a],"n":n,"correct":correct,"wrong":wrong,
+           "class_error_rate":wrong/n if n else 0,
+           "opposite_family_errors":family_swap,
+           "opposite_family_error_rate":family_swap/n if n else 0})
+    assert len(out)==16
+    return out
+
+def family_error_breakdown(y,p,writer,arm,seed,source):
+    """Digits→letters and letters→digits alongside within-family mistakes."""
+    cm=confusion_matrix(y,p,labels=CLASSES)
+    d2l=int(cm[:10,10:].sum());l2d=int(cm[10:,:10].sum())
+    d2d=int(cm[:10,:10].sum()-np.trace(cm[:10,:10]))
+    l2l=int(cm[10:,10:].sum()-np.trace(cm[10:,10:]))
+    return [{"arm":arm,"seed":seed,"dataset":source,"writer":writer,
+      "direction":key,"errors":val,"n_actual_family":n,
+      "error_rate":val/n if n else 0}
+      for key,val,n in (("digit_to_letter",d2l,int(cm[:10].sum())),
+                        ("letter_to_digit",l2d,int(cm[10:].sum())),
+                        ("digit_to_digit",d2d,int(cm[:10].sum())),
+                        ("letter_to_letter",l2l,int(cm[10:].sum())))]
+
+def geom_rows(name,x,y,arm,seed):
+    geo=image_geometry(x)
+    out=[]
+    for nameg,mask in (("digits",y<10),("letters",y>=10)):
+        z={"arm":arm,"seed":seed,"dataset":name,"group":nameg,
+           "n":int(mask.sum())}
+        for field in ("long_side","width","height","mass"):
+            zz=np.asarray(geo[field])[mask]
+            z[field+"_mean"]=float(zz.mean())
+            z[field+"_std"]=float(zz.std())
+        out.append(z)
+    return out
+
+def binary_size_probe(xtrain,ytrain,xval,yval):
+    train=image_geometry(xtrain)["long_side"].reshape(-1,1)
+    val=image_geometry(xval)["long_side"].reshape(-1,1)
+    model=Pipeline([("std",StandardScaler()),
+      ("logistic",LogisticRegression(class_weight="balanced",random_state=42,max_iter=1000))])
+    model.fit(train,(ytrain>=10).astype(int))
+    q=model.predict_proba(val)[:,1]
+    return {"bal_acc":float(balanced_accuracy_score(yval>=10,q>=.5)),
+            "auc":float(roc_auc_score(yval>=10,q))}
+
+def prepareraw(official,writers,arm):
+    ratio,stroke=ARMS[arm]
+    raw=official["X_train"]
+    yy=official["y_train"]
+    # CoM-only is exactly the EXP-CMB-004 reference condition.
+    main=process(raw,"com",20)
+    changed={"method":arm,"requested_ratio":ratio,"actual_ratio":0.,
+             "n_aug":0,"n_stroke_changed":0,"n_stroke_rejected":0,
+             "official_train_rows":len(raw)}
+    targets=[]
+    if ratio:
+        ids,target_map=nested_subset(yy,ratio)  # Normal EXP015 nested low-ratio group
+        half,_=balanced_indices(yy,seed=20261116)
+        augmented=scale_base(raw,ids,target_map)
+        augmented,stroke_stats=stroke_jitter(augmented,stroke,ids,half)
+        main[ids]=process(augmented,"com",20)
+        changed.update({"n_aug":len(ids),"actual_ratio":len(ids)/len(yy),
+             "n_stroke_changed":stroke_stats["modified"],
+             "n_stroke_rejected":stroke_stats["rejected"]})
+        for cl in CLASSES:
+            for length in TARGETS:
+                ct=int(np.sum((yy[ids]==cl)&(target_map[ids]==length)))
+                targets.append({"arm":arm,"class":LABELS[cl],"target_size":length,
+                                "train_images_assigned":ct})
+                assert ct>=1
+        for cl in CLASSES:
+            cc=[x["train_images_assigned"] for x in targets if x["class"]==LABELS[cl]]
+            assert max(cc)-min(cc)<=1
+        assert abs(len(ids)/len(yy)-ratio)<.002
+    else:
+        for cl in CLASSES:
+            for length in TARGETS:
+                targets.append({"arm":arm,"class":LABELS[cl],"target_size":length,
+                                "train_images_assigned":0})
+    transformed_w={w:process(writers[w]["X"],"com",20) for w in WRITERS}
+    assert main.shape==(76800,784) and len(transformed_w)==4
+    return main,transformed_w,changed,targets
+
+def make_scaled(official,writers):
+    ref={}
+    for scale in SCALES:
+        # exact Normal EXP012 intervention; raw image BBox-centered affine, then CoM
+        ref[("official",scale)]=process(fixed_scale(official["X_val"],scale),"com",20)
+        for w in WRITERS:
+            ref[(w,scale)]=process(fixed_scale(writers[w]["X"],scale),"com",20)
+    return ref
+
+def eval_scales(model,raw_map,y,dataset,writer,arm,seed):
+    rows=[]; pair_rows=[]; focus=[]; class_errors=[]; family_errors=[]
+    probs={}
+    for sc in SCALES:
+        xx=raw_map[(writer if dataset=="OOF" else "official",sc)]
+        q=np.asarray(model.predict_proba(xx),dtype=np.float64)
+        assert np.array_equal(model.named_steps["model"].classes_,CLASSES)
+        p=q.argmax(axis=1).astype(int)
+        letter=q[:,10:].sum(axis=1)
+        probs[sc]=(p,letter)
+    _,base_letter=probs[1.]
+    base_family=base_letter>=.5
+    for sc in SCALES:
+        p,letter=probs[sc]
+        for group,z,cls in (("all",np.ones(len(y),dtype=bool),CLASSES),
+             ("digits",y<10,np.arange(10)),("letters",y>=10,np.arange(10,16))):
+            m=metrics(y[z],p[z],cls)
+            flip=(letter[z]>=.5)!=(base_family[z])
+            rows.append({"arm":arm,"seed":seed,"writer":writer,"dataset":dataset,
+               "scale":sc,"group":group,**m,
+               "family_flip":float(flip.mean()),
+               "mean_abs_delta_p_letter":float(np.abs(letter[z]-base_letter[z]).mean()),
+               "mean_p_letter":float(letter[z].mean())})
+        for cls_i in CLASSES:
+            z=y==cls_i
+            pz=p[z];ll=letter[z];bb=base_letter[z]
+            focus.append({"arm":arm,"seed":seed,"writer":writer,"dataset":dataset,
+                "scale":sc,"actual":LABELS[cls_i],"n":int(z.sum()),
+                "correct":int(np.sum(pz==cls_i)),
+                "accuracy":float(np.mean(pz==cls_i)),
+                "family_flip":float(np.mean((ll>=.5)!=(bb>=.5))),
+                "mean_abs_delta_p_letter":float(np.mean(np.abs(ll-bb))),
+                "mean_p_letter":float(ll.mean())})
+        sc_name=dataset+"_scale_"+str(sc)
+        pair_rows+=confusion_pairs(y,p,writer,arm,seed,sc_name)
+        class_errors+=total_errors_by_class(y,p,writer,arm,seed,sc_name)
+        family_errors+=family_error_breakdown(y,p,writer,arm,seed,sc_name)
+    return rows,pair_rows,focus,probs[1.][0],class_errors,family_errors
+
+def output_plots(y,p,out,arm,seed):
+    cm=confusion_matrix(y,p,labels=CLASSES)
+    for k in ("counts","row_normalized"):
+        v=cm if k=="counts" else 100*cm/np.maximum(cm.sum(axis=1,keepdims=True),1)
+        fig,ax=plt.subplots(figsize=(10,8))
+        im=ax.imshow(v,cmap="viridis",vmin=0,vmax=160 if k=="counts" else 100)
+        fig.colorbar(im,ax=ax,fraction=.045,pad=.04)
+        ax.set(xticks=np.arange(16),yticks=np.arange(16),
+               xticklabels=list(LABELS),yticklabels=list(LABELS),
+               xlabel="Predicted",ylabel="True",
+               title=f"EXP-CMB-005 {arm} seed={seed} Combined OOF {k}")
+        fig.tight_layout()
+        fig.savefig(out/f"OOF_confusion_{k}.png",dpi=145)
+        plt.close(fig)
+
+def run(arm,seed,out,learning_rate):
+    if arm!="scale30_stroke28" or seed not in SEEDS or learning_rate not in (.0005,.001,.002):raise ValueError((arm,seed,learning_rate))
+    if out.exists(): raise FileExistsError(out)
+    out.mkdir(parents=True)
+    (out/"models").mkdir()
+    t0=time.perf_counter()
+    original=ROOT/"02_data"/"datasets"/"MNIST_EMNIST_official_split_112000.npz"
+    handmade=ROOT/"02_data"/"Hand_made"
+    off=load_official(original)
+    writers=load_writers(handmade)
+    assert off["sha256"]==V3_SHA
+    for w in WRITERS:assert writers[w]["sha256"]==HANDMADE_SHA[w]
+    assert len(off["X_train"])==76800 and len(off["X_val"])==19200
+    tpre=time.perf_counter()
+    xtrain_off,xwriters,info,targets=prepareraw(off,writers,arm)
+    xval=process(off["X_val"],"com",20)
+    scale_map=make_scaled(off,writers)
+    preprocess_time=time.perf_counter()-tpre
+    official_probe=binary_size_probe(xtrain_off,off["y_train"],xval,off["y_val"])
+    savecsv(out/"target_assignments.csv",targets)
+    features=geom_rows("official_train",xtrain_off,off["y_train"],arm,seed)
+    features+=geom_rows("official_val",xval,off["y_val"],arm,seed)
+    for w in WRITERS:features+=geom_rows("writer_"+str(w),xwriters[w],writers[w]["y"],arm,seed)
+    savecsv(out/"geometry_distributions.csv",features)
+    foldrows=[];pairs=[];class_errors=[];family_errors=[];scale_rows=[];class_rows=[];scale_class_rows=[];pred_rows=[];loss=[];fit=[]
+    pooled=[]
+    for held in WRITERS:
+        trwriters=[w for w in WRITERS if w!=held]
+        X=np.concatenate([xtrain_off]+[xwriters[w] for w in trwriters])
+        y=np.concatenate([off["y_train"]]+[writers[w]["y"] for w in trwriters])
+        assert X.shape==(78720,784) and len(y)==78720
+        mlp=Pipeline([("scale_0_1",PixelScaler255()),
+                      ("model",MLPClassifier(random_state=seed,hidden_layer_sizes=(256,),alpha=0.0001,learning_rate_init=learning_rate,early_stopping=True,validation_fraction=0.10,n_iter_no_change=10))])
+        started=time.perf_counter()
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            mlp.fit(X,y)
+        sec=time.perf_counter()-started
+        mlpnet=mlp.named_steps["model"]
+        assert mlpnet.n_features_in_==784
+        for it,lossval in enumerate(mlpnet.loss_curve_):
+            loss.append({"arm":arm,"seed":seed,"heldout":held,
+                        "iteration":it+1,"loss":float(lossval)})
+        fit.append({"arm":arm,"seed":seed,"heldout":held,
+                    "train_n":len(y),"heldout_n":640,
+                    "fit_seconds":sec,"iterations":mlpnet.n_iter_,
+                    "last_loss":float(mlpnet.loss_),
+                    "warnings":" | ".join(str(w.message) for w in caught)})
+        fout=out/"models"/f"heldout_{held}.joblib"
+        joblib.dump(mlp,fout,compress=3)
+        handwritten_y=writers[held]["y"]
+        outcome=mlp.predict(xwriters[held]).astype(int)
+        pp=mlp.predict(xval).astype(int)
+        for ds,ytrue,pred in (("OOF",handwritten_y,outcome),
+                              ("OfficialVal",off["y_val"],pp)):
+            maskset=(("all",np.ones(len(ytrue),bool),CLASSES),
+                     ("digits",ytrue<10,np.arange(10)),
+                     ("letters",ytrue>=10,np.arange(10,16)))
+            for g,z,classes in maskset:
+                foldrows.append({"arm":arm,"seed":seed,"heldout":held,"dataset":ds,
+                      "group":g,**metrics(ytrue[z],pred[z],classes)})
+        prec,rec,f1,_=precision_recall_fscore_support(handwritten_y,outcome,
+              labels=CLASSES,zero_division=0)
+        for ci in CLASSES:
+            z=handwritten_y==ci
+            class_rows.append({"arm":arm,"seed":seed,"writer":held,
+               "class":LABELS[ci],"n":int(z.sum()),"correct":int(np.sum(outcome[z]==ci)),
+               "precision":float(prec[ci]),"recall":float(rec[ci]),"f1":float(f1[ci])})
+        for i in range(640):
+            pred_rows.append({"arm":arm,"seed":seed,"writer":held,"index":i,
+                "actual":LABELS[int(handwritten_y[i])],
+                "pred":LABELS[int(outcome[i])]})
+        pooled.append(outcome)
+        pairs+=confusion_pairs(handwritten_y,outcome,held,arm,seed,"OOF_original")
+        pairs+=confusion_pairs(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
+        class_errors+=total_errors_by_class(handwritten_y,outcome,held,arm,seed,"OOF_original")
+        class_errors+=total_errors_by_class(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
+        family_errors+=family_error_breakdown(handwritten_y,outcome,held,arm,seed,"OOF_original")
+        family_errors+=family_error_breakdown(off["y_val"],pp,held,arm,seed,"OfficialVal_original")
+        for ds,ytrue,wid in (("OOF",handwritten_y,held),
+                             ("OfficialVal",off["y_val"],held)):
+            z,p2,c,base,ce,fe=eval_scales(mlp,scale_map,ytrue,ds,wid,arm,seed)
+            scale_rows+=z;pairs+=p2;scale_class_rows+=c
+            class_errors+=ce;family_errors+=fe
+            if ds=="OOF":assert np.array_equal(base,outcome)
+            else:assert np.array_equal(base,pp)
+        print("FOLD_COMPLETED",arm,seed,held,
+              "OOF",round(np.mean(outcome==handwritten_y),6),
+              "VAL",round(np.mean(pp==off["y_val"]),6),
+              "fit_s",round(sec,2),flush=True)
+        del X,y,mlp
+    hand_y=np.concatenate([writers[w]["y"] for w in WRITERS])
+    pooled_p=np.concatenate(pooled)
+    assert len(hand_y)==2560
+    output_plots(hand_y,pooled_p,out,arm,seed)
+    savecsv(out/"fold_metrics.csv",foldrows)
+    savecsv(out/"oof_per_class.csv",class_rows)
+    savecsv(out/"per_class_and_scale.csv",scale_class_rows)
+    savecsv(out/"pair_confusions.csv",pairs)
+    savecsv(out/"per_class_error_rates.csv",class_errors)
+    savecsv(out/"family_confusion_rates.csv",family_errors)
+    savecsv(out/"scale_sensitivity.csv",scale_rows)
+    savecsv(out/"oof_predictions.csv",pred_rows)
+    savecsv(out/"training_loss.csv",loss)
+    savecsv(out/"training_time.csv",fit)
+    overall=metrics(hand_y,pooled_p)
+    meta={"experiment":"EXP-CMB-008","stage":"S5_early_stopping","learning_rate_init":learning_rate,"alpha":0.0001,"hidden_layer_sizes":[256],"status":"S5 model trained, selection pending",
+          "arm":arm,"seed":seed,"handmade_cv":"Leave-One-Writer-Out 4-Fold",
+          "official_n":76800,"official_val_n":19200,"training_handmade_each_fold":1920,
+          "oof_n":2560,"scale_interventions":SCALES,"class_balanced_targets":TARGETS,
+          "official_train_only_augmentation":True,
+          "handmade_train_preprocess":"CoM-only",
+          "heldout_and_official_val_preprocess":"CoM-only",
+          "augmentation_seed":20261116,"augmentation":info,
+          "preregistration":"EXP-CMB-008 S5; width 256, alpha=1e-4, S4-selected LR, ES True vs False; no Test",
+          "hyperparameter_search":True,"only_changed_parameter":"early_stopping",
+          "fixed_params":{"activation":"relu","solver":"adam","hidden_layer_sizes":[256],"alpha":0.0001,
+             "learning_rate_init":learning_rate,"max_iter":200,"early_stopping":True},
+          "early_stopping_internal_validation_fraction":0.10,"early_stopping_n_iter_no_change":10,
+          "official_sha256":off["sha256"],
+          "handmade_sha256":{str(w):writers[w]["sha256"] for w in WRITERS},
+          "official_train_size_binary_probe":official_probe,
+          "oof_metrics":overall,"fit_total_seconds":sum(r["fit_seconds"] for r in fit),
+          "preprocessing_seconds":preprocess_time,
+          "wall_seconds":time.perf_counter()-t0,
+          "original_test_used":False,"professor_test_used":False,
+          "new_handmade_480_used":False,
+          "versions":{"numpy":np.__version__,"scikit_learn":sklearn.__version__},
+          "model_sha256":{str(w):hashlib.sha256((out/"models"/f"heldout_{w}.joblib").read_bytes()).hexdigest()
+                          for w in WRITERS}}
+    (out/"manifest.json").write_text(json.dumps(meta,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    print("COMPLETED",arm,seed,json.dumps(overall),flush=True)
+
+if __name__=="__main__":
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--arm",choices=("scale30_stroke28",),default="scale30_stroke28")
+    ap.add_argument("--learning-rate",type=float,choices=(.0005,.001,.002),required=True)
+    ap.add_argument("--seed",type=int,choices=SEEDS,required=True)
+    ap.add_argument("--out",type=Path,required=True)
+    ar=ap.parse_args()
+    run(ar.arm,ar.seed,ar.out,ar.learning_rate)
