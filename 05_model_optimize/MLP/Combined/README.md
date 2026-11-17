@@ -59,3 +59,7 @@ CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
 [실험일지](logs/README.md) · [실측 CSV/그림](results/README.md) · [재현 코드](scripts/README.md) · [가설 A 보류 근거](logs/가설A/README.md) · [실험 공통 양식](../../EXPERIMENT_TEMPLATE.md).
 
 **번호 구분:** Normal 실험의 `EXP유###` 번호는 별개이며 Combined의 `EXP-CMB-###`와 혼용하지 않는다.
+
+<!-- CMB008_S4S5_FINAL_START -->
+**CMB-008 S1~S5 검증 완료:** (256,), alpha=1e-4, LR **0.001**, Early Stopping **False**, OOF **92.214%**, OfficialVal **97.044%**. [선정·탈락 근거](logs/하이퍼파라미터_최적화/EXP-CMB-008_11_Final_HP_Decision.md). 최종 Test·배포 미변경.
+<!-- CMB008_S4S5_FINAL_END -->

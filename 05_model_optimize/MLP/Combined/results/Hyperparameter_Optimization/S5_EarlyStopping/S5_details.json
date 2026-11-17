@@ -1,0 +1,174 @@
+{
+  "experiment": "EXP-CMB-008",
+  "stage": "S5_early_stopping",
+  "selected": "False",
+  "status": "BASELINE_RETAINED",
+  "selected_is_independent_final_test": false,
+  "all_four_directions_under_5pct_candidates": [],
+  "safe_fallback_candidates": [
+    "False"
+  ],
+  "target_rate_each_direction": "strictly below 5%",
+  "max_count_per_direction": 23,
+  "actual_class_denominator": 480,
+  "criterion": "if none <5% with gates, maximize OOF accuracy with no regression in D->0/B->8/8->B/0->D, errors of 0/8/B/D, or overfit safeguards",
+  "scores": {
+    "False": {
+      "width": "False",
+      "oof": 0.9221354166666667,
+      "seed_std": 0.0027865800207074127,
+      "val": 0.9704427083333333,
+      "pairs": {
+        "0->D": 14,
+        "8->B": 38,
+        "D->0": 67,
+        "B->8": 43,
+        "5->F": 14,
+        "7->9": 26,
+        "7->A": 0,
+        "4->F": 9
+      },
+      "classerror": {
+        "0": 0.0375,
+        "1": 0.04375,
+        "2": 0.07083333333333333,
+        "3": 0.10208333333333333,
+        "4": 0.07083333333333333,
+        "5": 0.09166666666666666,
+        "6": 0.058333333333333334,
+        "7": 0.06666666666666667,
+        "8": 0.11875,
+        "9": 0.0625,
+        "A": 0.041666666666666664,
+        "B": 0.15625,
+        "C": 0.04791666666666667,
+        "D": 0.17708333333333334,
+        "E": 0.04375,
+        "F": 0.05625
+      },
+      "writers": {
+        "41": 0.8869791666666667,
+        "42": 0.9213541666666667,
+        "43": 0.953125,
+        "44": 0.9270833333333334
+      },
+      "flip": {
+        "OOF": 0.22708333333333333,
+        "OfficialVal": 0.16583333333333333
+      },
+      "mean_n_iter": 63.416666666666664,
+      "mean_fit_seconds": 65.0763968245,
+      "warnings": 0
+    },
+    "True": {
+      "width": "True",
+      "oof": 0.9177083333333333,
+      "seed_std": 0.006220089016925139,
+      "val": 0.9702473958333333,
+      "pairs": {
+        "0->D": 14,
+        "8->B": 49,
+        "D->0": 77,
+        "B->8": 49,
+        "5->F": 9,
+        "7->9": 26,
+        "7->A": 1,
+        "4->F": 10
+      },
+      "classerror": {
+        "0": 0.0375,
+        "1": 0.035416666666666666,
+        "2": 0.06666666666666667,
+        "3": 0.10833333333333334,
+        "4": 0.09166666666666666,
+        "5": 0.1,
+        "6": 0.05625,
+        "7": 0.075,
+        "8": 0.14166666666666666,
+        "9": 0.06041666666666667,
+        "A": 0.052083333333333336,
+        "B": 0.15833333333333333,
+        "C": 0.05,
+        "D": 0.19166666666666668,
+        "E": 0.0375,
+        "F": 0.05416666666666667
+      },
+      "writers": {
+        "41": 0.8859375,
+        "42": 0.9239583333333333,
+        "43": 0.9421875,
+        "44": 0.91875
+      },
+      "flip": {
+        "OOF": 0.21041666666666667,
+        "OfficialVal": 0.16236111111111112
+      },
+      "mean_n_iter": 47.166666666666664,
+      "mean_fit_seconds": 43.24551508033334,
+      "warnings": 0
+    }
+  },
+  "gates": {
+    "False": {
+      "oof_accuracy_at_least_baseline": true,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": true,
+      "class_0_8_B_D_error_no_increase": true,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": true,
+      "B_to_8_no_increase": true,
+      "8_to_B_no_increase": true,
+      "0_to_D_no_increase": true
+    },
+    "True": {
+      "oof_accuracy_at_least_baseline": false,
+      "official_val_drop_le_0p5pp": true,
+      "writer_drop_le_1pp": false,
+      "class_0_8_B_D_error_no_increase": false,
+      "max_class_family_flip_increase_le_5pp": true,
+      "D_to_0_no_increase": false,
+      "B_to_8_no_increase": false,
+      "8_to_B_no_increase": false,
+      "0_to_D_no_increase": true
+    }
+  },
+  "paired_corrected_and_induced": {
+    "True": [
+      164,
+      198
+    ]
+  },
+  "average_first_and_last_training_loss": {
+    "False": {
+      "first": 0.5947887606163351,
+      "last": 0.007022830984330359
+    },
+    "True": {
+      "first": 0.6194249203446167,
+      "last": 0.008317792901104957
+    }
+  },
+  "same_official_and_handmade_sha_confirmed": true,
+  "no_independent_test_used": true,
+  "training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "heldout_writers": [
+    41,
+    42,
+    43,
+    44
+  ],
+  "selected_learning_rate": "0.001",
+  "selected_early_stopping": false,
+  "s4_selected_learning_rate_from_verified_decision": true,
+  "internal_training_validation_fraction_if_enabled": 0.1,
+  "alpha_fixed": 0.0001,
+  "structure_fixed": [
+    256
+  ],
+  "new_fits": 12,
+  "baseline_reused_models": 12
+}

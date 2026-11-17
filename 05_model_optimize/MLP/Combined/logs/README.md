@@ -32,3 +32,7 @@
 전체 31조건의 **OOF 정확도 상위 3개**는 Size/Stroke **30%-28%, 30%-14%, 30%-0%**로 오분류율이 각각 **9.284%, 9.310%, 9.427%**다. 이는 학습 조건의 개발용 순위이며, **독립 신규 작성자 일반화나 최종 배포 모델의 선택을 의미하지 않는다.**
 
 [원본 결과 모음](../results/README.md) · [재현 코드](../scripts/README.md) · [Combined 개요](../README.md) · [공통 실험 양식](../../../EXPERIMENT_TEMPLATE.md).
+
+<!-- CMB008_S4S5_FINAL_START -->
+**CMB-008 S1~S5 완료:** (256,), alpha=1e-4, LR **0.001**, Early Stopping **False**, OOF **92.214%**, OfficialVal **97.044%**. [S4 결과](하이퍼파라미터_최적화/EXP-CMB-008_08_Stage4_LearningRate_Results.md) → [S5 결과](하이퍼파라미터_최적화/EXP-CMB-008_10_Stage5_EarlyStopping_Results.md) → [최종 결정](하이퍼파라미터_최적화/EXP-CMB-008_11_Final_HP_Decision.md). 최종 Test·배포 미변경.
+<!-- CMB008_S4S5_FINAL_END -->

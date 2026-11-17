@@ -33,3 +33,7 @@
 - 모든 결과에는 Seed·Writer별 성능, Loss, n_iter, 수렴 경고, 수정/유발 오답을 기록. 같은 4 Writer 반복 선택에 따른 개발용 OOF 과적합 위험을 명시.
 
 [연속 S4→S5 실행 워크플로](../../../../../.github/workflows/exp-cmb-008-s4-s5-chained.yml) · [S4 학습 코드](../../scripts/exp_cmb008_s4_learning_rate.py) · [S5 학습 코드](../../scripts/exp_cmb008_s5_early_stopping.py) · [통합 집계 및 최종 의사결정](../../scripts/exp_cmb008_s4_s5_finalize.py).
+
+<!-- CMB008_S4S5_FINAL_START -->
+**S1~S5 완료:** 단층 (256,), alpha=1e-4, LR **0.001**, Early Stopping **False**, OOF **92.214%**, OfficialVal **97.044%**. [S4 결과](EXP-CMB-008_08_Stage4_LearningRate_Results.md) → [S5 결과](EXP-CMB-008_10_Stage5_EarlyStopping_Results.md) → [최종 연구결정](EXP-CMB-008_11_Final_HP_Decision.md). 최종 Test·배포 미변경.
+<!-- CMB008_S4S5_FINAL_END -->
