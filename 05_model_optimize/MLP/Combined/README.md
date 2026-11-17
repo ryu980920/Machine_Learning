@@ -63,3 +63,7 @@ CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
 <!-- CMB008_S4S5_FINAL_START -->
 **CMB-008 S1~S5 검증 완료:** (256,), alpha=1e-4, LR **0.001**, Early Stopping **False**, OOF **92.214%**, OfficialVal **97.044%**. [선정·탈락 근거](logs/하이퍼파라미터_최적화/EXP-CMB-008_11_Final_HP_Decision.md). 최종 Test·배포 미변경.
 <!-- CMB008_S4S5_FINAL_END -->
+
+## 발표 자료 — S5 Learning Curve 및 현재 결정
+
+**Early Stopping=False 유지 (개발용 HP).** 같은 실행에서 관측한 Training vs Validation Accuracy·Loss 그래프의 과적합 징후와, 별도 S5 Writer OOF 평가에서 False가 True보다 좋았던 근거를 구분했다. [**PPT용 16:9 그래프 및 발표 문장**](logs/하이퍼파라미터_최적화/EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md). Test 평가·최종 배포는 미실시.
