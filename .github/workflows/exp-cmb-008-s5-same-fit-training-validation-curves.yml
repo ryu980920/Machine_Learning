@@ -1,0 +1,138 @@
+name: EXP-CMB-008 S5 Same-Fit Training and Validation Learning Curves
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s5-same-fit-training-validation-curves.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: cmb008-s5-samefit-trainval
+  cancel-in-progress: false
+
+jobs:
+  train_trace:
+    name: Actual Train and Val Accuracy seed ${{ matrix.seed }} Writer ${{ matrix.writer }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned project requirements
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Check sklearn version, instrument and existing data SHA
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python - <<'PY'
+          import inspect,sklearn
+          from sklearn.neural_network import MLPClassifier
+          assert sklearn.__version__=="1.8.0",sklearn.__version__
+          assert tuple(inspect.signature(MLPClassifier._update_no_improvement_count).parameters)==("self","early_stopping","X","y","sample_weight")
+          print("Train/validation same-fit learning curve hook available")
+          PY
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_train_val_curve.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_train_val_aggregate.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Capture true Training Accuracy and Validation Accuracy in same 120 epoch sklearn fit
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_train_val_curve.py \
+            --seed '${{ matrix.seed }}' \
+            --heldout '${{ matrix.writer }}' \
+            --out '${{ runner.temp }}/trainval/cmb008-trainval-s${{ matrix.seed }}-w${{ matrix.writer }}'
+      - name: Archive actual per-epoch Accuracy and Loss and counterfactual ES stop
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-trainval-s${{ matrix.seed }}-w${{ matrix.writer }}
+          path: '${{ runner.temp }}/trainval/cmb008-trainval-s${{ matrix.seed }}-w${{ matrix.writer }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate_plot:
+    name: Plot real Train vs Validation Accuracy and Loss from 12 completed folds
+    needs: [train_trace]
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install plotting dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Download complete 3 Seed times 4 Writer artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-trainval-s*-w*
+          path: ${{ runner.temp }}/trainval-incoming
+          merge-multiple: false
+      - name: Validate all 12 runs before plotting
+        env:
+          CURVE_DIR: ${{ runner.temp }}/trainval-incoming
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          root=Path(os.environ["CURVE_DIR"])
+          expected={f"cmb008-trainval-s{s}-w{w}" for s in (42,43,44) for w in (41,42,43,44)}
+          found={p.name for p in root.iterdir() if p.is_dir()}
+          assert found==expected,(len(found),expected-found,found-expected)
+          for p in root.iterdir():
+              assert (p/"same_run_train_val_curve.csv").is_file()
+              assert (p/"manifest.json").is_file()
+          print("All 12 full-training/validation accuracy traces verified")
+          PY
+      - name: Generate 6 genuine figures with original per-Epoch observations
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_train_val_aggregate.py \
+            --incoming '${{ runner.temp }}/trainval-incoming' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_SameFit_TrainVal
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_SameFit_TrainVal/report.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_16_S5_SameFit_TrainVal_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_16_S5_SameFit_TrainVal_Results.md
+      - name: Archive 6 PNG Learning Curves, Epoch CSV and final report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s5-true-train-validation-accuracy-curves
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_SameFit_TrainVal/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_16_S5_SameFit_TrainVal_Results.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish verified same-fit Learning Curves to main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_SameFit_TrainVal/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_16_S5_SameFit_TrainVal_Results.md
+          if git diff --staged --quiet; then
+            echo 'Identical Learning Curve results already committed'
+            exit 0
+          fi
+          git commit -m 'research: actual S5 same-fit Train vs Validation Accuracy and Loss curves [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main
