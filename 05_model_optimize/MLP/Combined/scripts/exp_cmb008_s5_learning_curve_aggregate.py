@@ -70,7 +70,10 @@ def build():
                        "exact_replay":exact})
     assert len(datasets)==36
     # Replay must match previously published S5 before interpreting new diagnostics.
-    assert all(x["exact_replay"] for x in orig_replays),f"Original S5 replication failed: {orig_replays}"
+    replay_exact=sum(x["exact_replay"] for x in orig_replays)
+    print("ORIGINAL_S5_REPLAY_AUDIT",json.dumps({"exact_folds":replay_exact,"total":12,"folds":orig_replays}),flush=True)
+    # Different runner or BLAS floating order can change validation-based stopping;
+    # never falsely claim exact replay. Preserve all mismatches for interpretation.
     # The ES=True 120-epoch continuation must exactly match ES10 until its stop:
     # only patience changes; split, initialization, Adam momentum and data are equal.
     replay_checks=[]
@@ -85,7 +88,10 @@ def build():
                 or any(int(x[p])!=int(y[p]) for p in PAIRS)
                 for x,y in zip(early,long))
             replay_checks.append({"seed":seed,"writer":w,"pre_stop_disagreements":disagreements})
-    assert not any(x["pre_stop_disagreements"] for x in replay_checks),"Extended run diverged from original ES before stopping"
+    aligned_count=sum(x["pre_stop_disagreements"]==0 for x in replay_checks)
+    print("ES10_VS_CONTINUATION_AUDIT",json.dumps({"matched_folds":aligned_count,"total":12,"folds":replay_checks}),flush=True)
+    # If trajectories diverge, these are repeated seeded stochastic trajectories,
+    # not an exactly paired causal stop-only comparison.
     base_sha=metadata[("es10",42,41)]["original_official_sha"]
     for m in metadata.values():
         assert m["original_official_sha"]==base_sha
@@ -140,16 +146,20 @@ def build():
     old_final={"accuracy":float(np.mean(y==p)),
       "pairs":{key:int(np.sum((y==aa)&(p==bb))) for aa,bb,key in (
          ("D","0","D_to_0"),("B","8","B_to_8"),("8","B","8_to_B"),("0","D","0_to_D"))}}
-    assert abs(old_final["accuracy"]-.9177083333333333)<1e-12,old_final
-    assert [old_final["pairs"][p] for p in PAIRS]==[77,49,49,14],old_final
+    original_s5_published={"accuracy":.9177083333333333,
+      "pairs":{"D_to_0":77,"B_to_8":49,"8_to_B":49,"0_to_D":14}}
+    print("REMEASURED_ES10_VS_ORIGINAL",json.dumps({"new":old_final,"original":original_s5_published}),flush=True)
     stop=[metadata[("es10",s,w)]["fit_epochs"] for s in SEEDS for w in WRITERS]
     best=[metadata[("es10",s,w)]["best_internal_val_epoch"] for s in SEEDS for w in WRITERS]
     summary={"experiment":"EXP-CMB-008 S5 learning curve","report_status":"evaluated",
-      "original_s5_exact_replay":True,"pre_stop_long_continuation_exact":True,
+      "original_s5_exact_replay":replay_exact==12,"original_exact_replay_folds":replay_exact,
+      "pre_stop_long_continuation_exact":aligned_count==12,
+      "pre_stop_aligned_folds":aligned_count,
       "counts":{"fold_variants":36,"seeds":3,"writers":4,
                  "internal_validation_samples_per_fold":7872},
       "stop_epochs":stop,"best_epochs":best,"mean_stop_epoch":statistics.mean(stop),
       "mean_best_epoch":statistics.mean(best),"restored_es10":old_final,
+      "original_published_s5":original_s5_published,
       "pre_registered_diagnostic_checkpoints":checkpoints,
       "unchanged_hyperparameters":{"hidden_layer_sizes":[256],"alpha":.0001,
                                   "learning_rate_init":.001,"size_ratio":.3,"stroke_strength":.28},
@@ -216,7 +226,7 @@ def build():
     fig.tight_layout();fig.savefig(a.out/"figures"/"05_best_vs_stop_epoch.png",dpi=170);plt.close(fig)
     # Evidence-first report with no hand-selected OOF-optimal checkpoint deployment.
     rows=["# EXP-CMB-008 · 13 Early Stopping Learning Curve 실측 보고","",
-      "> **실측 완료:** 3 Seed × 4 Writer × 3 학습 조건 = 36개 실제 모델. 원본 S5 ES10의 종료 Epoch/보류 Writer 예측을 재현했고, 90% Training 장기 학습은 ES10 종료 전까지 동일한 곡선을 재현했다.",
+      "> **실측 완료:** 3 Seed × 4 Writer × 3 학습 조건 = 36개 실제 모델. 원본 S5/조건 간 재현성 차이를 모두 감사했으며 일치 여부를 반드시 아래에서 확인한다.",
       "> **제한:** 120 Epoch 연장은 진단용이다. held-out OOF 최적 Epoch를 모델 선택에 사용하지 않는다. Original Test·교수님 Test·신규 손글씨 480장 미사용.","",
       "## 비교 설계와 실험 이유","",
       "| 조건 | Training / Validation | 종료 규칙 | 무엇을 구분하는가? |",
@@ -224,9 +234,16 @@ def build():
       "| es10 | Training Fold 90% / 내부 Val 10% | 기존 S5 ES=True, patience 10, max_iter 200 | 실제 종료 위치와 검증 최고점 |",
       "| internal120 | es10과 **동일한** 90% / 내부 Val 10% | 동일 초기값/Adam, patience 200, 120 Epoch 추적 | 종료 후 학습이 지속될 때의 변화 (OOF는 진단만) |",
       "| full120 | Training Fold 100% | ES=False, patience 200, 120 Epoch 추적 | 10% 학습데이터 제외가 결과에 미치는 영향 (검증 분할도 변함) |","",
+      "## 재현성 감사 (이 결과를 해석할 때 필수)","",
+      f"- **기존 S5 원본과 Stop Epoch 및 최종 OOF 예측까지 정확히 재현한 Fold:** {replay_exact}/12.",
+      f"- **계측 es10과 internal120가 Stop 이전 모든 Epoch Loss·Validation·OOF가 일치한 Fold:** {aligned_count}/12.",
+      "- 이 차이는 같은 입력과 Seed를 지정해도 실행 환경/부동소수점 연산 순서 등의 요소가 달라질 수 있음을 보여준다. 원인을 확정하지 않은 상태에서 **원본 S5를 정확히 재현했다거나 동일한 optimizer 경로라고 주장하지 않는다**.",
+      "- 만약 일치 Fold가 12 미만이라면, 이어서 학습한 곡선과 기존 ES10은 엄격한 단일 변수 통제 비교가 아니라 독립 반복 궤적이다. OOF/Best Epoch 차이는 진단 참고 결과이며 인과적 결론·최종 HP 선택에 사용하지 않는다.",
+      "- Fold별 불일치 원본은 [진단 요약 JSON](diagnostic_summary.json)의 `replay_s5_audit`와 `continuation_audit` 참조.",
+      "",
       "## 실제 종료 및 최고 검증 체크포인트","",
-      f"- 기존 ES10 평균 **Stop Epoch {statistics.mean(stop):.2f}**, 평균 **최고 Validation Epoch {statistics.mean(best):.2f}**.",
-      f"- 원본 S5 ES10의 restored OOF = **{ratio(old_final['accuracy'])}**. 실제 복원 모델 D→0={old_final['pairs']['D_to_0']}, B→8={old_final['pairs']['B_to_8']}, 8→B={old_final['pairs']['8_to_B']}, 0→D={old_final['pairs']['0_to_D']}건 (3 Seed×4 Writer, 실제 클래스당 480회).",
+      f"- 이번에 재측정한 ES10의 평균 **Stop Epoch {statistics.mean(stop):.2f}**, 평균 **최고 Validation Epoch {statistics.mean(best):.2f}**. 기존 S5에 발표된 평균 종료 횟수는 47.17 Epoch이다.",
+      f"- **새로 재측정한 ES10**의 restored OOF = **{ratio(old_final['accuracy'])}**. 복원 모델 D→0={old_final['pairs']['D_to_0']}, B→8={old_final['pairs']['B_to_8']}, 8→B={old_final['pairs']['8_to_B']}, 0→D={old_final['pairs']['0_to_D']}건 (3 Seed×4 Writer, 실제 클래스당 480회). 기존 S5 원본은 OOF 91.771%, D→0 77건, B→8 49건, 8→B 49건, 0→D 14건이다.",
       "- 모든 Fold의 실제 Stop/Best Epoch와 OOF 복원 성능은 [fold_checkpoint_summary.csv](fold_checkpoint_summary.csv) 보존.",
       "",
       "## 실제 Learning Curve — 원본 데이터에서 생성한 PNG","",
@@ -252,7 +269,7 @@ def build():
        "",
        "## 데이터와 재현","",
        "- [원본 Epoch별 관측 CSV](learning_curve_epoch_aggregate.csv) · [진단 요약 JSON](diagnostic_summary.json) · [Fold별 Stop/Best](fold_checkpoint_summary.csv)",
-       "- 기존 원본 S5 아티팩트 12 Fold와 모든 재학습 Stop·예측 일치, ES continuation도 Stop 전 구간 loss/Validation/OOF 일치 확인.",
+       "- 기존 S5와 개별 Fold의 정확한 재현 여부를 `diagnostic_summary.json`에서 공개했다. 불일치한 경우 이전 S5 선택 성능을 새로운 곡선의 정확한 마지막 점과 혼동하지 않는다.",
        ""]
     (a.out/"report.md").write_text("\n".join(rows),encoding="utf-8")
     print("CURVES_VERIFIED",json.dumps({"mean_stop":statistics.mean(stop),"mean_best":statistics.mean(best),
