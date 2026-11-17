@@ -14,9 +14,29 @@
 
 ## 2. 학습 곡선 그림
 
-- [전체 Learning Curve: 3 Seed×(Training Loss, OfficialVal Log Loss, Accuracy)](EXP021_Learning_Curves_3Seeds.png)
-- [Validation 구간 확대: epoch≥10](EXP021_Validation_Plateau_Zoom_3Seeds.png)
-- [ON 내부 Accuracy 기준과 OfficialVal Accuracy 비교](EXP021_EarlyStopping_Internal_vs_Official_Accuracy.png)
+아래 그림은 [epoch별 실측 CSV](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_epochwise_3seed_learning_curves.csv)에서 복원했다. OFF(NOES)와 ON(ES)은 학습 데이터 수 및 patience가 다르므로 곡선 차이를 Early Stopping만의 인과 효과로 해석하지 않는다.
+
+### 2-1. 전체 Learning Curve: 3 Seed × (Training Loss, OfficialVal NLL, Accuracy)
+
+![전체 Learning Curve: 3 Seed별 Training Loss, OfficialVal NLL, Accuracy](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_Learning_Curves_3Seeds.svg)
+
+### 2-2. Validation 구간 확대: epoch ≥ 10
+
+![Validation 구간 확대: Seed별 OfficialVal NLL](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_Validation_Plateau_Zoom_3Seeds.svg)
+
+### 2-3. ON 내부 Accuracy와 OfficialVal Accuracy 비교
+
+![ON 내부 Validation Accuracy, OfficialVal Accuracy 및 복원 Epoch](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_EarlyStopping_Internal_vs_Official_Accuracy.svg)
+
+### 2-4. 기존 3-Seed 평균 그래프 (ON/OFF)
+
+**OFF (NOES)**
+
+![Early Stopping OFF, 3-Seed 평균 학습곡선](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_Mean_Learning_Curve_NOES.png)
+
+**ON (ES)**
+
+![Early Stopping ON, 3-Seed 평균 학습곡선](../../results/크기편향_원인분석/EXP유021_EarlyStopping_LearningCurve/EXP021_3Seed_Mean_Learning_Curve_ES.png)
 
 **그래프 해석 시 주의:** Train Loss에는 L2 규제항이 포함되고, OfficialVal NLL은 규제항이 없는 원본 입력의 log loss다. 그러므로 두 손실값의 절대적인 차이보다 각 추세를 비교한다. ON/OFF는 학습행 수와 patience도 다르기 때문에 단순히 한 가지 옵션만 바꾼 인과 실험이 아니다.
 
