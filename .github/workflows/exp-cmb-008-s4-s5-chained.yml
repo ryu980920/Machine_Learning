@@ -1,0 +1,312 @@
+name: EXP-CMB-008 S4 then S5 Chained HP Optimization
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/exp-cmb-008-s4-s5-chained.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: cmb008-s4-s5-chained
+  cancel-in-progress: false
+
+jobs:
+  s4_train:
+    name: S4 LR ${{ matrix.lr }} seed ${{ matrix.seed }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        lr: ["0.0005", "0.002"]
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned model dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Compile the full S4 to S5 pipeline and verify dataset splits
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile \
+            05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_learning_rate.py \
+            05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_early_stopping.py \
+            05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_s5_aggregate.py \
+            05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_s5_finalize.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: S4 30-28 CoM, 256-only, alpha 1e-4, change only Adam LR
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_learning_rate.py \
+            --learning-rate '${{ matrix.lr }}' \
+            --seed '${{ matrix.seed }}' \
+            --out '${{ runner.temp }}/cmb008-s4/cmb008-s4-lr${{ matrix.lr }}-s${{ matrix.seed }}'
+      - name: Preserve all S4 predictions, loss, class confusion and model SHA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s4-lr${{ matrix.lr }}-s${{ matrix.seed }}
+          path: '${{ runner.temp }}/cmb008-s4/cmb008-s4-lr${{ matrix.lr }}-s${{ matrix.seed }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  s4_compare:
+    name: S4 4-direction error, accuracy, overfit, SELECT LR before S5
+    needs: [s4_train]
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    outputs:
+      selected_lr: ${{ steps.choose.outputs.selected_lr }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download six new S4 archives
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s4-lr*-s*
+          path: ${{ runner.temp }}/cmb008-s4
+          merge-multiple: false
+      - name: Retrieve original three seed archives of S1 256-width LR0.001
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 43914675988
+          pattern: cmb008-w256-s*
+          path: ${{ runner.temp }}/cmb008-s1
+          merge-multiple: false
+      - name: Verify all original and new files before selection
+        env:
+          NEW_DIR: ${{ runner.temp }}/cmb008-s4
+          S1_DIR: ${{ runner.temp }}/cmb008-s1
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          new=Path(os.environ["NEW_DIR"]); ref=Path(os.environ["S1_DIR"])
+          assert {p.name for p in new.iterdir() if p.is_dir()}=={
+            f"cmb008-s4-lr{lr}-s{seed}" for lr in ("0.0005","0.002") for seed in (42,43,44)}
+          assert {p.name for p in ref.iterdir() if p.is_dir()}=={
+            f"cmb008-w256-s{seed}" for seed in (42,43,44)}
+          for p in list(new.iterdir())+list(ref.iterdir()):
+              for name in ("manifest.json","oof_predictions.csv","fold_metrics.csv",
+                           "per_class_and_scale.csv","training_time.csv","training_loss.csv"):
+                  assert (p/name).is_file(),(p,name)
+          print("S4 original reference and new archives validated")
+          PY
+      - name: Evaluate S4 OOF + protected classes + four critical directions
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_s5_aggregate.py \
+            --stage s4 \
+            --s4-new '${{ runner.temp }}/cmb008-s4' \
+            --s1-reference '${{ runner.temp }}/cmb008-s1' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S4_LearningRate
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S4_LearningRate/S4_Stage_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_08_Stage4_LearningRate_Results.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_08_Stage4_LearningRate_Results.md
+      - name: Export real S4-selected LR as S5 dependency
+        id: choose
+        run: |
+          SELECTED=$(python -c "import json;print(json.load(open('05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S4_LearningRate/S4_details.json'))['selected_learning_rate'])")
+          case "$SELECTED" in
+            0.0005|0.001|0.002) ;;
+            *) echo "Unexpected LR $SELECTED"; exit 1 ;;
+          esac
+          echo "selected_lr=$SELECTED" >> "$GITHUB_OUTPUT"
+          echo "S4 selected learning rate: $SELECTED"
+      - name: Upload S4 decision to downstream S5 audit (not a refit)
+        run: |
+          mkdir -p '${{ runner.temp }}/cmb008-s4-decision'
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S4_LearningRate/S4_details.json \
+            '${{ runner.temp }}/cmb008-s4-decision/S4_details.json'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s4-stage-decision
+          path: '${{ runner.temp }}/cmb008-s4-decision/'
+          retention-days: 30
+          if-no-files-found: error
+      - name: Archive S4 full evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s4-comparison-and-log
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S4_LearningRate/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_08_Stage4_LearningRate_Results.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Publish S4 result and decision to main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S4_LearningRate/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_08_Stage4_LearningRate_Results.md
+          if git diff --staged --quiet; then
+            echo 'S4 results identical; already in main'
+          else
+            git commit -m 'research: EXP-CMB-008 S4 LR selection with OOF and confusion audit [skip ci]'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+  s5_train:
+    name: S5 ES True at S4-selected LR ${{ needs.s4_compare.outputs.selected_lr }} seed ${{ matrix.seed }}
+    needs: [s4_compare]
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        seed: [42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned training dependencies
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Recheck S5 Python and reproducibility
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_early_stopping.py
+          python 05_model_optimize/MLP/Combined/scripts/test_reproducibility.py
+      - name: Fit ES True with ONLY training-fold internal validation of ten percent
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s5_early_stopping.py \
+            --learning-rate '${{ needs.s4_compare.outputs.selected_lr }}' \
+            --seed '${{ matrix.seed }}' \
+            --out '${{ runner.temp }}/cmb008-s5/cmb008-s5-lr${{ needs.s4_compare.outputs.selected_lr }}-s${{ matrix.seed }}'
+      - name: Preserve S5 model, loss, OOF predictions, class and directed confusion
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s5-lr${{ needs.s4_compare.outputs.selected_lr }}-s${{ matrix.seed }}
+          path: '${{ runner.temp }}/cmb008-s5/cmb008-s5-lr${{ needs.s4_compare.outputs.selected_lr }}-s${{ matrix.seed }}/'
+          retention-days: 30
+          if-no-files-found: warn
+
+  s5_compare_finalize:
+    name: S5 early stop audit, finalize S1-S5, publish main
+    needs: [s4_compare,s5_train]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download S5 new Early Stopping artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s5-lr*-s*
+          path: ${{ runner.temp }}/cmb008-s5
+          merge-multiple: false
+      - name: Download original S4 LR candidates for comparing ES False
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb008-s4-lr*-s*
+          path: ${{ runner.temp }}/cmb008-s4
+          merge-multiple: false
+      - name: Download completed S4 selection JSON
+        uses: actions/download-artifact@v4
+        with:
+          name: cmb008-s4-stage-decision
+          path: ${{ runner.temp }}/cmb008-s4-decision
+      - name: Download unchanged S1 LR0.001 256-width reference
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 43914675988
+          pattern: cmb008-w256-s*
+          path: ${{ runner.temp }}/cmb008-s1
+          merge-multiple: false
+      - name: Confirm S4 output and exactly three new S5 seed archives
+        env:
+          NEW_DIR: ${{ runner.temp }}/cmb008-s5
+          DECISION: ${{ runner.temp }}/cmb008-s4-decision/S4_details.json
+        run: |
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          decision=json.loads(Path(os.environ["DECISION"]).read_text())
+          lr=decision["selected_learning_rate"]
+          found={p.name for p in Path(os.environ["NEW_DIR"]).iterdir() if p.is_dir()}
+          assert found=={f"cmb008-s5-lr{lr}-s{seed}" for seed in (42,43,44)}
+          print("S4 selected",lr,"; S5 three seed packages verified")
+          PY
+      - name: Audit Early Stopping against exact S4-selected LR and four-direction gates
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_s5_aggregate.py \
+            --stage s5 \
+            --s4-new '${{ runner.temp }}/cmb008-s4' \
+            --s5-new '${{ runner.temp }}/cmb008-s5' \
+            --s1-reference '${{ runner.temp }}/cmb008-s1' \
+            --s4-decision '${{ runner.temp }}/cmb008-s4-decision/S4_details.json' \
+            --out 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping
+          cp 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping/S5_Stage_Results.md \
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_10_Stage5_EarlyStopping_Results.md
+      - name: Generate final stage-by-stage HP rationale and update all research indexes
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb008_s4_s5_finalize.py \
+            --s4 '${{ runner.temp }}/cmb008-s4-decision/S4_details.json' \
+            --s5 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping/S5_details.json \
+            --logs 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화 \
+            --hp-index 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/README.md \
+            --combined-readme 05_model_optimize/MLP/Combined/README.md \
+            --master-log-index 05_model_optimize/MLP/Combined/logs/README.md
+          cat 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_11_Final_HP_Decision.md
+      - name: Preserve all S5 evaluation and final HP decision artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb008-s5-and-final-hp-evidence
+          path: |
+            05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping/
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_10_Stage5_EarlyStopping_Results.md
+            05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_11_Final_HP_Decision.md
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit S5 final outcome and all S1-S5 research indexes to main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 05_model_optimize/MLP/Combined/results/Hyperparameter_Optimization/S5_EarlyStopping/
+          git add 05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/
+          git add 05_model_optimize/MLP/Combined/README.md
+          git add 05_model_optimize/MLP/Combined/logs/README.md
+          if git diff --staged --quiet; then
+            echo 'S5 and final results already on main'
+            exit 0
+          fi
+          git commit -m 'research: EXP-CMB-008 S5 ES audit and complete S1-S5 HP decision [skip ci]'
+          git pull --rebase origin main
+          git push origin HEAD:main

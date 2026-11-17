@@ -1,6 +1,6 @@
 # MLP / Combined — 작성자 보류 OOF 최적화 연구
 
-> **현재 상태:** **EXP-CMB-001~007**의 실험·결과를 기록했고, 후속 **EXP-CMB-008의 S1·S2는 실측 완료**. 단층 (256,)을 잠정 선정했고 **S3 L2 규제(alpha) 실험을 사전등록**했다. 실험 번호는 하나의 `EXP-CMB-###` 체계이며, 계획/중간/최종/후속 분석은 **동일 실험의 문서 단계**다. **Size30/Stroke28/CoM의 학습 증강 조건은 선정했으나 최종 MLP 하이퍼파라미터·배포 체크포인트는 미확정.**
+> **현재 상태:** **EXP-CMB-001~007**의 실험·결과를 기록했고, 후속 **EXP-CMB-008의 S1·S2·S3를 실측 완료**. 단층 (256,), alpha=0.0001을 선정하고 **S4 Learning Rate → S5 Early Stopping 연속 검증을 사전등록**했다. 실험 번호는 하나의 `EXP-CMB-###` 체계이며, 계획/중간/최종/후속 분석은 **동일 실험의 문서 단계**다. **Size30/Stroke28/CoM의 학습 증강 조건은 선정했으나 최종 MLP 하이퍼파라미터·배포 체크포인트는 미확정.**
 
 ## 연구 흐름 (순서대로 읽기)
 
@@ -23,7 +23,9 @@ CMB-007   Size 60~100% 추가 (누적 31조건)
 CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
            → S1 너비 256 선정, S2 두 번째 층 추가 탈락
    ↓
-           S3 alpha (1e-5, 1e-4, 1e-3, 1e-2) 비교 준비
+           S3 alpha 강도 검증 완료 → alpha=1e-4 유지
+   ↓
+           S4 초기 LR 비교 → 실제 LR 선정 후 S5 Early Stopping 비교
 ```
 
 [**전체 실험 일지 및 단계별 문서 링크**](logs/README.md) · [가설 B 통합 설명](logs/가설B/README.md)
@@ -39,7 +41,7 @@ CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
 | **CMB-005** | Size 0~30% × Stroke, 120개 MLP | 전체 10조건 중 30%-28% **90.716%** | [최종 보고](logs/가설B/EXP-CMB-005_03_Final_Size00_30.md) |
 | **CMB-006** | Size 40~50%, 72개 MLP 추가 | 누적 16조건 비교, 30%-28% 우위 유지 | [계획](logs/가설B/EXP-CMB-006_01_Plan_Size40_50.md) · [16조건 결과](results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md) |
 | **CMB-007** | Size 60~100%, 180개 MLP 추가 | 누적 **31조건** 비교, 최고 OOF 갱신 실패, 8↔B 비대칭 오류 관측 | [최종 보고](logs/가설B/EXP-CMB-007_03_Final_Size60_100.md) · [오분류율 후속 분석](logs/가설B/EXP-CMB-007_04_Review_Top3_OOF_Error.md) |
-| **CMB-008** | **Size30/Stroke28/CoM 동결** 후 HP 탐색 | **S1 36개 학습 완료:** 은닉층 256 OOF **92.214%**·OfficialVal **97.044%**. 4방향 <5% 미달, 과적합 가드레일 통과한 최고 정확도 대안. **S2 깊이 실측 후 단층 (256,) 유지·S3 L2 사전등록 완료** | [S1 선정·탈락 이유](logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md) · [S2 최종 결정](logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md) · [S3 L2 검증 이유](logs/하이퍼파라미터_최적화/EXP-CMB-008_05_Plan_S3_Alpha.md) |
+| **CMB-008** | **Size30/Stroke28/CoM 동결** 후 HP 탐색 | **S1 36개 학습 완료:** 은닉층 256 OOF **92.214%**·OfficialVal **97.044%**. 4방향 <5% 미달, 과적합 가드레일 통과한 최고 정확도 대안. **S2 단층 유지·S3 alpha=1e-4 유지 실측 완료, S4→S5 연속 실험 계획 준비** | [S1 선정·탈락 이유](logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md) · [S2 최종 결정](logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md) · [S3 L2 실측](logs/하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md) · [S4 계획](logs/하이퍼파라미터_최적화/EXP-CMB-008_07_Plan_S4_LearningRate.md) · [S5 계획](logs/하이퍼파라미터_최적화/EXP-CMB-008_09_Plan_S5_EarlyStopping.md) |
 
 ## CMB-007까지의 관측과 한계
 
@@ -50,7 +52,7 @@ CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
 ## 후속 연구에서 고정된 결정
 
 - **선정한 학습 증강:** Official Training의 30%를 클래스 균형 Size·Stroke 강도 28%로 대체하며, 학습·보류 Writer·OfficialVal의 중심 정렬은 CoM. **추론 시 Size를 30% 줄이거나 Stroke를 28% 변경한다는 뜻이 아니다.**
-- **다음 변수:** [CMB-008 HP 단계별 사전등록](logs/하이퍼파라미터_최적화/EXP-CMB-008_01_Plan_30_28_Frozen_HP.md) 참조. S1에서 은닉층 256을 잠정 선정했으며, 다음 S2에서 깊이의 효과를 검증한다. 최종 배포 모델은 미확정이다.
+- **다음 변수:** [CMB-008 HP 단계별 사전등록](logs/하이퍼파라미터_최적화/EXP-CMB-008_01_Plan_30_28_Frozen_HP.md) 참조. S1~S3에서 은닉층 (256,), alpha=1e-4를 잠정 선정했으며, 다음 S4·S5에서 학습률과 Early Stopping을 순차 검증한다. 최종 배포 모델은 미확정이다.
 
 ## 자료 찾기
 
