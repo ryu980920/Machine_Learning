@@ -1,8 +1,8 @@
-# Combined MLP — 전체 연구 흐름 (EXP-CMB-001~008)
+# Combined MLP — 전체 연구 흐름 (EXP-CMB-001~009)
 
 > **번호 규칙:** Combined의 모든 실험은 `EXP-CMB-001`부터 순차 표기한다. 과거 `EXP유001~004`라는 폴더별 번호는 사용하지 않는다. 같은 실험 안의 문서는 `01_Plan → 02_Interim → 03_Final → 04_Review` 순서다. 이 번호는 **진행 단계**이며 별도 실험이 아니다.
 >
-> **연구 상태:** CMB-001~007 실측·분석 기록 완료. **Size30/Stroke28/CoM의 학습 증강 조합을 후속 개발 기준으로 선정**하고 CMB-008 **S1 너비 탐색(36개 신규 모델)**을 완료하여 첫 층 너비 **256**을 잠정 채택했고, S2 깊이 실측에서 단층 (256,)을 유지했고, S3 L2에서 alpha=1e-4를 유지했으며, S4 Learning Rate 및 S5 Early Stopping을 순차 사전등록했다. 최고 성능 조건 탐색은 개발용 Hand-made OOF/OfficialVal 기준이며 **최종 배포 모델은 결정하지 않았다. Original Test/교수님 Test는 이 연구의 조건 선택에 사용하지 않았다.**
+> **연구 상태 (2026-11-18):** CMB-001~009 실측·분석 완료. Size30/Stroke28/CoM + MLP (256,), alpha=1e-4, LR=.001, Early Stopping=False, **Batch 128은 후속 개발용 우선 후보**. 최종 배포는 미실시. Combined는 공식 Training에 **추가 Hand-made 학습 데이터**를 포함할 수 있으며, 작성자 보류 CV로 학습/평가 겹침을 방지한다.
 
 ## 1. 연구 진행 순서
 
@@ -16,6 +16,14 @@
 | 6 | 가설 B — 비율 확장 | **CMB-006** — Size 40~50%를 추가하면 개선이 이어지는가? | **6조건·72모델**, 기존 10조건과 합쳐 16조건 비교 | [사전 계획](가설B/EXP-CMB-006_01_Plan_Size40_50.md) · [16조건 원본 결과](../results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md) |
 | 7 | 가설 B — 상한·반례 검증 | **CMB-007** — Size 60~100%에서 정확도와 Family Flip의 상충은? | **15조건·180모델**, 과거 데이터 포함 **31조건 비교**. 8↔B 방향별 오류 교환·100% 증강 반례 | [계획](가설B/EXP-CMB-007_01_Plan_Size60_100.md) · [중간](가설B/EXP-CMB-007_02_Interim_Size60_80.md) · [최종](가설B/EXP-CMB-007_03_Final_Size60_100.md) · [후속 오분류율 분석](가설B/EXP-CMB-007_04_Review_Top3_OOF_Error.md) |
 | 8 | 하이퍼파라미터 최적화 | **CMB-008** — Size30/Stroke28/CoM 고정 후 구조·규제·학습률을 단계적으로 검증 | **S1 36개 학습 완료**, (256,) OOF 92.214%·OfficialVal 97.044% / 4방향 <5% 목표는 아직 미달 / **S2·S3 실측 완료 / (256,), alpha=1e-4 유지 / S4→S5 사전등록** | [S1 실측·채택 이유](하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md) → [S2 결과](하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md) → [S3 실측](하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md) → [S4 계획](하이퍼파라미터_최적화/EXP-CMB-008_07_Plan_S4_LearningRate.md) → [S5 계획](하이퍼파라미터_최적화/EXP-CMB-008_09_Plan_S5_EarlyStopping.md) |
+
+## 2026-11-18 최신 상태와 다음 연구 경계
+
+- **CMB-008 20번 [기존 S6 실측](하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md):** 사전 가드레일에 따라 Batch 200 유지 추천(역사적 판단 보존).
+- **CMB-008 21번 [438장 후속 평가](하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md):** Batch 128의 평균 438장 정확도 87.519%, Batch 200 86.301%. Batch 128을 정확도 중심 우선 후보로 재검토하되, 과거 가드레일 통과로 바꾸어 적지 않음.
+- **CMB-009 [추가 전처리 72모델 실측](가설B/EXP-CMB-009_01_Sequential_Preprocessing_Results.md):** Local Warp·Rotation·Shear 모두 사전 조합 가드레일 미통과 → **기존 Size30/Stroke28/CoM + Batch 128 유지**, 조합 학습은 조건 미충족으로 실행하지 않음. [정량 CSV](../results/Sequential_Preprocessing/standalone_table.csv).
+- **Combined의 차별성:** Normal은 공식 데이터만 학습하지만 Combined는 **공식 학습 + Hand-made 학습**이 가능함. 4명 보류 CV에서는 **다른 3명 1,920장만 학습**, 보류 Writer 640장만 OOF 평가한다. 오분류가 많은 클래스에 새 손글씨를 추가하는 연구는 **추후 논의 예정, 아직 데이터 편입·재학습 없음**.
+- 438장은 사용자 검토를 거친 개발 데이터로 최종 Test가 아니며 Original Test·교수님 Test 및 최종 배포 모델은 변경하지 않았다.
 
 ## 2. 가설별 연결
 
