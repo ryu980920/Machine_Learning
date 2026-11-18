@@ -110,5 +110,6 @@
 - 연구 브랜치: `exp/cmb008-s6-438-artifact-only-20261117` (**main 변경 없음**).
 - Actions 아티팩트: `cmb008-s6-external438-all24-models`, Artifact ID `14319656753`, 원래 설정상 30일 보관.
 - 로컬 실측 ZIP: `EXP_CMB_008_S6_128_vs_200_438_실측결과.zip`, 내부 `summary_438.json`, `per_model_metrics.csv`, `predictions_438_all_models.csv`, `per_class_metrics.csv`, `paired_128_vs_200.csv`, `evaluate_saved_s6_models.py`.
+- [후속 실측 요약 CSV](../../results/Hyperparameter_Optimization/S6_Batch_Size/External438_followup_summary.csv) — 438장 개별 이미지가 아닌 집계 값만 저장. 원본 예측·가중치 아티팩트는 아래 Actions 실행에서 추적한다.
 - 원래 S6 36모델 기록: [20 — S6 Batch Size 실측 비교](EXP-CMB-008_20_Stage6_Batch_Size_Results.md) 및 [S6 정량·가드레일](../../results/Hyperparameter_Optimization/S6_Batch_Size/S6_results.json).
 - **공개 기록:** 2026-11-18 후속 연구 로그로 `main`에 편입하였다. 최초 평가 및 연구 판단은 당시 개발용 결과이며, 기존 HP·배포 체크포인트를 변경하지 않았다.
