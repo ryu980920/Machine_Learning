@@ -8,6 +8,14 @@
 
 최종 정확도뿐 아니라 **문제 발견 → 원인 분석 → 해결 방법 시도 → 결과 검증**에 이르는 과정을 기록하는 것이 중요합니다.
 
+## 최신 모델 연구 현황 (2026-11-18)
+
+- **Normal 모델:** 공식 MNIST·EMNIST Training만 학습에 사용.
+- **Combined 모델:** 공식 Training에 **작성자 손글씨 학습 데이터**를 추가할 수 있는 모델. 현재 4-Writer CV에서는 Fold별 공식 76,800장과 다른 Writer 3명의 손글씨 1,920장으로 학습하고, 보류 Writer 640장으로 OOF 평가.
+- **Combined MLP 개발용 우선 후보:** Size30%-Stroke28%-CoM, 단층 MLP (256,), alpha=1e-4, LR=.001, Early Stopping=False, **Batch 128**. [438장 Batch 후속 비교](05_model_optimize/MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md)에서 Batch 128이 우세했지만 기존 S6 안전 가드레일은 통과하지 못했음.
+- **추가 전처리:** [EXP-CMB-009 실측](05_model_optimize/MLP/Combined/logs/가설B/EXP-CMB-009_01_Sequential_Preprocessing_Results.md)에서 Local Warp / Rotation / Shear 총 72개 모델을 비교했으나 조합 기준 통과 없음. 기존 전처리 유지.
+- **다음 연구:** 오류가 큰 클래스의 실제 손글씨를 학습 데이터로 추가하는 방안은 추후 논의. **이번 기록 반영은 모델 배포/손글씨 데이터 편입/독립 Test 평가를 포함하지 않음.**
+
 ## 폴더 안내
 
 | 폴더 | 내용 |
