@@ -43,3 +43,12 @@
 - 현재 새 폴더의 모든 실험은 **미실시·미등록 상태**다. 과거 측정값을 이 위치에서 새로 실행한 값으로 표시하지 않는다.
 
 [연구 흐름도](../01_project/RESEARCH_FLOW.md) · [데이터 사용 규칙](../02_data/HANDMADE_SPLIT_PLAN.md).
+
+
+## 2026-11-18 최신 Combined MLP 현황
+
+**Normal**은 공식 MNIST·EMNIST Training만 사용해 학습한다. **Combined**는 같은 공식 Training에 **별도 수집한 Hand-made 손글씨를 학습 데이터로 추가할 수 있는 모델**이다. 현재 Combined Writer-held-out Fold는 공식 76,800장에 다른 작성자 3명의 손글씨 **1,920장**을 추가하고, 보류 Writer 640장은 학습에 넣지 않는다.
+
+[Combined CMB-008 438장 후속 비교](MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md)에서 **Batch 128**을 정확도 중심 개발용 우선 후보로 정했고, [CMB-009 추가 전처리 연구](MLP/Combined/logs/가설B/EXP-CMB-009_01_Sequential_Preprocessing_Results.md)에서 Local Warp·Rotation·Shear의 사전 가드레일 통과가 없음을 확인하여 기존 Size30%-Stroke28%-CoM을 유지했다. **최종 배포는 미변경**이다.
+
+앞으로 오류가 높은 클래스의 손글씨를 추가하는 연구는 **후속 협의 대상**이며, 이번 main 반영에서 손글씨 원본 추가·학습 데이터 변경·새 모델 학습을 수행하지 않았다.
