@@ -10,3 +10,9 @@
 | [Geometry_Normalization/](Geometry_Normalization/README.md) | [가설 B EXP유001](../logs/가설B/EXP-CMB-004_02_Final_Geometry_Normalization.md) | **4방법×4-Fold 새 학습 + 4-way 설명 대조 완료**, 공식 Validation 손실로 최종 채택 보류 |
 
 기존 EXP-CMB-001의 모델 ZIP·OOF·Training Loss·Viridis CM와 학습/검증 분할은 바꾸지 않는다. 후속 분석은 새 실험 코드와 파일만 추가하며, OOF 개발평가를 독립 Test 성능으로 보고하지 않는다.
+
+
+## 2026-11-18 후속 실측 자료
+
+- [EXP-CMB-008 S6 438장 후속 집계 CSV](Hyperparameter_Optimization/S6_Batch_Size/External438_followup_summary.csv) · [21번 후속 로그](../logs/하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md): Batch 128 개발용 우선 후보를 신규 438장과 S6 재실행으로 비교. 438장 원본 NPZ·이미지는 공개 저장소에 게시하지 않는다.
+- [EXP-CMB-009 추가 전처리 결과](Sequential_Preprocessing/README.md) · [원본 정량 CSV](Sequential_Preprocessing/standalone_table.csv) · [조합 후보 선정 JSON](Sequential_Preprocessing/selection.json): Local Warp·Rotation·Shear 72모델 비교 완료, 단독 가드레일 통과 조건 없음. 모델 배포는 변경하지 않는다.

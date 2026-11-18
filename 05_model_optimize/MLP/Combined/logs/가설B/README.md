@@ -1,4 +1,4 @@
-# Combined 가설 B — CMB-004~007 기하·크기 편향 연구
+# Combined 가설 B — CMB-004~007 및 CMB-009 기하·전처리 연구
 
 [전체 연구 흐름](../README.md) · [초기분석 CMB-002~003](../초기분석/README.md)
 
@@ -34,3 +34,10 @@ Hand-made 숫자/문자의 글자 크기·위치·획 차이가 0↔D, 8↔B의 
 
 - **학습 증강 조합 선정:** 정상 입력 Hand-made OOF 정확도 우선 기준으로 **Size30%-Stroke28% + CoM**을 다음 Combined MLP HP 탐색의 고정 설정으로 사용한다. 이는 최종 테스트 일반화·모든 클래스 최고 성능 증명이 아니다.
 - **하이퍼파라미터 연구 이관:** [EXP-CMB-008 사전등록](../하이퍼파라미터_최적화/EXP-CMB-008_01_Plan_30_28_Frozen_HP.md). 너비·깊이·L2·LR·종료 방식을 순차 평가한다. **신규 실험 결과가 아직 없으므로 어떤 HP도 추가 확정하지 않는다.**
+
+## EXP-CMB-009 — 기존 전처리에 추가 변형을 적용한 재학습 검증 (2026-11-18)
+
+- 기준: 기존 Size30%-Stroke28%-CoM, MLP (256,), Batch 128, 3 Seed × 4 Writer.
+- 신규 train-only 20% 증강: Local Warp 상·하단 ±1px / Rotation ±3°·±5° / Shear ±0.05·±0.10. 기준선 포함 총 72모델.
+- [**CMB-009 실측 결론**](EXP-CMB-009_01_Sequential_Preprocessing_Results.md): Rotation ±5° OOF **92.3698%**(기준 92.2786%)이나 9→7 악화 및 사전 가드레일 미통과. Shear ±0.05는 7↔9 감소하나 전체 OOF 하락. **조합에 사용할 검증 완료 조건이 없어 조합 재학습은 생략**했다.
+- [**조건별 원본 CSV**](../../results/Sequential_Preprocessing/standalone_table.csv) · [GitHub Actions 72모델](https://github.com/ryu980920/Machine_Learning/actions/runs/44246719485). 438장·독립 Test·교수님 Test는 CMB-009 학습과 선택에 사용하지 않았다.

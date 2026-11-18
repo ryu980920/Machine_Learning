@@ -80,3 +80,13 @@ python 05_model_optimize/MLP/Combined/scripts/combined_mlp_writer_cv.py \
 - [exp_cmb004_cross_diagnostic.py](exp_cmb004_cross_diagnostic.py): **기존 모델+원본 / 기존 모델+변형 / 재학습 모델+변형 / 재학습 모델+원본** 대조로 입력/가중치 효과 구분(새 학습 없음).
 - [사전등록 기준](../logs/가설B/EXP-CMB-004_01_Plan_Geometry_Normalization.md) · [실험 완료 보고](../logs/가설B/EXP-CMB-004_02_Final_Geometry_Normalization.md) · [CSV/이미지/모델](../results/Geometry_Normalization/README.md).
 - [재학습 성공 Actions #43747924168](https://github.com/ryu980920/Machine_Learning/actions/runs/43747924168) · [4-way 대조 성공 #43748490480](https://github.com/ryu980920/Machine_Learning/actions/runs/43748490480). 공식 Original Test·교수님 Final Test 미사용. 숫자 합격선을 두지 않았으며 **기전별 설명 가능성**을 기준으로 판정했다.
+
+
+## EXP-CMB-008 S6 후속 및 EXP-CMB-009 — 재현 코드 (2026-11-18)
+
+- [EXP-CMB-008 S6 Batch Size 기존 학습](exp_cmb008_s6_batch_size.py): Batch 200/128/64의 역사적 36모델 실측 코드. 별도 [21번 후속 로그](../logs/하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md)에서는 Batch 128을 개발용 우선 후보로 상향했으나 원래 결과는 덮어쓰지 않는다.
+- [EXP-CMB-009 독립 증강 학습](exp_cmb009_sequential_aug.py): 기존 Size30/Stroke28/CoM+Batch128 고정, Local Warp / Rotation ±3°·±5° / Shear ±0.05·±0.10의 **train-only 20% 증강**. 원본 데이터 SHA·학습/보류 Writer 분리 검증.
+- [EXP-CMB-009 대응집계와 게이트 판정](exp_cmb009_aggregate.py): 72모델의 Writer OOF·OfficialVal·7↔9·기존 4방향 오류·대응 교정/신규 오류 집계, 조합 후보 여부 확인.
+- [전용 GitHub Actions](../../../../.github/workflows/exp-cmb009-aug-sequential.yml) · [성공 실행 44246719485](https://github.com/ryu980920/Machine_Learning/actions/runs/44246719485) · [실측 CSV](../results/Sequential_Preprocessing/standalone_table.csv).
+
+**결과:** 신규 전처리는 모두 사전 조합 가드레일 미통과, 조합 재학습 없음. 기존 Batch128 기준 후보·배포 가중치는 이번 저장소 문서 반영과 별개로 유지한다. Original Test·교수님 Test·438장은 후보 선정에 쓰지 않았다.

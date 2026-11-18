@@ -1,6 +1,6 @@
 # MLP / Combined — 작성자 보류 OOF 최적화 연구
 
-> **현재 상태:** **EXP-CMB-001~007**의 실험·결과를 기록했고, 후속 **EXP-CMB-008의 S1·S2·S3를 실측 완료**. 단층 (256,), alpha=0.0001을 선정하고 **S4 Learning Rate → S5 Early Stopping 연속 검증을 사전등록**했다. 실험 번호는 하나의 `EXP-CMB-###` 체계이며, 계획/중간/최종/후속 분석은 **동일 실험의 문서 단계**다. **Size30/Stroke28/CoM의 학습 증강 조건은 선정했으나 최종 MLP 하이퍼파라미터·배포 체크포인트는 미확정.**
+> **현재 연구 상태 (2026-11-18):** EXP-CMB-001~009 개발용 실험 완료. 공식 Training 76,800장에 Fold별 학습용 Hand-made 1,920장을 합치는 **Combined**의 특징을 유지한다. Size30%·Stroke28%·CoM, MLP (256,), alpha=1e-4, LR=.001, Early Stopping=False, **Batch 128을 후속 우선 후보**로 둔다. 단, 기존 S6의 Batch 128 안전 가드레일 미통과 및 새 438장 선택 편향은 남아 있다. 최종 배포 모델은 미변경.
 
 ## 연구 흐름 (순서대로 읽기)
 
@@ -42,6 +42,15 @@ CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
 | **CMB-006** | Size 40~50%, 72개 MLP 추가 | 누적 16조건 비교, 30%-28% 우위 유지 | [계획](logs/가설B/EXP-CMB-006_01_Plan_Size40_50.md) · [16조건 결과](results/Balanced_Scale_Stroke_Extension/full_0to50_comparison/SUMMARY.md) |
 | **CMB-007** | Size 60~100%, 180개 MLP 추가 | 누적 **31조건** 비교, 최고 OOF 갱신 실패, 8↔B 비대칭 오류 관측 | [최종 보고](logs/가설B/EXP-CMB-007_03_Final_Size60_100.md) · [오분류율 후속 분석](logs/가설B/EXP-CMB-007_04_Review_Top3_OOF_Error.md) |
 | **CMB-008** | **Size30/Stroke28/CoM 동결** 후 HP 탐색 | **S1 36개 학습 완료:** 은닉층 256 OOF **92.214%**·OfficialVal **97.044%**. 4방향 <5% 미달, 과적합 가드레일 통과한 최고 정확도 대안. **S2 단층 유지·S3 alpha=1e-4 유지 실측 완료, S4→S5 연속 실험 계획 준비** | [S1 선정·탈락 이유](logs/하이퍼파라미터_최적화/EXP-CMB-008_02_Stage1_Width_Results.md) · [S2 최종 결정](logs/하이퍼파라미터_최적화/EXP-CMB-008_04_Stage2_Depth_Results.md) · [S3 L2 실측](logs/하이퍼파라미터_최적화/EXP-CMB-008_06_Stage3_Alpha_Results.md) · [S4 계획](logs/하이퍼파라미터_최적화/EXP-CMB-008_07_Plan_S4_LearningRate.md) · [S5 계획](logs/하이퍼파라미터_최적화/EXP-CMB-008_09_Plan_S5_EarlyStopping.md) |
+
+## 2026-11-18 최신 후속 연구 — Batch Size 및 추가 전처리
+
+**Normal과 Combined의 핵심 차이:** Normal은 **공식 MNIST·EMNIST 데이터만 학습**하고 기존 Hand-made는 진단/검증에 사용한다. 반면 Combined는 **공식 Training에 별도 손글씨 학습 데이터를 추가할 수 있다.** 지금의 4-Writer 보류 평가에서는 학습에 공식 76,800장 + 다른 Writer 3명 1,920장을 넣고, 보류한 Writer 640장은 학습에 넣지 않는다. 앞으로 오류가 큰 클래스에 새로운 손글씨를 추가하는 방안은 **추가 논의 전까지 실험·반영하지 않았다.**
+
+- **CMB-008 S6 역사적 판단:** 36모델 사전등록 결과에서 Batch 200만 가드레일 통과. [20번 기존 실측 로그](logs/하이퍼파라미터_최적화/EXP-CMB-008_20_Stage6_Batch_Size_Results.md)는 변경하지 않는다.
+- **CMB-008 21번 후속:** 별도 438장 진단 평가(24모델)에서 Batch 128 정확도 **87.519%**, Batch 200 **86.301%**, Macro F1 **0.8690 vs 0.8567**. Batch 128을 *정확도 중심 개발용 우선 후보*로 상향. [21번 후속 로그](logs/하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md). 해당 438장은 사후 검토된 개발용 데이터이며 독립 Test가 아니다.
+- **CMB-009:** Local Warp, Rotation ±3°/±5°, Shear ±0.05/±0.10을 Batch 128에서 각각 평가(총 72개 모델). Rotation ±5°의 OOF가 **92.3698%**로 기준선 92.2786%보다 소폭 증가했으나 9→7 악화와 사전 가드레일 미통과. Shear ±0.05는 7↔9를 개선했으나 OOF 저하. **추가 전처리 자동 채택·조합 학습 없음.** [CMB-009 실험 로그](logs/가설B/EXP-CMB-009_01_Sequential_Preprocessing_Results.md) · [정량 CSV](results/Sequential_Preprocessing/standalone_table.csv).
+- **모델 적용 범위:** Batch 128 및 기존 전처리는 **후속 연구의 기준 후보**이며, 기존 저장된 최종 배포 체크포인트/Original Test·교수님 Test는 변경하지 않았다.
 
 ## CMB-007까지의 관측과 한계
 

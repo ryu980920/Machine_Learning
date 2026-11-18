@@ -1,0 +1,170 @@
+name: EXP-CMB-009 Local Warp then Rotation then Shear then gated Combination
+
+on:
+  push:
+    branches:
+      - exp/cmb009-sequential-augmentation-20261118
+    paths:
+      - .github/workflows/exp-cmb009-aug-sequential.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: exp-cmb009-preprocess
+  cancel-in-progress: false
+
+jobs:
+  train_standalone:
+    name: EXP-CMB-009 ${{ matrix.arm }} seed${{ matrix.seed }} writer${{ matrix.writer }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        arm: [base, warp, rotate3, rotate5, shear005, shear010]
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned project packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Validate augmentation scripts and prerequisites
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb009_sequential_aug.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb009_aggregate.py
+          python -c "import sklearn,cv2;assert sklearn.__version__=='1.8.0';print('PIN_OK',sklearn.__version__,cv2.__version__)"
+      - name: Run fixed Batch128 + one independent train-only augmentation
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb009_sequential_aug.py --arm "${{ matrix.arm }}" --seed "${{ matrix.seed }}" --heldout "${{ matrix.writer }}" --out "${{ runner.temp }}/fits/cmb009-${{ matrix.arm }}-s${{ matrix.seed }}-w${{ matrix.writer }}"
+      - name: Preserve original OOF, Validation, model weights and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb009-${{ matrix.arm }}-s${{ matrix.seed }}-w${{ matrix.writer }}
+          path: "${{ runner.temp }}/fits/cmb009-${{ matrix.arm }}-s${{ matrix.seed }}-w${{ matrix.writer }}/"
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: warn
+
+  standalone_aggregate:
+    name: Report stages 1 LocalWarp 2 Rotation 3 Shear and select gated arms
+    runs-on: ubuntu-latest
+    needs: train_standalone
+    timeout-minutes: 90
+    outputs:
+      combo_allowed: ${{ steps.selection.outputs.combo_allowed }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install matching metrics packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cmb009-*-s*
+          path: ${{ runner.temp }}/incoming
+          merge-multiple: false
+      - name: Aggregate exact 72 models, paired corrections, and preregistered gates
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb009_aggregate.py --phase standalone --incoming "${{ runner.temp }}/incoming" --out "${{ runner.temp }}/reports"
+      - name: Check whether TWO or more independently qualified operations exist
+        id: selection
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json,os
+          sel=json.load(open(os.path.join(os.environ["RUNNER_TEMP"],"reports","selection.json")))
+          print("combo_allowed="+str(sel["combo_allowed"]).lower())
+          PY
+      - name: Upload verified stage-by-stage summary and selection
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb009-standalone-summary-selection
+          path: ${{ runner.temp }}/reports/
+          retention-days: 30
+          if-no-files-found: error
+
+  train_combo:
+    name: EXP-CMB-009 gated combined seed${{ matrix.seed }} writer${{ matrix.writer }}
+    needs: standalone_aggregate
+    if: needs.standalone_aggregate.outputs.combo_allowed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install matching packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: cmb009-standalone-summary-selection
+          path: ${{ runner.temp }}/selection
+      - name: Retrain only the experimentally qualified operations in combination
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb009_sequential_aug.py --arm combo --selection "${{ runner.temp }}/selection/selection.json" --seed "${{ matrix.seed }}" --heldout "${{ matrix.writer }}" --out "${{ runner.temp }}/fits/cmb009-combo-s${{ matrix.seed }}-w${{ matrix.writer }}"
+      - name: Save combined model weights and original predictions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb009-combo-s${{ matrix.seed }}-w${{ matrix.writer }}
+          path: "${{ runner.temp }}/fits/cmb009-combo-s${{ matrix.seed }}-w${{ matrix.writer }}/"
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: warn
+
+  combo_aggregate:
+    name: Report stage 4 combined-only qualified augmentations
+    needs: [standalone_aggregate, train_combo]
+    if: needs.standalone_aggregate.outputs.combo_allowed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install matching metrics packages
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cmb009-*-s*
+          path: ${{ runner.temp }}/incoming
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: cmb009-standalone-summary-selection
+          path: ${{ runner.temp }}/selection
+      - name: Validate final combo vs paired Batch128 baseline
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb009_aggregate.py --phase combo --incoming "${{ runner.temp }}/incoming" --selection "${{ runner.temp }}/selection/selection.json" --out "${{ runner.temp }}/report"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cmb009-final-combination-report
+          path: ${{ runner.temp }}/report/
+          retention-days: 30
+          if-no-files-found: error
