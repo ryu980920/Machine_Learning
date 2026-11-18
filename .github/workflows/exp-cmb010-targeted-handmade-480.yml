@@ -1,0 +1,95 @@
+name: EXP-CMB-010 Compare Combined MLP with 480 targeted handwritten Training images
+
+on:
+  push:
+    branches:
+      - exp/cmb010-targeted-handmade-480-20261118
+    paths:
+      - .github/workflows/exp-cmb010-targeted-handmade-480.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: exp-cmb010-add480
+  cancel-in-progress: false
+
+jobs:
+  paired_fits:
+    name: CMB010 ${{ matrix.arm }} seed${{ matrix.seed }} writer${{ matrix.writer }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        arm: [base, add480]
+        seed: [42, 43, 44]
+        writer: [41, 42, 43, 44]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned project requirements
+        run: python -m pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Verify uploaded NPZ original hash and train scripts
+        run: |
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb010_targeted_handmade_train.py
+          python -m py_compile 05_model_optimize/MLP/Combined/scripts/exp_cmb010_aggregate.py
+          python - <<'PY'
+          import hashlib,pathlib,sklearn,numpy
+          p=pathlib.Path("02_data/Hand_made_extra/CMB010_7_8_9_B_480.npz")
+          assert p.is_file()
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="3d1686c67d7bb5c6193384eca1aa9218213c842252baa5b7e172698743b83fc7"
+          assert sklearn.__version__=="1.8.0"
+          print("CMB010_INPUT_OK",p.stat().st_size)
+          PY
+      - name: Fit exactly one baseline or add480 fold
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb010_targeted_handmade_train.py --arm "${{ matrix.arm }}" --seed "${{ matrix.seed }}" --heldout "${{ matrix.writer }}" --out "${{ runner.temp }}/fits/cmb010-${{ matrix.arm }}-s${{ matrix.seed }}-w${{ matrix.writer }}"
+      - name: Archive original fold predictions, manifest and trained candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb010-${{ matrix.arm }}-s${{ matrix.seed }}-w${{ matrix.writer }}
+          path: ${{ runner.temp }}/fits/cmb010-${{ matrix.arm }}-s${{ matrix.seed }}-w${{ matrix.writer }}/
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: warn
+
+  aggregate:
+    name: CMB010 24-model paired effects and class error report
+    needs: paired_fits
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate full exact 24-run artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cmb010-*-s*
+          path: ${{ runner.temp }}/incoming
+          merge-multiple: false
+      - name: Compare official validation and writer-held-out predictions
+        env:
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python 05_model_optimize/MLP/Combined/scripts/exp_cmb010_aggregate.py --incoming "${{ runner.temp }}/incoming" --out "${{ runner.temp }}/report"
+      - name: Preserve complete paired audit and per-class error CSVs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmb010-add480-final-audit
+          path: ${{ runner.temp }}/report/
+          retention-days: 30
+          if-no-files-found: error
