@@ -1,0 +1,85 @@
+{
+  "freeze_date": "2026-11-19",
+  "status": "FINAL_RESEARCH_MODEL_FROZEN_NO_DEPLOYMENT_CHANGE",
+  "selected_experiment": "EXP017",
+  "selected_variant": "slot1_alpha_up",
+  "train_source_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "train_rows": 76800,
+  "official_validation_rows": 19200,
+  "model": {
+    "hidden_layer_sizes": [
+      256,
+      128
+    ],
+    "activation": "relu",
+    "solver": "adam",
+    "alpha": 0.03,
+    "learning_rate_init": 0.001,
+    "batch_size": 200,
+    "early_stopping": false,
+    "max_iter": 200,
+    "tol": 0.0001,
+    "n_iter_no_change": 10
+  },
+  "training_preprocessing": {
+    "size_aug_fraction": 0.8,
+    "size_target_longside_px": [
+      16,
+      18,
+      20,
+      22,
+      24
+    ],
+    "stroke_blend": 0.14,
+    "center_of_mass": true
+  },
+  "inference_preprocessing": {
+    "input": "28x28 0..255 intensity",
+    "CoM": {
+      "threshold": 32,
+      "center_xy": [
+        13.5,
+        13.5
+      ],
+      "shift": "integer_zero_fill"
+    },
+    "pixel_scaler": "PixelScaler255(/255.0)"
+  },
+  "checkpoints": [
+    {
+      "seed": 42,
+      "sha256": "e08eab163cc2db86b03338185f1b0b4f1416a074572597f2b692adec85a0d190",
+      "bytes": 3497704
+    },
+    {
+      "seed": 43,
+      "sha256": "f47e4cc2a97af98e18e5bfdca9b2621acac0f9c303bcd1458fe270fb58e9f931",
+      "bytes": 3444078
+    },
+    {
+      "seed": 44,
+      "sha256": "120cdf9f48691d3e75016379fb62a3cbf3f66d57ffcb7c4c59902a9639795413",
+      "bytes": 3534286
+    }
+  ],
+  "baseline": {
+    "OfficialVal_3seed": 0.9653645833333333,
+    "Handmade2560_3seed": 0.920703125,
+    "B8D_worst_family_flip": 0.16666666666666666,
+    "reviewed438_3seed": 0.8789954337899544
+  },
+  "retention_gates": [
+    "OfficialVal accuracy >= 96.5365%",
+    "Original EXP017 scale-shortcut safety gates fully passed",
+    "Existing Handmade2560 accuracy >= 92.0703%"
+  ],
+  "status_scope": {
+    "single_seed_deployment_selected": false,
+    "soft_voting_deployment_selected": false,
+    "weights_or_models_retrained": false,
+    "Original_Test_used": false,
+    "professor_Test_used": false
+  },
+  "model_bytes_publicly_committed": false,
+  "original_checkpoint_manifest": "05_model_optimize/MLP/Normal/results/크기편향_원인분석/EXP유017_동결모델_SHA256_Manifest.json"
+}
