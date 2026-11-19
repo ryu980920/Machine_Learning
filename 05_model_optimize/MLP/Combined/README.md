@@ -1,5 +1,18 @@
 # MLP / Combined — 작성자 보류 OOF 최적화 연구
 
+## 최종 선정·동결 (2026-11-19)
+
+**기존 Combined MLP `EXP-CMB-011/base` 최종 유지 확정.** 공식 Training + 기존 3 Writer Hand-made만 학습하며, 신규 7·9·8·B 480장은 최종 학습에 **추가하지 않는다**.
+
+- **고정 조건:** `MLPClassifier(hidden_layer_sizes=(256,), activation="relu", solver="adam", alpha=0.0001, learning_rate_init=0.001, batch_size=128, early_stopping=False, max_iter=200)`; 학습 공식 Size30%-Stroke28%-CoM, 손글씨 CoM-only. 추론은 CoM → /255.
+- **CMB011 기존 Writer OOF:** 92.3568%, Macro F1 0.923571, OfficialVal 97.0781%. 신규 7·9 / B·8 / 전체 480장 추가 모두 Writer OOF에서 기준선 대비 소폭 하락.
+- **별도 438장:** 기존 87.7283%, 전체 480장 추가 87.9376%(+0.2093%p). 소폭 이득이지만 재사용 개발셋·Bootstrap 95% 구간의 0 포함·클래스별 상충으로 신규 추가 조건 미채택.
+- [**최종 모델 동결 선언**](logs/EXP-CMB-012_Final_Combined_Model_Freeze_20261119.md) · [**438장 실측 보고서**](logs/학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md) · [**동결 데이터·모델 조건 JSON**](results/Final_Model/FINAL_COMBINED_FREEZE.json).
+- **정확한 범위:** 기존 12개 CV 가중치는 검증 근거이며, 새 단일 최종 추론 모델을 생성·교체한 것이 아님. Original Test·교수님 Test 미사용. 과거 CMB008 S6 가드레일 결과를 소급 변경하지 않음.
+
+> 아래 2026-11-18의 '개발용 우선 후보/배포 미확정' 설명과 CMB010 작성 시점의 Draft PR 표기는 **과거 단계의 기록**이다. 이 날짜 이후의 최종 결정은 위 CMB012 선언이 우선한다.
+
+
 > **현재 연구 상태 (2026-11-18):** EXP-CMB-001~009 개발용 실험 완료. 공식 Training 76,800장에 Fold별 학습용 Hand-made 1,920장을 합치는 **Combined**의 특징을 유지한다. Size30%·Stroke28%·CoM, MLP (256,), alpha=1e-4, LR=.001, Early Stopping=False, **Batch 128을 후속 우선 후보**로 둔다. 단, 기존 S6의 Batch 128 안전 가드레일 미통과 및 새 438장 선택 편향은 남아 있다. 최종 배포 모델은 미변경.
 
 ## 연구 흐름 (순서대로 읽기)
