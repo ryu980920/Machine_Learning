@@ -7,7 +7,7 @@
 - [새로 만든 438장에 대한 84모델 실측·최종 결정](../../logs/학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md)
 - [고정 설정·12개 CV 체크포인트 SHA-256](FINAL_COMBINED_FREEZE.json)
 - [438장 7조건 정량 비교 CSV](External438_7Arm_Summary.csv)
-- [CMB011 84개 학습/Writer OOF 원본 결과](../Targeted_Handmade_480/README.md) · [CMB011 보고서](../../logs/학습데이터_추가/EXP-CMB-011_02_Classwise_MatchedControls_Results.md)
+- [CMB010 480장 단독 추가 24모델 원본](../Targeted_Handmade_480/README.md) · [CMB011 7조건 84모델 보고서](../../logs/학습데이터_추가/EXP-CMB-011_02_Classwise_MatchedControls_Results.md)
 - [CMB011 GitHub Actions 84개 모델](https://github.com/ryu980920/Machine_Learning/actions/runs/44345990347)
 
 ## 선택한 구성
