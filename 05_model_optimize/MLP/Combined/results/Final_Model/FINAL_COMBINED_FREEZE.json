@@ -1,0 +1,218 @@
+{
+  "experiment": "EXP-CMB-012",
+  "decision_date": "2026-11-19",
+  "status": "FINAL_CONFIGURATION_SELECTED_AND_FROZEN",
+  "selected_model": "Existing Combined MLP",
+  "selected_experiment_arm": "EXP-CMB-011/base",
+  "replaced_candidate_model": false,
+  "final_training_includes_new_480": false,
+  "selected_scope": "model specification, preprocessing, data recipe, CV evaluation protocol, reproducibility references",
+  "weights_scope": "12 existing CV checkpoints are references; no new universal 4-writer final-fit checkpoint was created or deployed",
+  "training": {
+    "official_train_count": 76800,
+    "official_train_npz_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+    "existing_handmade_writers": [
+      41,
+      42,
+      43,
+      44
+    ],
+    "existing_handmade_samples_per_writer": 640,
+    "included_training_writers_per_fold": 3,
+    "handmade_training_per_fold": 1920,
+    "total_training_per_fold": 78720,
+    "extra_handmade_480_available_but_not_used": true,
+    "extra_handmade_480_sha256": "3d1686c67d7bb5c6193384eca1aa9218213c842252baa5b7e172698743b83fc7",
+    "official_train_augmentation": {
+      "scheme": "class_balanced_size30_stroke28",
+      "fraction": 0.3,
+      "stroke_strength": 0.28,
+      "replaces_existing_training_rows": true
+    },
+    "handmade_train_preprocess": "CoM-only"
+  },
+  "model": {
+    "library": "sklearn.neural_network.MLPClassifier",
+    "n_classes": 16,
+    "classes": "0123456789ABCDEF",
+    "hidden_layer_sizes": [
+      256
+    ],
+    "activation": "relu",
+    "solver": "adam",
+    "alpha": 0.0001,
+    "learning_rate_init": 0.001,
+    "early_stopping": false,
+    "batch_size": 128,
+    "max_iter": 200,
+    "tol": 0.0001,
+    "n_iter_no_change": 10,
+    "seed_values": [
+      42,
+      43,
+      44
+    ]
+  },
+  "inference_preprocessing": {
+    "raw_input": "28x28 grayscale uint8 or 0..255",
+    "method": "CoM",
+    "foreground_threshold": 32,
+    "target_center_xy": [
+      13.5,
+      13.5
+    ],
+    "translation": "integer rounded, zero pad no wrap",
+    "normalization": "PixelScaler255 divides by 255",
+    "no_inference_time_size_or_stroke_augmentation": true
+  },
+  "validation": {
+    "heldout_writer_ids": [
+      41,
+      42,
+      43,
+      44
+    ],
+    "heldout_per_fold": 640,
+    "official_val": 19200,
+    "writer_oof_trials_per_arm": 7680,
+    "unique_oof_images": 2560,
+    "developer_screened_external_images": 438,
+    "external_438_npz_sha256": "a4a1be864abea59793d534f9f94fbf56795e48bcc7693c40ace60a1967baca51",
+    "external_438_prior_repeated_development_use": true,
+    "original_test_used": false,
+    "professor_test_used": false
+  },
+  "paired_cmb011_same_run": {
+    "base": {
+      "oof_accuracy": 0.9235677083333333,
+      "oof_macro_f1": 0.9235706596431266,
+      "official_val_accuracy": 0.97078125,
+      "external438_accuracy": 0.8772831050228311,
+      "external438_macro_f1": 0.8708292475273218
+    },
+    "add79": {
+      "oof_accuracy": 0.9221354166666667,
+      "official_val_accuracy": 0.9705425347222222,
+      "external438_accuracy": 0.879185692541857,
+      "external438_macro_f1": 0.87586
+    },
+    "addB8": {
+      "oof_accuracy": 0.9233072916666667,
+      "official_val_accuracy": 0.9714453125,
+      "external438_accuracy": 0.8759512937595129,
+      "external438_macro_f1": 0.87004
+    },
+    "add480": {
+      "oof_accuracy": 0.9233072916666667,
+      "official_val_accuracy": 0.9710850694444444,
+      "external438_accuracy": 0.8793759512937595,
+      "external438_macro_f1": 0.87601
+    },
+    "external438_add480_minus_base_accuracy_pp": 0.209284627092846,
+    "external438_add480_minus_base_bootstrap95_pp": [
+      -0.609,
+      1.084
+    ],
+    "note": "This is a repeatedly used development dataset; no independent test superiority is claimed"
+  },
+  "historic_cmb008_s6_note": "Batch128 did not satisfy original S6 class-specific predeclared nonregression gates; historical Batch200 S6 gate decision remains recorded without retrospective revision",
+  "selected_reasons": [
+    "All new-handwriting augmentation arms fell slightly below baseline writer OOF in EXP-CMB-011",
+    "External 438 add480 gain was only 0.2093 percentage points with image bootstrap interval including zero",
+    "Some classes improved but B, D, A, 4 declined",
+    "External 438 reused for development and new480 writer identities are unknown"
+  ],
+  "cv_checkpoint_provenance": {
+    "github_actions_run": "https://github.com/ryu980920/Machine_Learning/actions/runs/44345990347",
+    "artifact_retention_days_at_creation": 30,
+    "checkpoint_filename": "candidate_model.joblib",
+    "checkpoints": [
+      {
+        "seed": 42,
+        "heldout_writer": 41,
+        "artifact_name": "cmb011-base-s42-w41",
+        "sha256": "db0595f87b984e97266d4fdad140ee881785f2e8860a41bfdcd5afd21a8e037f"
+      },
+      {
+        "seed": 42,
+        "heldout_writer": 42,
+        "artifact_name": "cmb011-base-s42-w42",
+        "sha256": "476c3f10104fcc9f5e780c9de5aa7b627fe366a1bda5cb8c1941a5f93de846d6"
+      },
+      {
+        "seed": 42,
+        "heldout_writer": 43,
+        "artifact_name": "cmb011-base-s42-w43",
+        "sha256": "34006886a10c5e9b3729a8acd005c6ff733023b05b2b6d6972d704a463210b2d"
+      },
+      {
+        "seed": 42,
+        "heldout_writer": 44,
+        "artifact_name": "cmb011-base-s42-w44",
+        "sha256": "99059bb4d003065408e6a15150343001c936289fabdfcd3736a777ab7270ed08"
+      },
+      {
+        "seed": 43,
+        "heldout_writer": 41,
+        "artifact_name": "cmb011-base-s43-w41",
+        "sha256": "67c88c2919c40db2a618bdb7c9206712facd75dcbd428803f59882b8211221de"
+      },
+      {
+        "seed": 43,
+        "heldout_writer": 42,
+        "artifact_name": "cmb011-base-s43-w42",
+        "sha256": "52218ab56640040cd8be6fa59a889656bebceb198e8e17413172c49c4b31d482"
+      },
+      {
+        "seed": 43,
+        "heldout_writer": 43,
+        "artifact_name": "cmb011-base-s43-w43",
+        "sha256": "bff5a26e9a7dcc196333aa8abb61391972a2b57404bc13abeaa16ff1998d5d22"
+      },
+      {
+        "seed": 43,
+        "heldout_writer": 44,
+        "artifact_name": "cmb011-base-s43-w44",
+        "sha256": "34eb215dea7dcf27f8a20cb72328932612cc0632f50fe98c2705aec22068dcbf"
+      },
+      {
+        "seed": 44,
+        "heldout_writer": 41,
+        "artifact_name": "cmb011-base-s44-w41",
+        "sha256": "52c0e6e565955903c34d8fcd7399797a4e65e2c0e82997c230a12bb188530a21"
+      },
+      {
+        "seed": 44,
+        "heldout_writer": 42,
+        "artifact_name": "cmb011-base-s44-w42",
+        "sha256": "2430cfb0f271508c89e75ddba5aa98029d5954b3b0519d45c9f1df036c6d8aca"
+      },
+      {
+        "seed": 44,
+        "heldout_writer": 43,
+        "artifact_name": "cmb011-base-s44-w43",
+        "sha256": "471e181acd4ae0d13299384335a534990e46735f2d45db7f5b2f2e98e82c0eeb"
+      },
+      {
+        "seed": 44,
+        "heldout_writer": 44,
+        "artifact_name": "cmb011-base-s44-w44",
+        "sha256": "932ea311901e2c01f25ae24ffce023551d6d658baa859ae67b89dd6b3d0856f9"
+      }
+    ]
+  },
+  "deployment": {
+    "main_repo": "ryu980920/Machine_Learning",
+    "deployed_assets": "final selection log, frozen training/inference specification and development evaluation evidence",
+    "new_model_weights_published": false,
+    "new_full_writer_final_fit_performed": false,
+    "single_checkpoint_or_seed_selected": false,
+    "test_scores_claimed": false,
+    "change_requires_new_explicit_approval": true
+  },
+  "evidence": [
+    "logs/EXP-CMB-012_Final_Combined_Model_Freeze_20261119.md",
+    "logs/학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md",
+    "logs/학습데이터_추가/EXP-CMB-011_02_Classwise_MatchedControls_Results.md"
+  ]
+}
