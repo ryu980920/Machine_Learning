@@ -7,6 +7,7 @@
 | [datasets/](datasets/) | 최종 MNIST·EMNIST v3 **112,000장 NPZ**, 검증 보고서 | 공식 분할 기반 모델 개발 데이터 |
 | [scripts/](scripts/) | 데이터 생성 Notebook, v3 재구성 코드, Hand-made 통일 변환 코드 | 구성 과정 재현 |
 | [Hand_made/](Hand_made/) | 팀원별 독립 손글씨 NPZ **4개, 각 640장** | **개발용 오류 분석·Normal/Combined 실험, 학습·검증 중복 방지** |
+| [Hand_made_extra/](Hand_made_extra/README.md) | 신규 직접 필기 7·8·9·B **480장 원본 NPZ** | **EXP-CMB-010 Combined 실험 전용 추가 Training 후보** — 기존 Writer·Original Test와 분리, 작성자 ID 미기록 |
 
 ## 1. 최종 MNIST·EMNIST 데이터
 

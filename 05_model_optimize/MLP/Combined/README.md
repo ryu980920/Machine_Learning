@@ -76,3 +76,10 @@ CMB-008   MLP 구조 → L2 → 학습률 → 조기 종료 순차 최적화
 ## 발표 자료 — S5 Learning Curve 및 현재 결정
 
 **Early Stopping=False 유지 (개발용 HP).** 같은 실행에서 관측한 Training vs Validation Accuracy·Loss 그래프의 과적합 징후와, 별도 S5 Writer OOF 평가에서 False가 True보다 좋았던 근거를 구분했다. [**PPT용 16:9 그래프 및 발표 문장**](logs/하이퍼파라미터_최적화/EXP-CMB-008_18_S5_Presentation_LearningCurve_ESFalse.md). Test 평가·최종 배포는 미실시.
+
+## EXP-CMB-010 — 7·8·9·B 추가 Training 통제 실험 (실측 완료, main 미반영)
+
+- 사용자가 새로 제공한 실제 손글씨 480장(7 160·9 160·8 80·B 80)을 QA 검증 후 단일 신규 작성자 미확인 코호트로 보존했다. [원본 NPZ](../../../02_data/Hand_made_extra/CMB010_7_8_9_B_480.npz) · [품질 검사](logs/학습데이터_추가/EXP-CMB-010_01_Input_QA_and_Train_Plan.md).
+- 기준선 78,720장과 추가 학습 79,200장을 **동일 Batch 128·MLP (256,)·Size30/Stroke28/CoM**으로 Seed 3 × 기존 Writer 4 × 2조건 = 24모델 통제 비교했다.
+- Writer OOF **92.4089% → 92.2917%**, OfficialVal **97.0972% → 97.0677%**로 하락. D→0, B→8은 개선됐지만 7↔9, 0→D는 악화돼 **480장 전체 보강은 최종 채택하지 않았다**. [실측 결과](logs/학습데이터_추가/EXP-CMB-010_02_Added_480_Training_Results.md) · [실측 CSV/JSON](results/Targeted_Handmade_480/README.md).
+- 이번 내용은 [Draft PR #38](https://github.com/ryu980920/Machine_Learning/pull/38)에서만 보존한다. **main의 기존 학습 데이터/모델 및 독립 Test는 변경하지 않았다.**
