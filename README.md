@@ -1,5 +1,17 @@
 # Machine Learning 팀 프로젝트
 
+## 최종 모델 선정 현황 — 2026-11-19
+
+**Combined MLP 최종 선정·설정 동결 완료: 기존 `CMB011/base` 유지.** (256,) / alpha=0.0001 / LR=0.001 / Batch=128 / Early Stopping=False / 공식 학습 30%-Size·28%-Stroke + CoM / 기존 Hand-made Writer 보류 학습. 새로 수집한 7·9·8·B 손글씨 480장은 **최종 Training에서 제외**한다.
+
+- [**Combined 최종 선정 선언·근거**](05_model_optimize/MLP/Combined/logs/EXP-CMB-012_Final_Combined_Model_Freeze_20261119.md) · [**438장 추가 평가 실측**](05_model_optimize/MLP/Combined/logs/학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md) · [**동결 Manifest·CV 모델 해시**](05_model_optimize/MLP/Combined/results/Final_Model/FINAL_COMBINED_FREEZE.json)
+- 근거: CMB011 84모델 비교에서 추가 데이터 세 조건 모두 기존 Writer OOF 개선 실패. 별도 438장에서는 480장 추가 시 +0.2093%p였으나 개발용 반복 자료이고 Bootstrap 95% 구간에 0이 포함돼 최종 교체 근거로 채택하지 않음.
+- **동결 범위는 모델 설정·학습 구성·재현 프로토콜**이다. 새로운 단일 최종 추론 가중치·앙상블은 생성/배포하지 않았고, Original Test·교수님 Test는 아직 사용하지 않았다.
+- Normal MLP 최종 모델 동결은 [별도 EXP017 기록](05_model_optimize/MLP/Normal/logs/크기편향_원인분석/EXP017_최종모델_선정확정_실험로그_20261119.md)에 따른다.
+
+> 아래 '최신 모델 연구 현황 (2026-11-18)' 및 이후 2026-11-10 단계별 서술은 **작성 당시 연구 이력**이며, 현재 최종 Combined 결정은 위 링크가 우선한다.
+
+
 2026년 2학기 머신러닝 팀 프로젝트의 계획, 데이터, 실험 및 발표 자료를 관리하는 저장소입니다.
 
 ## 프로젝트 개요
