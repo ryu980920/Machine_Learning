@@ -1,5 +1,12 @@
 # MLPClassifier / Combined — 실측 결과
 
+## 최종 모델 구성 및 별도 438장 검증 결과 (2026-11-19)
+
+- [**Final_Model — 최종 기존 Combined 선정 결과·동결 Manifest·438장 7조건 CSV**](Final_Model/README.md)
+- [**CMB011 438장 실제 저장 모델 84개 평가 로그**](../logs/학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md)
+- 고정 조건은 기존 Combined `CMB011/base`이며 신규 480장 Training 제외. **최종 설정 고정과 새로운 단일 추론 가중치 생성/배포는 구분**한다.
+
+
 실제 수행한 실험의 지표·오류 이미지·Confusion Matrix·학습/추론 시간·메타데이터를 각각의 폴더에서 관리하고, [logs](../logs/README.md)와 [scripts](../scripts/README.md)에 연결한다.
 
 | 결과 폴더 | 관련 실험 | 상태 |
