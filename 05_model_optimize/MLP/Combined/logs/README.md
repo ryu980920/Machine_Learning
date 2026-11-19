@@ -1,5 +1,12 @@
 # Combined MLP — 전체 연구 흐름 (EXP-CMB-001~009)
 
+## 최종 Combined MLP 선정 (2026-11-19)
+
+**EXP-CMB-012: 신규 480장 추가 이전의 `CMB011/base`를 최종 모델 구성으로 동결.** [선정 근거·고정 사양](EXP-CMB-012_Final_Combined_Model_Freeze_20261119.md) · [438장 실측·후속 판단](학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md) · [동결 Manifest](../results/Final_Model/FINAL_COMBINED_FREEZE.json).
+
+CMB011의 7·9·B·8 데이터 추가 연구는 최종 학습 구성으로 채택하지 않았으며 원본·성공/실패 기록은 모두 보존한다. 기존 Writer OOF·OfficialVal과 재사용 개발용 438장을 함께 검토한 결정이다. 새 단일 모델 가중치를 생성한 것은 아니고 Original Test·교수님 Test는 미사용이다.
+
+
 > **번호 규칙:** Combined의 모든 실험은 `EXP-CMB-001`부터 순차 표기한다. 과거 `EXP유001~004`라는 폴더별 번호는 사용하지 않는다. 같은 실험 안의 문서는 `01_Plan → 02_Interim → 03_Final → 04_Review` 순서다. 이 번호는 **진행 단계**이며 별도 실험이 아니다.
 >
 > **연구 상태 (2026-11-18):** CMB-001~009 실측·분석 완료. Size30/Stroke28/CoM + MLP (256,), alpha=1e-4, LR=.001, Early Stopping=False, **Batch 128은 후속 개발용 우선 후보**. 최종 배포는 미실시. Combined는 공식 Training에 **추가 Hand-made 학습 데이터**를 포함할 수 있으며, 작성자 보류 CV로 학습/평가 겹침을 방지한다.
