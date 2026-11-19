@@ -1,5 +1,12 @@
 # 05_model_optimize — 모델별 최적화 연구 기록
 
+## Combined MLP 최종 선정 — 2026-11-19
+
+**기존 Combined `CMB011/base` 최종 확정·하이퍼파라미터 및 Training 구성 동결.** 신규 480장 추가는 미채택. [최종 선정 근거](MLP/Combined/logs/EXP-CMB-012_Final_Combined_Model_Freeze_20261119.md) · [438장 외부 개발 평가](MLP/Combined/logs/학습데이터_추가/EXP-CMB-011_03_External438_and_Selection.md) · [최종 고정값](MLP/Combined/results/Final_Model/FINAL_COMBINED_FREEZE.json).
+
+공식 Train 76,800장 + 기존 다른 작성자 3명 1,920장의 Writer 보류 Training, MLP (256,), alpha=1e-4, LR=.001, Batch=128, Early Stopping=False, Size30%-Stroke28%-CoM 구성. 학습 가중치를 재학습·교체한 것이 아니라 **최종 선정 설정과 근거를 기록**한 것이다. 독립 Test는 미사용.
+
+
 5개 모델 각각의 **Normal**과 **Combined**를 독립적으로 최적화하고, 가설·실험 코드·결과물을 같은 규칙으로 축적하는 공간이다.
 
 ## 폴더 구조
