@@ -1,0 +1,36 @@
+{
+  "name": "validation",
+  "samples": 19200,
+  "correct": 18851,
+  "accuracy": 0.9818229166666667,
+  "macro_f1": 0.9817484226390943,
+  "dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "training_rows": 107520,
+  "model": {
+    "name": "KNeighborsClassifier",
+    "k": 3,
+    "weights": "distance",
+    "metric": "euclidean"
+  },
+  "preprocessing": "CoM -> Deskew",
+  "features": "Pixel 20% + HOG 80%",
+  "base_augmentation": {
+    "fraction": 0.3,
+    "stroke_strength": 0.44
+  },
+  "targeted_augmentation": {
+    "classes": [
+      "D",
+      "B",
+      "5",
+      "3"
+    ],
+    "rows": 7680
+  },
+  "source_fit_split": "EXP-014 official Training 76800, not full 96000",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.3",
+    "scikit_learn": "1.9.1"
+  }
+}
