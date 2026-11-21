@@ -1,0 +1,5 @@
+﻿p,official_pilot_accuracy,handmade_pilot_accuracy,handmade_pilot_macro_f1,dataset_scope
+1,0.873047,0.6875,0.681005,reduced_train_and_eval
+1.5,0.884766,0.730469,0.727512,reduced_train_and_eval
+2,0.884766,0.746094,0.741421,reduced_train_and_eval
+3,0.876953,0.726562,0.719173,reduced_train_and_eval

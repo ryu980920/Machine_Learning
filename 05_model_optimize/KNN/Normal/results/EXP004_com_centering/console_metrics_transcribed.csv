@@ -1,0 +1,3 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+baseline,0.9629166667,0.58828125,0.56642,user_console_transcription
+com,0.9619791667,0.778515625,0.7764856058,user_console_transcription

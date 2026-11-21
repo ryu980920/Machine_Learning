@@ -1,0 +1,5 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+control,0.981823,0.921875,0.921519,user_console_transcription
+uniform_5,0.981615,0.925781,0.925478,user_console_transcription
+targeted_5,0.981719,0.926172,0.926096,user_console_transcription
+targeted_10,0.981823,0.930078,0.930121,user_console_transcription

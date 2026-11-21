@@ -1,0 +1,6 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+hog_only,0.97224,0.914453,0.914183,user_console_transcription
+pixel_20_hog_80,0.981823,0.921875,0.921519,user_console_transcription
+pixel_35_hog_65,0.982812,0.916016,0.915534,user_console_transcription
+pixel_50_hog_50,0.981979,0.914453,0.913995,user_console_transcription
+pixel_65_hog_35,0.980104,0.904687,0.904181,user_console_transcription
