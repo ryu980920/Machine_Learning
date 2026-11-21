@@ -47,3 +47,21 @@
 - [`scripts/`](../scripts/)의 실제 실행 `.py` 12개 및 EXP-010 fast `.py`를 업로드한다.
 - 사용자 PC의 `results/EXP005_*` ~ `results/EXP015_*`의 원본 CSV/JSON을 **기존 디렉터리 구조를 유지한 채 추가 업로드**한다.
 - `results/EXP004_com_centering/`에는 이전에 확보한 일부 실측 원본이 포함돼 있다.
+
+## 최종 KNN Normal 모델 평가
+
+EXP-014에서 선정하고 EXP-015에서 재검증한 최적 설정을 고정한 후, 독립적인 Official Test 데이터 16,000장을 평가하였다.
+
+| 평가 데이터 | Accuracy | Macro F1 |
+|---|---:|---:|
+| Official Validation | 98.1823% | 0.981748 |
+| Official Test | **98.1250%** | **0.981144** |
+| Hand-made (개발용) | 93.0078% | 0.930121 |
+
+Official Test에서는 총 16,000장 중 15,700장을 정확하게 분류하였으며, 오분류는 300장이었다.
+
+Validation과 Test의 정확도 차이는 약 0.0573%p로, 최종 설정이 독립적인 공식 Test에서도 유사한 성능을 보임을 확인하였다.
+
+Hand-made 데이터는 최적화 과정에서 반복적으로 활용한 개발용 평가 데이터이므로 독립적인 Test 결과와 구분하였다.
+
+최종 모델은 KNN(k=3, distance, Euclidean), CoM → Deskew 전처리, Pixel:HOG 20:80 특징, 크기·획 증강 30% 및 취약 클래스(D, B, 5, 3) 집중 증강 10%를 사용하였다.
