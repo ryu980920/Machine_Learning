@@ -1,0 +1,8 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+control_com,0.965052,0.787891,0.78654,user_console_transcription
+size_30,0.961198,0.822266,0.82257,user_console_transcription
+combined_strength_12,0.959427,0.825391,0.825624,user_console_transcription
+combined_strength_20,0.958698,0.832422,0.832685,user_console_transcription
+combined_strength_28,0.958073,0.830859,0.830861,user_console_transcription
+combined_strength_36,0.956979,0.832422,0.831968,user_console_transcription
+combined_strength_44,0.957344,0.841016,0.840871,user_console_transcription

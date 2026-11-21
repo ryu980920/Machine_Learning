@@ -1,0 +1,8 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+control_com,0.965052,0.787891,0.78654,user_console_transcription
+size_10,0.963229,0.816406,0.817018,user_console_transcription
+size_20,0.961979,0.824219,0.823989,user_console_transcription
+size_30,0.961198,0.822266,0.82257,user_console_transcription
+combined_10,0.961042,0.821484,0.821873,user_console_transcription
+combined_20,0.958385,0.829297,0.828566,user_console_transcription
+combined_30,0.958073,0.830859,0.830861,user_console_transcription

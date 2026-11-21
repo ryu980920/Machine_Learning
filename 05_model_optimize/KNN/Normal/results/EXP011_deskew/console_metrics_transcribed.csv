@@ -1,0 +1,4 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+com_control,0.957344,0.841016,0.840871,user_console_transcription
+deskew_then_com,0.967135,0.864062,0.863137,user_console_transcription
+com_then_deskew,0.96724,0.865234,0.864277,user_console_transcription

@@ -1,0 +1,2 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+p2_full,0.957344,0.841016,0.840871,user_console_transcription

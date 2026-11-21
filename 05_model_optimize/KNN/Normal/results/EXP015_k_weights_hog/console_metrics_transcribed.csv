@@ -1,0 +1,13 @@
+﻿variant,official_accuracy,handmade_accuracy,handmade_macro_f1,provenance
+k1_uniform,0.979062,0.922656,0.922612,user_console_transcription
+k1_distance,0.979062,0.922656,0.922612,user_console_transcription
+k3_uniform,0.98151,0.927734,0.92779,user_console_transcription
+k3_distance,0.981823,0.930078,0.930121,user_console_transcription
+k5_uniform,0.98276,0.927344,0.927481,user_console_transcription
+k5_distance,0.982969,0.927734,0.927879,user_console_transcription
+k7_uniform,0.982135,0.925781,0.925878,user_console_transcription
+k7_distance,0.98224,0.927344,0.927419,user_console_transcription
+k9_uniform,0.98151,0.928516,0.92862,user_console_transcription
+k9_distance,0.981458,0.928516,0.928648,user_console_transcription
+k11_uniform,0.981146,0.926172,0.926258,user_console_transcription
+k11_distance,0.981458,0.928516,0.928695,user_console_transcription
