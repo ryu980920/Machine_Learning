@@ -1,0 +1,194 @@
+{
+  "experiment": "EXP-CMB-002 SVC Combined HOG full 4-writer OOF",
+  "official_train_n": 76800,
+  "official_validation_n": 19200,
+  "combined_training_per_fold_n": 78720,
+  "handmade_training_per_fold_n": 1920,
+  "heldout_per_fold_n": 640,
+  "features": "CoM -> Deskew -> HOG (324 dimensions)",
+  "parameters": {
+    "kernel": "rbf",
+    "C": 1.0,
+    "gamma": "scale",
+    "cache_size_mb": 200
+  },
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_test_used": false,
+  "normal_reference_official_validation": {
+    "n": 19200,
+    "correct": 18867,
+    "accuracy": 0.98265625,
+    "macro_f1": 0.9826400407955499
+  },
+  "normal_oof_development": {
+    "n": 2560,
+    "correct": 2348,
+    "accuracy": 0.9171875,
+    "macro_f1": 0.9150309981703894
+  },
+  "combined_oof_development": {
+    "n": 2560,
+    "correct": 2395,
+    "accuracy": 0.935546875,
+    "macro_f1": 0.9350346255528845
+  },
+  "paired": {
+    "corrected": 53,
+    "new_errors": 6,
+    "unchanged_correct": 2342,
+    "unchanged_wrong": 159
+  },
+  "folds": [
+    {
+      "status": "complete",
+      "heldout_writer": 41,
+      "train_writers": [
+        42,
+        43,
+        44
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 100.32,
+      "handmade_predict_seconds": 2.97,
+      "official_predict_seconds": 92.26,
+      "support_vectors": 12634,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 560,
+        "accuracy": 0.875,
+        "macro_f1": 0.8647987146120133
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 583,
+        "accuracy": 0.9109375,
+        "macro_f1": 0.9086358390967878
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18864,
+        "accuracy": 0.9825,
+        "macro_f1": 0.9824745207005999
+      }
+    },
+    {
+      "status": "complete",
+      "heldout_writer": 42,
+      "train_writers": [
+        41,
+        43,
+        44
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 108.05,
+      "handmade_predict_seconds": 3.02,
+      "official_predict_seconds": 91.96,
+      "support_vectors": 12636,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 585,
+        "accuracy": 0.9140625,
+        "macro_f1": 0.9103471278373952
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 598,
+        "accuracy": 0.934375,
+        "macro_f1": 0.9339659783239935
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18861,
+        "accuracy": 0.98234375,
+        "macro_f1": 0.9823176428000622
+      }
+    },
+    {
+      "status": "complete",
+      "heldout_writer": 43,
+      "train_writers": [
+        41,
+        42,
+        44
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 109.01,
+      "handmade_predict_seconds": 2.81,
+      "official_predict_seconds": 94.34,
+      "support_vectors": 12710,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 622,
+        "accuracy": 0.971875,
+        "macro_f1": 0.9719306893345891
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 625,
+        "accuracy": 0.9765625,
+        "macro_f1": 0.9765870004224626
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18868,
+        "accuracy": 0.9827083333333333,
+        "macro_f1": 0.9826867025616804
+      }
+    },
+    {
+      "status": "complete",
+      "heldout_writer": 44,
+      "train_writers": [
+        41,
+        42,
+        43
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 162.58,
+      "handmade_predict_seconds": 6.25,
+      "official_predict_seconds": 188.94,
+      "support_vectors": 12643,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 581,
+        "accuracy": 0.9078125,
+        "macro_f1": 0.9061811349162758
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 589,
+        "accuracy": 0.9203125,
+        "macro_f1": 0.9194145618115779
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18868,
+        "accuracy": 0.9827083333333333,
+        "macro_f1": 0.982698452483355
+      }
+    }
+  ],
+  "evaluation_note": "Hand-made was used in prior Normal optimization; these writer-heldout folds exclude heldout training but are NOT an independent final test."
+}

@@ -1,0 +1,3 @@
+﻿model,fit_seconds,official_accuracy,official_macro_f1,handmade_accuracy,handmade_macro_f1
+com_subset,7.53,0.9475,0.9470947413088215,0.728125,0.724748307955049
+com_deskew_subset,5.88,0.959375,0.9591315006963252,0.76796875,0.7638930017246074

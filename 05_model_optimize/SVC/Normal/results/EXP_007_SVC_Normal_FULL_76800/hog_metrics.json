@@ -1,0 +1,67 @@
+{
+  "experiment": "EXP-007 SVC Normal full training",
+  "feature": "hog",
+  "official_training": 76800,
+  "official_validation_size": 19200,
+  "official_test_used": false,
+  "dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "baseline_source": "03_experiments\\model_optimization\\svc.py",
+  "parameters": {
+    "kernel": "rbf",
+    "C": 1.0,
+    "gamma": "scale",
+    "cache_size_mb": 200
+  },
+  "status": "complete",
+  "note": "Hand-made evaluation is repeated-use development data.",
+  "feature_dimensions": 324,
+  "fit_seconds": 87.89,
+  "support_vectors": 12242,
+  "official_validation": {
+    "n": 19200,
+    "correct": 18867,
+    "accuracy": 0.98265625,
+    "macro_f1": 0.9826400407955499
+  },
+  "validation_predict_seconds": 72.54,
+  "handmade_development": {
+    "n": 2560,
+    "correct": 2348,
+    "accuracy": 0.9171875,
+    "macro_f1": 0.9150309981703894
+  },
+  "writers": [
+    {
+      "writer": 41,
+      "n": 640,
+      "correct": 560,
+      "accuracy": 0.875,
+      "macro_f1": 0.8647987146120133,
+      "predict_seconds": 2.63
+    },
+    {
+      "writer": 42,
+      "n": 640,
+      "correct": 585,
+      "accuracy": 0.9140625,
+      "macro_f1": 0.9103471278373952,
+      "predict_seconds": 2.42
+    },
+    {
+      "writer": 43,
+      "n": 640,
+      "correct": 622,
+      "accuracy": 0.971875,
+      "macro_f1": 0.9719306893345891,
+      "predict_seconds": 2.22
+    },
+    {
+      "writer": 44,
+      "n": 640,
+      "correct": 581,
+      "accuracy": 0.9078125,
+      "macro_f1": 0.9061811349162758,
+      "predict_seconds": 2.81
+    }
+  ]
+}

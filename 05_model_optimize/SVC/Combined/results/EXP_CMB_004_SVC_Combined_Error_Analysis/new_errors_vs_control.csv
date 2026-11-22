@@ -1,0 +1,2 @@
+﻿writer,index,true,control_pred,aug25_pred,aug50_pred,aug100_pred,control_correct,aug100_correct,change_from_control
+43,493,D,D,D,0,0,1,0,new_error

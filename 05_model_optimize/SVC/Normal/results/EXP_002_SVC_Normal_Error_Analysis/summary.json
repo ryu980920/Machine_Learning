@@ -1,0 +1,160 @@
+{
+  "experiment": "EXP-002 SVC Normal error analysis",
+  "source": "05_model_optimize\\SVC\\Normal\\results\\EXP_001_SVC_Normal_Baseline\\handmade_predictions.csv",
+  "handmade_n": 2560,
+  "correct": 1576,
+  "errors": 984,
+  "top_confusions": [
+    {
+      "true": "5",
+      "predicted": "F",
+      "count": 46
+    },
+    {
+      "true": "B",
+      "predicted": "8",
+      "count": 45
+    },
+    {
+      "true": "D",
+      "predicted": "0",
+      "count": 44
+    },
+    {
+      "true": "4",
+      "predicted": "F",
+      "count": 39
+    },
+    {
+      "true": "8",
+      "predicted": "B",
+      "count": 34
+    },
+    {
+      "true": "7",
+      "predicted": "F",
+      "count": 32
+    },
+    {
+      "true": "9",
+      "predicted": "F",
+      "count": 32
+    },
+    {
+      "true": "6",
+      "predicted": "5",
+      "count": 27
+    },
+    {
+      "true": "D",
+      "predicted": "2",
+      "count": 27
+    },
+    {
+      "true": "0",
+      "predicted": "D",
+      "count": 23
+    },
+    {
+      "true": "9",
+      "predicted": "3",
+      "count": 23
+    },
+    {
+      "true": "B",
+      "predicted": "5",
+      "count": 23
+    }
+  ],
+  "weakest_classes": [
+    {
+      "class": "7",
+      "total": 160,
+      "errors": 123,
+      "correct": 37,
+      "recall": 0.23125
+    },
+    {
+      "class": "9",
+      "total": 160,
+      "errors": 122,
+      "correct": 38,
+      "recall": 0.2375
+    },
+    {
+      "class": "B",
+      "total": 160,
+      "errors": 105,
+      "correct": 55,
+      "recall": 0.34375
+    },
+    {
+      "class": "4",
+      "total": 160,
+      "errors": 85,
+      "correct": 75,
+      "recall": 0.46875
+    },
+    {
+      "class": "D",
+      "total": 160,
+      "errors": 83,
+      "correct": 77,
+      "recall": 0.48125
+    },
+    {
+      "class": "5",
+      "total": 160,
+      "errors": 76,
+      "correct": 84,
+      "recall": 0.525
+    },
+    {
+      "class": "8",
+      "total": 160,
+      "errors": 71,
+      "correct": 89,
+      "recall": 0.55625
+    },
+    {
+      "class": "6",
+      "total": 160,
+      "errors": 60,
+      "correct": 100,
+      "recall": 0.625
+    }
+  ],
+  "writers": [
+    {
+      "writer": 41,
+      "total": 640,
+      "correct": 323,
+      "errors": 317,
+      "accuracy": 0.5046875
+    },
+    {
+      "writer": 42,
+      "total": 640,
+      "correct": 422,
+      "errors": 218,
+      "accuracy": 0.659375
+    },
+    {
+      "writer": 43,
+      "total": 640,
+      "correct": 393,
+      "errors": 247,
+      "accuracy": 0.6140625
+    },
+    {
+      "writer": 44,
+      "total": 640,
+      "correct": 438,
+      "errors": 202,
+      "accuracy": 0.684375
+    }
+  ],
+  "model_retrained": false,
+  "official_test_used": false,
+  "evaluation_role": "Repeated-use Hand-made development; not independent test"
+}
