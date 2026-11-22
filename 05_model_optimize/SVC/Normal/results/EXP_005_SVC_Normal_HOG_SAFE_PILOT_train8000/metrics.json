@@ -1,0 +1,173 @@
+{
+  "experiment": "EXP-005 SVC Normal HOG safe pilot",
+  "train_size": 8000,
+  "validation_size": 3200,
+  "official_test_used": false,
+  "model_source": "03_experiments\\model_optimization\\svc.py",
+  "model_parameters": {
+    "C": 1.0,
+    "break_ties": false,
+    "cache_size": 200,
+    "class_weight": null,
+    "coef0": 0.0,
+    "decision_function_shape": "ovr",
+    "degree": 3,
+    "gamma": "scale",
+    "kernel": "rbf",
+    "max_iter": -1,
+    "probability": "deprecated",
+    "random_state": null,
+    "shrinking": true,
+    "tol": 0.001,
+    "verbose": false
+  },
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "results": {
+    "pixel_com_deskew": {
+      "feature_dimensions": 784,
+      "scaling": "project pixel/255 pipeline",
+      "fit_seconds": 5.93,
+      "official_predict_seconds": 7.35,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3070,
+        "accuracy": 0.959375,
+        "macro_f1": 0.9591315006963252
+      },
+      "handmade_development": {
+        "n": 2560,
+        "correct": 1966,
+        "accuracy": 0.76796875,
+        "macro_f1": 0.7638930017246074
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "accuracy": 0.6625,
+          "macro_f1": 0.633551887159284,
+          "n": 640,
+          "predict_seconds": 1.36
+        },
+        {
+          "writer": 42,
+          "accuracy": 0.7796875,
+          "macro_f1": 0.7505415603860879,
+          "n": 640,
+          "predict_seconds": 1.62
+        },
+        {
+          "writer": 43,
+          "accuracy": 0.83125,
+          "macro_f1": 0.8287532785369799,
+          "n": 640,
+          "predict_seconds": 1.6
+        },
+        {
+          "writer": 44,
+          "accuracy": 0.7984375,
+          "macro_f1": 0.7923107353938582,
+          "n": 640,
+          "predict_seconds": 1.52
+        }
+      ]
+    },
+    "hog_com_deskew": {
+      "feature_dimensions": 324,
+      "scaling": "pre-normalized features; no pixel/255 scaler",
+      "fit_seconds": 1.47,
+      "official_predict_seconds": 3.14,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3121,
+        "accuracy": 0.9753125,
+        "macro_f1": 0.9752839937527136
+      },
+      "handmade_development": {
+        "n": 2560,
+        "correct": 2288,
+        "accuracy": 0.89375,
+        "macro_f1": 0.8916133030662736
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "accuracy": 0.8546875,
+          "macro_f1": 0.842764937021615,
+          "n": 640,
+          "predict_seconds": 0.66
+        },
+        {
+          "writer": 42,
+          "accuracy": 0.884375,
+          "macro_f1": 0.8788355208592062,
+          "n": 640,
+          "predict_seconds": 0.58
+        },
+        {
+          "writer": 43,
+          "accuracy": 0.95,
+          "macro_f1": 0.9503642844738793,
+          "n": 640,
+          "predict_seconds": 0.56
+        },
+        {
+          "writer": 44,
+          "accuracy": 0.8859375,
+          "macro_f1": 0.884962884853471,
+          "n": 640,
+          "predict_seconds": 0.52
+        }
+      ]
+    },
+    "pixel20_hog80_com_deskew": {
+      "feature_dimensions": 1108,
+      "scaling": "pre-normalized features; no pixel/255 scaler",
+      "fit_seconds": 6.97,
+      "official_predict_seconds": 7.2,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3134,
+        "accuracy": 0.979375,
+        "macro_f1": 0.9793195055137223
+      },
+      "handmade_development": {
+        "n": 2560,
+        "correct": 2284,
+        "accuracy": 0.8921875,
+        "macro_f1": 0.8890043725986869
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "accuracy": 0.8484375,
+          "macro_f1": 0.8338298276055449,
+          "n": 640,
+          "predict_seconds": 1.51
+        },
+        {
+          "writer": 42,
+          "accuracy": 0.884375,
+          "macro_f1": 0.8749317793434861,
+          "n": 640,
+          "predict_seconds": 1.72
+        },
+        {
+          "writer": 43,
+          "accuracy": 0.953125,
+          "macro_f1": 0.9531922925174003,
+          "n": 640,
+          "predict_seconds": 1.44
+        },
+        {
+          "writer": 44,
+          "accuracy": 0.8828125,
+          "macro_f1": 0.8812640159302739,
+          "n": 640,
+          "predict_seconds": 1.51
+        }
+      ]
+    }
+  },
+  "selected_development_candidate": "hog_com_deskew",
+  "note": "Subset pilot; repeated-use Hand-made development set is not an independent final test"
+}

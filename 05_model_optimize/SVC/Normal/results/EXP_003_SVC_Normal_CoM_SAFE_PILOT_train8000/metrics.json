@@ -1,0 +1,130 @@
+{
+  "experiment": "EXP-003 CoM SAFE PILOT (subset, not comparable to EXP-001 full)",
+  "train_size": 8000,
+  "validation_size": 3200,
+  "com_preprocessing_seconds": 0.28,
+  "official_test_used": false,
+  "model_source": "03_experiments\\model_optimization\\svc.py",
+  "hyperparameters": {
+    "C": 1.0,
+    "break_ties": false,
+    "cache_size": 200,
+    "class_weight": null,
+    "coef0": 0.0,
+    "decision_function_shape": "ovr",
+    "degree": 3,
+    "gamma": "scale",
+    "kernel": "rbf",
+    "max_iter": -1,
+    "probability": "deprecated",
+    "random_state": null,
+    "shrinking": true,
+    "tol": 0.001,
+    "verbose": false
+  },
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "results": {
+    "baseline_subset": {
+      "fit_seconds": 8.64,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3044,
+        "accuracy": 0.95125,
+        "macro_f1": 0.950953627350068
+      },
+      "official_predict_seconds": 12.98,
+      "handmade_development": {
+        "n": 2560,
+        "correct": 1429,
+        "accuracy": 0.558203125,
+        "macro_f1": 0.5390417224494517
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "n": 640,
+          "correct": 283,
+          "accuracy": 0.4421875,
+          "macro_f1": 0.4029135626115509,
+          "predict_seconds": 2.36
+        },
+        {
+          "writer": 42,
+          "n": 640,
+          "correct": 369,
+          "accuracy": 0.5765625,
+          "macro_f1": 0.5385980507942336,
+          "predict_seconds": 2.53
+        },
+        {
+          "writer": 43,
+          "n": 640,
+          "correct": 388,
+          "accuracy": 0.60625,
+          "macro_f1": 0.5594107434881268,
+          "predict_seconds": 2.38
+        },
+        {
+          "writer": 44,
+          "n": 640,
+          "correct": 389,
+          "accuracy": 0.6078125,
+          "macro_f1": 0.5820810107230423,
+          "predict_seconds": 2.3
+        }
+      ]
+    },
+    "com_subset": {
+      "fit_seconds": 16.43,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3032,
+        "accuracy": 0.9475,
+        "macro_f1": 0.9470947413088215
+      },
+      "official_predict_seconds": 15.71,
+      "handmade_development": {
+        "n": 2560,
+        "correct": 1864,
+        "accuracy": 0.728125,
+        "macro_f1": 0.724748307955049
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "n": 640,
+          "correct": 391,
+          "accuracy": 0.6109375,
+          "macro_f1": 0.5747840772885686,
+          "predict_seconds": 2.92
+        },
+        {
+          "writer": 42,
+          "n": 640,
+          "correct": 470,
+          "accuracy": 0.734375,
+          "macro_f1": 0.7062727921651295,
+          "predict_seconds": 2.84
+        },
+        {
+          "writer": 43,
+          "n": 640,
+          "correct": 517,
+          "accuracy": 0.8078125,
+          "macro_f1": 0.8055472917776363,
+          "predict_seconds": 2.86
+        },
+        {
+          "writer": 44,
+          "n": 640,
+          "correct": 486,
+          "accuracy": 0.759375,
+          "macro_f1": 0.756241903405668,
+          "predict_seconds": 2.83
+        }
+      ]
+    }
+  },
+  "handmade_delta_pp": 16.9921875,
+  "official_delta_pp": -0.3750000000000031
+}
