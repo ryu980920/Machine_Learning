@@ -6,8 +6,6 @@
 - **기존 학습 전 기본 코드:** [extra_trees.py](../../03_experiments/model_optimization/extra_trees.py)
 - **공통 로그 양식:** [EXPERIMENT_TEMPLATE.md](../EXPERIMENT_TEMPLATE.md)
 
-아직 이 폴더에서 최적화 실험을 완료한 것으로 표시하지 않는다.
-
 ## Extra Trees 최적화 실측 결과
 
 - [Normal 실험일지](Normal/logs/findings.md) · [Normal PDF](Normal/results/Extra_Trees_Normal.pdf)
@@ -35,3 +33,49 @@ python "$extra/Normal/scripts/render_report.py" --mode Normal --source "$source_
 ```
 
 실험별 `summary.json`에는 설정과 모든 평가 지표가 있고, `predictions.npz`에는 각 공식 Validation Fold 및 작성자별 예측이 있다. 공식 Validation 예측 순서는 `official_split_indices.npz`의 val_idx를 따른다. 작성자 예측 순서는 원본 NPZ 행 순서다. 모델 가중치는 저장하지 않았으며 선택한 설정과 학습 코드를 제공한다.
+
+### 후속 검토 재현
+
+Combined의 대조군은 T02 설정을 기준으로 한 변수씩 변경한다. 각 조건은
+시드 42·17·73과 동일한 네 작성자 보류 Fold에서 평가한다.
+
+```bash
+review="$extra/Combined/results/review"
+for arm in stroke00 features08; do
+  python "$extra/Combined/scripts/run_controls.py" --arm "$arm" \
+    --out "/tmp/et-${arm}" --jobs 4
+done
+
+python "$extra/Combined/scripts/review_evidence.py" --out "$review" --controls
+
+for mode in Normal Combined; do
+  source_dir="$extra/$mode/results"
+  python "$extra/Normal/scripts/render_report.py" --mode "$mode" \
+    --source "$source_dir" --results "$source_dir" --review-dir "$review" \
+    --output "/tmp/Extra_Trees_${mode}_Reviewed.pdf"
+done
+```
+
+`review_evidence.py`는 보존한 행 순서와 실제 레이블을 사용해 각
+`predictions.npz`에서 개발 지표를 다시 계산하고 `summary.json` 및 통합 CSV와
+대조한다. 대조군의 새 학습 결과로 분석을 다시 실행하려면 새 검토 디렉터리의
+`runs/`에 두 대조군 출력의 `runs/` 하위 폴더를 모아 `--out`으로 지정한다.
+
+### 독립 평가용 후보 동결
+
+[후보 명세](Combined/results/review/freeze.json)에 학습 자료, 시드, 트리 설정,
+추론 전처리를 고정했다. Normal은 공식 Train 76,800장으로, Combined는 같은
+공식 Train에 개발 작성자 41–44의 2,560장을 더해 Extra Trees 한 모델씩을
+학습한다. Combined의 작성자별 OOF 점수에서는 각 학습 Fold에 1,920장이 들어갔다.
+최종 모델의 손글씨 일반화 성능은 독립 평가에서 확인한다.
+
+```bash
+for mode in normal combined; do
+  python "$extra/Normal/scripts/fit_frozen.py" --mode "$mode" \
+    --out "/tmp/et-frozen-$mode" --jobs 4
+done
+```
+
+저장된 모델의 입력은 표준화된 28×28 명암 이미지다. `fit_frozen.py`의
+`predict()`가 CoM 정렬과 픽셀·HOG를 적용한다. 소스 그룹 분할, 입력 해시와
+실행 환경은 모델 출력 디렉터리에도 남는다. 이 명령은 개발 학습 자료만 사용한다.

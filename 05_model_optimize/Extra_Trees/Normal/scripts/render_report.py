@@ -36,6 +36,10 @@ th {font-weight:bold;background:#e6eff5;text-align:left;color:#103b57;}
 td,th {border-bottom:1px solid #d9e2ea;padding:5pt 6pt;font-size:8.8pt;}
 img {display:block;width:100%;height:auto;max-height:65mm;object-fit:contain;}
 .errors img {max-height:46mm;}
+.closing img {max-height:47mm;}
+.review-errors img {max-height:28mm;}
+.review-errors td,.review-errors th {padding:3pt 6pt;}
+
 """
 
 PREP_TEXT = {
@@ -101,7 +105,7 @@ def seed_stats(seeds, function):
     return f"{pct(np.mean(values))} ± {100*np.std(values, ddof=1):.2f}%p"
 
 
-def pages(out, results, mode):
+def pages(out, results, mode, review=None):
     comb = mode == "Combined"
     runs = {p.parent.name: json.loads(p.read_text()) for p in (out / "runs").glob("*/summary.json")}
     selection = json.loads((out / "selection.json").read_text())
@@ -149,6 +153,8 @@ def pages(out, results, mode):
     summary += paragraph("MLP·HGB 수치는 각 보고서의 최종 3시드 평균이다. "
                          "Extra Trees 역시 시드별 점수를 평균했으며 ±값은 표본 표준편차다. 보고서마다 시드, 후보 선정 기준과 실행 환경은 다르다. "
                          "Original Test 16,000장과 교수님 Test는 이 연구에서 평가하지 않았다.", "note")
+    if comb and review and (review / "paired_controls.csv").is_file():
+        summary += paragraph("후속 대조의 시드별 결과와 독립 평가용 후보 결정은 마지막 쪽에 정리했다.", "note")
     yield summary
 
     data = title("데이터 감사와 기준선", "공식 자료와 작성자별 분리")
@@ -266,9 +272,22 @@ def pages(out, results, mode):
     peak = max(curve, key=lambda row: float(row["hand_accuracy"]))
     learning += paragraph(f"공식 학습량을 20%에서 100%로 늘리자 공식 Validation은 "
                           f"{delta(float(last['official_accuracy'])-float(first['official_accuracy']))}, "
-                          f"손글씨 정확도는 {delta(float(last['hand_accuracy'])-float(first['hand_accuracy']))} 변했다. "
-                          f"측정점 중 손글씨 최고 정확도는 공식 Train {int(peak['official_train_n']):,}장에서 "
-                          f"{pct(float(peak['hand_accuracy']))}였다.")
+                          f"손글씨 정확도는 {delta(float(last['hand_accuracy'])-float(first['hand_accuracy']))} 변했다.")
+    if comb:
+        at_sixty = next(row for row in curve if row["run"] == "LC60")
+        hand_share = lambda row: int(row["handmade_train_n"]) / (
+            int(row["official_train_n"]) + int(row["handmade_train_n"]))
+        learning += paragraph(
+            f"46,079장과 61,440장에서 손글씨 정확도 {pct(float(at_sixty['hand_accuracy']))}가 공동 최고였다. "
+            f"76,800장의 공식 Validation은 46,079장 대비 "
+            f"{delta(float(last['official_accuracy'])-float(at_sixty['official_accuracy']))}, "
+            f"손글씨는 {delta(float(last['hand_accuracy'])-float(at_sixty['hand_accuracy']))}였다. "
+            f"손글씨 학습 비중은 {pct(hand_share(at_sixty))}에서 {pct(hand_share(last))}로 줄었다. "
+            "시드 42에서 관측한 결과이며 공식 학습량과 손글씨 비중이 함께 변했다.")
+    else:
+        learning += paragraph(
+            f"손글씨 최고 정확도는 공식 학습 {int(peak['official_train_n']):,}장에서 "
+            f"{pct(float(peak['hand_accuracy']))}였다.")
     times = list(final["timing"].values())
     avg_fit = average(times, lambda r: r["fit_seconds"])
     avg_val = average(times, lambda r: r["val_predict_seconds"]*1000/19200)
@@ -312,17 +331,111 @@ def pages(out, results, mode):
     closing += sub("선정 범위") + paragraph("후보 탐색에 같은 공식 Validation과 팀 손글씨를 반복 사용했다. "
                         "따라서 성능 수치는 개발 결과이며 독립 작성자나 최종 Test의 정확도는 추정하지 않았다. "
                         "시드 평균은 개별 모델 점수의 평균이다. 교수님 Test와 공식 Original Test 평가는 미실시다.")
+    freeze = review / "freeze.json" if review else None
+    if freeze and freeze.is_file():
+        recipe = json.loads(freeze.read_text()).get(mode.lower())
+        if recipe:
+            closing += sub("독립 평가용 후보 구성")
+            closing += paragraph(
+                f"{recipe['candidate']} · 시드 {recipe['seed']} · 공식 Train "
+                f"{recipe['official_training_n']:,}장 · 손글씨 {recipe['handmade_training_n']:,}장. "
+                "Extra Trees 한 모델을 학습하고 추론에는 CoM 정렬과 픽셀·HOG를 적용한다. "
+                "손글씨 개발 OOF는 후보 비교에 사용한 Fold별 점수다.")
     closing += sub("비교 근거") + paragraph("팀 저장소 README·RESEARCH_PLAN·W02 실험 2/3 및 02_data 검증 문서. "
                     "팀 선행 보고서 MLP_Normal(19p), MLP_Combined(18p), HGB_Normal(23p), HGB_Combined(15p). "
                     "실험별 원자료는 runs/summary.json 및 predictions.npz, 통합 결과는 results의 CSV를 참조한다.", "note")
     yield closing
 
+    if review:
+        yield paired_error_page(review, mode)
+        if comb and (review / "paired_controls.csv").is_file():
+            yield controls_page(review)
 
-def render(source, results, output, mode):
-    report_pages = list(pages(source, results, mode))
-    articles = "".join(f'<article class="{("errors" if i == 4 else "")}">{body}</article>'
+
+def paired_error_page(review, mode):
+    rows = [r for r in read_csv(review / "seven_to_nine_by_writer.csv") if r["mode"] == mode]
+    totals = {key: sum(int(r[key]) for r in rows) for key in rows[0] if key not in ("mode", "writer")}
+    output = title("동일 샘플의 예측 대조", "7→9 오류와 작성자별 차이")
+    output += table(("작성자", "7 정답 기존 → 선정", "7→9 기존 → 선정", "기존 정답 → 9", "기존 기타 오답 → 9"),
+                    [(r["writer"], f"{r['correct_before']} → {r['correct_after']}",
+                      f"{r['before']} → {r['after']}", r["introduced_from_correct"],
+                      r["introduced_from_other_error"]) for r in rows])
+    output += paragraph(
+        f"전체 숫자 7 {totals['true_sevens']}장 중 정답은 {totals['correct_before']}→"
+        f"{totals['correct_after']}건, 7→9 오답은 {totals['before']}→{totals['after']}건이었다. "
+        f"새 7→9 오류에는 기존 정답 {totals['introduced_from_correct']}건과 "
+        f"기존의 다른 오답 {totals['introduced_from_other_error']}건이 포함됐다. "
+        f"기존 7→9 가운데 {totals['resolved_to_correct']}건은 정답으로 바뀌었다.")
+    output += paragraph("44번에서 7→9 오류가 가장 크게 늘었다. 전체 숫자 7의 인식률은 개선됐고 "
+                        "잔존 오류는 9에 더 집중됐다. 여러 전처리와 트리 설정이 함께 바뀐 기준선 비교이므로 "
+                        "개별 설정이 7→9 오류에 기여한 크기는 분리해 추정하지 않았다.")
+    if mode == "Combined":
+        classes = read_csv(review / "writer41_by_class.csv")
+        changed = [r for r in classes if r["errors_before"] != r["errors_after"]]
+        output += sub("41번에서 손글씨 추가 학습의 영향")
+        output += table(("정답", "오류 기존 → 추가", "오답 → 정답", "정답 → 오답"),
+                        [(r["actual"], f"{r['errors_before']} → {r['errors_after']}", r["corrected"],
+                          r["regressed"]) for r in changed])
+        output += paragraph("같은 설정의 공식 자료 단독 모델 대비 15건이 개선되고 21건이 악화됐다. "
+                            "순오류는 숫자 6에서 4건, 숫자 9에서 3건 증가했다. "
+                            "6에서 새로 틀린 4건은 C 2건, B와 5 각 1건이었다. D의 오류는 3건 줄었다. "
+                            "41번의 획 밀도가 낮았다는 입력 특성은 관찰값이며, "
+                            "획 굵기와 정확도 하락의 인과관계를 이 비교로 추정하지 않았다.")
+    gallery = review / f"seven_to_nine_{mode.lower()}.png"
+    if gallery.is_file():
+        output += figure(gallery.resolve().as_uri().removesuffix(".png"),
+                         "모두 정답 7. 왼쪽 4장은 새 7→9 오류, 오른쪽 4장은 9에서 7로 교정된 예시다. "
+                         "위 숫자는 작성자와 원본 행 번호, 아래는 예측의 변화다.")
+        output += paragraph("윗획 왼쪽이 아래로 꺾인 7이 새 오류와 교정 사례 모두에 보였다. "
+                            "같은 형태에서도 예측이 달라져 이 시각적 특징만으로 오류 증가를 설명하기 어렵다.",
+                            "note")
+    output += paragraph("예측이 바뀐 원본 행 번호는 paired_error_examples.csv에 기록했다.", "note")
+    return output
+
+
+def controls_page(review):
+    rows = read_csv(review / "paired_controls.csv")
+    output = title("후속 대조 실험 · 같은 작성자 분할과 시드", "획 혼합과 분기 후보 수")
+    for arm, heading in (("stroke00", "픽셀·HOG에서 획 혼합 0.00과 0.28"),
+                         ("features08", "분기 특징 비율 0.08과 0.18")):
+        control = [r for r in rows if r["comparison"] == arm and r["arm"] == arm]
+        reference = [r for r in rows if r["comparison"] == arm and r["arm"] == "T02_reference"]
+        score_delta = lambda key: [float(b[key])-float(a[key]) for a, b in zip(control, reference)]
+        output += sub(heading)
+        output += table(("시드", "공식 Acc. 차이", "손글씨 Acc. 차이", "손글씨 Macro F1 차이"),
+                        [(a["seed"], delta(float(b["official_accuracy"])-float(a["official_accuracy"])),
+                          delta(float(b["hand_accuracy"])-float(a["hand_accuracy"])),
+                          f"{float(b['hand_macro_f1'])-float(a['hand_macro_f1']):+.5f}")
+                         for a, b in zip(control, reference)])
+        output += paragraph(
+            f"차이는 T02에서 대조군을 뺀 값이다. 3시드 평균 차이는 공식 "
+            f"{delta(np.mean(score_delta('official_accuracy')))}, 손글씨 "
+            f"{delta(np.mean(score_delta('hand_accuracy')))}, "
+            f"Macro F1 {np.mean(score_delta('hand_macro_f1')):+.5f}였다.")
+    output += paragraph(
+        "획 혼합 대조는 크기 증강 30%와 픽셀·HOG를 고정했다. 0.28은 획 혼합의 강도다. "
+        "픽셀 단독 단계의 대조는 트리 설정이 달라 HOG와 획의 상호작용 크기를 직접 추정할 수 없다.")
+    old_fit = average(control, lambda row: float(row["fit_seconds_mean"]))
+    reference_fit = average(reference, lambda row: float(row["fit_seconds_mean"]))
+    output += paragraph(
+        "1,108개 입력 특징 중 각 분기에서 고려하는 기본 특징 수는 0.08에서 88개, 0.18에서 199개다. "
+        "후보 수를 늘리면 무작위 분기에서 더 많은 변수를 비교하므로 계산량이 커지고 트리 간 다양성에도 영향을 줄 수 있다. "
+        f"3시드에서 모델당 평균 적합 시간은 각각 {old_fit:.1f}초, {reference_fit:.1f}초였다. "
+        "실행 시점과 CPU 부하가 달라 시간은 관측값이다.")
+    freeze = review / "freeze.json"
+    if freeze.is_file():
+        decision = json.loads(freeze.read_text())["combined"]["report_decision"]
+        output += paragraph(decision, "note")
+    return output
+
+
+def render(source, results, output, mode, review=None):
+    report_pages = list(pages(source, results, mode, review))
+    section_styles = {4: "errors", 6: "closing", 7: "review-errors"}
+    articles = "".join(f'<article class="{section_styles.get(i, "")}">{body}</article>'
                        for i, body in enumerate(report_pages))
-    label = f"EXTRA TREES / {mode.upper()}  |  2026-11-22"
+    date = "2026-11-23" if review else "2026-11-22"
+    label = f"EXTRA TREES / {mode.upper()}  |  {date}"
     html = (f'<!doctype html><html lang="ko"><head><meta charset="utf-8">'
             f'<title>Extra Trees {mode} Optimization</title><style>{STYLE}</style></head>'
             f'<body><div class="report-label">{label}</div><main>{articles}</main></body></html>')
@@ -339,5 +452,6 @@ if __name__ == "__main__":
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--results", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--review-dir", type=Path)
     args = parser.parse_args()
-    render(args.source, args.results, args.output, args.mode)
+    render(args.source, args.results, args.output, args.mode, args.review_dir)

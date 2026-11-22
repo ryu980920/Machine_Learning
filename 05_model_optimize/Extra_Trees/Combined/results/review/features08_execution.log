@@ -1,0 +1,12 @@
+C42_features08 fold=41: official=97.1250% hand=89.0625% fit=34.2s
+C42_features08 fold=42: official=97.0573% hand=91.0938% fit=41.6s
+C42_features08 fold=43: official=97.0573% hand=95.0000% fit=34.8s
+C42_features08 fold=44: official=97.1875% hand=88.9062% fit=37.3s
+C17_features08 fold=41: official=97.2865% hand=87.1875% fit=32.2s
+C17_features08 fold=42: official=97.0938% hand=91.8750% fit=33.7s
+C17_features08 fold=43: official=97.1458% hand=95.4688% fit=36.2s
+C17_features08 fold=44: official=97.1615% hand=89.2188% fit=35.5s
+C73_features08 fold=41: official=97.0990% hand=88.2812% fit=36.1s
+C73_features08 fold=42: official=97.1146% hand=90.9375% fit=37.4s
+C73_features08 fold=43: official=97.2135% hand=95.4688% fit=34.7s
+C73_features08 fold=44: official=97.1354% hand=89.2188% fit=34.9s

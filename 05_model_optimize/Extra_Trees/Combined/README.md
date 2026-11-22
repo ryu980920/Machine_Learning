@@ -1,12 +1,12 @@
 # Extra Trees — Combined 모델 최적화
 
-**현재 상태: 실험 로그 미등록.** 새 파일을 기록할 때 실제 실행 결과와 계획을 구분한다.
+**현재 상태** 개발 실험 완료. 실측 결과와 재현 절차는 아래에 있다.
 
 ## 연구 대상
 
 - **Training:** 공식 MNIST·EMNIST Training + 분리된 Hand-made Training 데이터. 정확한 수량·작성자·Fold는 실험마다 기록.
 - **Validation:** 같은 작성자의 학습/검증 중복을 피한 작성자 그룹 CV 또는 별도 신규 작성자 Validation. Fold마다 Extra Trees 모델을 새로 학습하고, 각 Fold에서 보류 작성자에 대한 Confusion Matrix를 얻는다.
-- **주의:** 아직 Combined 학습/Group CV Runner가 기존 [초기 모델 실행 코드](../../../03_experiments/model_optimization/README.md)에 구현된 것은 아니다. 실제 구현과 검증 내역을 반드시 함께 저장.
+- **Grouped CV 실행 코드** [run_combined.py](scripts/run_combined.py)
 
 ## 매 실험의 순서
 
@@ -35,3 +35,13 @@
 - [입력 데이터 감사](results/data_audit.json) · [실행 환경](results/environment.json) · [재현 절차](../README.md)
 - [동일 설정 손글씨 추가 대조](results/matched_writers.csv) · [대조의 오류 방향](results/matched_directional_errors.csv)
 - [병행 실행 로그](logs/execution_parallel.log)
+
+## 후속 검토
+
+- [작성자 41번 클래스별 변화](results/review/writer41_by_class.csv)
+- [Normal·Combined의 7→9 전이](results/review/seven_to_nine_by_writer.csv)
+- [예측 변경 샘플의 작성자·행 번호](results/review/paired_error_examples.csv)
+- [대조군 실행](scripts/run_controls.py) · [원시 예측 검증 및 오류 분석](scripts/review_evidence.py)
+- [획 혼합과 분기 특징 수의 3시드 비교](results/review/paired_controls.csv)
+- [추가 학습·평가 로그](results/review/stroke00_execution.log) · [분기 비율 대조 로그](results/review/features08_execution.log)
+- [후속 검토 결론](logs/review_findings.md) · [독립 평가용 후보 명세](results/review/freeze.json)

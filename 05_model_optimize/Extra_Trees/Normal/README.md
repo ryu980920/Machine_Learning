@@ -1,6 +1,6 @@
 # Extra Trees — Normal 모델 최적화
 
-**현재 상태: 실험 로그 미등록.** 새 파일을 기록할 때 실제 실행 결과와 계획을 구분한다.
+**현재 상태** 개발 실험 완료. 실측 결과와 재현 절차는 아래에 있다.
 
 ## 연구 대상
 
@@ -33,3 +33,8 @@
 - [선정 설정](results/selection.json) · [후보 비교 CSV](results/experiment_summary.csv)
 - [Fold 지표](results/fold_metrics.csv) · [클래스별 CSV](results/class_metrics.csv) · [학습곡선](results/learning_curve.csv)
 - [입력 데이터 감사](results/data_audit.json) · [실행 환경](results/environment.json) · [재현 절차](../README.md)
+
+## 후속 검토
+
+- [작성자별 7→9 전이](../Combined/results/review/seven_to_nine_by_writer.csv)
+- [예측 변경 샘플의 작성자·행 번호](../Combined/results/review/paired_error_examples.csv)

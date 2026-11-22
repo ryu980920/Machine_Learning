@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "inference": {
+    "input": "standardized 28x28 grayscale, ink bright, values 0–255",
+    "center_of_mass": "threshold 32, origin (13.5, 13.5), integer shift with zero fill",
+    "features": "784 pixels followed by 324 HOG values",
+    "hog": {
+      "orientations": 9,
+      "pixels_per_cell": [
+        7,
+        7
+      ],
+      "cells_per_block": [
+        2,
+        2
+      ],
+      "block_norm": "L2-Hys"
+    },
+    "test_time_augmentation": false,
+    "label_order": "0123456789ABCDEF"
+  },
+  "normal": {
+    "candidate": "T02_feat18",
+    "config": {
+      "prep": "stroke",
+      "features": "pixels+hog",
+      "n_estimators": 100,
+      "max_features": 0.18,
+      "min_samples_leaf": 1,
+      "max_depth": null
+    },
+    "seed": 42,
+    "official_training_n": 76800,
+    "handmade_training_n": 0,
+    "training_writers": [],
+    "ensemble_of_seeds_or_folds": false,
+    "report_decision": "Normal은 기존 선정 설정 T02와 시드 42를 고정했다."
+  },
+  "combined": {
+    "candidate": "T02_feat18",
+    "config": {
+      "prep": "stroke",
+      "features": "pixels+hog",
+      "n_estimators": 100,
+      "max_features": 0.18,
+      "min_samples_leaf": 1,
+      "max_depth": null
+    },
+    "seed": 42,
+    "official_training_n": 76800,
+    "handmade_training_n": 2560,
+    "training_writers": [
+      41,
+      42,
+      43,
+      44
+    ],
+    "ensemble_of_seeds_or_folds": false,
+    "report_decision": "Combined는 T02를 유지했다. 획 혼합의 평균 차이는 +0.08%p였지만 시드별 방향이 달랐다. max_features 0.18의 평균 이득은 +0.27%p였고 주로 시드 73에서 나왔다. 손글씨 Macro F1 우선 기준에서 T02가 세 조건 중 평균값이 가장 높았다."
+  }
+}
