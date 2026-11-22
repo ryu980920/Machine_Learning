@@ -1,0 +1,194 @@
+{
+  "experiment": "EXP-CMB-001 SVC Combined Hybrid full 4-writer OOF",
+  "official_train_n": 76800,
+  "official_validation_n": 19200,
+  "combined_training_per_fold_n": 78720,
+  "handmade_training_per_fold_n": 1920,
+  "heldout_per_fold_n": 640,
+  "features": "CoM -> Deskew -> hybrid pixel20/HOG80 (1108 dimensions)",
+  "parameters": {
+    "kernel": "rbf",
+    "C": 1.0,
+    "gamma": "scale",
+    "cache_size_mb": 200
+  },
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_test_used": false,
+  "normal_reference_official_validation": {
+    "n": 19200,
+    "correct": 18983,
+    "accuracy": 0.9886979166666666,
+    "macro_f1": 0.9886609357060077
+  },
+  "normal_oof_development": {
+    "n": 2560,
+    "correct": 2345,
+    "accuracy": 0.916015625,
+    "macro_f1": 0.9141448774311078
+  },
+  "combined_oof_development": {
+    "n": 2560,
+    "correct": 2403,
+    "accuracy": 0.938671875,
+    "macro_f1": 0.9385806688559485
+  },
+  "paired": {
+    "corrected": 64,
+    "new_errors": 6,
+    "unchanged_correct": 2339,
+    "unchanged_wrong": 151
+  },
+  "folds": [
+    {
+      "status": "complete",
+      "heldout_writer": 41,
+      "train_writers": [
+        42,
+        43,
+        44
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 413.38,
+      "handmade_predict_seconds": 14.91,
+      "official_predict_seconds": 427.8,
+      "support_vectors": 11563,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 551,
+        "accuracy": 0.8609375,
+        "macro_f1": 0.8505865957718495
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 572,
+        "accuracy": 0.89375,
+        "macro_f1": 0.8918152438989595
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18984,
+        "accuracy": 0.98875,
+        "macro_f1": 0.988728133077927
+      }
+    },
+    {
+      "status": "complete",
+      "heldout_writer": 42,
+      "train_writers": [
+        41,
+        43,
+        44
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 434.52,
+      "handmade_predict_seconds": 14.23,
+      "official_predict_seconds": 429.8,
+      "support_vectors": 11602,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 584,
+        "accuracy": 0.9125,
+        "macro_f1": 0.9073790299099214
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 604,
+        "accuracy": 0.94375,
+        "macro_f1": 0.943280233182754
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18981,
+        "accuracy": 0.98859375,
+        "macro_f1": 0.9885607466059185
+      }
+    },
+    {
+      "status": "complete",
+      "heldout_writer": 43,
+      "train_writers": [
+        41,
+        42,
+        44
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 432.02,
+      "handmade_predict_seconds": 14.28,
+      "official_predict_seconds": 429.48,
+      "support_vectors": 11621,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 618,
+        "accuracy": 0.965625,
+        "macro_f1": 0.9653969061629921
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 624,
+        "accuracy": 0.975,
+        "macro_f1": 0.9748425812482634
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18984,
+        "accuracy": 0.98875,
+        "macro_f1": 0.9887056089455146
+      }
+    },
+    {
+      "status": "complete",
+      "heldout_writer": 44,
+      "train_writers": [
+        41,
+        42,
+        43
+      ],
+      "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+      "official_train_n": 76800,
+      "handmade_train_n": 1920,
+      "train_n": 78720,
+      "heldout_n": 640,
+      "fit_seconds": 376.8,
+      "handmade_predict_seconds": 6.56,
+      "official_predict_seconds": 414.42,
+      "support_vectors": 11604,
+      "normal_handmade": {
+        "n": 640,
+        "correct": 592,
+        "accuracy": 0.925,
+        "macro_f1": 0.9235009565128869
+      },
+      "combined_handmade": {
+        "n": 640,
+        "correct": 603,
+        "accuracy": 0.9421875,
+        "macro_f1": 0.9418043383111074
+      },
+      "combined_official_validation": {
+        "n": 19200,
+        "correct": 18981,
+        "accuracy": 0.98859375,
+        "macro_f1": 0.9885670204977093
+      }
+    }
+  ],
+  "evaluation_note": "Hand-made was used in prior Normal optimization; these writer-heldout folds exclude heldout training but are NOT an independent final test."
+}

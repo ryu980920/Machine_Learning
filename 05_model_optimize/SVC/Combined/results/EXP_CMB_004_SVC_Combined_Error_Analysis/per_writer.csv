@@ -1,0 +1,5 @@
+﻿writer,correct,incorrect,accuracy,corrected_from_control,new_errors_vs_control
+41,580,60,0.90625,8,0
+42,610,30,0.953125,6,0
+43,629,11,0.9828125,6,1
+44,611,29,0.9546875,8,0

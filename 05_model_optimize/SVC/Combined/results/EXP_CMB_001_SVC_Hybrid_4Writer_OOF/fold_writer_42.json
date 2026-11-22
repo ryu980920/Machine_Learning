@@ -1,0 +1,36 @@
+{
+  "status": "complete",
+  "heldout_writer": 42,
+  "train_writers": [
+    41,
+    43,
+    44
+  ],
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "official_train_n": 76800,
+  "handmade_train_n": 1920,
+  "train_n": 78720,
+  "heldout_n": 640,
+  "fit_seconds": 434.52,
+  "handmade_predict_seconds": 14.23,
+  "official_predict_seconds": 429.8,
+  "support_vectors": 11602,
+  "normal_handmade": {
+    "n": 640,
+    "correct": 584,
+    "accuracy": 0.9125,
+    "macro_f1": 0.9073790299099214
+  },
+  "combined_handmade": {
+    "n": 640,
+    "correct": 604,
+    "accuracy": 0.94375,
+    "macro_f1": 0.943280233182754
+  },
+  "combined_official_validation": {
+    "n": 19200,
+    "correct": 18981,
+    "accuracy": 0.98859375,
+    "macro_f1": 0.9885607466059185
+  }
+}

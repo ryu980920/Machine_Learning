@@ -1,0 +1,5 @@
+﻿class,n,control_correct,targeted_correct,control_recall,targeted_recall
+D,160,133,135,0.83125,0.84375
+B,160,135,136,0.84375,0.85
+0,160,154,154,0.9625,0.9625
+8,160,150,151,0.9375,0.94375
