@@ -1,0 +1,20 @@
+P00_raw fold=all: official=96.9688% hand=61.6016% fit=11.5s
+P01_com fold=all: official=96.5729% hand=77.5391% fit=10.1s
+P02_size fold=all: official=95.9115% hand=83.7500% fit=12.0s
+P03_stroke fold=all: official=96.0156% hand=84.2969% fit=12.6s
+P04_hybrid fold=all: official=96.9479% hand=88.5156% fit=13.6s
+P05_hog fold=all: official=95.5938% hand=87.5000% fit=6.5s
+T01_feat08 fold=all: official=97.0000% hand=89.4922% fit=29.9s
+T02_feat18 fold=all: official=97.2188% hand=89.8047% fit=57.9s
+T03_leaf2 fold=all: official=96.6302% hand=88.3203% fit=11.7s
+T04_depth24 fold=all: official=96.9635% hand=88.2422% fit=12.9s
+T05_trees64 fold=all: official=96.8438% hand=87.7344% fit=8.9s
+T06_trees160 fold=all: official=97.0781% hand=88.6719% fit=23.4s
+R42_selected fold=all: official=97.2188% hand=89.8047% fit=58.3s
+R17_selected fold=all: official=97.2656% hand=89.7656% fit=61.9s
+R73_selected fold=all: official=97.2135% hand=89.5312% fit=71.7s
+LC20 fold=all: official=95.7031% hand=86.5234% fit=10.1s
+LC40 fold=all: official=96.5833% hand=87.8906% fit=27.5s
+LC60 fold=all: official=96.7812% hand=88.8281% fit=46.0s
+LC80 fold=all: official=97.0104% hand=89.2187% fit=61.8s
+COMPLETE: normal; selected T02_feat18

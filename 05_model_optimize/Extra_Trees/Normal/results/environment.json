@@ -1,0 +1,15 @@
+{
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "logical_cpus": 9,
+  "jobs": 4,
+  "packages": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0",
+    "scikit-image": "0.26.0",
+    "opencv-python-headless": "5.1.0.95",
+    "matplotlib": "3.10.8"
+  }
+}

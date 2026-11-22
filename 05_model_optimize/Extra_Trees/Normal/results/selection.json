@@ -1,0 +1,14 @@
+{
+  "preprocessing": "P04_hybrid",
+  "selected": "T02_feat18",
+  "config": {
+    "prep": "stroke",
+    "features": "pixels+hog",
+    "n_estimators": 100,
+    "max_features": 0.18,
+    "min_samples_leaf": 1,
+    "max_depth": null
+  },
+  "official_accuracy_floor": 0.9646875,
+  "guardrail_drop": 0.005
+}

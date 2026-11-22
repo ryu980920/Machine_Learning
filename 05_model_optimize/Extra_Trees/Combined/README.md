@@ -25,3 +25,13 @@
 **원칙:** 공식 Original Test 16,000장과 교수님 최종 2차 Test는 모델 튜닝에 사용하지 않는다. 교수님 1차 데이터는 최초 Test 후 성능이 부족할 때에만 Validation으로 전환한다. 기록에는 모델 버전과 데이터 누출 여부를 명시한다.
 
 [상위 모델 안내](../README.md) · [05 전체 안내](../../README.md) · [연구 흐름도](../../../01_project/RESEARCH_FLOW.md).
+
+## 실측 결과
+
+- [보고서](results/Extra_Trees_Combined.pdf)
+- [실험 설계](logs/experimental_protocol.md) · [판정 및 결과](logs/findings.md) · [실행 로그](logs/execution.log)
+- [선정 설정](results/selection.json) · [후보 비교 CSV](results/experiment_summary.csv)
+- [Fold 지표](results/fold_metrics.csv) · [클래스별 CSV](results/class_metrics.csv) · [학습곡선](results/learning_curve.csv)
+- [입력 데이터 감사](results/data_audit.json) · [실행 환경](results/environment.json) · [재현 절차](../README.md)
+- [동일 설정 손글씨 추가 대조](results/matched_writers.csv) · [대조의 오류 방향](results/matched_directional_errors.csv)
+- [병행 실행 로그](logs/execution_parallel.log)

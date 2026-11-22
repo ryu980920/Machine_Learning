@@ -1,0 +1,16 @@
+outcome,writer,row_index_zero_based,label,baseline_pred,selected_pred
+corrected,43,16,0,D,0
+remains,41,608,0,D,D
+corrected,41,125,D,0,D
+remains,41,189,D,0,0
+corrected,43,8,8,B,8
+remains,43,104,8,B,B
+corrected,41,187,B,8,B
+remains,42,43,B,8,8
+corrected,41,69,5,F,5
+remains,42,453,5,F,F
+corrected,41,319,F,5,F
+corrected,41,167,7,9,7
+remains,44,439,7,9,9
+corrected,41,9,9,7,9
+remains,42,217,9,7,7
