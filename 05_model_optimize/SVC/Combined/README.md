@@ -1,27 +1,27 @@
-# SVC (RBF) — Combined 모델 최적화
+# SVC Combined — full-data writer-heldout optimization
 
-**현재 상태: 실험 로그 미등록.** 새 파일을 기록할 때 실제 실행 결과와 계획을 구분한다.
+**All Combined folds use official Training 76,800.** Hand-made training writers=3 (1,920 original); held-out writer=1 (640). Four folds cover writers 41–44, resulting in 2,560 out-of-fold *development* predictions. Official Test excluded.
 
-## 연구 대상
+| Experiment | Feature / augmentation | Total training per fold | OOF correct / 2,560 | OOF accuracy | OOF Macro F1 |
+|---|---|---:|---:|---:|---:|
+| EXP-CMB-001 | Hybrid20:80, none | 78,720 | 2,403 | 93.8672% | 0.938581 |
+| EXP-CMB-002 | HOG only, none | 78,720 | 2,395 | 93.5547% | 0.935035 |
+| EXP-CMB-003 (25%) | Hybrid, 480 augmented | 79,200 | 2,414 | 94.2969% | 0.942904 |
+| EXP-CMB-003 (50%) | Hybrid, 960 augmented | 79,680 | 2,424 | 94.6875% | 0.946852 |
+| EXP-CMB-003 (100%) | Hybrid, 1,920 augmented | 80,640 | 2,430 | 94.9219% | 0.949203 |
+| EXP-CMB-004 | Saved-result error analysis, no training | — | 2,430 | 94.9219% | 0.949203 |
+| **EXP-CMB-005** | **Hybrid, 1,920 augmented + D/B targeted 120** | **80,760** | **2,434** | **95.0781%** | **0.950784** |
 
-- **Training:** 공식 MNIST·EMNIST Training + 분리된 Hand-made Training 데이터. 정확한 수량·작성자·Fold는 실험마다 기록.
-- **Validation:** 같은 작성자의 학습/검증 중복을 피한 작성자 그룹 CV 또는 별도 신규 작성자 Validation. Fold마다 SVC (RBF) 모델을 새로 학습하고, 각 Fold에서 보류 작성자에 대한 Confusion Matrix를 얻는다.
-- **주의:** 아직 Combined 학습/Group CV Runner가 기존 [초기 모델 실행 코드](../../../03_experiments/model_optimization/README.md)에 구현된 것은 아니다. 실제 구현과 검증 내역을 반드시 함께 저장.
+**Selected Combined development candidate:** CoM → Deskew → Pixel20%:HOG80%, RBF SVC C=1 gamma='scale', plus base and targeted D/B training-writer augmentation.
 
-## 매 실험의 순서
+### Targeted augmentation diagnosis
 
-1. **Confusion Matrix와 오분류 사례 분석** — 사용 데이터/레이블, 주요 혼동과 비율 기록.
-2. **오차 원인 가설 및 강의 개념 연결** — 이미지·모델 특성과 연결한 검증 가능한 가설.
-3. **개선 조건 설정·실행** — 전처리, Training 증강, 데이터 구성, Hyperparameter의 변경 변수 분리.
-4. **동일 개발 Validation으로 재평가** — Accuracy·Precision·Recall·F1, Confusion Matrix 및 학습 데이터 크기에 따른 Training / Validation 점수, 학습·추론 시간.
-5. **결론 및 후속 실험** — 성공과 실패 모두 실험일지·CSV·그림에 연결.
+- EXP-CMB-004 (100% augmented) had 130 wrong; dominant confusions D→0 (24), B→8 (13), B→0 (8). D recall=83.13%, B recall=84.38%.
+- EXP-CMB-005 120 targeted samples: D recall 84.38%, B recall 85.00%, 0 remains 96.25%, 8 rises from 93.75% to 94.37%. Net +4 correct vs 100% control (5 corrected, 1 new error).
+- Official Validation accuracy at EXP-CMB-005 by fold: 98.8490%, 98.7917%, 98.8073%, 98.7969%. This is slightly below the Normal Hybrid 98.8698% and is a potential trade-off.
 
-## 저장 경로
+### Reproducibility
 
-- [logs/](logs/README.md): [공통 실험일지 양식](../../EXPERIMENT_TEMPLATE.md)을 복사해 개별 Markdown 저장
-- [scripts/](scripts/README.md): 실행 Python·Notebook 및 사용 방법
-- [results/](results/README.md): 지표 CSV, Confusion Matrix, Learning Curve, 실제 실행 증빙
-
-**원칙:** 공식 Original Test 16,000장과 교수님 최종 2차 Test는 모델 튜닝에 사용하지 않는다. 교수님 1차 데이터는 최초 Test 후 성능이 부족할 때에만 Validation으로 전환한다. 기록에는 모델 버전과 데이터 누출 여부를 명시한다.
-
-[상위 모델 안내](../README.md) · [05 전체 안내](../../README.md) · [연구 흐름도](../../../01_project/RESEARCH_FLOW.md).
+- Scripts: [scripts/](scripts/)
+- Outputs should be copied intact from the working PC's [results/](results/); each experiment creates its own directory and CSV/JSON artifacts.
+- All Hand-made OOF scores are **repeated-use model-selection scores**, not unbiased new-writer generalization estimates.
