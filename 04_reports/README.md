@@ -81,3 +81,17 @@
 **모델 비교의 기본 결과:** Normal Optimized vs Combined Optimized의 Original Test, 1차 Hand-made Test 점수를 함께 제시하고, 1차를 개발용 Validation으로 활용했는지 여부를 명시한다. 2차에 도달한 경우에는 해당 최종 모델 버전과 2차 결과를 정확히 연결해 보고한다. 평가 단계별 모델 버전이 달랐다면 이전 버전의 점수를 최종 버전 점수라고 표시하지 않는다.
 
 **연구 기록:** 데이터 오류 분석 → 전처리·증강 → Normal/Combined 각각 독립 최적화 → 두 모델 비교의 실험 조건·시간·실측 결과·실패 사례를 Notebook과 로그에 보존한다. 팀원별 구체 업무 분담은 팀장이 별도로 작성한다. 중간 발표 PDF 및 실험 CSV·NPZ 원본은 변경하지 않는다.
+
+---
+
+## 8. MLP Normal / Combined 최적화 보고서 — 2026-11-22
+
+**담당: 유용성.** 사용자 제공 19쪽 `MLP_Normal(1).pdf`, 18쪽 `MLP_Combined(1).pdf`를 확인하고, 팀원이 GitHub에서 핵심 판단과 기존 로그를 바로 따라갈 수 있도록 별도 연구요약을 등록했다.
+
+| 자료 | GitHub 등록된 내용 | 기존 실험 기록 |
+| --- | --- | --- |
+| Normal | [최적화 핵심 요약](MLP_Normal_Optimization_Review_20261122.md) | [Normal 실험 폴더](../05_model_optimize/MLP/Normal/README.md) |
+| Combined | [최적화 핵심 요약](MLP_Combined_Optimization_Review_20261122.md) | [Combined 실험 폴더](../05_model_optimize/MLP/Combined/README.md) |
+
+**범위 구분:** 위 GitHub 파일은 PDF의 핵심 수치·의사결정·최종 설정을 기록한 **요약 Markdown**이다. 첨부된 **PDF 원본 파일 및 원본 속 혼동행렬·그래프는 아직 GitHub 파일로 등록되지 않았다**. 원본 PDF를 배포 완료로 표시하지 않는다. [팀원별 담당 모델 확정표](../01_project/TEAM_ROLES_20261122.md) 참고.
+
