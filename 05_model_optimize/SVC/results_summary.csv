@@ -1,0 +1,10 @@
+﻿variant,experiment,setting,evaluation_scheme,training_rows_per_model,official_validation_n,handmade_n,handmade_correct,handmade_accuracy,handmade_macro_f1,official_validation_accuracy_full_normal_only
+Normal,EXP-001,baseline,full,76800,19200,2560,1576,0.615625,0.604038,0.976667
+Normal,EXP-007,hog,full,76800,19200,2560,2348,0.9171875,0.915031,0.98265625
+Normal,EXP-007,hybrid20_80,full,76800,19200,2560,2345,0.916015625,0.914145,0.9886979167
+Combined,EXP-CMB-001,hybrid_no_aug,4_writer_oof,78720,19200,2560,2403,0.938671875,0.938581,
+Combined,EXP-CMB-002,hog_no_aug,4_writer_oof,78720,19200,2560,2395,0.935546875,0.935035,
+Combined,EXP-CMB-003,hybrid_aug25,4_writer_oof,79200,19200,2560,2414,0.94296875,0.942904,
+Combined,EXP-CMB-003,hybrid_aug50,4_writer_oof,79680,19200,2560,2424,0.946875,0.946852,
+Combined,EXP-CMB-003,hybrid_aug100,4_writer_oof,80640,19200,2560,2430,0.94921875,0.949203,
+Combined,EXP-CMB-005,hybrid_aug100_db120,4_writer_oof,80760,19200,2560,2434,0.95078125,0.950784,
