@@ -100,3 +100,21 @@ flowchart TD
 - [Hand-made 분할·그룹 CV 및 Test 정책](02_data/HANDMADE_SPLIT_PLAN.md) · [후속 W02 실험 순서](03_experiments/W02_2026-11-09_11-15/README.md).
 - 기존 2,560장의 오류 분석은 개발에 활용 가능하다. 신규 작성자 Validation 수집과 추가 손글씨 학습 데이터 수집도 가능하다. **팀원별 상세 업무 배정은 팀장이 직접 작성한다.**
 - [학습 전 모델 5개 실행 안내](03_experiments/model_optimization/README.md): 현재 Combined와 자동 Pipeline/그룹 CV는 미구현이며 계획을 완료로 표기하지 않는다.
+
+---
+
+## 팀원별 담당 모델 — 2026-11-22 최신 확정
+
+| 팀원 | 담당 모델 |
+| --- | --- |
+| 유용성 | **MLP** (Normal / Combined) |
+| 곽지호 | **KNN + SVC** |
+| 김다연 | **HistGD** (HistGradientBoosting, 저장소 `HGB` 폴더) |
+| 이선형 | **Extra Trees** |
+
+- [**역할 분담 및 팀 통합 체크리스트**](01_project/TEAM_ROLES_20261122.md)
+- [**MLP Normal 최적화 보고서 핵심 요약**](04_reports/MLP_Normal_Optimization_Review_20261122.md)
+- [**MLP Combined 최적화 보고서 핵심 요약**](04_reports/MLP_Combined_Optimization_Review_20261122.md)
+
+기존 문서의 “팀원 배정 예정/미정” 표기는 작성 당시 기록이며, **현재 역할은 위 2026-11-22 확정표가 우선**한다. 두 연구요약은 첨부 원본 PDF 전체를 대체하는 문서가 아니며, 원본 PDF의 GitHub 업로드 상태를 뜻하지 않는다.
+
