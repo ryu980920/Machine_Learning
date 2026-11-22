@@ -59,3 +59,17 @@
 [Combined CMB-008 438장 후속 비교](MLP/Combined/logs/하이퍼파라미터_최적화/EXP-CMB-008_21_Stage6_External438_Followup_Results.md)에서 **Batch 128**을 정확도 중심 개발용 우선 후보로 정했고, [CMB-009 추가 전처리 연구](MLP/Combined/logs/가설B/EXP-CMB-009_01_Sequential_Preprocessing_Results.md)에서 Local Warp·Rotation·Shear의 사전 가드레일 통과가 없음을 확인하여 기존 Size30%-Stroke28%-CoM을 유지했다. **최종 배포는 미변경**이다.
 
 앞으로 오류가 높은 클래스의 손글씨를 추가하는 연구는 **후속 협의 대상**이며, 이번 main 반영에서 손글씨 원본 추가·학습 데이터 변경·새 모델 학습을 수행하지 않았다.
+
+---
+
+## 팀원별 모델 담당 — 2026-11-22
+
+| 담당자 | 담당 모델 | 확인 위치 |
+| --- | --- | --- |
+| 유용성 | MLP | [Normal](MLP/Normal/README.md) · [Combined](MLP/Combined/README.md) |
+| 곽지호 | KNN + SVC | [KNN](KNN/Normal/README.md) · [SVC](SVC/Normal/README.md) |
+| 김다연 | HistGD / HistGradientBoosting | [HGB](HGB/Normal/README.md) |
+| 이선형 | Extra Trees | [Extra Trees](Extra_Trees/Normal/README.md) |
+
+상세 [팀 역할 분담](../01_project/TEAM_ROLES_20261122.md). [Normal 연구요약](../04_reports/MLP_Normal_Optimization_Review_20261122.md) 및 [Combined 연구요약](../04_reports/MLP_Combined_Optimization_Review_20261122.md)은 2026-11-22 첨부 PDF를 기준으로 작성한 요약이며, 원본 PDF 파일과 구분한다.
+
