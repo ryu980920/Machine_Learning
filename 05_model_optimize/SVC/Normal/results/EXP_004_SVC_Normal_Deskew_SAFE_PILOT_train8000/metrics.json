@@ -1,0 +1,152 @@
+{
+  "experiment": "EXP-004 SVC CoM -> Deskew SAFE PILOT (subset only)",
+  "train_size": 8000,
+  "validation_size": 3200,
+  "com_preprocessing_seconds": 0.25,
+  "deskew_preprocessing_seconds": 1.43,
+  "deskew_train_diagnostics": {
+    "total": 8000,
+    "changed": 8000,
+    "skipped": 0,
+    "clamped": 1264,
+    "threshold": 32.0,
+    "max_abs_slope": 0.45,
+    "interpolation": "bilinear",
+    "border": "constant_zero"
+  },
+  "deskew_validation_diagnostics": {
+    "total": 3200,
+    "changed": 3200,
+    "skipped": 0,
+    "clamped": 532,
+    "threshold": 32.0,
+    "max_abs_slope": 0.45,
+    "interpolation": "bilinear",
+    "border": "constant_zero"
+  },
+  "official_test_used": false,
+  "model_source": "03_experiments\\model_optimization\\svc.py",
+  "hyperparameters": {
+    "C": 1.0,
+    "break_ties": false,
+    "cache_size": 200,
+    "class_weight": null,
+    "coef0": 0.0,
+    "decision_function_shape": "ovr",
+    "degree": 3,
+    "gamma": "scale",
+    "kernel": "rbf",
+    "max_iter": -1,
+    "probability": "deprecated",
+    "random_state": null,
+    "shrinking": true,
+    "tol": 0.001,
+    "verbose": false
+  },
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "results": {
+    "com_subset": {
+      "fit_seconds": 7.53,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3032,
+        "accuracy": 0.9475,
+        "macro_f1": 0.9470947413088215
+      },
+      "official_predict_seconds": 9.09,
+      "handmade_development": {
+        "n": 2560,
+        "correct": 1864,
+        "accuracy": 0.728125,
+        "macro_f1": 0.724748307955049
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "n": 640,
+          "correct": 391,
+          "accuracy": 0.6109375,
+          "macro_f1": 0.5747840772885686,
+          "predict_seconds": 1.78
+        },
+        {
+          "writer": 42,
+          "n": 640,
+          "correct": 470,
+          "accuracy": 0.734375,
+          "macro_f1": 0.7062727921651295,
+          "predict_seconds": 1.98
+        },
+        {
+          "writer": 43,
+          "n": 640,
+          "correct": 517,
+          "accuracy": 0.8078125,
+          "macro_f1": 0.8055472917776363,
+          "predict_seconds": 1.75
+        },
+        {
+          "writer": 44,
+          "n": 640,
+          "correct": 486,
+          "accuracy": 0.759375,
+          "macro_f1": 0.756241903405668,
+          "predict_seconds": 1.7
+        }
+      ]
+    },
+    "com_deskew_subset": {
+      "fit_seconds": 5.88,
+      "official_validation": {
+        "n": 3200,
+        "correct": 3070,
+        "accuracy": 0.959375,
+        "macro_f1": 0.9591315006963252
+      },
+      "official_predict_seconds": 7.39,
+      "handmade_development": {
+        "n": 2560,
+        "correct": 1966,
+        "accuracy": 0.76796875,
+        "macro_f1": 0.7638930017246074
+      },
+      "writers": [
+        {
+          "writer": 41,
+          "n": 640,
+          "correct": 424,
+          "accuracy": 0.6625,
+          "macro_f1": 0.633551887159284,
+          "predict_seconds": 1.37
+        },
+        {
+          "writer": 42,
+          "n": 640,
+          "correct": 499,
+          "accuracy": 0.7796875,
+          "macro_f1": 0.7505415603860879,
+          "predict_seconds": 1.5
+        },
+        {
+          "writer": 43,
+          "n": 640,
+          "correct": 532,
+          "accuracy": 0.83125,
+          "macro_f1": 0.8287532785369799,
+          "predict_seconds": 1.58
+        },
+        {
+          "writer": 44,
+          "n": 640,
+          "correct": 511,
+          "accuracy": 0.7984375,
+          "macro_f1": 0.7923107353938582,
+          "predict_seconds": 1.62
+        }
+      ]
+    }
+  },
+  "handmade_delta_pp": 3.9843749999999956,
+  "official_delta_pp": 1.187499999999997,
+  "note": "8,000-row development pilot; do not directly compare to 76,800-row full baseline"
+}

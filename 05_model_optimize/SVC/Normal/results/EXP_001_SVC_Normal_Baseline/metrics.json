@@ -1,0 +1,81 @@
+{
+  "experiment": "EXP_001_SVC_Normal_Baseline",
+  "model_source": "03_experiments\\model_optimization\\svc.py",
+  "hyperparameters": {
+    "C": 1.0,
+    "break_ties": false,
+    "cache_size": 200,
+    "class_weight": null,
+    "coef0": 0.0,
+    "decision_function_shape": "ovr",
+    "degree": 3,
+    "gamma": "scale",
+    "kernel": "rbf",
+    "max_iter": -1,
+    "probability": "deprecated",
+    "random_state": null,
+    "shrinking": true,
+    "tol": 0.001,
+    "verbose": false
+  },
+  "scaled": true,
+  "official_train_n": 76800,
+  "official_val_n": 19200,
+  "official_validation": {
+    "n": 19200,
+    "correct": 18752,
+    "accuracy": 0.9766666666666667,
+    "macro_f1": 0.976551275691151
+  },
+  "handmade_development": {
+    "n": 2560,
+    "correct": 1576,
+    "accuracy": 0.615625,
+    "macro_f1": 0.604037977206742
+  },
+  "writers": [
+    {
+      "writer": 41,
+      "n": 640,
+      "correct": 323,
+      "accuracy": 0.5046875,
+      "macro_f1": 0.4670373428266078
+    },
+    {
+      "writer": 42,
+      "n": 640,
+      "correct": 422,
+      "accuracy": 0.659375,
+      "macro_f1": 0.6219920713481175
+    },
+    {
+      "writer": 43,
+      "n": 640,
+      "correct": 393,
+      "accuracy": 0.6140625,
+      "macro_f1": 0.5685113867097588
+    },
+    {
+      "writer": 44,
+      "n": 640,
+      "correct": 438,
+      "accuracy": 0.684375,
+      "macro_f1": 0.6687118868457175
+    }
+  ],
+  "fit_seconds": 269.64657360001,
+  "dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_test_used": false,
+  "evaluation_role": "repeated-use Hand-made development; NOT independent final test",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.3",
+    "sklearn": "1.9.1"
+  }
+}
