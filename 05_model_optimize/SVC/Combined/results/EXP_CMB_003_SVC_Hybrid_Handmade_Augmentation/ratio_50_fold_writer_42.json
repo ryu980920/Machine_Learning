@@ -1,0 +1,55 @@
+{
+  "status": "complete",
+  "ratio_percent": 50,
+  "heldout_writer": 42,
+  "train_writers": [
+    41,
+    43,
+    44
+  ],
+  "official_dataset_sha256": "0e9570d0eb04c0c1da99d043b85bfdab7f3b639eebe4b10335b05b57ad671879",
+  "handmade_sha256": {
+    "41": "0a829172a72787c770139c73de34cc8b751181829ff6fe08ec260247b9be5a2f",
+    "42": "f364fb453d05b4fe2a705c2b8a80683b404608c7c257d664e3ec7ac86932d4c5",
+    "43": "10db20997c727c1bc1f1299f8e89626fadd3ec9618468d6759c86b0d2ddc4a66",
+    "44": "0e266a36e7b29edfcca0514836b5c383d13939948b4e335d70f61bb40bdc084d"
+  },
+  "official_train_n": 76800,
+  "original_handmade_train_n": 1920,
+  "augmented_handmade_train_n": 960,
+  "train_n": 79680,
+  "augmentation_seed": 20261165,
+  "augmentation_strength": 0.44,
+  "size_stats": {
+    "16": 240,
+    "18": 240,
+    "22": 240,
+    "24": 240
+  },
+  "stroke_stats": {
+    "changed": 690,
+    "topology_rejected": 270
+  },
+  "parameters": {
+    "C": 1.0,
+    "gamma": "scale",
+    "kernel": "rbf",
+    "cache_size_mb": 200
+  },
+  "fit_seconds": 442.76,
+  "support_vectors": 11880,
+  "handmade_predict_seconds": 15.4,
+  "official_predict_seconds": 458.63,
+  "handmade": {
+    "n": 640,
+    "correct": 609,
+    "accuracy": 0.9515625,
+    "macro_f1": 0.9511806234329238
+  },
+  "official_validation": {
+    "n": 19200,
+    "correct": 18981,
+    "accuracy": 0.98859375,
+    "macro_f1": 0.9885659192638906
+  }
+}

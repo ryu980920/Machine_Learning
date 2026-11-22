@@ -1,0 +1,233 @@
+{
+  "experiment": "EXP-CMB-004 SVC Combined saved prediction error analysis",
+  "source": "05_model_optimize\\SVC\\Combined\\results\\EXP_CMB_003_SVC_Hybrid_Handmade_Augmentation",
+  "official_test_used": false,
+  "note": "Repeated-use writer-heldout DEVELOPMENT samples, not independent final test",
+  "n": 2560,
+  "correct": 2430,
+  "errors": 130,
+  "accuracy": 0.94921875,
+  "paired_vs_control": {
+    "still_correct": 2402,
+    "still_wrong": 129,
+    "corrected": 28,
+    "new_error": 1
+  },
+  "persistent_errors_across_25_50_100": 122,
+  "top_confusions": [
+    {
+      "true": "D",
+      "predicted": "0",
+      "count": 24
+    },
+    {
+      "true": "B",
+      "predicted": "8",
+      "count": 13
+    },
+    {
+      "true": "B",
+      "predicted": "0",
+      "count": 8
+    },
+    {
+      "true": "8",
+      "predicted": "B",
+      "count": 7
+    },
+    {
+      "true": "0",
+      "predicted": "D",
+      "count": 5
+    },
+    {
+      "true": "3",
+      "predicted": "5",
+      "count": 3
+    },
+    {
+      "true": "6",
+      "predicted": "1",
+      "count": 3
+    },
+    {
+      "true": "6",
+      "predicted": "5",
+      "count": 3
+    },
+    {
+      "true": "7",
+      "predicted": "9",
+      "count": 3
+    },
+    {
+      "true": "A",
+      "predicted": "1",
+      "count": 3
+    },
+    {
+      "true": "B",
+      "predicted": "D",
+      "count": 3
+    },
+    {
+      "true": "1",
+      "predicted": "7",
+      "count": 2
+    }
+  ],
+  "weakest_recall_classes": [
+    {
+      "class": "D",
+      "support": 160,
+      "correct": 133,
+      "errors": 27,
+      "precision": 0.9366197183098591,
+      "recall": 0.83125,
+      "f1": 0.8807947019867549,
+      "control_correct": 129,
+      "gain_vs_control": 4
+    },
+    {
+      "class": "B",
+      "support": 160,
+      "correct": 135,
+      "errors": 25,
+      "precision": 0.9507042253521126,
+      "recall": 0.84375,
+      "f1": 0.8940397350993378,
+      "control_correct": 126,
+      "gain_vs_control": 9
+    },
+    {
+      "class": "3",
+      "support": 160,
+      "correct": 150,
+      "errors": 10,
+      "precision": 0.9803921568627451,
+      "recall": 0.9375,
+      "f1": 0.9584664536741214,
+      "control_correct": 149,
+      "gain_vs_control": 1
+    },
+    {
+      "class": "8",
+      "support": 160,
+      "correct": 150,
+      "errors": 10,
+      "precision": 0.9090909090909091,
+      "recall": 0.9375,
+      "f1": 0.9230769230769231,
+      "control_correct": 146,
+      "gain_vs_control": 4
+    },
+    {
+      "class": "9",
+      "support": 160,
+      "correct": 151,
+      "errors": 9,
+      "precision": 0.9320987654320988,
+      "recall": 0.94375,
+      "f1": 0.937888198757764,
+      "control_correct": 150,
+      "gain_vs_control": 1
+    },
+    {
+      "class": "A",
+      "support": 160,
+      "correct": 153,
+      "errors": 7,
+      "precision": 0.9935064935064936,
+      "recall": 0.95625,
+      "f1": 0.9745222929936306,
+      "control_correct": 153,
+      "gain_vs_control": 0
+    },
+    {
+      "class": "0",
+      "support": 160,
+      "correct": 154,
+      "errors": 6,
+      "precision": 0.8148148148148148,
+      "recall": 0.9625,
+      "f1": 0.8825214899713467,
+      "control_correct": 151,
+      "gain_vs_control": 3
+    },
+    {
+      "class": "6",
+      "support": 160,
+      "correct": 154,
+      "errors": 6,
+      "precision": 0.9871794871794872,
+      "recall": 0.9625,
+      "f1": 0.9746835443037974,
+      "control_correct": 154,
+      "gain_vs_control": 0
+    }
+  ],
+  "by_writer": [
+    {
+      "writer": 41,
+      "correct": 580,
+      "incorrect": 60,
+      "accuracy": 0.90625,
+      "corrected_from_control": 8,
+      "new_errors_vs_control": 0
+    },
+    {
+      "writer": 42,
+      "correct": 610,
+      "incorrect": 30,
+      "accuracy": 0.953125,
+      "corrected_from_control": 6,
+      "new_errors_vs_control": 0
+    },
+    {
+      "writer": 43,
+      "correct": 629,
+      "incorrect": 11,
+      "accuracy": 0.9828125,
+      "corrected_from_control": 6,
+      "new_errors_vs_control": 1
+    },
+    {
+      "writer": 44,
+      "correct": 611,
+      "incorrect": 29,
+      "accuracy": 0.9546875,
+      "corrected_from_control": 8,
+      "new_errors_vs_control": 0
+    }
+  ],
+  "augmentation": [
+    {
+      "augmentation_percent": 0,
+      "correct": 2403,
+      "errors": 157,
+      "accuracy": 0.938671875,
+      "delta_vs_control_pp": 0.0
+    },
+    {
+      "augmentation_percent": 25,
+      "correct": 2414,
+      "errors": 146,
+      "accuracy": 0.94296875,
+      "delta_vs_control_pp": 0.4296875
+    },
+    {
+      "augmentation_percent": 50,
+      "correct": 2424,
+      "errors": 136,
+      "accuracy": 0.946875,
+      "delta_vs_control_pp": 0.8203125
+    },
+    {
+      "augmentation_percent": 100,
+      "correct": 2430,
+      "errors": 130,
+      "accuracy": 0.94921875,
+      "delta_vs_control_pp": 1.0546875
+    }
+  ]
+}
