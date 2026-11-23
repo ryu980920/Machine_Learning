@@ -1,27 +1,26 @@
-# HistGradientBoosting — Normal 모델 최적화
+# HistGradientBoosting Normal — 실험 완료
 
-**현재 상태: 실험 로그 미등록.** 새 파일을 기록할 때 실제 실행 결과와 계획을 구분한다.
+**범위:** 공식 Training만 학습. Train 76,800 / Validation 19,200 (StratifiedGroupKFold 첫 Fold, 시드 42). Hand-made 2,560장(작성자 41~44)은 개발용 평가에만 사용. 공식 Test 미사용.
 
-## 연구 대상
+| 실험 | 환경 | 변경 | 공식 Val | Hand-made | 판정 |
+|---|---|---|---|---|---|
+| N1 | Colab | 원본 픽셀 기준 모델 | 97.77% | 57.19% | 기준 |
+| N2 | Colab | CoM 정렬 | 97.82% | 73.28% | 채택 |
+| N3 | Colab | + 크기 30%·획 28% 증강 | 97.58% | 83.44% | 채택 |
+| N4 | Colab | 학습률 0.2 (2만 장 서브셋 선택) | 88.86% | 44.34% | 기각 (26회 붕괴) |
+| N5 | Colab | + 투영 56 + HOG 324 | 98.50% | 88.75% | N7로 교체 |
+| N6 | Colab | N3 + `max_features=0.5` | 97.57% | 81.88% | 기각 |
+| D1~D3 | 별도 | 분기 gain 히트맵, 오분류 사례, 작성자별 글자 기하 | — | — | 원인 분석 |
+| 특징 분리 | 별도 | 픽셀+투영 / 픽셀+HOG | 97.91 / 98.39% | 77.38 / 90.66% | 투영 기각 |
+| N7 | 별도 | 픽셀 + HOG (3시드) | 98.31% | 90.98 ± 0.34% | N9로 교체 |
+| N8 | 별도 | N7 + 정규화 투영 (3시드, 사전 등록) | — | 시드 42 붕괴 | 기각 |
+| **N9** | 별도 | N7 + `l2_regularization=1.0` (3시드, 사전 등록) | **98.28%** | **91.43 ± 0.25%** | **최종** |
+| N10 | 별도 | N9 + `max_iter=500` (사전 등록) | 98.38% | 91.37% (시드 42) | 기각 |
+| N11 | 별도 | N9 + HOG 4×4 (3시드, 사전 등록) | 98.36% | 91.63% | 기각 |
 
-- **Training:** 공식 MNIST·EMNIST 데이터만 사용. 기존 Baseline Train 76,800장·Validation 19,200장 분할을 기준으로 비교.
-- **오류 분석:** 공식 Validation Confusion Matrix와 개발용 Hand-made Confusion Matrix 비교. Hand-made는 Normal Training에 편입하지 않는다.
-- **기존 Baseline 실행:** [초기 모델 코드](../../../03_experiments/model_optimization/README.md)에서 `--model hgb --variant baseline` 선택.
+**최종 Normal 모델 N9:** 학습 전처리 = Train 30% 크기(긴 변 16~24px)·획 28% 증강 → CoM(임계 32, 중심 13.5). 평가 전처리 = CoM만. 특징 = 픽셀 784 + HOG 324(7×7 셀, 9방향, 2×2 블록). `HistGradientBoostingClassifier(learning_rate=0.1, max_leaf_nodes=31, l2_regularization=1.0, max_iter=300, early_stopping=True, validation_fraction=0.1, n_iter_no_change=10)`.
 
-## 매 실험의 순서
-
-1. **Confusion Matrix와 오분류 사례 분석** — 사용 데이터/레이블, 주요 혼동과 비율 기록.
-2. **오차 원인 가설 및 강의 개념 연결** — 이미지·모델 특성과 연결한 검증 가능한 가설.
-3. **개선 조건 설정·실행** — 전처리, Training 증강, 데이터 구성, Hyperparameter의 변경 변수 분리.
-4. **동일 개발 Validation으로 재평가** — Accuracy·Precision·Recall·F1, Confusion Matrix 및 Boosting iteration에 따른 손실 또는 Validation 점수, 학습·추론 시간.
-5. **결론 및 후속 실험** — 성공과 실패 모두 실험일지·CSV·그림에 연결.
-
-## 저장 경로
-
-- [logs/](logs/README.md): [공통 실험일지 양식](../../EXPERIMENT_TEMPLATE.md)을 복사해 개별 Markdown 저장
-- [scripts/](scripts/README.md): 실행 Python·Notebook 및 사용 방법
-- [results/](results/README.md): 지표 CSV, Confusion Matrix, Learning Curve, 실제 실행 증빙
-
-**원칙:** 공식 Original Test 16,000장과 교수님 최종 2차 Test는 모델 튜닝에 사용하지 않는다. 교수님 1차 데이터는 최초 Test 후 성능이 부족할 때에만 Validation으로 전환한다. 기록에는 모델 버전과 데이터 누출 여부를 명시한다.
-
-[상위 모델 안내](../README.md) · [05 전체 안내](../../README.md) · [연구 흐름도](../../../01_project/RESEARCH_FLOW.md).
+- 보고서: [logs/HGB_Normal_최적화_보고서.pdf](logs/)
+- 사전 등록 기준: [logs/](logs/) `PREREG_*.md`
+- 전체 수치: [results/HGB_Normal_results.csv](results/HGB_Normal_results.csv) · 학습곡선 `lc_*.csv` · 그림 [results/figures/](results/figures/)
+- 코드: [scripts/](scripts/README.md)
