@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "experiment": "EXP_FINAL_002",
+  "evaluation_date": "2026-11-26",
+  "publication_date": "2026-11-27",
+  "training_run": {
+    "id": 45777648203,
+    "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203",
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "9b8fe432afb1ffee55087d480c68706c879611d8",
+    "runner_cpu": "AMD EPYC 7763",
+    "seed": 42,
+    "threads": 2,
+    "sklearn": "1.8.0",
+    "sequential": true
+  },
+  "validation": {
+    "rows": 1280,
+    "class_counts": [
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80
+    ],
+    "collector_groups": [
+      41,
+      42,
+      43,
+      44
+    ],
+    "npz_sha256": "73de49ac0a0e05eba5099a0a8c31b332ac8abec3fd7eebbc69eb875210770f31",
+    "raw_data_public": false,
+    "original_test_used": false,
+    "professor_test_used": false,
+    "actual_writer_disjointness_verified": false
+  },
+  "artifacts": [
+    {
+      "name": "final-fit-training-summary",
+      "id": 15100842102,
+      "archive_digest": "sha256:b6002ba2c4d9a69459bdd16a7f2d9bb41b85426a38455d1b492d564cebf36746",
+      "bytes": 1059,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:53:04Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15100842102"
+    },
+    {
+      "name": "final-fit-ExtraTrees_Normal",
+      "id": 15100557838,
+      "archive_digest": "sha256:9458f920fe333083af97d75c9f78875ac5b4b8ba80e7633a5190be05b2c6e1d8",
+      "bytes": 56548059,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:50:35Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15100557838"
+    },
+    {
+      "name": "final-fit-ExtraTrees_Combined",
+      "id": 15100094407,
+      "archive_digest": "sha256:69eb70f2ef3e2ff37f57edb3be4e2fb3f3a1da5dfac62c768d3f4c975937b7eb",
+      "bytes": 58670822,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:53:02Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15100094407"
+    },
+    {
+      "name": "final-fit-HGB_Combined",
+      "id": 15099584030,
+      "archive_digest": "sha256:6f875a9ca4676d8d25ec321623975c1c967ee6177b2d35e9abd5c5c0edbabaab",
+      "bytes": 6262694,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:48:15Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15099584030"
+    },
+    {
+      "name": "final-fit-HGB_Normal",
+      "id": 15098894622,
+      "archive_digest": "sha256:8ba87533ac817c5eccf7ac6b8d0723bf936e68d8ff6a8e25658003022c76ffa6",
+      "bytes": 8316547,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:28:27Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15098894622"
+    },
+    {
+      "name": "final-fit-KNN_Normal",
+      "id": 15097457431,
+      "archive_digest": "sha256:692f6856c44c249c7204ab7b301376a58836bf1e2bd12643f1a6803bb93dcec7",
+      "bytes": 181975991,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:01:22Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15097457431"
+    },
+    {
+      "name": "final-fit-KNN_Combined",
+      "id": 15097432745,
+      "archive_digest": "sha256:6ac32dbb3b8a310c59efc6d6a69d5f1ff4ab877f3519b36c40dd033fbc7f99cd",
+      "bytes": 194677553,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T08:03:09Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15097432745"
+    },
+    {
+      "name": "final-fit-SVC_Combined",
+      "id": 15097273430,
+      "archive_digest": "sha256:8ab3b57260e40882a9b18a7b808abd05a7c2c4a8afcf84fb15e8286a77d705bf",
+      "bytes": 26129577,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T07:59:41Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15097273430"
+    },
+    {
+      "name": "final-fit-MLP_Normal",
+      "id": 15096936692,
+      "archive_digest": "sha256:7f706d27fd6acc2772272424a5c1c2ec22fba494cf9d92def00196e7a04ba16a",
+      "bytes": 3501749,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T07:47:43Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15096936692"
+    },
+    {
+      "name": "final-fit-SVC_Normal",
+      "id": 15096664798,
+      "archive_digest": "sha256:f0d115db75ead1ade72b1cf410f23beafe9d0c18854e76ab98c2c2133cc33216",
+      "bytes": 22682192,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T07:54:08Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15096664798"
+    },
+    {
+      "name": "final-fit-MLP_Combined",
+      "id": 15096309283,
+      "archive_digest": "sha256:8fe128ca3dda4718e246e63e7546f6ebf1c7039a6678370c2b62afe68d4f35b1",
+      "bytes": 3086112,
+      "expired_at_publication": false,
+      "expires_at": "2026-12-26T07:49:00Z",
+      "url": "https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203/artifacts/15096309283"
+    }
+  ],
+  "scope": "Evaluation results and frozen training code publication only. No binary checkpoint replacement; artifact archive digests are distinct from internal joblib digests.",
+  "limitations": [
+    "Actions artifact retention is finite; checkpoint bytes are not committed to main.",
+    "Training and inference were measured on different environments; comparison within each metric used a common environment.",
+    "Extra Trees inference timings may include parallel-processing warning overhead.",
+    "HGB refit used scikit-learn 1.8.0 rather than the report's stated 1.9.1.",
+    "Original full result archive could not be accessed by the execution environment during publication. Summary CSV and delta CSV were read directly; regenerated SVGs are based on these exact values. Raw per-image predictions, confusion matrices and exact original local evaluation script were not uploaded in this publication."
+  ]
+}
