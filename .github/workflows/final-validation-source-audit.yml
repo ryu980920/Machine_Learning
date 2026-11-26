@@ -1,0 +1,45 @@
+name: Final validation frozen source audit
+on:
+  push:
+    branches: [exp/final-validation-10-models-20261126]
+    paths: [.github/workflows/final-validation-source-audit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact split requirements
+        run: pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt
+      - name: Verify and export only development training and code
+        run: |
+          mkdir -p "$RUNNER_TEMP/audit"
+          git fetch origin ec30f7fd4a97de9f8336df2eef6a52b394c810c0
+          git archive ec30f7fd4a97de9f8336df2eef6a52b394c810c0 05_model_optimize/Extra_Trees | gzip > "$RUNNER_TEMP/audit/extra_trees_source.tar.gz"
+          git archive HEAD 03_experiments/model_optimization 03_experiments/W02_2026-11-09_11-15/scripts 05_model_optimize/MLP/Normal/scripts 05_model_optimize/MLP/Combined/scripts 05_model_optimize/SVC/Normal/scripts 05_model_optimize/SVC/Combined/scripts 05_model_optimize/KNN/Normal/scripts 05_model_optimize/KNN/Combined/scripts 05_model_optimize/HGB/Normal/scripts 05_model_optimize/HGB/Combined/scripts | gzip > "$RUNNER_TEMP/audit/main_source.tar.gz"
+          python - <<'PY'
+          import os,sys,hashlib,json,pathlib,numpy as np
+          sys.path.insert(0,'05_model_optimize/MLP/Combined/scripts')
+          from combined_mlp_writer_cv import load_official,load_writers
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'audit'
+          p=pathlib.Path('02_data/datasets/MNIST_EMNIST_official_split_112000.npz')
+          off=load_official(p)
+          wr=load_writers(pathlib.Path('02_data/Hand_made'))
+          assert len(off['y_train'])==76800 and len(off['y_val'])==19200
+          np.savez_compressed(out/'official_development_only.npz',**{k:v for k,v in off.items() if k not in ('sha256',)})
+          np.savez_compressed(out/'handmade_training_only.npz',**{f'X{w}':v['X'].astype(np.uint8) for w,v in wr.items()},**{f'y{w}':v['y'] for w,v in wr.items()})
+          (out/'source_audit.json').write_text(json.dumps({'official_source_sha256':off['sha256'],'handmade_sources':{w:v['sha256'] for w,v in wr.items()},'train_rows':len(off['y_train']),'official_val_rows':len(off['y_val']),'handmade_rows':sum(len(v['y']) for v in wr.values()),'original_test_accessed':False,'new_validation_accessed':False},indent=2))
+          print((out/'source_audit.json').read_text())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-validation-development-sources
+          path: ${{ runner.temp }}/audit/
+          retention-days: 7
+          if-no-files-found: error
