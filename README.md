@@ -1,5 +1,13 @@
 # Machine Learning 팀 프로젝트
 
+## 최종 10개 모델 비교 — 2026-11-27 공개
+
+**동결 최적화 조건으로 10/10 재학습 및 신규 Handmade Validation 1,280장 평가 완료.** Combined는 기존 2,560장 전체를 학습에 사용하고 신규 평가 데이터는 학습에 사용하지 않았다. SVC Combined가 Accuracy 93.671875%, Macro Precision 93.95595%, Macro F1 93.64541%로 1위. KNN Normal 학습 최단(29.509 s), MLP Normal 추론 최단(0.3117 ms/image).
+
+- [최종 10개 모델 결과·그래프](06_final_validation/README.md) · [실측 CSV](06_final_validation/results/summary.csv) · [체크포인트 및 평가 Manifest](06_final_validation/results/FINAL_EVALUATION_MANIFEST.json)
+- [최종 학습 Actions 10/10 성공](https://github.com/ryu980920/Machine_Learning/actions/runs/45777648203). 학습/추론 시간의 측정 환경은 서로 다르며 각 지표 내에서 통일. Original Test 및 교수님 Test 미사용.
+- 기존 아래 MLP 동결 기록은 모델별 연구 이력이며, 이번 단일 모델 10개 평가와 구분한다. 이번 공개는 비교 결과·학습 코드·아티팩트 참조의 배포이며 기존 모델 가중치 교체 또는 전체 팀 제출 모델 확정을 의미하지 않는다.
+
 ## 최종 모델 선정 현황 — 2026-11-19
 
 **Combined MLP 최종 선정·설정 동결 완료: 기존 `CMB011/base` 유지.** (256,) / alpha=0.0001 / LR=0.001 / Batch=128 / Early Stopping=False / 공식 학습 30%-Size·28%-Stroke + CoM / 기존 Hand-made Writer 보류 학습. 새로 수집한 7·9·8·B 손글씨 480장은 **최종 Training에서 제외**한다.
@@ -37,6 +45,7 @@
 | [03_experiments](03_experiments/README.md) | 모델 학습·성능 평가·개선 실험 및 시행착오 |
 | [04_reports](04_reports/README.md) | 중간 발표, 최종보고서 및 제출 자료 |
 | [05_model_optimize](05_model_optimize/README.md) | 5개 모델별 Normal·Combined 독립 최적화, 실험일지·코드·결과 |
+| [06_final_validation](06_final_validation/README.md) | 10개 모델 최종 재학습·Validation 결과, 그래프 및 재현 기록 |
 
 각 폴더는 **개요 → 작업 내용 → 진행 현황 → 결과 및 자료 → 특이사항 및 시행착오 → 향후 계획** 순서로 작성합니다.
 
