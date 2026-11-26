@@ -1,0 +1,169 @@
+name: Final Validation 10-model sequential full fit
+on:
+  push:
+    branches: [exp/final-validation-10-models-20261126]
+    paths: [.github/workflows/final-validation-long-fit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: final-validation-long-fit
+  cancel-in-progress: false
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned common runtime
+        run: |
+          pip install -r 05_model_optimize/MLP/Normal/scripts/EXP007_requirements.txt pandas==2.2.3 threadpoolctl==3.6.0
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 45775698001
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: final-validation-development-sources
+          path: ${{ runner.temp }}/bench/development
+      - name: Restore exact audited source archives
+        run: |
+          mkdir -p "${{ runner.temp }}/bench/sources"
+          tar -xzf "${{ runner.temp }}/bench/development/main_source.tar.gz" -C "${{ runner.temp }}/bench/sources"
+          tar -xzf "${{ runner.temp }}/bench/development/extra_trees_source.tar.gz" -C "${{ runner.temp }}/bench/sources"
+          python -m py_compile 06_final_validation/scripts/long_fit.py
+          df -h
+          lscpu
+      - name: Confirm validation pixels are absent
+        run: |
+          test ! -e "${{ runner.temp }}/bench/handmade_validation_1280.npz"
+          cat "${{ runner.temp }}/bench/development/source_audit.json"
+      - name: Fit MLP_Normal (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py MLP_Normal "${{ runner.temp }}/fit/MLP_Normal"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-MLP_Normal
+          path: ${{ runner.temp }}/fit/MLP_Normal
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit MLP_Combined (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py MLP_Combined "${{ runner.temp }}/fit/MLP_Combined"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-MLP_Combined
+          path: ${{ runner.temp }}/fit/MLP_Combined
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit SVC_Normal (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py SVC_Normal "${{ runner.temp }}/fit/SVC_Normal"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-SVC_Normal
+          path: ${{ runner.temp }}/fit/SVC_Normal
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit SVC_Combined (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py SVC_Combined "${{ runner.temp }}/fit/SVC_Combined"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-SVC_Combined
+          path: ${{ runner.temp }}/fit/SVC_Combined
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit KNN_Normal (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py KNN_Normal "${{ runner.temp }}/fit/KNN_Normal"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-KNN_Normal
+          path: ${{ runner.temp }}/fit/KNN_Normal
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit KNN_Combined (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py KNN_Combined "${{ runner.temp }}/fit/KNN_Combined"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-KNN_Combined
+          path: ${{ runner.temp }}/fit/KNN_Combined
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit HGB_Normal (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py HGB_Normal "${{ runner.temp }}/fit/HGB_Normal"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-HGB_Normal
+          path: ${{ runner.temp }}/fit/HGB_Normal
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit HGB_Combined (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py HGB_Combined "${{ runner.temp }}/fit/HGB_Combined"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-HGB_Combined
+          path: ${{ runner.temp }}/fit/HGB_Combined
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit ExtraTrees_Normal (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py ExtraTrees_Normal "${{ runner.temp }}/fit/ExtraTrees_Normal"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-ExtraTrees_Normal
+          path: ${{ runner.temp }}/fit/ExtraTrees_Normal
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Fit ExtraTrees_Combined (full data, no per-model timeout)
+        env:
+          BENCH_ROOT: ${{ runner.temp }}/bench
+        run: python -u 06_final_validation/scripts/long_fit.py ExtraTrees_Combined "${{ runner.temp }}/fit/ExtraTrees_Combined"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-ExtraTrees_Combined
+          path: ${{ runner.temp }}/fit/ExtraTrees_Combined
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+      - name: Audit completion
+        run: |
+          python - <<'PY'
+          import pathlib,json,csv,os
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"fit"
+          rows=[json.loads(x.read_text()) for x in sorted(p.glob("*/fit_manifest.json"))]
+          assert len(rows)==10
+          with (p/"training_summary.csv").open("w",newline="") as f:
+              cols=["model","training_rows","training_time_s","training_prepare_s","fit_s","official_dev_accuracy","official_dev_correct","checkpoint_sha256"]
+              w=csv.DictWriter(f,fieldnames=cols,extrasaction="ignore");w.writeheader();w.writerows(rows)
+          print("ALL 10 FULL FITS COMPLETED; private 1280 evaluation not performed on public runner")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-fit-training-summary
+          path: ${{ runner.temp }}/fit/training_summary.csv
+          retention-days: 30
