@@ -1,0 +1,22 @@
+{
+  "original_paths": 180,
+  "grouped_notebooks": 55,
+  "individual_final_notebooks": 10,
+  "total_notebooks": 65,
+  "embedded_originals": 180,
+  "pinned_checkout_required": 0,
+  "embedded_code_cells": 239,
+  "compiled_ipython_cells": 425,
+  "notebook_schema_errors": 0,
+  "new_experiments_run": false,
+  "full_execution_verified": false,
+  "source_git_hash_audit": "170 local kit originals verified against GitHub tree; 6 first-fine-tuning originals matched GitHub tree; 4 remaining files fetched by pinned commit and matched Git blob SHA; all 180 embedded",
+  "limitations": [
+    "Historical scripts require original data and CLI parameters; independent full-data reproduction not performed.",
+    "Source-preserving grouping rather than deduplication of differing model pipelines.",
+    "Private evaluation kit and model binaries not included."
+  ],
+  "remote_added_source_cells": 13,
+  "compiled_ipython_cells_scope": "425 cells in local build before final 4 source files were embedded; added remote source cells are not locally syntax-tested",
+  "notebook_schema_errors_scope": "65 local build notebooks; two remote-enriched notebook JSON structures checked"
+}
