@@ -1,0 +1,9 @@
+condition,model_family,scope,correct,accuracy,macro_precision,macro_f1,official_correct,fit_s,training_time_previous_s,matched_1280x5_ms,status
+SVC Baseline,SVC,full,1199,0.93671875,0.9395594960462721,0.9364540514111936,18967,164.424712203,178.546021614,10.994163222187474,retained reference
+KNN Baseline,KNN,full,1182,0.9234375,0.9261688244348776,0.9232689402444594,18856,0.031629718,31.555983236,,retain under approved accuracy gate
+SVC C2_G2,SVC,full_train_full_dev,1209,0.94453125,0.9460499800415427,0.9441366722358595,19003,268.619103309,,12.71298156265619,accuracy-first review candidate; latency preference exceeded
+SVC SW1.5,SVC,full_train_full_dev,1203,0.93984375,0.9421858978811299,0.9396533234307103,18962,230.256190822,,,pass accuracy guardrails; full latency not measured
+SVC SW4,SVC,full_train_full_dev,1213,0.94765625,0.9494029180653427,0.9476128383260438,18945,194.55278583699987,,,fail official guardrail
+SVC TW2,SVC,full_train_full_dev,1205,0.94140625,0.9433372683628203,0.9412294386218499,18962,225.90135655300014,,,pass accuracy guardrails; full latency not measured
+KNN PCA512,KNN,full_train_full_dev,1182,0.9234375,0.926265997475163,0.9233478980559164,18856,0.029210153000008177,,,speed alternative only; strict accuracy increase not achieved
+KNN PCA128,KNN,full_train_full_dev,1182,0.9234375,0.92616067498603,0.9233107728213686,18856,0.009403293999980633,,,speed alternative only; strict accuracy increase not achieved

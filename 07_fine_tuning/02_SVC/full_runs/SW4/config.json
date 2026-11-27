@@ -1,0 +1,11 @@
+{
+  "condition": "SW4",
+  "C": 1.0,
+  "gamma_multiplier": 1.0,
+  "handmade_weight": 4.0,
+  "target_weight": 1.0,
+  "training_rows": 82080,
+  "seed": 42,
+  "official_train_only": true,
+  "new_validation_used_in_fit": false
+}
