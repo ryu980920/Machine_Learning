@@ -1,0 +1,11 @@
+condition,repeat,n,ms_per_image,predictions_match,cpu_affinity,note
+baseline,1,1280,10.858211128124928,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+C2_G2,1,1280,13.1614691609375,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+baseline,2,1280,11.777363322656242,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+C2_G2,2,1280,13.971283952343683,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+baseline,3,1280,11.232441932031278,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+C2_G2,3,1280,12.564398124218634,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+baseline,4,1280,10.275784883593708,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+C2_G2,4,1280,11.976098195312446,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+baseline,5,1280,10.827014844531213,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
+C2_G2,5,1280,11.891658380468684,True,"2,3","SVC training concurrently on cores 0,1; matched timing within this screen, shared memory effects possible"
