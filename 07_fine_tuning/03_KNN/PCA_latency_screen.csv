@@ -1,0 +1,4 @@
+dims,n,repeats,mean_ms_per_image,individual_ms,matches_batch,timing_scope
+1108,128,3,56.09590407031285,"[53.58639098437479, 55.912764617188415, 58.78855660937532]",128,"screen only, separate CPU affinity; SVC process running"
+128,128,3,10.07960682812481,"[9.973753046875089, 9.606749750000532, 10.658317687498808]",128,"screen only, separate CPU affinity; SVC process running"
+512,128,3,27.664448382813234,"[28.338156562501382, 27.233010359374532, 27.422178226563787]",128,"screen only, separate CPU affinity; SVC process running"
