@@ -1,0 +1,140 @@
+{
+  "status": "predeclared_before_candidate_evaluation",
+  "seed": 42,
+  "threads": 2,
+  "validation_role": "development tuning only; no independent new test available",
+  "official_dev_n": 19200,
+  "handmade_dev_n": 1280,
+  "official_test_used": false,
+  "professor_test_used": false,
+  "baseline": {
+    "SVC": {
+      "correct": 1199,
+      "official_correct": 18967,
+      "precision": 0.9395594960462721,
+      "f1": 0.9364540514111936
+    },
+    "KNN": {
+      "correct": 1182,
+      "official_correct": 18856,
+      "precision": 0.9261688244348776,
+      "f1": 0.9232689402444594
+    }
+  },
+  "guardrails": {
+    "correct_strictly_higher": true,
+    "macro_precision_at_least_baseline": true,
+    "macro_f1_strictly_higher": true,
+    "official_max_correct_loss": 19,
+    "target_pooled_recall_increase": true,
+    "protect_max_class_correct_loss": 2,
+    "protected_classes": [
+      "0",
+      "8",
+      "6"
+    ],
+    "time": "SVC <= 10% increase preferred, KNN decrease preferred; full matched measurement required before final selection"
+  },
+  "target_classes": [
+    "B",
+    "D",
+    "C"
+  ],
+  "knn_additional_diagnostic_classes": [
+    "5",
+    "6"
+  ],
+  "SVC": {
+    "C": [
+      0.5,
+      1,
+      2
+    ],
+    "gamma_scale_multiple": [
+      0.5,
+      1,
+      2
+    ],
+    "handmade_weight": [
+      1,
+      1.5,
+      2,
+      3,
+      4
+    ],
+    "target_weight": [
+      1,
+      1.5,
+      2
+    ],
+    "target_extra_aug_per_class_cohort": [
+      0,
+      20,
+      40
+    ],
+    "combination": "only independent passing factors",
+    "pilot_resource_adaptation": {
+      "rows": 8528,
+      "official_train": 8000,
+      "handmade_original": 256,
+      "handmade_augmented": 256,
+      "handmade_targeted": 16,
+      "official_validation": 640,
+      "handmade_validation": 1280,
+      "purpose": "screening only; full 9x DOE not claimed complete; full fit required for adoption"
+    },
+    "followup_SW1_5": {
+      "trigger": "SW4 full official loss 22 > 19",
+      "reason": "SW1.5 was the other pilot-passing weight",
+      "condition": {
+        "C": 1,
+        "gamma_multiplier": 1,
+        "handmade_weight": 1.5,
+        "target_weight": 1
+      },
+      "full_train_rows": 82080
+    },
+    "combination_promotion": {
+      "eligible_factors": "full accuracy guardrail pass only; timing remains separate recommendation",
+      "pilot_promotion": "higher correct and macro-F1 than best eligible individual pilot, precision at least pilot baseline, official pilot correct >= baseline-1",
+      "max_full_combo": "one best passing combination, resource-constrained; remaining full combinations explicitly unmeasured"
+    }
+  },
+  "KNN": {
+    "metric_p": [
+      2,
+      1,
+      1.5,
+      3
+    ],
+    "k": [
+      1,
+      3,
+      5,
+      7,
+      9
+    ],
+    "alpha": [
+      0.5,
+      1,
+      2
+    ],
+    "repeat": [
+      "baseline",
+      "remove_all",
+      "original_only",
+      "augmented_only",
+      "lineage_cap"
+    ],
+    "PCA": [
+      1108,
+      512,
+      256,
+      128,
+      64
+    ],
+    "combination": "only independent passing factors; recheck k and alpha after PCA"
+  },
+  "pilot_rule": "distance functions pilot: 8000 stratified training rows, 320 balanced handmade development queries and 320 official development queries; rank and promote only if pilot macro F1 and accuracy improve, not final evidence; any other pilot due execution limit explicitly marked",
+  "stop_policy": "no measured result fabricated; record unexecuted/failed stages, retain baseline until full guardrails and timing checked"
+}
