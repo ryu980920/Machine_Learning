@@ -1,6 +1,16 @@
 # Machine Learning 팀 프로젝트
 
-## SVC · KNN Fine-Tuning — 2026-11-28 공개
+## 최종 모델 선정 변경 — 2026-11-28 사용자 승인
+
+**SVC Combined 최종 모델을 기존 Baseline에서 Fine-Tuning C2_G2로 변경 확정.** C=2, gamma scale 배수=2, seed=42, 학습 82,080행. 신규 1,280장 개발 평가 Accuracy 94.453125% (1,209/1,280), Macro Precision 94.6050%, Macro F1 94.4137%. 기존 대비 +0.78125%p (+10장). 공식 Validation 19,003/19,200으로 정확도 보호 기준 통과. 동일 환경 추론 10.9942 → 12.7130 ms/image로 권장 속도 기준은 미충족하나 사용자 승인으로 정확도 우선 선정한다. **KNN Combined 및 나머지 8개 모델의 선정은 유지한다.**
+
+- [현재 최종 선정 Manifest](07_fine_tuning/05_final_models/CURRENT_FINAL_MODEL_SELECTION.json) (이전 검토용 Manifest보다 우선)
+- [Fine-Tuning 재현 Notebook](07_fine_tuning/Fine_Tuning_Reproduction.ipynb) · [최종 추론 Notebook (C2_G2 기본값)](07_fine_tuning/Final_Inference.ipynb) · [Full SVC 학습 스크립트](07_fine_tuning/run_svc_full.py)
+- [C2_G2 실험 설정](07_fine_tuning/02_SVC/full_runs/C2_G2/config.json) · [실험 비교](07_fine_tuning/04_final_comparison/FINAL_REVIEW.md)
+
+11/27의 10개 모델 CSV와 11/28의 기존 검토 기록은 당시 실측 이력으로 보존한다. 이번 변경은 최종 선정 확정이며 공개 바이너리 배포는 아니다. C2_G2 가중치 및 비공개 입력 ZIP은 기존 로컬 검토 패키지에서 확보해야 하며, Notebook의 새 환경 전체 실행은 미검증이다. Original Test 및 교수님 Test는 미사용.
+
+## SVC · KNN Fine-Tuning — 2026-11-28 최초 공개 기록 (선정 변경 전)
 
 상위 두 모델에 대해 기존 체크포인트·1,280장 예측을 재현하고, 오분류 분석 및 단계별 Fine-Tuning을 수행했다. **SVC C2_G2는 정확도 94.453125% (1,209/1,280), 기존 대비 +0.78125%p**로 정확도 우선 검토 후보이다. KNN은 기존 92.34375% (1,182/1,280) 유지; PCA128은 속도 개선 대안으로만 기록했다. SVC 후보의 정식 추론 시간은 동일 환경 재측정에서 약 15.6% 증가해 권장 기준을 초과했고, SW4는 공식 보호 기준을 통과하지 못했다.
 

@@ -1,5 +1,7 @@
 # Final Handmade Validation — 10 frozen models (2026-11-26)
 
+> **2026-11-28 최종 선정 변경:** 이 페이지의 10개 모델 실측 결과는 Fine-Tuning 이전 비교 이력이다. SVC Combined는 C2_G2 (94.453125%, 1209/1280 개발 평가)로 선정 변경되었고, 다른 9개 모델은 유지한다. [현재 선정 Manifest](../07_fine_tuning/05_final_models/CURRENT_FINAL_MODEL_SELECTION.json) · [재현 Notebook](../07_fine_tuning/Fine_Tuning_Reproduction.ipynb) · [추론 Notebook](../07_fine_tuning/Final_Inference.ipynb). 기존 CSV/그래프/아티팩트는 당시 기록이며 C2_G2 바이너리의 공개 배포를 의미하지 않는다.
+
 **최종 10개 모델 재학습 및 신규 Handmade Validation 1,280장 평가 완료.** 2026-11-27 결과 공개.
 
 - [최종 비교 보고서 및 그래프](logs/EXP_FINAL_002_10Model_Validation_Results.md)
