@@ -1,0 +1,27 @@
+[
+  {
+    "filename": "Final_Validation_Private_Evaluation_Kit_20261126.zip",
+    "bytes": 4852128,
+    "sha256": "eb6a4c8135a2a4e23f090a4e4a8ab138104d07895ce3776233e6f6d8a6741db5"
+  },
+  {
+    "filename": "final-validation-development-sources.zip",
+    "bytes": 35326317,
+    "sha256": "b65e63786a7e6a86dadb6e25509cc03a231cdcf57ee1e26d8d27c2221bd0d69f"
+  },
+  {
+    "filename": "Final_10_Model_Validation_Results.zip",
+    "bytes": 348448,
+    "sha256": "f9f4e35df9749c4cd6da0dad3024d8f0d2a7841290d1cb7b8d6733fbb23e9696"
+  },
+  {
+    "filename": "final-fit-SVC_Combined.zip",
+    "bytes": 26129577,
+    "sha256": "8ab3b57260e40882a9b18a7b808abd05a7c2c4a8afcf84fb15e8286a77d705bf"
+  },
+  {
+    "filename": "final-fit-KNN_Combined.zip",
+    "bytes": 194677553,
+    "sha256": "6ac32dbb3b8a310c59efc6d6a69d5f1ff4ab877f3519b36c40dd033fbc7f99cd"
+  }
+]
