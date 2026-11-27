@@ -1,5 +1,13 @@
 # Machine Learning 팀 프로젝트
 
+## SVC · KNN Fine-Tuning — 2026-11-28 공개
+
+상위 두 모델에 대해 기존 체크포인트·1,280장 예측을 재현하고, 오분류 분석 및 단계별 Fine-Tuning을 수행했다. **SVC C2_G2는 정확도 94.453125% (1,209/1,280), 기존 대비 +0.78125%p**로 정확도 우선 검토 후보이다. KNN은 기존 92.34375% (1,182/1,280) 유지; PCA128은 속도 개선 대안으로만 기록했다. SVC 후보의 정식 추론 시간은 동일 환경 재측정에서 약 15.6% 증가해 권장 기준을 초과했고, SW4는 공식 보호 기준을 통과하지 못했다.
+
+- [Fine-Tuning 전체 실험 자료](07_fine_tuning/README.md) · [최종 검토 보고서](07_fine_tuning/04_final_comparison/FINAL_REVIEW.md) · [최종 비교표](07_fine_tuning/04_final_comparison/final_comparison.csv)
+- [SVC 실험 보고서](07_fine_tuning/06_reports/SVC_Fine_Tuning_Report.md) · [KNN 실험 보고서](07_fine_tuning/06_reports/KNN_Fine_Tuning_Report.md)
+- 이번 1,280장은 Fine-Tuning 개발 자료로 사용했으므로 독립 Test가 아니다. 이번 공개는 실험 결과 및 코드 배포이며 기존 최종 가중치 교체가 아니다. 모든 실험의 Full/Pilot 범위와 미실행 사유, 비공개 입력 및 바이너리 제외 범위를 별도 기록했다.
+
 ## 최종 10개 모델 비교 — 2026-11-27 공개
 
 **동결 최적화 조건으로 10/10 재학습 및 신규 Handmade Validation 1,280장 평가 완료.** Combined는 기존 2,560장 전체를 학습에 사용하고 신규 평가 데이터는 학습에 사용하지 않았다. SVC Combined가 Accuracy 93.671875%, Macro Precision 93.95595%, Macro F1 93.64541%로 1위. KNN Normal 학습 최단(29.509 s), MLP Normal 추론 최단(0.3117 ms/image).
@@ -46,6 +54,7 @@
 | [04_reports](04_reports/README.md) | 중간 발표, 최종보고서 및 제출 자료 |
 | [05_model_optimize](05_model_optimize/README.md) | 5개 모델별 Normal·Combined 독립 최적화, 실험일지·코드·결과 |
 | [06_final_validation](06_final_validation/README.md) | 10개 모델 최종 재학습·Validation 결과, 그래프 및 재현 기록 |
+| [07_fine_tuning](07_fine_tuning/README.md) | 상위 두 모델 Fine-Tuning 실험별 로그, 비교 결과 및 코드 |
 
 각 폴더는 **개요 → 작업 내용 → 진행 현황 → 결과 및 자료 → 특이사항 및 시행착오 → 향후 계획** 순서로 작성합니다.
 
