@@ -1,0 +1,3 @@
+condition,corrected,regressed,exploratory_mcnemar_exact_p,not_independent_after_selection
+C2_G2,15,5,0.04138946533203125,True
+SW4,17,3,0.0025768280029296875,True
