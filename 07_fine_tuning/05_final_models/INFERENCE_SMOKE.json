@@ -1,0 +1,7 @@
+{
+  "condition": "C2_G2",
+  "rows": 16,
+  "matches_original_candidate_predictions": 16,
+  "input": "existing development images; not independent test",
+  "exit_code": 0
+}
