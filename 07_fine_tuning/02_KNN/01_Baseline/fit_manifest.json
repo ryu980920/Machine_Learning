@@ -1,0 +1,91 @@
+{
+  "model": "KNN_Combined",
+  "training_rows": 113920,
+  "training_prepare_s": 31.524353517999998,
+  "fit_s": 0.03162971799997649,
+  "training_time_s": 31.555983235999975,
+  "checkpoint_sha256": "ff046fffafc27cf19bb0a3e6a997b55c2af42b9494c556d6851c3ea06a5df6d9",
+  "checkpoint_bytes": 194674505,
+  "config": {
+    "algorithm": "brute",
+    "leaf_size": 30,
+    "metric": "euclidean",
+    "metric_params": null,
+    "n_jobs": 2,
+    "n_neighbors": 3,
+    "p": 2,
+    "weights": "distance"
+  },
+  "augmentation": {
+    "handmade_original": 2560,
+    "handmade_augmented": 2560,
+    "handmade_original_repeat": 640,
+    "handmade_augmented_repeat": 640
+  },
+  "environment": {
+    "python": "3.13.18",
+    "platform": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "threads": 2,
+    "versions": {
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "scikit-learn": "1.8.0",
+      "scikit-image": "0.26.0",
+      "joblib": "1.5.3",
+      "opencv-python-headless": "4.13.0.92"
+    },
+    "threadpools": [
+      {
+        "user_api": "blas",
+        "internal_api": "openblas",
+        "num_threads": 2,
+        "prefix": "libscipy_openblas",
+        "filepath": "/opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so",
+        "version": "0.3.30",
+        "threading_layer": "pthreads",
+        "architecture": "Haswell"
+      },
+      {
+        "user_api": "blas",
+        "internal_api": "openblas",
+        "num_threads": 2,
+        "prefix": "libscipy_openblas",
+        "filepath": "/opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so",
+        "version": "0.3.30",
+        "threading_layer": "pthreads",
+        "architecture": "Haswell"
+      },
+      {
+        "user_api": "openmp",
+        "internal_api": "openmp",
+        "num_threads": 2,
+        "prefix": "libgomp",
+        "filepath": "/opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+        "version": null
+      },
+      {
+        "user_api": "blas",
+        "internal_api": "openblas",
+        "num_threads": 2,
+        "prefix": "libopenblas",
+        "filepath": "/opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/opencv_python_headless.libs/libopenblasp-r0-59ffcd50.3.15.so",
+        "version": "0.3.15",
+        "threading_layer": "pthreads",
+        "architecture": "Zen"
+      }
+    ]
+  },
+  "warnings": [],
+  "validation_loaded_during_fit": false,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "official_dev_accuracy": 0.9820833333333333,
+  "official_dev_correct": 18856
+}

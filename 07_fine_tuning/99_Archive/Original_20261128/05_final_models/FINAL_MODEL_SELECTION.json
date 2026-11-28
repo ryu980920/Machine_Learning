@@ -1,0 +1,53 @@
+{
+  "status": "review_only_no_deployment",
+  "SVC_accuracy_first_review_candidate": {
+    "condition": "C2_G2",
+    "checkpoint": "02_SVC/full_runs/C2_G2/model.joblib",
+    "sha256": "f88be338da4065315d943ca4150b5a425c24adf63733fada7da212c837ae4398",
+    "correct": 1209,
+    "accuracy": 0.94453125,
+    "macro_precision": 0.9460499800415427,
+    "macro_f1": 0.9441366722358595,
+    "official_correct": 19003,
+    "accuracy_guardrails_pass": true,
+    "speed_preference_pass": false,
+    "timing_note": "matched batch1 1280 x5 while separate-core training was active; shared memory contention possible",
+    "existing_model_replacement_approved": false
+  },
+  "SVC_conservative_alternative": {
+    "condition": "TW2",
+    "checkpoint": "02_SVC/full_runs/TW2/model.joblib",
+    "sha256": "7860d8d318dc49daac628cbc8b850195d0b6a152e45c4346f73bd23ae9ee496e",
+    "correct": 1205,
+    "regressed": 0,
+    "official_correct": 18962,
+    "native_official_full_completed": false,
+    "full_latency_measured": false
+  },
+  "KNN": {
+    "decision": "retain_original",
+    "checkpoint_archive": "inputs/final-fit-KNN_Combined.zip",
+    "archive_member": "model.joblib",
+    "sha256": "ff046fffafc27cf19bb0a3e6a997b55c2af42b9494c556d6851c3ea06a5df6d9",
+    "correct": 1182,
+    "accuracy": 0.9234375,
+    "speed_alternative": "PCA128 not adopted; same correct count, tiny precision decrease, timing screen only"
+  },
+  "scope": {
+    "SVC_pilot_conditions_including_reused_baseline": 17,
+    "SVC_combo_pilot_conditions": 4,
+    "SVC_new_full_training_conditions": 4,
+    "KNN_distance_pilot_conditions": 4,
+    "KNN_full_vote_conditions": 13,
+    "KNN_repeat_conditions": 5,
+    "KNN_PCA_conditions": 5,
+    "KNN_PCA_vote_recheck_conditions": 26
+  },
+  "limitations": [
+    "SVC full DOE was reduced to pilot screening and 4 full candidate fits; remaining full conditions not executed.",
+    "SVC full combinations were not promoted after failing pilot criterion.",
+    "KNN failed accuracy gate conditions were not given full official/time evaluation; p alternatives pilot-only.",
+    "Original Test and professor Test not used; reused 1280 are development data, not independent final test.",
+    "No GitHub changes. All local fit processes ended."
+  ]
+}

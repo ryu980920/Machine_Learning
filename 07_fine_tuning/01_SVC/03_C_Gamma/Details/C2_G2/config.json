@@ -1,0 +1,11 @@
+{
+  "condition": "C2_G2",
+  "C": 2.0,
+  "gamma_multiplier": 2.0,
+  "handmade_weight": 1.0,
+  "target_weight": 1.0,
+  "training_rows": 82080,
+  "seed": 42,
+  "official_train_only": true,
+  "new_validation_used_in_fit": false
+}

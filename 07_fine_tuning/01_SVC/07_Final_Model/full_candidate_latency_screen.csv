@@ -1,0 +1,3 @@
+condition,n,repeats,mean_ms_per_image,individual_ms,matches_batch,scope
+baseline,128,3,10.511962770832994,"[10.670797578125502, 10.374202703124169, 10.490888031249312]",128,"screen, same CPU affinity, concurrent SVC subprocess on separate cores"
+C2_G2,128,3,12.533125005208015,"[12.458504031249262, 12.503385429686986, 12.6374855546878]",128,"screen, same CPU affinity, concurrent SVC subprocess on separate cores"

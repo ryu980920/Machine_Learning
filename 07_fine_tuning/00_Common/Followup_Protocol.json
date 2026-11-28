@@ -1,0 +1,50 @@
+{
+  "status": "proposed_followup_protocol_before_new_runs",
+  "seed": 42,
+  "threads": 2,
+  "development_n": 1280,
+  "official_validation_n": 19200,
+  "original_test_used": false,
+  "professor_test_used": false,
+  "baseline": {
+    "SVC": {
+      "condition": "C2_G2",
+      "correct": 1209,
+      "precision": 0.9460499800415427,
+      "f1": 0.9441366722358595,
+      "official_correct": 19003,
+      "official_min": 18984,
+      "sha256": "f88be338da4065315d943ca4150b5a425c24adf63733fada7da212c837ae4398"
+    },
+    "KNN": {
+      "condition": "frozen_20261126",
+      "correct": 1182,
+      "precision": 0.9261688244348776,
+      "f1": 0.9232689402444594,
+      "official_correct": 18856,
+      "official_min": 18837,
+      "sha256": "ff046fffafc27cf19bb0a3e6a997b55c2af42b9494c556d6851c3ea06a5df6d9"
+    }
+  },
+  "guardrails": {
+    "correct_strictly_higher": true,
+    "precision_at_least_baseline": true,
+    "f1_strictly_higher": true,
+    "official_max_correct_loss": 19,
+    "target_pooled_recall_increase": true,
+    "target_classes": [
+      "B",
+      "D",
+      "C"
+    ],
+    "protected_classes": [
+      "0",
+      "8",
+      "6"
+    ],
+    "protect_max_class_correct_loss": 2,
+    "speed": "SVC <=10% increase preferred; KNN decrease preferred; matched batch1 timing separate; 1280 x 5",
+    "target_accuracy": 0.95
+  },
+  "selection": "No automatic replacement; full results and team leader approval required."
+}

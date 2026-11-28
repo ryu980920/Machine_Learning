@@ -1,0 +1,54 @@
+{
+  "decision_date": "2026-11-28",
+  "status": "final_model_selection_approved_checkpoint_not_publicly_deployed",
+  "supersedes": "FINAL_MODEL_SELECTION.json (historical pre-approval review)",
+  "scope": "Replace SVC Combined selection in ten-model lineup; other nine selections unchanged. This is not an independent final test or public binary deployment.",
+  "SVC_Combined": {
+    "previous": "11/26 frozen baseline",
+    "selected": "C2_G2",
+    "C": 2,
+    "gamma_multiplier": 2,
+    "handmade_weight": 1,
+    "target_weight": 1,
+    "training_rows": 82080,
+    "seed": 42,
+    "checkpoint": "02_SVC/full_runs/C2_G2/model.joblib",
+    "sha256": "f88be338da4065315d943ca4150b5a425c24adf63733fada7da212c837ae4398",
+    "development_n": 1280,
+    "correct": 1209,
+    "accuracy": 0.94453125,
+    "macro_precision": 0.9460499800415427,
+    "macro_f1": 0.9441366722358595,
+    "official_correct": 19003,
+    "official_n": 19200,
+    "accuracy_guardrails_pass": true,
+    "speed_preference_pass": false,
+    "baseline_matched_ms": 10.9942,
+    "selected_matched_ms": 12.713,
+    "existing_model_replacement_approved": true,
+    "public_checkpoint_available": false
+  },
+  "KNN_Combined": {
+    "decision": "retain_original",
+    "checkpoint_archive": "inputs/final-fit-KNN_Combined.zip",
+    "archive_member": "model.joblib",
+    "sha256": "ff046fffafc27cf19bb0a3e6a997b55c2af42b9494c556d6851c3ea06a5df6d9",
+    "correct": 1182,
+    "accuracy": 0.9234375,
+    "speed_alternative": "PCA128 not adopted; same correct count, tiny precision decrease, timing screen only"
+  },
+  "notebooks": {
+    "reproduction": "../Fine_Tuning_Reproduction.ipynb",
+    "inference": "../Final_Inference.ipynb",
+    "full_svc_scripts": [
+      "../run_svc_full.py",
+      "../run_svc_remaining.py",
+      "../run_svc_sw15_followup.py"
+    ],
+    "verified_present_on_github": true,
+    "independent_end_to_end_rerun": false,
+    "private_inputs_required": true
+  },
+  "original_test_used": false,
+  "professor_test_used": false
+}
